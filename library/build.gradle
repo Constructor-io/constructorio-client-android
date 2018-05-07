@@ -1,0 +1,103 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.Constructor-io'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+
+    dexOptions {
+        maxProcessCount 4
+        preDexLibraries false
+    }
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 27
+        testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
+        versionCode 1
+        versionName '0.1.0'
+        buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
+        buildConfigField("String", "BASE_API_URL", "\"https://ac.cnstrc.com\"")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        def commonTestDir = 'src/commonTest/java'
+        test {
+            java.srcDir commonTestDir
+        }
+        androidTest {
+            java.srcDir commonTestDir
+        }
+    }
+
+    lintOptions {
+        textOutput "stdout"
+        textReport true
+        checkAllWarnings true
+        warningsAsErrors true
+        showAll true
+        explainIssues true
+        abortOnError false
+        lintConfig file("$projectDir/lint.xml")
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/license/LICENSE.base64.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/MANIFEST.MF'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+}
+
+apply from: 'dependencies.gradle'
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
+    testImplementation 'io.mockk:mockk:1.7.14'
+    testImplementation 'org.robolectric:robolectric:3.6.1'
+    implementation supportLibs
+    implementation networkLibs
+    implementation otherLibs
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    // APT dependencies
+    kapt annotationProcessorLibs
+    kaptTest daggerCompiler
+    kaptAndroidTest daggerCompiler
+    testImplementation unitTestLibs
+    androidTestImplementation androidTestsLibs
+}

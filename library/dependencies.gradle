@@ -1,0 +1,50 @@
+ext {
+    versions = [
+            support : "27.1.1",
+            moshi   : "1.5.0",
+            okHttp  : "3.9.0",
+            retrofit: '2.3.0',
+            dagger  : '2.14.1',
+            junit   : '4.12',
+    ]
+
+    junit = [junit: "junit:junit:$versions.junit"]
+
+    supportDeps = [
+            appcompatV7 : "com.android.support:appcompat-v7:$versions.support",
+            recyclerView: "com.android.support:recyclerview-v7:$versions.support",
+    ]
+
+    retrofit = [
+            retrofit      : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+            rxAdapter     : "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",
+            moshiConverter: "com.squareup.retrofit2:converter-moshi:$versions.retrofit",
+    ]
+
+    moshi = [
+            moshi: "com.squareup.moshi:moshi-kotlin:$versions.moshi"
+    ]
+
+    okHttp = [
+            logger: "com.squareup.okhttp3:logging-interceptor:$versions.okHttp",
+            okhttp: "com.squareup.okhttp3:okhttp:$versions.okHttp",
+    ]
+
+    unitTest = [
+            supportAnnotation: "com.android.support:support-annotations:$versions.support",
+            kotlinTest       : "org.jetbrains.kotlin:kotlin-test:$kotlin_version",
+            kotlinJunit      : "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version",
+
+    ] + junit
+
+    dagger = "com.google.dagger:dagger:$versions.dagger"
+    daggerCompiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    supportLibs = supportDeps.values()
+    networkLibs = retrofit.values() + okHttp.values() + moshi.values()
+    otherLibs = [dagger]
+    annotationProcessorLibs = [daggerCompiler]
+
+    unitTestLibs = unitTest.values()
+    androidTestsLibs = supportLibs
+}
