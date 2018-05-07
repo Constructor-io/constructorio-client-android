@@ -21,7 +21,7 @@ and then in your app gradle file include Constructor.IO dependency:
 
 ```
 dependencies {
-    implementation 'com.github.Constructor-io:constructorio-client-android:0.1'
+    implementation 'com.github.Constructor-io:constructorio-client-android:v0.1'
 }
 ```
 
