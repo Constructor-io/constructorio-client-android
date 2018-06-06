@@ -17,6 +17,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
+import java.util.*
 import kotlin.test.assertEquals
 
 class ConstructorIoTest {
@@ -25,6 +26,7 @@ class ConstructorIoTest {
     private val pref = mockk<PreferencesHelper>()
     private val data = mockk<DataManager>()
     private var constructorIo = ConstructorIo
+    private val sampleMillis = "1520000000000"
     private val dummySuggestion = SuggestionViewModel("", Group("123", "Test name", null), "",null)
 
     @Before
@@ -42,7 +44,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySelectUrl() {
-        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/select?s=1&i=1&autocomplete_section=Search%20Suggestions&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=click&c=cioand-${BuildConfig.VERSION_NAME}&autocomplete_key=testKey"
+        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/select?s=1&i=1&_dt=1520000000000&autocomplete_section=Search%20Suggestions&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=click&c=cioand-${BuildConfig.VERSION_NAME}&autocomplete_key=testKey"
         val searchQuery = "dog"
         val term = "hot dogs"
         val urlBuilder = HttpUrl.Builder().scheme("https")
@@ -52,6 +54,7 @@ class ConstructorIoTest {
                 .addPathSegment("select")
                 .addQueryParameter(Constants.QueryConstants.SESSION, "1")
                 .addQueryParameter(Constants.QueryConstants.IDENTITY, "1")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
                 .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_SECTION, Constants.QueryValues.SEARCH_SUGGESTIONS)
                 .addQueryParameter(Constants.QueryConstants.ORIGINAL_QUERY, searchQuery)
                 .addEncodedQueryParameter(Constants.QueryConstants.GROUP_ID.urlEncode(), "Meat%20%26%20Seafood")
@@ -65,13 +68,14 @@ class ConstructorIoTest {
 
     @Test
     fun verifyGetSuggestionsUrl() {
-        val expected = "https://ac.cnstrc.com/autocomplete/dog?autocomplete_key=testKey"
+        val expected = "https://ac.cnstrc.com/autocomplete/dog?autocomplete_key=testKey&_dt=1520000000000"
         val searchQuery = "dog"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("autocomplete")
                 .addPathSegment(searchQuery)
                 .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
     }
@@ -108,7 +112,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchUrl() {
-        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/search?s=1&i=1&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=search&c=cioand-${BuildConfig.VERSION_NAME}&autocomplete_key=testKey"
+        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/search?s=1&i=1&_dt=1520000000000&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=search&c=cioand-${BuildConfig.VERSION_NAME}&autocomplete_key=testKey"
         val originalQuery = "dog"
         val term = "hot dogs"
         val urlBuilder = HttpUrl.Builder().scheme("https")
@@ -118,6 +122,7 @@ class ConstructorIoTest {
                 .addPathSegment("search")
                 .addQueryParameter(Constants.QueryConstants.SESSION, "1")
                 .addQueryParameter(Constants.QueryConstants.IDENTITY, "1")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
                 .addQueryParameter(Constants.QueryConstants.ORIGINAL_QUERY, originalQuery)
                 .addEncodedQueryParameter(Constants.QueryConstants.GROUP_ID.urlEncode(), "Meat%20%26%20Seafood")
                 .addEncodedQueryParameter(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode(), "Meat & Seafood".urlEncode())

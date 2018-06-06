@@ -45,7 +45,7 @@ object ConstructorIo {
 
     internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper) {
         if (context == null) {
-            throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
+            throw IllegalStateException("Context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
         this.dataManager = dataManager
@@ -90,7 +90,6 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-
         dataManager.triggerSearchEvent(suggestion.term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.IDENTITY to userId,
