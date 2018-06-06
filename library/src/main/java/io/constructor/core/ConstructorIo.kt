@@ -30,6 +30,14 @@ object ConstructorIo {
                 .build()
     }
 
+    var sessionIncrementEventHandler: (String) -> Unit = {
+        dataManager.triggerSessionStartEvent(arrayOf(Constants.QueryConstants.CLIENT to BuildConfig.CLIENT_VERSION,
+                Constants.QueryConstants.SESSION to it,
+                Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SESSION_START)).subscribe({}, {
+            d("Error triggering Session Change event")
+        })
+    }
+
     fun init(context: Context?, apiKey: String) {
         if (context == null) {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
@@ -59,7 +67,7 @@ object ConstructorIo {
     internal fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query)
 
     internal fun triggerSelectEvent(query: String, suggestion: SuggestionViewModel) {
-        val sessionId = preferenceHelper.getSessionId()
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val userId = preferenceHelper.getId()
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
@@ -85,7 +93,7 @@ object ConstructorIo {
     }
 
     internal fun triggerSearchEvent(query: String, suggestion: SuggestionViewModel) {
-        val sessionId = preferenceHelper.getSessionId()
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val userId = preferenceHelper.getId()
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
@@ -104,7 +112,6 @@ object ConstructorIo {
                 }, {
                     it.printStackTrace()
                     e("trigger search error: ${it.message}") //To change body of created functions use File | Settings | File Templates. }
-
                 })
     }
 

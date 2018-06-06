@@ -35,6 +35,7 @@ class ConstructorIoTest {
         every { pref.saveToken(any()) } returns Unit
         every { pref.getId() } returns "1"
         every { pref.getSessionId() } returns 1
+        every { pref.getSessionId(any()) } returns 1
         constructorIo.testInit(ctx, "dummyKey", data, pref)
     }
 
@@ -68,6 +69,20 @@ class ConstructorIoTest {
 
     @Test
     fun verifyGetSuggestionsUrl() {
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=session_start&autocomplete_key=testKey&_dt=1520000000000"
+        val urlBuilder = HttpUrl.Builder().scheme("https")
+                .host("ac.cnstrc.com")
+                .addPathSegment("behavior")
+                .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
+                .addQueryParameter(Constants.QueryConstants.SESSION, "1")
+                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
+        val urlString = urlBuilder.build().url().toString()
+        assertEquals(expected, urlString)
+    }
+
+    @Test
+    fun verifySessionStartUrl() {
         val expected = "https://ac.cnstrc.com/autocomplete/dog?autocomplete_key=testKey&_dt=1520000000000"
         val searchQuery = "dog"
         val urlBuilder = HttpUrl.Builder().scheme("https")

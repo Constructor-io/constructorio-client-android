@@ -15,6 +15,10 @@ class PreferencesHelperTest {
 
     private var preferencesHelper = spyk(PreferencesHelper(RuntimeEnvironment.application.applicationContext, "test.prefs"))
 
+    private var dummyAction: (String) -> Unit = {
+        assertEquals("2", it)
+    }
+
     @Test
     fun saveAndRetrieveToken() {
         preferencesHelper.saveToken("testToken")
@@ -30,7 +34,15 @@ class PreferencesHelperTest {
         every { preferencesHelper.getLastSessionAccess() } returns currentTime - TimeUnit.MINUTES.toMillis(31)
         assertEquals(2, preferencesHelper.getSessionId())
         assertEquals(3, preferencesHelper.getSessionId())
+    }
 
+    @Test
+    fun verifySessionIdIncrementTriggerAction() {
+        val currentTime = System.currentTimeMillis()
+        assertEquals(1, preferencesHelper.getSessionId())
+        verify(exactly = 1) { preferencesHelper.resetSession() }
+        every { preferencesHelper.getLastSessionAccess() } returns currentTime - TimeUnit.MINUTES.toMillis(31)
+        assertEquals(2, preferencesHelper.getSessionId(dummyAction))
     }
 
     @Test
