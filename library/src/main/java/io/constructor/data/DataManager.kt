@@ -33,4 +33,8 @@ constructor(private val constructorApi: ConstructorApi) {
         return constructorApi.triggerSessionStartEvent(params.toMap())
     }
 
+    fun triggerConversionEvent(itemId: String, revenue: String? = null, params: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
+        return constructorApi.triggerConvertEvent(itemId, revenue, params.toMap())
+    }
+
 }

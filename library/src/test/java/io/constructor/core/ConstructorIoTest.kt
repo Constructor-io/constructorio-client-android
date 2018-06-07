@@ -17,7 +17,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
-import java.util.*
 import kotlin.test.assertEquals
 
 class ConstructorIoTest {
@@ -27,13 +26,13 @@ class ConstructorIoTest {
     private val data = mockk<DataManager>()
     private var constructorIo = ConstructorIo
     private val sampleMillis = "1520000000000"
-    private val dummySuggestion = SuggestionViewModel("", Group("123", "Test name", null), "",null)
+    private val dummySuggestion = SuggestionViewModel("", Group("123", "Test name", null), "", null)
 
     @Before
     fun setUp() {
         every { ctx.applicationContext } returns ctx
-        every { pref.saveToken(any()) } returns Unit
-        every { pref.getId() } returns "1"
+        every { pref.token = any() } returns Unit
+        every { pref.id } returns "1"
         every { pref.getSessionId() } returns 1
         every { pref.getSessionId(any()) } returns 1
         constructorIo.testInit(ctx, "dummyKey", data, pref)
@@ -69,20 +68,6 @@ class ConstructorIoTest {
 
     @Test
     fun verifyGetSuggestionsUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=session_start&autocomplete_key=testKey&_dt=1520000000000"
-        val urlBuilder = HttpUrl.Builder().scheme("https")
-                .host("ac.cnstrc.com")
-                .addPathSegment("behavior")
-                .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
-                .addQueryParameter(Constants.QueryConstants.SESSION, "1")
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
-                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
-        val urlString = urlBuilder.build().url().toString()
-        assertEquals(expected, urlString)
-    }
-
-    @Test
-    fun verifySessionStartUrl() {
         val expected = "https://ac.cnstrc.com/autocomplete/dog?autocomplete_key=testKey&_dt=1520000000000"
         val searchQuery = "dog"
         val urlBuilder = HttpUrl.Builder().scheme("https")
@@ -94,6 +79,22 @@ class ConstructorIoTest {
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
     }
+
+    @Test
+    fun verifySessionStartUrl() {
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=session_start&autocomplete_key=testKey&_dt=1520000000000"
+        val urlBuilder = HttpUrl.Builder().scheme("https")
+                .host("ac.cnstrc.com")
+                .addPathSegment("behavior")
+                .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
+                .addQueryParameter(Constants.QueryConstants.SESSION, "1")
+                .addQueryParameter(Constants.QueryConstants.ACTION, "session_start")
+                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
+        val urlString = urlBuilder.build().url().toString()
+        assertEquals(expected, urlString)
+    }
+
 
     @Test
     fun triggerSelectEventSuccess() {
@@ -155,6 +156,17 @@ class ConstructorIoTest {
             every { data.triggerSearchEvent(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
             constructorIo.triggerSearchEvent("doggy dog", dummySuggestion)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
+        }
+    }
+
+    @Test
+    fun triggerConversionEvent() {
+        staticMockk("io.constructor.util.ExtensionsKt").use {
+            every { ctx.broadcastIntent(any(), any()) } returns Unit
+            every { pref.defaultItemSection } returns "Products"
+            every { data.triggerConversionEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
+            constructorIo.triggerConversionEvent("1")
+            verify(exactly = 1) { data.triggerConversionEvent(any(), any(), any()) }
         }
     }
 

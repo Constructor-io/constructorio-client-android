@@ -5,4 +5,6 @@ object ApiPaths {
     const val URL_SELECT_EVENT = "autocomplete/{term}/select"
     const val URL_SEARCH_EVENT = "autocomplete/{term}/search"
     const val URL_SESSION_START_EVENT = "behavior"
+    const val URL_CONVERT_EVENT = "autocomplete/TERM_UNKNOWN/conversion"
+
 }

@@ -62,4 +62,18 @@ class DataManagerTest {
         verify(exactly = 1) { constructorApi.triggerSearchEvent(any(), any(), any())}
     }
 
+    @Test
+    fun triggerSessionStartEvent() {
+        every { constructorApi.triggerSessionStartEvent(any()) } returns Observable.just(Response.success(""))
+        dataManager.triggerSessionStartEvent(arrayOf())
+        verify(exactly = 1) { constructorApi.triggerSessionStartEvent(any())}
+    }
+
+    @Test
+    fun triggerConversionEvent() {
+        every { constructorApi.triggerConvertEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
+        dataManager.triggerConversionEvent("1")
+        verify(exactly = 1) { constructorApi.triggerConvertEvent(any(), any(), any())}
+    }
+
 }
