@@ -30,6 +30,14 @@ object ConstructorIo {
                 .build()
     }
 
+    var sessionIncrementEventHandler: (String) -> Unit = {
+        dataManager.triggerSessionStartEvent(arrayOf(Constants.QueryConstants.CLIENT to BuildConfig.CLIENT_VERSION,
+                Constants.QueryConstants.SESSION to it,
+                Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SESSION_START)).subscribe({}, {
+            d("Error triggering Session Change event")
+        })
+    }
+
     fun init(context: Context?, apiKey: String) {
         if (context == null) {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
@@ -45,7 +53,7 @@ object ConstructorIo {
 
     internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper) {
         if (context == null) {
-            throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
+            throw IllegalStateException("Context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
         this.dataManager = dataManager
@@ -59,7 +67,7 @@ object ConstructorIo {
     internal fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query)
 
     internal fun triggerSelectEvent(query: String, suggestion: SuggestionViewModel) {
-        val sessionId = preferenceHelper.getSessionId()
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val userId = preferenceHelper.getId()
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
@@ -85,12 +93,11 @@ object ConstructorIo {
     }
 
     internal fun triggerSearchEvent(query: String, suggestion: SuggestionViewModel) {
-        val sessionId = preferenceHelper.getSessionId()
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val userId = preferenceHelper.getId()
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-
         dataManager.triggerSearchEvent(suggestion.term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.IDENTITY to userId,
@@ -105,7 +112,6 @@ object ConstructorIo {
                 }, {
                     it.printStackTrace()
                     e("trigger search error: ${it.message}") //To change body of created functions use File | Settings | File Templates. }
-
                 })
     }
 

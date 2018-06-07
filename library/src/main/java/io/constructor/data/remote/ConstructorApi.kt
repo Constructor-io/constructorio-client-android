@@ -10,21 +10,15 @@ import retrofit2.http.QueryMap
 
 interface ConstructorApi {
 
-    /**
-     * gets suggestions based on search term
-     */
     @GET(ApiPaths.URL_GET_SUGGESTIONS)
     fun getSuggestions(@Path("value") value: String): Single<Response<Result>>
 
-    /**
-     * event that triggers on user selection
-     */
     @GET(ApiPaths.URL_SELECT_EVENT)
     fun triggerSelectEvent(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Observable<Response<String>>
 
-    /**
-     * event that triggers on user search
-     */
     @GET(ApiPaths.URL_SEARCH_EVENT)
     fun triggerSearchEvent(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Observable<Response<String>>
+
+    @GET(ApiPaths.URL_SESSION_START_EVENT)
+    fun triggerSessionStartEvent(@QueryMap params: Map<String, String>): Observable<Response<String>>
 }

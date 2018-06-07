@@ -13,7 +13,10 @@ class TokenInterceptor(val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = PreferencesHelper(context).getToken()
         var request = chain.request()
-        val url = request.url().newBuilder().addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, token).build()
+        val url = request.url().newBuilder()
+                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, token)
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, System.currentTimeMillis().toString())
+                .build()
         request = request.newBuilder().url(url).build()
         return chain.proceed(request)
     }
