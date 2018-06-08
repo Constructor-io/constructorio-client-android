@@ -128,6 +128,22 @@ class ConstructorIoTest {
     }
 
     @Test
+    fun verifyInputFocusEvent() {
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&i=user_id&s=1&action=focus&autocomplete_key=testKey&_dt=1520000000000"
+        val urlBuilder = HttpUrl.Builder().scheme("https")
+                .host("ac.cnstrc.com")
+                .addPathSegment("behavior")
+                .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
+                .addQueryParameter(Constants.QueryConstants.IDENTITY, "user_id")
+                .addQueryParameter(Constants.QueryConstants.SESSION, "1")
+                .addQueryParameter(Constants.QueryConstants.ACTION, Constants.QueryValues.EVENT_INPUT_FOCUS)
+                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
+        val urlString = urlBuilder.build().url().toString()
+        assertEquals(expected, urlString)
+    }
+
+    @Test
     fun triggerSelectEventSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
@@ -204,6 +220,13 @@ class ConstructorIoTest {
         every { data.triggerSearchResultClickThroughEvent(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
         constructorIo.triggerSearchResultClickThroughEvent("1", "1")
         verify(exactly = 1) { data.triggerSearchResultClickThroughEvent(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun triggerInputFocusEvent() {
+        every { data.triggerInputFocusEvent(any(), any()) } returns Observable.just(Response.success(""))
+        constructorIo.triggerInputFocusEvent("1")
+        verify(exactly = 1) { data.triggerInputFocusEvent(any(), any()) }
     }
 
 }

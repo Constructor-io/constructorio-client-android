@@ -32,5 +32,6 @@ class Constants {
         const val EVENT_SESSION_START = "session_start"
         const val SEARCH_SUGGESTIONS = "Search Suggestions"
         const val EVENT_SEARCH_RESULTS = "search-results"
+        const val EVENT_INPUT_FOCUS = "focus"
     }
 }
