@@ -37,4 +37,12 @@ constructor(private val constructorApi: ConstructorApi) {
         return constructorApi.triggerConvertEvent(itemId, revenue, params.toMap())
     }
 
+    fun triggerSearchResultClickThroughEvent(term: String, itemId: String, position: String? = null, params: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
+        return constructorApi.triggerSearchResultClickThroughEvent(term, itemId, position, params.toMap())
+    }
+
+    fun triggerSearchResultLoadedEvent(term: String, reultCount: Int, params: Array<Pair<String, String>>): Observable<Response<String>> {
+        return constructorApi.triggerSearchResultLoadedEvent(term, reultCount, params.toMap())
+    }
+
 }

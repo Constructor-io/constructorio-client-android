@@ -95,6 +95,37 @@ class ConstructorIoTest {
         assertEquals(expected, urlString)
     }
 
+    @Test
+    fun verifySearchClickThroughEvent() {
+        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=cioand-0.1.0&s=1&autocomplete_section=Products&autocomplete_key=testKey&_dt=1520000000000"
+        val urlBuilder = HttpUrl.Builder().scheme("https")
+                .host("ac.cnstrc.com")
+                .addPathSegment("autocomplete")
+                .addPathSegment("term")
+                .addPathSegment("click_through")
+                .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
+                .addQueryParameter(Constants.QueryConstants.SESSION, "1")
+                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_SECTION, "Products")
+                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
+        val urlString = urlBuilder.build().url().toString()
+        assertEquals(expected, urlString)
+    }
+
+    @Test
+    fun verifySearchLoadedEventUrl() {
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=search-results&autocomplete_key=testKey&_dt=1520000000000"
+        val urlBuilder = HttpUrl.Builder().scheme("https")
+                .host("ac.cnstrc.com")
+                .addPathSegment("behavior")
+                .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
+                .addQueryParameter(Constants.QueryConstants.SESSION, "1")
+                .addQueryParameter(Constants.QueryConstants.ACTION, Constants.QueryValues.EVENT_SEARCH_RESULTS)
+                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
+        val urlString = urlBuilder.build().url().toString()
+        assertEquals(expected, urlString)
+    }
 
     @Test
     fun triggerSelectEventSuccess() {
@@ -161,13 +192,18 @@ class ConstructorIoTest {
 
     @Test
     fun triggerConversionEvent() {
-        staticMockk("io.constructor.util.ExtensionsKt").use {
-            every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { pref.defaultItemSection } returns "Products"
-            every { data.triggerConversionEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
-            constructorIo.triggerConversionEvent("1")
-            verify(exactly = 1) { data.triggerConversionEvent(any(), any(), any()) }
-        }
+        every { pref.defaultItemSection } returns "Products"
+        every { data.triggerConversionEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
+        constructorIo.triggerConversionEvent("1")
+        verify(exactly = 1) { data.triggerConversionEvent(any(), any(), any()) }
+    }
+
+    @Test
+    fun triggerSearchResultClickThroughEvent() {
+        every { pref.defaultItemSection } returns "Products"
+        every { data.triggerSearchResultClickThroughEvent(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        constructorIo.triggerSearchResultClickThroughEvent("1", "1")
+        verify(exactly = 1) { data.triggerSearchResultClickThroughEvent(any(), any(), any(), any()) }
     }
 
 }

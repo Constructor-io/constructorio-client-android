@@ -25,4 +25,10 @@ interface ConstructorApi {
 
     @GET(ApiPaths.URL_CONVERT_EVENT)
     fun triggerConvertEvent(@Query("item_id") itemId: String, @Query("revenue") revenue: String?, @QueryMap params: Map<String, String>): Observable<Response<String>>
+
+    @GET(ApiPaths.URL_CLICK_THROUG_EVENT)
+    fun triggerSearchResultClickThroughEvent(@Path("term") term: String, @Query("item_id") itemId: String, @Query("position") position: String?, @QueryMap params: Map<String, String>): Observable<Response<String>>
+
+    @GET(ApiPaths.URL_SEARCH_RESULTS_EVENT)
+    fun triggerSearchResultLoadedEvent(@Query("term") term: String, @Query("num_results") resultCount: Int, @QueryMap params: Map<String, String>): Observable<Response<String>>
 }
