@@ -76,4 +76,18 @@ class DataManagerTest {
         verify(exactly = 1) { constructorApi.triggerConvertEvent(any(), any(), any())}
     }
 
+    @Test
+    fun triggerSearchResultClickThroughEvent() {
+        every { constructorApi.triggerSearchResultClickThroughEvent(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        dataManager.triggerSearchResultClickThroughEvent("term", "1")
+        verify(exactly = 1) { constructorApi.triggerSearchResultClickThroughEvent(any(), any(), any(), any())}
+    }
+
+    @Test
+    fun triggerSearchResultLoadedEvent() {
+        every { constructorApi.triggerSearchResultLoadedEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
+        dataManager.triggerSearchResultLoadedEvent("term", 10, arrayOf())
+        verify(exactly = 1) { constructorApi.triggerSearchResultLoadedEvent(any(), any(), any())}
+    }
+
 }
