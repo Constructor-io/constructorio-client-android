@@ -139,7 +139,7 @@ object ConstructorIo {
                 })
     }
 
-    internal fun triggerSearchResultLoadedEvent(term: String, resultCount: Int) {
+    fun triggerSearchResultLoadedEvent(term: String, resultCount: Int) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         dataManager.triggerSearchResultLoadedEvent(term, resultCount,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
@@ -151,6 +151,21 @@ object ConstructorIo {
                 }, { t ->
                     t.printStackTrace()
                     e("Conversion event error: ${t.message}")
+                })
+    }
+
+    internal fun triggerInputFocusEvent(term: String?) {
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        dataManager.triggerInputFocusEvent(term,
+                arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
+                        Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS)).subscribeOn(Schedulers.io())
+                .subscribe({ response ->
+                    if (response.isSuccessful) {
+                        d("Input focus event success")
+                    }
+                }, { t ->
+                    t.printStackTrace()
+                    e("Input focus event error: ${t.message}")
                 })
     }
 

@@ -9,6 +9,7 @@ import io.constructor.util.d
 import io.constructor.util.rx.scheduler.SchedulerUtils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -24,6 +25,14 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
             getSuggestions(query)
         }, {error ->
             error.printStackTrace()
+        }))
+        disposables.add(mvpView.inputFocusChanged().subscribeOn(Schedulers.io()).subscribe({
+            if (it.second) {
+                ConstructorIo.triggerInputFocusEvent(it.first)
+                d("Fired focus event for term: ${it.first}")
+            }
+        }, {
+            d("Error firing input focus event")
         }))
     }
 

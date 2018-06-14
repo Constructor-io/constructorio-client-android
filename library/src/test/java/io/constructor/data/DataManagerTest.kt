@@ -90,4 +90,11 @@ class DataManagerTest {
         verify(exactly = 1) { constructorApi.triggerSearchResultLoadedEvent(any(), any(), any())}
     }
 
+    @Test
+    fun triggerInputFocusEvent() {
+        every { constructorApi.inputFocusEvent(any(), any()) } returns Observable.just(Response.success(""))
+        dataManager.triggerInputFocusEvent("term", arrayOf())
+        verify(exactly = 1) { constructorApi.inputFocusEvent(any(), any()) }
+    }
+
 }

@@ -45,4 +45,8 @@ constructor(private val constructorApi: ConstructorApi) {
         return constructorApi.triggerSearchResultLoadedEvent(term, reultCount, params.toMap())
     }
 
+    fun triggerInputFocusEvent(term: String?, params: Array<Pair<String, String>>): Observable<Response<String>> {
+        return constructorApi.inputFocusEvent(term, params.toMap())
+    }
+
 }
