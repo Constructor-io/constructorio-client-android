@@ -32,7 +32,7 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
 
     fun getSuggestions(text: String) {
         mvpView.loading()
-        if (preferencesHelper.getToken().isEmpty()) {
+        if (preferencesHelper.token.isEmpty()) {
             mvpView.onError(IllegalStateException("token is null, please init library with token using ConstructorIo.init"))
             return
         }

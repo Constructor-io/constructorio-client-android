@@ -14,6 +14,7 @@ import io.constructor.util.broadcastIntent
 import io.constructor.util.d
 import io.constructor.util.e
 import io.constructor.util.urlEncode
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 @SuppressLint("StaticFieldLeak")
@@ -30,47 +31,53 @@ object ConstructorIo {
                 .build()
     }
 
-    fun init(context: Context?, apiKey: String) {
+    var sessionIncrementEventHandler: (String) -> Unit = {
+        dataManager.triggerSessionStartEvent(arrayOf(Constants.QueryConstants.SESSION to it,
+                Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SESSION_START)).subscribeOn(Schedulers.io()).subscribe({}, {
+            d("Error triggering Session Change event")
+        })
+    }
+
+    fun init(context: Context?, apiKey: String, defaultItemSection: String = BuildConfig.AUTOCOMPLETE_SECTION) {
         if (context == null) {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
         dataManager = component.dataManager()
         preferenceHelper = component.preferenceHelper()
-        preferenceHelper.saveToken(apiKey)
-        if (preferenceHelper.getId().isBlank()) {
-            preferenceHelper.saveId(UUID.randomUUID().toString())
+        preferenceHelper.token = apiKey
+        preferenceHelper.defaultItemSection = defaultItemSection
+        if (preferenceHelper.id.isBlank()) {
+            preferenceHelper.id = UUID.randomUUID().toString()
         }
     }
 
     internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper) {
         if (context == null) {
-            throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
+            throw IllegalStateException("Context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
         this.dataManager = dataManager
         this.preferenceHelper = preferenceHelper
-        preferenceHelper.saveToken(apiKey)
-        if (preferenceHelper.getId().isBlank()) {
-            preferenceHelper.saveId(UUID.randomUUID().toString())
+        preferenceHelper.token = apiKey
+        if (preferenceHelper.id.isBlank()) {
+            preferenceHelper.id = UUID.randomUUID().toString()
         }
     }
 
     internal fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query)
 
     internal fun triggerSelectEvent(query: String, suggestion: SuggestionViewModel) {
-        val sessionId = preferenceHelper.getSessionId()
-        val userId = preferenceHelper.getId()
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
         dataManager.triggerSelectEvent(suggestion.term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
-                        Constants.QueryConstants.IDENTITY to userId,
+                        Constants.QueryConstants.IDENTITY to preferenceHelper.id,
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to suggestion.section!!,
                         Constants.QueryConstants.ORIGINAL_QUERY to query,
-                        Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK,
-                        Constants.QueryConstants.CLIENT to BuildConfig.CLIENT_VERSION),
+                        Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK),
                 encodedParams.toTypedArray())
                 .subscribe({ response ->
                     if (response.isSuccessful) {
@@ -81,31 +88,43 @@ object ConstructorIo {
                     t.printStackTrace()
                     e("trigger select error: ${t.message}") //To change body of created functions use File | Settings | File Templates.
                 })
-
     }
 
     internal fun triggerSearchEvent(query: String, suggestion: SuggestionViewModel) {
-        val sessionId = preferenceHelper.getSessionId()
-        val userId = preferenceHelper.getId()
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        val userId = preferenceHelper.id
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-
         dataManager.triggerSearchEvent(suggestion.term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.IDENTITY to userId,
                         Constants.QueryConstants.ORIGINAL_QUERY to query,
-                        Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH,
-                        Constants.QueryConstants.CLIENT to BuildConfig.CLIENT_VERSION), encodedParams.toTypedArray())
+                        Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH), encodedParams.toTypedArray())
                 .subscribe({
                     if (it.isSuccessful) {
-                        d("trigger search success") //To change body of created functions use File | Settings | File Templates.
+                        d("trigger search success")
                         context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
                     }
                 }, {
                     it.printStackTrace()
-                    e("trigger search error: ${it.message}") //To change body of created functions use File | Settings | File Templates. }
+                    e("trigger search error: ${it.message}")
+                })
+    }
 
+    fun triggerConversionEvent(itemId: String, revenue: String? = null) {
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        dataManager.triggerConversionEvent(itemId, revenue,
+                arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
+                        Constants.QueryConstants.IDENTITY to preferenceHelper.id,
+                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to preferenceHelper.defaultItemSection)).subscribeOn(Schedulers.io())
+                .subscribe({ response ->
+                    if (response.isSuccessful) {
+                        d("Conversion event success")
+                    }
+                }, { t ->
+                    t.printStackTrace()
+                    e("Conversion event error: ${t.message}")
                 })
     }
 
