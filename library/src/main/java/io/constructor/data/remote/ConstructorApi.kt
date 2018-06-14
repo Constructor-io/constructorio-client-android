@@ -26,7 +26,7 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_CONVERT_EVENT)
     fun triggerConvertEvent(@Query("item_id") itemId: String, @Query("revenue") revenue: String?, @QueryMap params: Map<String, String>): Observable<Response<String>>
 
-    @GET(ApiPaths.URL_CLICK_THROUG_EVENT)
+    @GET(ApiPaths.URL_CLICK_THROUGH_EVENT)
     fun triggerSearchResultClickThroughEvent(@Path("term") term: String, @Query("item_id") itemId: String, @Query("position") position: String?, @QueryMap params: Map<String, String>): Observable<Response<String>>
 
     @GET(ApiPaths.URL_BEHAVIOR)
