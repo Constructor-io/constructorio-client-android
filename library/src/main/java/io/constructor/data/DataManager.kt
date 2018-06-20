@@ -21,32 +21,32 @@ constructor(private val constructorApi: ConstructorApi) {
         }
     }.flatMapIterable { result -> result.sections.suggestions }.toList()
 
-    fun triggerSelectEvent(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
-        return constructorApi.triggerSelectEvent(term, params.toMap(), encodedParams.toMap())
+    fun trackSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
+        return constructorApi.trackSelect(term, params.toMap(), encodedParams.toMap())
     }
 
-    fun triggerSearchEvent(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
-        return constructorApi.triggerSearchEvent(term, params.toMap(), encodedParams.toMap())
+    fun trackSearch(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
+        return constructorApi.trackSearch(term, params.toMap(), encodedParams.toMap())
     }
 
-    fun triggerSessionStartEvent(params: Array<Pair<String, String>>): Observable<Response<String>> {
-        return constructorApi.triggerSessionStartEvent(params.toMap())
+    fun trackSessionStart(params: Array<Pair<String, String>>): Observable<Response<String>> {
+        return constructorApi.trackSessionStart(params.toMap())
     }
 
-    fun triggerConversionEvent(itemId: String, revenue: String? = null, params: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
-        return constructorApi.triggerConvertEvent(itemId, revenue, params.toMap())
+    fun trackConversion(term: String, itemId: String, revenue: String? = null, params: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
+        return constructorApi.trackConversion(term, itemId, revenue, params.toMap())
     }
 
-    fun triggerSearchResultClickThroughEvent(term: String, itemId: String, position: String? = null, params: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
-        return constructorApi.triggerSearchResultClickThroughEvent(term, itemId, position, params.toMap())
+    fun trackSearchResultClickThrough(term: String, itemId: String, position: String? = null, params: Array<Pair<String, String>> = arrayOf()): Observable<Response<String>> {
+        return constructorApi.trackSearchResultClickThrough(term, itemId, position, params.toMap())
     }
 
-    fun triggerSearchResultLoadedEvent(term: String, reultCount: Int, params: Array<Pair<String, String>>): Observable<Response<String>> {
-        return constructorApi.triggerSearchResultLoadedEvent(term, reultCount, params.toMap())
+    fun trackSearchResultLoaded(term: String, reultCount: Int, params: Array<Pair<String, String>>): Observable<Response<String>> {
+        return constructorApi.trackSearchResultLoaded(term, reultCount, params.toMap())
     }
 
-    fun triggerInputFocusEvent(term: String?, params: Array<Pair<String, String>>): Observable<Response<String>> {
-        return constructorApi.inputFocusEvent(term, params.toMap())
+    fun trackInputFocus(term: String?, params: Array<Pair<String, String>>): Observable<Response<String>> {
+        return constructorApi.trackInputFocus(term, params.toMap())
     }
 
 }

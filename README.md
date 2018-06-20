@@ -232,9 +232,9 @@ Triggered when error occured while requesting suggestions.
 
 Default fragment expose two additional methods for easier implementing custom UI:
 
-### triggerSearch()
+### trackSearch()
 
-Manually trigger search using text in the input box.
+Manually track search using text in the input box.
 
 ### clearSuggestions()
 
@@ -242,27 +242,29 @@ Clear input box and suggestion list.
 
 ## ConstructorIO public API
 
-### triggerConversionEvent(itemId: String, revenue: String?)
+### trackConversion(term: String, itemId: String, revenue: String?)
 
-Trigger conversion event
+Track conversion event
 
 |Parameter|Type|Description|
 |--|--|--|
+|`term`|String|Optional term for which tracking event is reported.|
 |`itemId`|String|Id of item for which we want to trigger an event.|
+|`revenue`|String|Optional revenue indicator.|
 
-### triggerSearchResultClickThroughEvent(term: String, itemId: String, position: String?)
+### trackSearchResultClickThrough(term: String, itemId: String, position: String?)
 
-Trigger search result click event
+Track search result click event
 
 |Parameter|Type|Description|
 |--|--|--|
 |`term`|String|Term used for search.|
-|`itemId`|String|Id of item for which we want to trigger an event.|
+|`itemId`|String|Id of item for which we want to track an event.|
 |`position`|String|Optional position of clicked item on the list.|
 
 ### triggerSearchResultLoadedEvent(term: String, resultCount: Int)
 
-Trigger search results loaded event
+Track search results loaded event
 
 |Parameter|Type|Description|
 |--|--|--|

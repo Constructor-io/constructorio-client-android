@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         button.setOnClickListener { startActivity(Intent(this, SampleActivity::class.java)) }
         button2.setOnClickListener { startActivity(Intent(this, SampleActivityCustom::class.java)) }
-        button3.setOnClickListener { ConstructorIo.triggerConversionEvent("testId", "$11.99") }
-        button4.setOnClickListener { ConstructorIo.triggerSearchResultClickThroughEvent("testTerm", "testId", "1") }
+        button3.setOnClickListener { ConstructorIo.trackConversion("testId", revenue = "$11.99") }
+        button4.setOnClickListener { ConstructorIo.trackSearchResultClickThrough("testTerm", "testId", "1") }
     }
 }

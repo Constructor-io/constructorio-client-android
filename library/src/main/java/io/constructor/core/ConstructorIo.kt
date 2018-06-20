@@ -32,7 +32,7 @@ object ConstructorIo {
     }
 
     var sessionIncrementEventHandler: (String) -> Unit = {
-        dataManager.triggerSessionStartEvent(arrayOf(Constants.QueryConstants.SESSION to it,
+        dataManager.trackSessionStart(arrayOf(Constants.QueryConstants.SESSION to it,
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SESSION_START)).subscribeOn(Schedulers.io()).subscribe({}, {
             d("Error triggering Session Change event")
         })
@@ -67,12 +67,12 @@ object ConstructorIo {
 
     internal fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query)
 
-    internal fun triggerSelectEvent(query: String, suggestion: SuggestionViewModel) {
+    internal fun trackSelect(query: String, suggestion: SuggestionViewModel) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-        dataManager.triggerSelectEvent(suggestion.term,
+        dataManager.trackSelect(suggestion.term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to suggestion.section!!,
                         Constants.QueryConstants.ORIGINAL_QUERY to query,
@@ -89,12 +89,12 @@ object ConstructorIo {
                 })
     }
 
-    internal fun triggerSearchEvent(query: String, suggestion: SuggestionViewModel) {
+    internal fun trackSearch(query: String, suggestion: SuggestionViewModel) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-        dataManager.triggerSearchEvent(suggestion.term,
+        dataManager.trackSearch(suggestion.term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ORIGINAL_QUERY to query,
                         Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH), encodedParams.toTypedArray())
@@ -109,9 +109,9 @@ object ConstructorIo {
                 })
     }
 
-    fun triggerConversionEvent(itemId: String, revenue: String? = null) {
+    fun trackConversion(itemId: String, term: String = "TERM_UNKNOWN", revenue: String? = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        dataManager.triggerConversionEvent(itemId, revenue,
+        dataManager.trackConversion(term, itemId, revenue,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to preferenceHelper.defaultItemSection)).subscribeOn(Schedulers.io())
                 .subscribe({ response ->
@@ -124,9 +124,9 @@ object ConstructorIo {
                 })
     }
 
-    fun triggerSearchResultClickThroughEvent(term: String, itemId: String, position: String? = null) {
+    fun trackSearchResultClickThrough(term: String, itemId: String, position: String? = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        dataManager.triggerSearchResultClickThroughEvent(term, itemId, position,
+        dataManager.trackSearchResultClickThrough(term, itemId, position,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to preferenceHelper.defaultItemSection)).subscribeOn(Schedulers.io())
                 .subscribe({ response ->
@@ -139,9 +139,9 @@ object ConstructorIo {
                 })
     }
 
-    fun triggerSearchResultLoadedEvent(term: String, resultCount: Int) {
+    fun trackSearchResultLoaded(term: String, resultCount: Int) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        dataManager.triggerSearchResultLoadedEvent(term, resultCount,
+        dataManager.trackSearchResultLoaded(term, resultCount,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS)).subscribeOn(Schedulers.io())
                 .subscribe({ response ->
@@ -154,9 +154,9 @@ object ConstructorIo {
                 })
     }
 
-    internal fun triggerInputFocusEvent(term: String?) {
+    internal fun trackInputFocus(term: String?) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        dataManager.triggerInputFocusEvent(term,
+        dataManager.trackInputFocus(term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS)).subscribeOn(Schedulers.io())
                 .subscribe({ response ->
