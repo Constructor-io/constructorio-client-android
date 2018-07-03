@@ -46,8 +46,8 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
             return
         }
         disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<List<Suggestion>>()).subscribe({ suggestions ->
-            ConstructorIo.trackSearchResultLoaded(text, suggestions.size)
-            mvpView.showSuggestions(suggestions, preferencesHelper.categoriesPerTerm)
+            ConstructorIo.triggerSearchResultLoadedEvent(text, suggestions.size)
+            mvpView.showSuggestions(suggestions)
         }, { error ->
             run {
                 if (error is NoSuchElementException) {

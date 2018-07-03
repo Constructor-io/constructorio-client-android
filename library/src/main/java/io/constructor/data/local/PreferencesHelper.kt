@@ -28,10 +28,6 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         get() = preferences.getString(PREF_DEFAULT_ITEM_SECTION, "")
         set(value) = preferences.edit().putString(PREF_DEFAULT_ITEM_SECTION, value).apply()
 
-    var categoriesPerTerm: Int
-        get() = preferences.getInt(PREF_CATEGORIES_PER_TERM, 2)
-        set(value) = preferences.edit().putInt(PREF_CATEGORIES_PER_TERM, value).apply()
-
     var lastSessionAccess: Long
         get() = preferences.getLong(SESSION_LAST_ACCESS, System.currentTimeMillis())
         set(value) = preferences.edit().putLong(SESSION_LAST_ACCESS, value).apply()
@@ -65,12 +61,17 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
     companion object {
 
         const val PREF_TOKEN = "token"
+
         const val PREF_DEFAULT_ITEM_SECTION = "default_item_section"
-        const val PREF_CATEGORIES_PER_TERM = "categories_per_term"
+
         const val PREF_ID = "id"
+
         const val PREF_FILE_NAME = "constructor_pref_file"
+
         const val SESSION_ID = "session_id"
+
         const val SESSION_LAST_ACCESS = "session_last_access"
+
         const val SESSION_TIME_THRESHOLD = 1000 * 60 * 30
     }
 

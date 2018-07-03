@@ -7,7 +7,7 @@ import io.reactivex.Observable
 
 interface SuggestionsView : MvpView {
 
-    fun showSuggestions(suggestionsResult: List<Suggestion>, categoriesPerTerm: Int = Int.MAX_VALUE)
+    fun showSuggestions(suggestionsResult: List<Suggestion>)
     fun queryChanged() : Observable<String>
     fun inputFocusChanged() : Observable<Pair<String?, Boolean>>
     fun loading()
