@@ -22,7 +22,7 @@ class OnSearchService : IntentService("OnSearchService") {
         val query: String? = intent?.getStringExtra(Constants.EXTRA_QUERY)
         val suggestion: SuggestionViewModel = intent?.getSerializableExtra(Constants.EXTRA_SUGGESTION) as SuggestionViewModel
             if (!suggestion.term.isBlank()) {
-                ConstructorIo.triggerSearchEvent(query!!, suggestion)
+                ConstructorIo.trackSearch(query!!, suggestion)
             }
     }
 }

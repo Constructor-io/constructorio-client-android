@@ -27,7 +27,7 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
         }))
         disposables.add(mvpView.inputFocusChanged().subscribeOn(Schedulers.io()).subscribe({
             if (it.second) {
-                ConstructorIo.triggerInputFocusEvent(it.first)
+                ConstructorIo.trackInputFocus(it.first)
                 d("Fired focus event for term: ${it.first}")
             }
         }, {
@@ -46,7 +46,7 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
             return
         }
         disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<List<Suggestion>>()).subscribe({ suggestions ->
-            ConstructorIo.triggerSearchResultLoadedEvent(text, suggestions.size)
+            ConstructorIo.trackSearchResultLoaded(text, suggestions.size)
             mvpView.showSuggestions(suggestions, preferencesHelper.groupsShownForFirstTerm)
         }, { error ->
             run {

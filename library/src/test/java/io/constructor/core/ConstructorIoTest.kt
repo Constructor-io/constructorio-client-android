@@ -144,31 +144,31 @@ class ConstructorIoTest {
     }
 
     @Test
-    fun triggerSelectEventSuccess() {
+    fun trackSelectSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.triggerSelectEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
-            constructorIo.triggerSelectEvent("doggy dog", dummySuggestion)
+            every { data.trackSelect(any(), any(), any()) } returns Observable.just(Response.success(""))
+            constructorIo.trackSelect("doggy dog", dummySuggestion)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
     }
 
     @Test
-    fun triggerSelectEventError() {
+    fun trackSelectError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.triggerSelectEvent(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
-            constructorIo.triggerSelectEvent("doggy dog", dummySuggestion)
+            every { data.trackSelect(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
+            constructorIo.trackSelect("doggy dog", dummySuggestion)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
     }
 
     @Test
-    fun triggerSearchEventSuccess() {
+    fun trackSearchSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.triggerSearchEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
-            constructorIo.triggerSearchEvent("doggy dog", dummySuggestion)
+            every { data.trackSearch(any(), any(), any()) } returns Observable.just(Response.success(""))
+            constructorIo.trackSearch("doggy dog", dummySuggestion)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
     }
@@ -197,36 +197,36 @@ class ConstructorIoTest {
     }
 
     @Test
-    fun triggerSearchEventError() {
+    fun trackSearchError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.triggerSearchEvent(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
-            constructorIo.triggerSearchEvent("doggy dog", dummySuggestion)
+            every { data.trackSearch(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
+            constructorIo.trackSearch("doggy dog", dummySuggestion)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
     }
 
     @Test
-    fun triggerConversionEvent() {
+    fun trackConversion() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.triggerConversionEvent(any(), any(), any()) } returns Observable.just(Response.success(""))
-        constructorIo.triggerConversionEvent("1")
-        verify(exactly = 1) { data.triggerConversionEvent(any(), any(), any()) }
+        every { data.trackConversion(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        constructorIo.trackConversion(itemId = "1")
+        verify(exactly = 1) { data.trackConversion(any(), any(), any(), any()) }
     }
 
     @Test
-    fun triggerSearchResultClickThroughEvent() {
+    fun trackSearchResultClickThrough() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.triggerSearchResultClickThroughEvent(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
-        constructorIo.triggerSearchResultClickThroughEvent("1", "1")
-        verify(exactly = 1) { data.triggerSearchResultClickThroughEvent(any(), any(), any(), any()) }
+        every { data.trackSearchResultClickThrough(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        constructorIo.trackSearchResultClickThrough("1", "1")
+        verify(exactly = 1) { data.trackSearchResultClickThrough(any(), any(), any(), any()) }
     }
 
     @Test
-    fun triggerInputFocusEvent() {
-        every { data.triggerInputFocusEvent(any(), any()) } returns Observable.just(Response.success(""))
-        constructorIo.triggerInputFocusEvent("1")
-        verify(exactly = 1) { data.triggerInputFocusEvent(any(), any()) }
+    fun trackInputFocus() {
+        every { data.trackInputFocus(any(), any()) } returns Observable.just(Response.success(""))
+        constructorIo.trackInputFocus("1")
+        verify(exactly = 1) { data.trackInputFocus(any(), any()) }
     }
 
 }
