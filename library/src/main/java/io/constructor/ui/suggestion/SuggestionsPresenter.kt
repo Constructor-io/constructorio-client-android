@@ -8,7 +8,6 @@ import io.constructor.injection.ConfigPersistent
 import io.constructor.util.d
 import io.constructor.util.rx.scheduler.SchedulerUtils
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -48,7 +47,7 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
         }
         disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<List<Suggestion>>()).subscribe({ suggestions ->
             ConstructorIo.triggerSearchResultLoadedEvent(text, suggestions.size)
-            mvpView.showSuggestions(suggestions)
+            mvpView.showSuggestions(suggestions, preferencesHelper.groupsShownForFirstTerm)
         }, { error ->
             run {
                 if (error is NoSuchElementException) {
