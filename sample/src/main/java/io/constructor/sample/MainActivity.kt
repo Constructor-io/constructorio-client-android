@@ -16,6 +16,6 @@ class MainActivity : AppCompatActivity() {
         button2.setOnClickListener { startActivity(Intent(this, SampleActivityCustom::class.java)) }
         button3.setOnClickListener { ConstructorIo.trackConversion("testId", revenue = "$11.99") }
         button4.setOnClickListener { ConstructorIo.trackSearchResultClickThrough("testTerm", "testId", "1") }
-        button5.setOnClickListener { ConstructorIo.trackSearchResultLoadedEvent("testTerm", Random().nextInt(99) + 1) }
+        button5.setOnClickListener { ConstructorIo.trackSearchResultLoaded("testTerm", Random().nextInt(99) + 1) }
     }
 }
