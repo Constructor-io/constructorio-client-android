@@ -141,12 +141,12 @@ abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {
 
     abstract fun getProgressId(): Int
 
-    override fun showSuggestions(suggestionsResult: List<Suggestion>) {
+    override fun showSuggestions(suggestionsResult: List<Suggestion>, groupsShownForFirstTerm: Int) {
         progressIndicator?.visibility = View.GONE
         activity?.let {
             it.broadcastIntent(Constants.EVENT_SUGGESTIONS_RETRIEVED, Constants.EXTRA_SUGGESTIONS to suggestionsResult)
         }
-        val suggestionViews = Mapper.toSuggestionsViewModel(suggestionsResult)
+        val suggestionViews = Mapper.toSuggestionsViewModel(suggestionsResult, groupsShownForFirstTerm)
         val adapter = getSuggestionAdapter()
         adapter.setData(suggestionViews)
         adapter.setListener(object : BaseSuggestionsAdapter.ClickListener {
