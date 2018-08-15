@@ -82,7 +82,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySessionStartUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=session_start&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.2.0&s=1&action=session_start&autocomplete_key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -97,7 +97,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchClickThroughEvent() {
-        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=cioand-0.1.0&s=1&autocomplete_section=Products&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=cioand-0.2.0&s=1&autocomplete_section=Products&autocomplete_key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("autocomplete")
@@ -114,7 +114,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchLoadedEventUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=search-results&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.2.0&s=1&action=search-results&autocomplete_key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -129,7 +129,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifyInputFocusEvent() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&i=user_id&s=1&action=focus&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.2.0&i=user_id&s=1&action=focus&autocomplete_key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
