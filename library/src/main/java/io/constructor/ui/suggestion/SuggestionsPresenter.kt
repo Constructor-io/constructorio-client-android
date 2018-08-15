@@ -8,6 +8,7 @@ import io.constructor.injection.ConfigPersistent
 import io.constructor.util.d
 import io.constructor.util.rx.scheduler.SchedulerUtils
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -24,6 +25,14 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
         }, {error ->
             error.printStackTrace()
         }))
+        disposables.add(mvpView.inputFocusChanged().subscribeOn(Schedulers.io()).subscribe({
+            if (it.second) {
+                ConstructorIo.trackInputFocus(it.first)
+                d("Fired focus event for term: ${it.first}")
+            }
+        }, {
+            d("Error firing input focus event")
+        }))
     }
 
     override fun detachView() {
@@ -32,12 +41,13 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
 
     fun getSuggestions(text: String) {
         mvpView.loading()
-        if (preferencesHelper.getToken().isEmpty()) {
+        if (preferencesHelper.token.isEmpty()) {
             mvpView.onError(IllegalStateException("token is null, please init library with token using ConstructorIo.init"))
             return
         }
         disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<List<Suggestion>>()).subscribe({ suggestions ->
-            mvpView.showSuggestions(suggestions)
+            ConstructorIo.trackSearchResultLoaded(text, suggestions.size)
+            mvpView.showSuggestions(suggestions, preferencesHelper.groupsShownForFirstTerm)
         }, { error ->
             run {
                 if (error is NoSuchElementException) {

@@ -3,6 +3,7 @@ package io.constructor.sample
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import io.constructor.core.ConstructorIo
 
 import io.constructor.core.ConstructorListener
 import io.constructor.data.model.Group

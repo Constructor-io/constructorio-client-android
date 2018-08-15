@@ -13,7 +13,9 @@ class Constants {
 
     object QueryConstants {
         const val SESSION = "s"
+        const val TIMESTAMP = "_dt"
         const val IDENTITY = "i"
+        const val ACTION = "action"
         const val AUTOCOMPLETE_SECTION = "autocomplete_section"
         const val ORIGINAL_QUERY = "original_query"
         const val CLIENT = "c"
@@ -26,6 +28,9 @@ class Constants {
     object QueryValues {
         const val EVENT_CLICK = "click"
         const val EVENT_SEARCH = "search"
+        const val EVENT_SESSION_START = "session_start"
         const val SEARCH_SUGGESTIONS = "Search Suggestions"
+        const val EVENT_SEARCH_RESULTS = "search-results"
+        const val EVENT_INPUT_FOCUS = "focus"
     }
 }

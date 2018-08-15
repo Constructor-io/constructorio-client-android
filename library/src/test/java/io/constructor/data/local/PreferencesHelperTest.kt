@@ -15,10 +15,20 @@ class PreferencesHelperTest {
 
     private var preferencesHelper = spyk(PreferencesHelper(RuntimeEnvironment.application.applicationContext, "test.prefs"))
 
+    private var dummyAction: (String) -> Unit = {
+        assertEquals("2", it)
+    }
+
     @Test
     fun saveAndRetrieveToken() {
-        preferencesHelper.saveToken("testToken")
-        assertEquals("testToken", preferencesHelper.getToken())
+        preferencesHelper.token = "testToken"
+        assertEquals("testToken", preferencesHelper.token)
+    }
+
+    @Test
+    fun saveAndRetrieveDefaultItemSection() {
+        preferencesHelper.defaultItemSection = "Products"
+        assertEquals("Products", preferencesHelper.defaultItemSection)
     }
 
     @Test
@@ -27,22 +37,30 @@ class PreferencesHelperTest {
         assertEquals(1, preferencesHelper.getSessionId())
         verify(exactly = 1) { preferencesHelper.resetSession() }
         assertEquals(1, preferencesHelper.getSessionId())
-        every { preferencesHelper.getLastSessionAccess() } returns currentTime - TimeUnit.MINUTES.toMillis(31)
+        every { preferencesHelper.lastSessionAccess } returns currentTime - TimeUnit.MINUTES.toMillis(31)
         assertEquals(2, preferencesHelper.getSessionId())
         assertEquals(3, preferencesHelper.getSessionId())
+    }
 
+    @Test
+    fun verifySessionIdIncrementTriggerAction() {
+        val currentTime = System.currentTimeMillis()
+        assertEquals(1, preferencesHelper.getSessionId())
+        verify(exactly = 1) { preferencesHelper.resetSession() }
+        every { preferencesHelper.lastSessionAccess} returns currentTime - TimeUnit.MINUTES.toMillis(31)
+        assertEquals(2, preferencesHelper.getSessionId(dummyAction))
     }
 
     @Test
     fun saveAndRetrieveId() {
-        preferencesHelper.saveId("testId")
-        assertEquals("testId", preferencesHelper.getId())
+        preferencesHelper.id = "testId"
+        assertEquals("testId", preferencesHelper.id)
     }
 
     @Test
     fun clearAllValues() {
         preferencesHelper.clear()
-        assertEquals("", preferencesHelper.getId())
+        assertEquals("", preferencesHelper.id)
     }
 
 }

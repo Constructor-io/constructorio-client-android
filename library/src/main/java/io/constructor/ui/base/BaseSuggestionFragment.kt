@@ -35,9 +35,10 @@ import javax.inject.Inject
 /**
  * abstract class you can extend to use your own custom ui
  */
-abstract class BaseSuggestionFragment: BaseFragment(), SuggestionsView {
+abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {
 
     private val searchSubject = PublishSubject.create<String>()
+    private val focusChange = PublishSubject.create<Pair<String?, Boolean>>()
     private var listener: ConstructorListener? = null
     private var suggestionList: RecyclerView? = null
     private var suggestionBox: EditText? = null
@@ -52,7 +53,8 @@ abstract class BaseSuggestionFragment: BaseFragment(), SuggestionsView {
                 when (it.action) {
                     Constants.EVENT_QUERY_SENT -> listener?.onQuerySentToServer(it.getStringExtra(Constants.EXTRA_TERM))
                     Constants.EVENT_SUGGESTIONS_RETRIEVED -> listener?.onSuggestionsRetrieved(it.getSerializableExtra(Constants.EXTRA_SUGGESTIONS) as List<Suggestion>)
-                    else -> {}
+                    else -> {
+                    }
                 }
             }
         }
@@ -69,6 +71,10 @@ abstract class BaseSuggestionFragment: BaseFragment(), SuggestionsView {
         super.onActivityCreated(savedInstanceState)
         suggestionList = view?.findViewById(getSuggestionListId())
         suggestionBox = view?.findViewById(getSuggestionsInputId())
+        suggestionBox?.setOnFocusChangeListener { v, hasFocus ->
+            val text = (v as EditText).text.toString()
+            focusChange.onNext(Pair(if (text.isNullOrBlank()) null else text, hasFocus))
+        }
         progressIndicator = view?.findViewById(getProgressId())
         suggestionList?.layoutManager = LinearLayoutManager(context)
         suggestionList?.adapter = getSuggestionAdapter()
@@ -127,20 +133,20 @@ abstract class BaseSuggestionFragment: BaseFragment(), SuggestionsView {
     }
 
 
-    abstract fun getSuggestionAdapter() : BaseSuggestionsAdapter
+    abstract fun getSuggestionAdapter(): BaseSuggestionsAdapter
 
-    abstract fun getSuggestionsInputId() : Int
+    abstract fun getSuggestionsInputId(): Int
 
-    abstract fun getSuggestionListId() : Int
+    abstract fun getSuggestionListId(): Int
 
-    abstract fun getProgressId() : Int
+    abstract fun getProgressId(): Int
 
-    override fun showSuggestions(suggestionsResult: List<Suggestion>) {
+    override fun showSuggestions(suggestionsResult: List<Suggestion>, groupsShownForFirstTerm: Int) {
         progressIndicator?.visibility = View.GONE
         activity?.let {
             it.broadcastIntent(Constants.EVENT_SUGGESTIONS_RETRIEVED, Constants.EXTRA_SUGGESTIONS to suggestionsResult)
         }
-        val suggestionViews = Mapper.toSuggestionsViewModel(suggestionsResult)
+        val suggestionViews = Mapper.toSuggestionsViewModel(suggestionsResult, groupsShownForFirstTerm)
         val adapter = getSuggestionAdapter()
         adapter.setData(suggestionViews)
         adapter.setListener(object : BaseSuggestionsAdapter.ClickListener {
@@ -156,6 +162,10 @@ abstract class BaseSuggestionFragment: BaseFragment(), SuggestionsView {
 
     override fun queryChanged(): Observable<String> {
         return searchSubject
+    }
+
+    override fun inputFocusChanged(): Observable<Pair<String?, Boolean>> {
+        return focusChange
     }
 
     override fun onError(error: Throwable) {
