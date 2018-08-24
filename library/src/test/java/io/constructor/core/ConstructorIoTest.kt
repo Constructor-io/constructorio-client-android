@@ -223,6 +223,18 @@ class ConstructorIoTest {
     }
 
     @Test
+    fun getSessionId() {
+        constructorIo.getSessionId()
+        verify(exactly = 1) { pref.getSessionId() }
+    }
+
+    @Test
+    fun getClientId() {
+        constructorIo.getClientId()
+        verify(exactly = 2) { pref.id }
+    }
+
+    @Test
     fun trackInputFocus() {
         every { data.trackInputFocus(any(), any()) } returns Observable.just(Response.success(""))
         constructorIo.trackInputFocus("1")

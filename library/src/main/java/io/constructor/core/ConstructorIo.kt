@@ -52,6 +52,10 @@ object ConstructorIo {
         }
     }
 
+    fun getSessionId() = preferenceHelper.getSessionId()
+
+    fun getClientId() = preferenceHelper.id
+
     internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper) {
         if (context == null) {
             throw IllegalStateException("Context is null, please init library using ConstructorIo.with(context)")
