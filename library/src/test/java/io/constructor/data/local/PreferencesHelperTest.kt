@@ -35,7 +35,7 @@ class PreferencesHelperTest {
     fun getSessionId() {
         val currentTime = System.currentTimeMillis()
         assertEquals(1, preferencesHelper.getSessionId())
-        verify(exactly = 1) { preferencesHelper.resetSession() }
+        verify(exactly = 1) { preferencesHelper.resetSession(any()) }
         assertEquals(1, preferencesHelper.getSessionId())
         every { preferencesHelper.lastSessionAccess } returns currentTime - TimeUnit.MINUTES.toMillis(31)
         assertEquals(2, preferencesHelper.getSessionId())
@@ -46,7 +46,7 @@ class PreferencesHelperTest {
     fun verifySessionIdIncrementTriggerAction() {
         val currentTime = System.currentTimeMillis()
         assertEquals(1, preferencesHelper.getSessionId())
-        verify(exactly = 1) { preferencesHelper.resetSession() }
+        verify(exactly = 1) { preferencesHelper.resetSession(any()) }
         every { preferencesHelper.lastSessionAccess} returns currentTime - TimeUnit.MINUTES.toMillis(31)
         assertEquals(2, preferencesHelper.getSessionId(dummyAction))
     }
