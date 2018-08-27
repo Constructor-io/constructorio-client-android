@@ -10,10 +10,7 @@ import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
 import io.constructor.injection.module.NetworkModule
-import io.constructor.util.broadcastIntent
-import io.constructor.util.d
-import io.constructor.util.e
-import io.constructor.util.urlEncode
+import io.constructor.util.*
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -55,6 +52,14 @@ object ConstructorIo {
     fun getSessionId() = preferenceHelper.getSessionId()
 
     fun getClientId() = preferenceHelper.id
+
+    fun setTestCellValues(pair1: Pair<String, String>, pair2: Pair<String, String>? = null, pair3: Pair<String, String>? = null) {
+        preferenceHelper.testCellParams = listOf(pair1, pair2, pair3)
+    }
+
+    fun clearTestCellValues() {
+        preferenceHelper.clearTestCellParams()
+    }
 
     internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper) {
         if (context == null) {

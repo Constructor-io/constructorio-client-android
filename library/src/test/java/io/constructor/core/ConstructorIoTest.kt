@@ -3,6 +3,7 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.BuildConfig
 import io.constructor.data.DataManager
+import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.Group
 import io.constructor.data.model.SuggestionViewModel
@@ -10,9 +11,9 @@ import io.constructor.util.broadcastIntent
 import io.constructor.util.urlEncode
 import io.mockk.*
 import io.reactivex.Observable
-import okhttp3.HttpUrl
-import okhttp3.MediaType
-import okhttp3.ResponseBody
+import okhttp3.*
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -194,6 +195,23 @@ class ConstructorIoTest {
                 .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
+    }
+
+    @Test
+    fun verifyTestCellParamsAddedToRequest() {
+        val mockServer = MockWebServer()
+        every { pref.token } returns "123"
+        every { pref.id } returns "1"
+        every { pref.testCellParams = any() } just Runs
+        every { pref.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
+        constructorIo.setTestCellValues("1" to "2", "3" to "4")
+        verify(exactly = 1) { pref.testCellParams = any() }
+        mockServer.start()
+        mockServer.enqueue(MockResponse())
+        var client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref)).build()
+        client.newCall(Request.Builder().url(mockServer.url("/")).build()).execute()
+        var recordedRequest = mockServer.takeRequest()
+        assert(recordedRequest.path.contains("ef-1=2"))
     }
 
     @Test
