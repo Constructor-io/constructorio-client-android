@@ -1,6 +1,8 @@
 package io.constructor.data
 
+import com.squareup.moshi.Moshi
 import io.constructor.data.model.Suggestion
+import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.remote.ConstructorApi
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -9,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class DataManager @Inject
-constructor(private val constructorApi: ConstructorApi) {
+constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
 
     fun getAutocompleteResults(text: String): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getSuggestions(text).map {
         if (!it.isError) {

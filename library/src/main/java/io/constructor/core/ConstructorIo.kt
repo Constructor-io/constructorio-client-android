@@ -16,6 +16,8 @@ import io.constructor.util.d
 import io.constructor.util.e
 import io.constructor.util.urlEncode
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -62,6 +64,7 @@ object ConstructorIo {
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
         }
+        clearTestCellValues()
     }
 
     fun getSessionId() = preferenceHelper.getSessionId()
@@ -90,7 +93,26 @@ object ConstructorIo {
         }
     }
 
-    fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query)
+    internal fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+
+    fun search(text: String, vararg facets: Pair<String, String>, page: Int? = null, perPage: Int? = null, groupId: Int? = null): Observable<SearchResponse> {
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        val params: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        page?.let {
+            params.add(Constants.QueryConstants.PAGE to page.toString())
+        }
+        perPage?.let {
+            params.add(Constants.QueryConstants.PER_PAGE to perPage.toString())
+        }
+        params.add(Constants.QueryConstants.SESSION to sessionId.toString())
+        facets.forEach { it?.let {
+            encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(it.first).urlEncode() to it.second)
+        } }
+        return dataManager.search(text, params = params.toTypedArray(), encodedParams = encodedParams.toTypedArray())
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    }
 
     fun trackSelect(query: String, suggestion: SuggestionViewModel, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
@@ -120,7 +142,7 @@ object ConstructorIo {
         disposable.add(dataManager.trackSearch(suggestion.term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ORIGINAL_QUERY to query,
-                        Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH), encodedParams.toTypedArray())
+                        Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH), encodedParams.toTypedArray()).subscribeOn(Schedulers.io())
                 .subscribe({
                     context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
                 }, {

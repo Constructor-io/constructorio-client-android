@@ -1,5 +1,7 @@
 package io.constructor.data
 
+import com.squareup.moshi.KotlinJsonAdapterFactory
+import com.squareup.moshi.Moshi
 import io.constructor.data.model.AutocompleteResult
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.util.RxSchedulersOverrideRule
@@ -8,6 +10,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.MediaType
 import okhttp3.ResponseBody
@@ -23,7 +26,7 @@ class DataManagerTest {
 
     private var constructorApi = mockk<ConstructorApi>()
 
-    private var dataManager = DataManager(constructorApi)
+    private var dataManager = DataManager(constructorApi, Moshi.Builder().add(KotlinJsonAdapterFactory()).build())
 
     @Test
     fun getSuggestions() {
@@ -67,6 +70,27 @@ class DataManagerTest {
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.isEmpty
+        }
+    }
+
+    @Test
+    fun getSearchResultsDefault() {
+        every { constructorApi.search("corn", any(), any()) } returns Observable.just(Response.success(ResponseBody.create(MediaType.parse("application/json"), TestDataLoader.loadAsString("search_response.json"))))
+        val observer = dataManager.search("corn").test()
+        observer.assertComplete().assertValue {
+            it.searchData.resultCount == 87
+        }
+        observer.assertValue {
+            it.searchData.results!!.size == 87
+        }
+    }
+
+    @Test
+    fun getSearchResultsError() {
+        every { constructorApi.search("corn", any(), any()) } returns Observable.just(Response.error(401, ResponseBody.create(MediaType.parse("text/plain"), "")))
+        val observer = dataManager.search("corn").test()
+        observer.assertError {
+            it is Exception
         }
     }
 

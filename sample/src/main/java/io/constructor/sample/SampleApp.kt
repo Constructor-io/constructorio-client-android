@@ -8,6 +8,5 @@ class SampleApp : Application() {
     override fun onCreate() {
         super.onCreate()
         ConstructorIo.init(this, "key_OucJxxrfiTVUQx0C")
-        ConstructorIo.setTestCellValues("ab" to "cd", "11" to "22")
     }
 }

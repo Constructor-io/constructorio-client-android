@@ -2,7 +2,10 @@ package io.constructor.data.remote
 
 import io.constructor.data.model.AutocompleteResult
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,6 +19,9 @@ interface ConstructorApi {
 
     @GET(ApiPaths.URL_SELECT_EVENT)
     fun trackSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
+
+    @GET(ApiPaths.URL_SEARCH)
+    fun search(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Observable<Response<ResponseBody>>
 
     @GET(ApiPaths.URL_SEARCH_EVENT)
     fun trackSearch(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable

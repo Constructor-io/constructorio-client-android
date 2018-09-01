@@ -22,6 +22,10 @@ class Constants {
         const val EVENT = "tr"
         const val AUTOCOMPLETE_KEY = "autocomplete_key"
         const val GROUP_ID = "group[group_id]"
+        const val PAGE = "page"
+        const val PER_PAGE = "num_results_per_page"
+        const val FILTER_GROUP_ID = "filters[group_id]"
+        const val FILTER_FACET = "filters[%s]"
         const val GROUP_DISPLAY_NAME = "group[display_name]"
     }
 
