@@ -63,7 +63,7 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
 
     fun getSessionId(sessionIncrementAction: ((String) -> Unit)? = null): Int {
         if (!preferences.contains(SESSION_ID)) {
-            return resetSession()
+            return resetSession(sessionIncrementAction)
         }
         val sessionTime = lastSessionAccess
         val timeDiff = System.currentTimeMillis() - sessionTime
@@ -76,9 +76,10 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         return preferences.getInt(SESSION_ID, 1)
     }
 
-    internal fun resetSession(): Int {
+    internal fun resetSession(sessionIncrementAction: ((String) -> Unit)?): Int {
         val sessionId = 1
         preferences.edit().putInt(SESSION_ID, sessionId).apply()
+        sessionIncrementAction?.invoke(sessionId.toString())
         return sessionId
     }
 
