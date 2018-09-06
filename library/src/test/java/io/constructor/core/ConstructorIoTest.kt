@@ -5,6 +5,7 @@ import io.constructor.BuildConfig
 import io.constructor.data.DataManager
 import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
+import io.constructor.data.model.ResultGroup
 import io.constructor.data.memory.TestCellMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.SuggestionViewModel
@@ -27,7 +28,8 @@ import kotlin.test.assertEquals
 class ConstructorIoTest {
 
     @Rule
-    @JvmField val overrideSchedulersRule = RxSchedulersOverrideRule()
+    @JvmField
+    val overrideSchedulersRule = RxSchedulersOverrideRule()
 
     private val ctx = mockk<Context>()
     private val pref = mockk<PreferencesHelper>()
@@ -35,7 +37,7 @@ class ConstructorIoTest {
     private val data = mockk<DataManager>()
     private var constructorIo = ConstructorIo
     private val sampleMillis = "1520000000000"
-    private val dummySuggestion = SuggestionViewModel("", Group("123", "Test name", null), "", null)
+    private val dummySuggestion = SuggestionViewModel("", ResultGroup("123", "Test name", null), "", null)
 
     @Before
     fun setUp() {

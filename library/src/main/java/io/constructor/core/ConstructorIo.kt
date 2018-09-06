@@ -133,7 +133,6 @@ object ConstructorIo {
                 }, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("trigger select error: ${t.message}") //To change body of created functions use File | Settings | File Templates.
                 }))
     }
 
@@ -151,7 +150,6 @@ object ConstructorIo {
                 }, {
                     it.printStackTrace()
                     errorCallback?.invoke(it)
-                    e("trigger search error: ${it.message}")
                 }))
     }
 
@@ -163,7 +161,6 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Conversion event error: ${t.message}")
                 }))
     }
 

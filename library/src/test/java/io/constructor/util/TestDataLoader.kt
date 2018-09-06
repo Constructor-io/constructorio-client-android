@@ -2,7 +2,7 @@ package io.constructor.util
 
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
-import io.constructor.data.model.AutocompleteResult
+import io.constructor.data.model.AutocompleteResponse
 import io.constructor.data.model.search.SearchResponse
 import okio.Buffer
 import java.io.File
@@ -13,13 +13,13 @@ import java.nio.charset.Charset
 
 object TestDataLoader {
 
-    fun loadResponse() : AutocompleteResult? = loadResult<AutocompleteResult>("response.json", AutocompleteResult::class.java)
+    fun loadResponse() : AutocompleteResponse? = loadResult<AutocompleteResponse>("response.json", AutocompleteResponse::class.java)
 
     fun loadSearchResponse() : SearchResponse? = loadResult<SearchResponse>("response.json", SearchResponse::class.java)
 
-    fun loadResponseWithUnknownData() : AutocompleteResult? = loadResult<AutocompleteResult>("response_with_unexpected_data.json", AutocompleteResult::class.java)
+    fun loadResponseWithUnknownData() : AutocompleteResponse? = loadResult<AutocompleteResponse>("response_with_unexpected_data.json", AutocompleteResponse::class.java)
 
-    fun loadEmptyResponse() : AutocompleteResult? = loadResult<AutocompleteResult>("empty_response.json", AutocompleteResult::class.java)
+    fun loadEmptyResponse() : AutocompleteResponse? = loadResult<AutocompleteResponse>("empty_response.json", AutocompleteResponse::class.java)
 
     private fun <T> loadResult(fileName: String, responseClass: Class<*>): T? {
         val file = File(TestDataLoader::class.java.classLoader.getResource(fileName).path)

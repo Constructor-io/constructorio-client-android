@@ -1,3 +1,3 @@
 package io.constructor.data.model.search
 
-data class ResultFacet(val name: String, val values: List<Option>?)
+data class ResultFacet(val name: String, val values: List<FacetOption>?)

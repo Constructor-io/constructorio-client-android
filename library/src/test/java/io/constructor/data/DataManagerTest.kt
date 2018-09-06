@@ -75,7 +75,7 @@ class DataManagerTest {
 
     @Test
     fun getSearchResultsDefault() {
-        every { constructorApi.search("corn", any(), any()) } returns Observable.just(Response.success(ResponseBody.create(MediaType.parse("application/json"), TestDataLoader.loadAsString("search_response.json"))))
+        every { constructorApi.search(any()) } returns Observable.just(Response.success(ResponseBody.create(MediaType.parse("application/json"), TestDataLoader.loadAsString("search_response.json"))))
         val observer = dataManager.search("corn").test()
         observer.assertComplete().assertValue {
             it.searchData.resultCount == 87
@@ -87,7 +87,7 @@ class DataManagerTest {
 
     @Test
     fun getSearchResultsError() {
-        every { constructorApi.search("corn", any(), any()) } returns Observable.just(Response.error(401, ResponseBody.create(MediaType.parse("text/plain"), "")))
+        every { constructorApi.search(any()) } returns Observable.just(Response.error(401, ResponseBody.create(MediaType.parse("text/plain"), "")))
         val observer = dataManager.search("corn").test()
         observer.assertError {
             it is Exception
