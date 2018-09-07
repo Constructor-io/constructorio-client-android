@@ -2,7 +2,7 @@ package io.constructor.util
 
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
-import io.constructor.data.model.Result
+import io.constructor.data.model.AutocompleteResult
 import okio.Buffer
 import java.io.File
 import java.io.FileInputStream
@@ -11,17 +11,17 @@ import java.io.IOException
 
 object TestDataLoader {
 
-    fun loadResponse() : Result? = loadResult("response.json")
+    fun loadResponse() : AutocompleteResult? = loadResult("response.json")
 
-    fun loadResponseWithUnknownData() : Result? = loadResult("response_with_unexpected_data.json")
+    fun loadResponseWithUnknownData() : AutocompleteResult? = loadResult("response_with_unexpected_data.json")
 
-    fun loadEmptyResponse() : Result? = loadResult("empty_response.json")
+    fun loadEmptyResponse() : AutocompleteResult? = loadResult("empty_response.json")
 
-    private fun loadResult(fileName: String): Result? {
+    private fun loadResult(fileName: String): AutocompleteResult? {
         val file = File(TestDataLoader::class.java.classLoader.getResource(fileName).path)
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val jsonAdapter = moshi.adapter(Result::class.java)
-        var result: Result? = null
+        val jsonAdapter = moshi.adapter(AutocompleteResult::class.java)
+        var result: AutocompleteResult? = null
         try {
             result = jsonAdapter.fromJson(Buffer().readFrom(FileInputStream(file)))
         } catch (e: IOException) {
