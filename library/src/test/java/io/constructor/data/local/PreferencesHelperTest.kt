@@ -52,14 +52,6 @@ class PreferencesHelperTest {
     }
 
     @Test
-    fun verifyTestCellsWrittenAndEncoded() {
-        preferencesHelper.testCellParams = listOf("1" to "2", "3" to "4", null)
-        val params = preferencesHelper.testCellParams
-        assert(params[0]!!.first == "ef-1" && params[0]!!.second == "2")
-        assert(params[1]!!.first == "ef-3" && params[1]!!.second == "4")
-    }
-
-    @Test
     fun saveAndRetrieveId() {
         preferencesHelper.id = "testId"
         assertEquals("testId", preferencesHelper.id)

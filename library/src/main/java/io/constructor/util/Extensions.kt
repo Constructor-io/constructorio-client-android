@@ -37,7 +37,7 @@ fun Any.d(msg: String) = Log.d(this::class.qualifiedName, msg)
 fun Any.e(msg: String) = Log.e(this::class.qualifiedName, msg)
 
 fun String.base64Encode(): String? {
-    return Base64.encodeToString(toByteArray(), Base64.NO_WRAP or Base64.NO_PADDING)
+    return String(Base64.encode(toByteArray(), Base64.NO_WRAP or Base64.NO_PADDING))
 }
 
 fun String.base64Decode(): String {

@@ -3,8 +3,6 @@ package io.constructor.data.local
 import android.content.Context
 import android.content.SharedPreferences
 import io.constructor.injection.ApplicationContext
-import io.constructor.util.base64Decode
-import io.constructor.util.base64Encode
 import javax.inject.Inject
 
 class PreferencesHelper @Inject
@@ -31,35 +29,6 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
     var lastSessionAccess: Long
         get() = preferences.getLong(SESSION_LAST_ACCESS, System.currentTimeMillis())
         set(value) = preferences.edit().putLong(SESSION_LAST_ACCESS, value).apply()
-
-    var testCellParams: List<Pair<String, String>?>
-        get() {
-            val result = mutableListOf<Pair<String, String>>()
-            val s = preferences.getString(TEST_CELL_PARAMS, "")
-            if (s.isNotEmpty()) {
-                s.split(";").forEach {
-                    val pair = it.split("=")
-                    result.add("ef-${pair[0].base64Decode()}" to pair[1].base64Decode())
-                }
-            }
-            return result
-        }
-        set(value) {
-            var combined = ""
-            value.filter { it != null }.forEachIndexed { index, pair ->
-                combined += if (index == 0) {
-                    "${pair!!.first.base64Encode()}=${pair.second.base64Encode()}"
-                } else {
-                    ";${pair!!.first.base64Encode()}=${pair.second.base64Encode()}"
-                }
-            }
-            preferences.edit().putString(TEST_CELL_PARAMS, combined).apply()
-        }
-
-
-    fun clearTestCellParams() {
-        preferences.edit().remove(TEST_CELL_PARAMS).apply()
-    }
 
     fun getSessionId(sessionIncrementAction: ((String) -> Unit)? = null): Int {
         if (!preferences.contains(SESSION_ID)) {
