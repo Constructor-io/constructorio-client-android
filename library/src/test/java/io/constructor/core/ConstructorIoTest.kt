@@ -5,6 +5,7 @@ import io.constructor.BuildConfig
 import io.constructor.data.DataManager
 import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
+import io.constructor.data.memory.TestCellMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.SuggestionViewModel
 import io.constructor.util.RxSchedulersOverrideRule
@@ -30,6 +31,7 @@ class ConstructorIoTest {
 
     private val ctx = mockk<Context>()
     private val pref = mockk<PreferencesHelper>()
+    private val testCellMemoryHolder = mockk<TestCellMemoryHolder>()
     private val data = mockk<DataManager>()
     private var constructorIo = ConstructorIo
     private val sampleMillis = "1520000000000"
@@ -42,7 +44,7 @@ class ConstructorIoTest {
         every { pref.id } returns "1"
         every { pref.getSessionId() } returns 1
         every { pref.getSessionId(any()) } returns 1
-        constructorIo.testInit(ctx, "dummyKey", data, pref)
+        constructorIo.testInit(ctx, "dummyKey", data, pref, testCellMemoryHolder)
     }
 
     @After
@@ -208,13 +210,13 @@ class ConstructorIoTest {
         val mockServer = MockWebServer()
         every { pref.token } returns "123"
         every { pref.id } returns "1"
-        every { pref.testCellParams = any() } just Runs
-        every { pref.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
+        every { testCellMemoryHolder.testCellParams = any() } just Runs
+        every { testCellMemoryHolder.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
         constructorIo.setTestCellValues("1" to "2", "3" to "4")
-        verify(exactly = 1) { pref.testCellParams = any() }
+        verify(exactly = 1) { testCellMemoryHolder.testCellParams = any() }
         mockServer.start()
         mockServer.enqueue(MockResponse())
-        var client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref)).build()
+        var client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, testCellMemoryHolder)).build()
         client.newCall(Request.Builder().url(mockServer.url("/")).build()).execute()
         var recordedRequest = mockServer.takeRequest()
         assert(recordedRequest.path.contains("ef-1=2"))
