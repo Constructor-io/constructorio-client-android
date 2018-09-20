@@ -99,11 +99,8 @@ object ConstructorIo {
                         Constants.QueryConstants.ORIGINAL_QUERY to query,
                         Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK),
                 encodedParams.toTypedArray())
-                .subscribe({ response ->
-                    if (response.isSuccessful) {
-                        d("trigger select success") //To change body of created functions use File | Settings | File Templates.
-                        context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
-                    }
+                .subscribe({
+                    context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
                 }, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
@@ -121,10 +118,7 @@ object ConstructorIo {
                         Constants.QueryConstants.ORIGINAL_QUERY to query,
                         Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH), encodedParams.toTypedArray())
                 .subscribe({
-                    if (it.isSuccessful) {
-                        context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
-                        d("trigger search success")
-                    }
+                    context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
                 }, {
                     it.printStackTrace()
                     errorCallback?.invoke(it)
@@ -137,11 +131,7 @@ object ConstructorIo {
         disposable.add(dataManager.trackConversion(term, itemId, revenue,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to preferenceHelper.defaultItemSection)).subscribeOn(Schedulers.io())
-                .subscribe({ response ->
-                    if (response.isSuccessful) {
-                        d("Conversion event success")
-                    }
-                }, { t ->
+                .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
                     e("Conversion event error: ${t.message}")
@@ -153,11 +143,7 @@ object ConstructorIo {
         disposable.add(dataManager.trackSearchResultClickThrough(term, itemId, position,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to preferenceHelper.defaultItemSection)).subscribeOn(Schedulers.io())
-                .subscribe({ response ->
-                    if (response.isSuccessful) {
-                        d("Conversion click through event success")
-                    }
-                }, { t ->
+                .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
                     e("Conversion click through event error: ${t.message}")
@@ -169,11 +155,7 @@ object ConstructorIo {
         disposable.add(dataManager.trackSearchResultLoaded(term, resultCount,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS)).subscribeOn(Schedulers.io())
-                .subscribe({ response ->
-                    if (response.isSuccessful) {
-                        d("Conversion event success")
-                    }
-                }, { t ->
+                .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
                     e("Conversion event error: ${t.message}")
@@ -185,11 +167,7 @@ object ConstructorIo {
         disposable.add(dataManager.trackInputFocus(term,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS)).subscribeOn(Schedulers.io())
-                .subscribe({ response ->
-                    if (response.isSuccessful) {
-                        d("Input focus event success")
-                    }
-                }, { t ->
+                .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
                     e("Input focus event error: ${t.message}")

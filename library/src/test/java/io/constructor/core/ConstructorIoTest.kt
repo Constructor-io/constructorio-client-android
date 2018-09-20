@@ -7,20 +7,26 @@ import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.Group
 import io.constructor.data.model.SuggestionViewModel
+import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.broadcastIntent
 import io.constructor.util.urlEncode
 import io.mockk.*
-import io.reactivex.Observable
-import okhttp3.*
+import io.reactivex.Completable
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import retrofit2.Response
 import kotlin.test.assertEquals
 
 class ConstructorIoTest {
+
+    @Rule
+    @JvmField val overrideSchedulersRule = RxSchedulersOverrideRule()
 
     private val ctx = mockk<Context>()
     private val pref = mockk<PreferencesHelper>()
@@ -148,7 +154,7 @@ class ConstructorIoTest {
     fun trackSelectSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Observable.just(Response.success(""))
+            every { data.trackSelect(any(), any(), any()) } returns Completable.complete()
             constructorIo.trackSelect("doggy dog", dummySuggestion)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
@@ -158,7 +164,7 @@ class ConstructorIoTest {
     fun trackSelectError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
+            every { data.trackSelect(any(), any(), any()) } returns Completable.error(Exception())
             constructorIo.trackSelect("doggy dog", dummySuggestion)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
@@ -168,7 +174,7 @@ class ConstructorIoTest {
     fun trackSearchSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Observable.just(Response.success(""))
+            every { data.trackSearch(any(), any(), any()) } returns Completable.complete()
             constructorIo.trackSearch("doggy dog", dummySuggestion)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
@@ -218,7 +224,7 @@ class ConstructorIoTest {
     fun trackSearchError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
+            every { data.trackSearch(any(), any(), any()) } returns Completable.error(Exception())
             constructorIo.trackSearch("doggy dog", dummySuggestion)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
@@ -227,7 +233,7 @@ class ConstructorIoTest {
     @Test
     fun trackConversion() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackConversion(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        every { data.trackConversion(any(), any(), any(), any()) } returns Completable.complete()
         constructorIo.trackConversion(itemId = "1")
         verify(exactly = 1) { data.trackConversion(any(), any(), any(), any()) }
     }
@@ -235,7 +241,7 @@ class ConstructorIoTest {
     @Test
     fun trackSearchResultClickThrough() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackSearchResultClickThrough(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        every { data.trackSearchResultClickThrough(any(), any(), any(), any()) } returns Completable.complete()
         constructorIo.trackSearchResultClickThrough("1", "1")
         verify(exactly = 1) { data.trackSearchResultClickThrough(any(), any(), any(), any()) }
     }
@@ -254,7 +260,7 @@ class ConstructorIoTest {
 
     @Test
     fun trackInputFocus() {
-        every { data.trackInputFocus(any(), any()) } returns Observable.just(Response.success(""))
+        every { data.trackInputFocus(any(), any()) } returns Completable.complete()
         constructorIo.trackInputFocus("1")
         verify(exactly = 1) { data.trackInputFocus(any(), any()) }
     }
