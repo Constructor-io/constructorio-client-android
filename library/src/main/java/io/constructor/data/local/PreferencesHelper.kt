@@ -57,7 +57,6 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
     }
 
     companion object {
-
         const val PREF_TOKEN = "token"
         const val PREF_DEFAULT_ITEM_SECTION = "default_item_section"
         const val GROUPS_SHOWN_FOR_FIRST_TERM = "groups_shown_for_first_term"
@@ -65,8 +64,6 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         const val PREF_FILE_NAME = "constructor_pref_file"
         const val SESSION_ID = "session_id"
         const val SESSION_LAST_ACCESS = "session_last_access"
-        const val TEST_CELL_PARAMS = "test_cell_params"
-
         const val SESSION_TIME_THRESHOLD = 1000 * 60 * 30
     }
 
