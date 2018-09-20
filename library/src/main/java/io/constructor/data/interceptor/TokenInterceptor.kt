@@ -19,7 +19,7 @@ class TokenInterceptor(val context: Context, private val preferencesHelper: Pref
                 .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
         preferencesHelper.testCellParams.forEach {
             it?.let {
-                builder.addQueryParameter("ef-${it.first}", it.second)
+                builder.addQueryParameter(it.first, it.second)
             }
         }
         val url = builder.build()

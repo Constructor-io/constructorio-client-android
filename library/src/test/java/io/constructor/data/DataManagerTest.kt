@@ -53,8 +53,8 @@ class DataManagerTest {
     }
 
     @Test
-    fun getSuggestionsResponseContainsUnexpectedData() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnknownData())))
+    fun getSuggestionsUnexpectedDataResponse() {
+        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnexpectedData())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.get()!!.isNotEmpty() && it.get()!!.size == 5
@@ -62,7 +62,7 @@ class DataManagerTest {
     }
 
     @Test
-    fun getEmptySuggestions() {
+    fun getSuggestionsEmptyResponse() {
         every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadEmptyResponse())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
@@ -95,7 +95,7 @@ class DataManagerTest {
     }
 
     @Test
-    fun trackError() {
+    fun trackSearchError() {
         every { constructorApi.trackSearch(any(), any(), any()) } returns Completable.error(Exception())
         val observer = dataManager.trackSearch("titanic").test()
         observer.assertError {
