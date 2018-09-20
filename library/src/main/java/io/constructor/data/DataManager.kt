@@ -45,7 +45,7 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
                 throw Exception()
             }
         }
-    }.toObservable()
+    }
 
     fun trackSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackSelect(term, params.toMap(), encodedParams.toMap())

@@ -5,9 +5,8 @@ import io.constructor.BuildConfig
 import io.constructor.data.DataManager
 import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.model.ResultGroup
 import io.constructor.data.memory.TestCellMemoryHolder
-import io.constructor.data.model.Group
+import io.constructor.data.model.ResultGroup
 import io.constructor.data.model.SuggestionViewModel
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.broadcastIntent

@@ -6,12 +6,13 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
 
 interface ConstructorApi {
 
     @GET(ApiPaths.URL_GET_SUGGESTIONS)
-    fun getSuggestions(@Path("value") value: String): Single<Response<AutocompleteResponse>>
+    fun getSuggestions(@Path("value") value: String): Single<Result<AutocompleteResponse>>
 
     @GET(ApiPaths.URL_SELECT_EVENT)
     fun trackSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable

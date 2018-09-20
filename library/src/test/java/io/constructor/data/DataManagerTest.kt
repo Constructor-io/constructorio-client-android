@@ -2,7 +2,7 @@ package io.constructor.data
 
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
-import io.constructor.data.model.AutocompleteResult
+import io.constructor.data.model.AutocompleteResponse
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -48,7 +48,7 @@ class DataManagerTest {
 
     @Test
     fun getSuggestionsException() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.error<AutocompleteResult>(Exception()))
+        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.error<AutocompleteResponse>(Exception()))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.isError
@@ -57,7 +57,7 @@ class DataManagerTest {
 
     @Test
     fun getSuggestionsUnexpectedDataResponse() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnexpectedData())))
+        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnknownData())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.get()!!.isNotEmpty() && it.get()!!.size == 5

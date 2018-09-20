@@ -9,6 +9,7 @@ import io.constructor.BuildConfig
 import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.TestCellMemoryHolder
+import io.constructor.data.remote.ResultDataAdapter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -56,6 +57,7 @@ class NetworkModule(private val context: Context) {
     @Singleton
     internal fun provideMoshi(): Moshi = Moshi
             .Builder()
+            .add(ResultDataAdapter())
             .add(KotlinJsonAdapterFactory())
             .build()
 }
