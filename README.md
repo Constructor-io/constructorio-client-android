@@ -1,34 +1,14 @@
+[![Release](https://jitpack.io/v/Constructor-io/constructorio-client-android.svg)](https://jitpack.io/#Constructor-io/constructorio--client-android) [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Constructor-io/constructorio-client-android/blob/master/LICENSE)
+
 # Constructor.io Android Client Library
 
-
-An android client library for constructor.io suggestions engine
+An Android Client library for [Constructor.io](http://constructor.io/).  [Constructor.io](http://constructor.io/) provides search as a service that optimizes results using artificial intelligence (including natural language processing, re-ranking to optimize for conversions, and user personalization).
 
 # Usage
 
-## 1a. Install using gradle
-Add following to main gradle file:
+## 1. Install
 
-```
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-and then in your app gradle file include Constructor.IO dependency:
-
-```
-dependencies {
-    implementation 'com.github.Constructor-io:constructorio-client-android:v0.1'
-}
-```
-
-## 1b. Manual import
-
-* Clone the android client repository from github ```git clone https://github.com/Constructor-io/constructorio-client-android.git```
-* Open and build the project in your IDE
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v1.0.0) to add the client to your project.
 
 ## 2. Retrieve an autocomplete key
 
