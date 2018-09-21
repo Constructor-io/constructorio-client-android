@@ -3,26 +3,35 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.BuildConfig
 import io.constructor.data.DataManager
+import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
+import io.constructor.data.memory.TestCellMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.SuggestionViewModel
+import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.broadcastIntent
 import io.constructor.util.urlEncode
 import io.mockk.*
-import io.reactivex.Observable
+import io.reactivex.Completable
 import okhttp3.HttpUrl
-import okhttp3.MediaType
-import okhttp3.ResponseBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import retrofit2.Response
 import kotlin.test.assertEquals
 
 class ConstructorIoTest {
 
+    @Rule
+    @JvmField val overrideSchedulersRule = RxSchedulersOverrideRule()
+
     private val ctx = mockk<Context>()
     private val pref = mockk<PreferencesHelper>()
+    private val testCellMemoryHolder = mockk<TestCellMemoryHolder>()
     private val data = mockk<DataManager>()
     private var constructorIo = ConstructorIo
     private val sampleMillis = "1520000000000"
@@ -35,7 +44,7 @@ class ConstructorIoTest {
         every { pref.id } returns "1"
         every { pref.getSessionId() } returns 1
         every { pref.getSessionId(any()) } returns 1
-        constructorIo.testInit(ctx, "dummyKey", data, pref)
+        constructorIo.testInit(ctx, "dummyKey", data, pref, testCellMemoryHolder)
     }
 
     @After
@@ -147,7 +156,7 @@ class ConstructorIoTest {
     fun trackSelectSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Observable.just(Response.success(""))
+            every { data.trackSelect(any(), any(), any()) } returns Completable.complete()
             constructorIo.trackSelect("doggy dog", dummySuggestion)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
@@ -157,7 +166,7 @@ class ConstructorIoTest {
     fun trackSelectError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
+            every { data.trackSelect(any(), any(), any()) } returns Completable.error(Exception())
             constructorIo.trackSelect("doggy dog", dummySuggestion)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
@@ -167,7 +176,7 @@ class ConstructorIoTest {
     fun trackSearchSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Observable.just(Response.success(""))
+            every { data.trackSearch(any(), any(), any()) } returns Completable.complete()
             constructorIo.trackSearch("doggy dog", dummySuggestion)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
@@ -197,10 +206,27 @@ class ConstructorIoTest {
     }
 
     @Test
+    fun verifyTestCellParamsAddedToRequest() {
+        val mockServer = MockWebServer()
+        every { pref.token } returns "123"
+        every { pref.id } returns "1"
+        every { testCellMemoryHolder.testCellParams = any() } just Runs
+        every { testCellMemoryHolder.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
+        constructorIo.setTestCellValues("1" to "2", "3" to "4")
+        verify(exactly = 1) { testCellMemoryHolder.testCellParams = any() }
+        mockServer.start()
+        mockServer.enqueue(MockResponse())
+        var client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, testCellMemoryHolder)).build()
+        client.newCall(Request.Builder().url(mockServer.url("/")).build()).execute()
+        var recordedRequest = mockServer.takeRequest()
+        assert(recordedRequest.path.contains("ef-1=2"))
+    }
+
+    @Test
     fun trackSearchError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Observable.just(Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), "")))
+            every { data.trackSearch(any(), any(), any()) } returns Completable.error(Exception())
             constructorIo.trackSearch("doggy dog", dummySuggestion)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
@@ -209,7 +235,7 @@ class ConstructorIoTest {
     @Test
     fun trackConversion() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackConversion(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        every { data.trackConversion(any(), any(), any(), any()) } returns Completable.complete()
         constructorIo.trackConversion(itemId = "1")
         verify(exactly = 1) { data.trackConversion(any(), any(), any(), any()) }
     }
@@ -217,14 +243,26 @@ class ConstructorIoTest {
     @Test
     fun trackSearchResultClickThrough() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackSearchResultClickThrough(any(), any(), any(), any()) } returns Observable.just(Response.success(""))
+        every { data.trackSearchResultClickThrough(any(), any(), any(), any()) } returns Completable.complete()
         constructorIo.trackSearchResultClickThrough("1", "1")
         verify(exactly = 1) { data.trackSearchResultClickThrough(any(), any(), any(), any()) }
     }
 
     @Test
+    fun getSessionId() {
+        constructorIo.getSessionId()
+        verify(exactly = 1) { pref.getSessionId() }
+    }
+
+    @Test
+    fun getClientId() {
+        constructorIo.getClientId()
+        verify(exactly = 2) { pref.id }
+    }
+
+    @Test
     fun trackInputFocus() {
-        every { data.trackInputFocus(any(), any()) } returns Observable.just(Response.success(""))
+        every { data.trackInputFocus(any(), any()) } returns Completable.complete()
         constructorIo.trackInputFocus("1")
         verify(exactly = 1) { data.trackInputFocus(any(), any()) }
     }

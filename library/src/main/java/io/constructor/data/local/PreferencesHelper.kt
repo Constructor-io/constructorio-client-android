@@ -2,14 +2,8 @@ package io.constructor.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
-import io.constructor.BuildConfig
-import io.constructor.core.Constants
-import io.constructor.core.ConstructorIo
-import io.constructor.data.DataManager
 import io.constructor.injection.ApplicationContext
-import io.constructor.util.d
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class PreferencesHelper @Inject
 constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FILE_NAME) {
@@ -36,10 +30,9 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         get() = preferences.getLong(SESSION_LAST_ACCESS, System.currentTimeMillis())
         set(value) = preferences.edit().putLong(SESSION_LAST_ACCESS, value).apply()
 
-
     fun getSessionId(sessionIncrementAction: ((String) -> Unit)? = null): Int {
         if (!preferences.contains(SESSION_ID)) {
-            return resetSession()
+            return resetSession(sessionIncrementAction)
         }
         val sessionTime = lastSessionAccess
         val timeDiff = System.currentTimeMillis() - sessionTime
@@ -52,9 +45,10 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         return preferences.getInt(SESSION_ID, 1)
     }
 
-    internal fun resetSession(): Int {
+    internal fun resetSession(sessionIncrementAction: ((String) -> Unit)?): Int {
         val sessionId = 1
         preferences.edit().putInt(SESSION_ID, sessionId).apply()
+        sessionIncrementAction?.invoke(sessionId.toString())
         return sessionId
     }
 
@@ -63,7 +57,6 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
     }
 
     companion object {
-
         const val PREF_TOKEN = "token"
         const val PREF_DEFAULT_ITEM_SECTION = "default_item_section"
         const val GROUPS_SHOWN_FOR_FIRST_TERM = "groups_shown_for_first_term"

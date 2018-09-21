@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import android.support.v4.content.LocalBroadcastManager
+import android.util.Base64
 import android.util.Log
 import java.io.Serializable
 import java.net.URLEncoder
@@ -34,3 +35,11 @@ fun String.urlEncode() = URLEncoder.encode(this, "UTF-8").replace("+", "%20")
 fun Any.d(msg: String) = Log.d(this::class.qualifiedName, msg)
 
 fun Any.e(msg: String) = Log.e(this::class.qualifiedName, msg)
+
+fun String.base64Encode(): String? {
+    return String(Base64.encode(toByteArray(), Base64.NO_WRAP or Base64.NO_PADDING))
+}
+
+fun String.base64Decode(): String {
+    return String(Base64.decode(this, Base64.NO_WRAP or Base64.NO_PADDING))
+}

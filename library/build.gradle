@@ -90,12 +90,12 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     testImplementation 'io.mockk:mockk:1.7.14'
     testImplementation 'org.robolectric:robolectric:3.6.1'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:3.11.0'
     implementation supportLibs
     implementation networkLibs
     implementation otherLibs
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
-    // APT dependencies
     kapt annotationProcessorLibs
     kaptTest daggerCompiler
     kaptAndroidTest daggerCompiler

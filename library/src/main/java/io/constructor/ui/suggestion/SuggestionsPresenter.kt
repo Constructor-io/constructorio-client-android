@@ -1,6 +1,7 @@
 package io.constructor.ui.suggestion
 
 import io.constructor.core.ConstructorIo
+import io.constructor.data.ConstructorData
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.Suggestion
 import io.constructor.features.base.BasePresenter
@@ -45,21 +46,21 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
             mvpView.onError(IllegalStateException("token is null, please init library with token using ConstructorIo.init"))
             return
         }
-        disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<List<Suggestion>>()).subscribe({ suggestions ->
-            ConstructorIo.trackSearchResultLoaded(text, suggestions.size)
-            mvpView.showSuggestions(suggestions, preferencesHelper.groupsShownForFirstTerm)
-        }, { error ->
-            run {
-                if (error is NoSuchElementException) {
-                    d("throwing invalid token error")
-                    mvpView.onError(IllegalStateException("invalid token"))
-
-                } else {
-                    mvpView.onError(error)
-                }
-
+        disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<ConstructorData<List<Suggestion>?>>()).subscribe { data ->
+            data.onValue {
+                ConstructorIo.trackSearchResultLoaded(text, it!!.size)
+                mvpView.showSuggestions(it, preferencesHelper.groupsShownForFirstTerm)
             }
-        }))
+            data.onError {
+                    if (it is NoSuchElementException) {
+                        d("throwing invalid token error")
+                        mvpView.onError(IllegalStateException("invalid token"))
+
+                    } else {
+                        mvpView.onError(it)
+                    }
+            }
+        })
     }
 
 }
