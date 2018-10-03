@@ -54,11 +54,11 @@ To respond to a user performing a search (instead of selecting an autocomplete r
 To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to your layout:
 
 ```xml
-      <fragment
-          android:id="@+id/fragment_suggestions"
-          android:name="io.constructor.sample.SuggestionsFragment"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
+<fragment
+    android:id="@+id/fragment_suggestions"
+    android:name="io.constructor.sample.SuggestionsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 ```
 
 ### Using a Custom UI
