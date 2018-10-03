@@ -47,8 +47,9 @@ To respond to a user selecting an autocomplete result, use the `onSuggestionSele
 ### Performing Searches
 To respond to a user performing a search (instead of selecting an autocomplete result), use the `onQuerySentToServer` method.
 
+## 4. Customize the Autocomplete UI
 
-## 4a. Use default out-of-the-box UI
+### 4a. Use the default out-of-the-box UI
 
 To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to your layout:
 
@@ -60,41 +61,49 @@ To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to yo
           android:layout_height="match_parent" />
 ```
 
-Skip to #5 if not customizing UI
+### 4b. Customize the UI with your own fragments and adapters
 
-## 4b. Customize UI
+To fully customize the UI, extend the `BaseSuggestionFragment`
 
-### Extend the suggestion screen fragment `BaseSuggestionFragment`.
+```kotlin
+class CustomSearchFragment : BaseSuggestionFragment() {
 
-Implement the following:
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        view?.backButton?.setOnClickListener {
+            view?.input?.text?.clear()
+            clearSuggestions()
+        }
+        view?.searchButton?.setOnClickListener { triggerSearch() }
+    }
 
-|Element name|Returned Type|Description|
-|--|--|--|
-|`layoutId`|`Int`|Returns your custom layout resource id for the fragment.|
-|`getSuggestionsInputId`|`EditText`|Returns the id of the suggestion input field.|
-|`getSuggestionListId`|`RecyclerView`|Returns your suggestion list id.|
-|`getSuggestionAdapter`|Class that extends from `BaseSuggestionAdapter`|Returns your custom adapter.|
-|`getProgressId`|Int`|Returns progress indicator id, used when request is being in progress. Return 0 for no progress|
+    // Returns your custom adapter
+    override fun getSuggestionAdapter(): BaseSuggestionsAdapter {
+        return CustomSuggestionsAdapter()
+    }
 
-To see an example of usage, you can look at `SampleActivityCustom`.
+    // Returns the id of the suggestion input field
+    override fun getSuggestionsInputId(): Int {
+        return R.id.input
+    }
 
-### Extend the suggestion items adapter `BaseSuggestionsAdapter`.
+    // Returns the id of the suggestion list
+    override fun getSuggestionListId(): Int {
+        return R.id.suggestions
+    }
 
-Implement the following :
+    // Returns progress indicator id, used when request is being in progress. Return 0 for no progress
+    override fun getProgressId(): Int {
+        return 0
+    }
+    
+    // Returns your custom layout resource id for the fragment
+    override fun layoutId(): Int {
+        return R.layout.fragment_custom_suggestions
+    }
 
-|Element name|Returned Type|Description|
-|--|--|--|
-|`getItemLayoutId()`|`Int`|Returns your custom adapter item layout id for suggestion.|
-|`getSuggestionNameId()`|`Int`|Return your text view id - the text will be the suggestion. |
-|`getSuggestionGroupNameId()`|`Int`|Return your text view id - the text will be the suggestion group name, if found. |
-|`onViewTypeSuggestion`|`String` text| Triggered when inflating an item which is a suggestion. Read below for more info.|
-|`styleHighlightedSpans(spannable: Spannable, spanStart: Int, spanEnd: Int)`|`Unit`| Override to apply custom styling to highlighted part of suggestions search result. `spannable` is highlighted part of suggestion name, start and end mark position of the `spannable` within whole text.|
-
-abstract val styleHighlightedSpans: ((spannable: Spannable, spanStart: Int, spanEnd: Int) -> Unit)?
-
-In case you need to modify something in the ViewHolder (e.g make the group name bold) you can get a reference to it using `getHolder()`
-
-To see an example of usage, you can look at `SampleActivityCustom`.
+}
+```
 
 ## 5. Instrument Behavioral Events
 
