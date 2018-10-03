@@ -63,7 +63,7 @@ To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to yo
 
 ### Using a Custom UI
 
-To fully customize the UI, extend the `BaseSuggestionFragment`
+To fully customize the UI, extend the `BaseSuggestionFragment` and the B`aseSuggestionsAdapter`
 
 ```kotlin
 class CustomSearchFragment : BaseSuggestionFragment() {
@@ -77,30 +77,54 @@ class CustomSearchFragment : BaseSuggestionFragment() {
         view?.searchButton?.setOnClickListener { triggerSearch() }
     }
 
-    // Returns your custom adapter
+    // Return your custom adapter
     override fun getSuggestionAdapter(): BaseSuggestionsAdapter {
-        return SuggestionsAdapter()
+        return CustomSuggestionsAdapter()
     }
 
-    // Returns the id of the suggestion input field
+    // Return your id of the suggestion input field
     override fun getSuggestionsInputId(): Int {
         return R.id.input
     }
 
-    // Returns the id of the suggestion list
+    // Return your id of the suggestion list
     override fun getSuggestionListId(): Int {
         return R.id.suggestions
     }
 
-    // Returns progress indicator id, used when request is being in progress. Return 0 for no progress
+    // Return your progress indicator id, used when request is being in progress. Return 0 for no progress
     override fun getProgressId(): Int {
         return 0
     }
     
-    // Returns your custom layout resource id for the fragment
+    // Return your custom layout resource id for the fragment
     override fun layoutId(): Int {
         return R.layout.fragment_custom_suggestions
     }
+
+}
+
+class CustomSuggestionsAdapter() : BaseSuggestionsAdapter() {
+    
+    // Triggered when inflating an item which is a suggestion.
+    override fun onViewTypeSuggestion(holder: ViewHolder, suggestion: String, highlightedSuggestion: Spannable, groupName: String?) {
+        holder.suggestionName.text = highlightedSuggestion
+        val spans = highlightedSuggestion.getSpans(0, highlightedSuggestion.length, StyleSpan::class.java)
+        spans.forEach { highlightedSuggestion.setSpan(ForegroundColorSpan(Color.parseColor("#222222")), highlightedSuggestion.getSpanStart(it), highlightedSuggestion.getSpanEnd(it), 0) }
+        groupName?.let { holder.suggestionGroupName.text = holder.suggestionGroupName.context.getString(R.string.suggestion_group, it) }
+    }
+
+    // Return your custom adapter item layout id for suggestion
+    override val itemLayoutId: Int
+        get() = R.layout.item_suggestion
+   
+    // Return your text view id - the text will be the suggestion.
+    override val suggestionNameId: Int
+        get() = R.id.suggestionName
+    
+    // Return your text view id - the text will be the suggestion group name, if present
+    override val suggestionGroupNameId: Int
+        get() = R.id.suggestionGroupName
 
 }
 ```
