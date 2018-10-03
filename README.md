@@ -79,7 +79,7 @@ class CustomSearchFragment : BaseSuggestionFragment() {
 
     // Returns your custom adapter
     override fun getSuggestionAdapter(): BaseSuggestionsAdapter {
-        return CustomSuggestionsAdapter()
+        return SuggestionsAdapter()
     }
 
     // Returns the id of the suggestion input field
