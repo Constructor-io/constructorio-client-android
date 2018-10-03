@@ -63,7 +63,7 @@ To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to yo
 
 ### Using a Custom UI
 
-To fully customize the UI, extend the `BaseSuggestionFragment` and the B`aseSuggestionsAdapter`
+To fully customize the UI, extend the `BaseSuggestionFragment` and the `BaseSuggestionsAdapter`
 
 ```kotlin
 class CustomSearchFragment : BaseSuggestionFragment() {
