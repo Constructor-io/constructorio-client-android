@@ -49,7 +49,7 @@ To respond to a user performing a search (instead of selecting an autocomplete r
 
 ## 4. Customize the Autocomplete UI
 
-### 4a. Use the default out-of-the-box UI
+### 4a. Use the Default UI
 
 To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to your layout:
 
@@ -61,7 +61,7 @@ To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to yo
           android:layout_height="match_parent" />
 ```
 
-### 4b. Customize the UI with your own fragments and adapters
+### 4b. Use a Custom UI
 
 To fully customize the UI, extend the `BaseSuggestionFragment`
 
