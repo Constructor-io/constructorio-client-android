@@ -15,7 +15,7 @@ You can find this in your [Constructor.io dashboard](https://constructor.io/dash
 
 In your Application class add the following code with your key:
 
-```
+```kotlin
 override fun onCreate() {
     super.onCreate()
     ConstructorIo.init(this, "your-key")
