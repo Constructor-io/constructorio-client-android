@@ -18,7 +18,7 @@ In your Application class add the following code with your key:
 ```kotlin
 override fun onCreate() {
     super.onCreate()
-    ConstructorIo.init(this, "your-api-key")
+    ConstructorIo.init(this, "YOUR API KEY")
     
     val fragment = supportFragmentManager.findFragmentById(R.id.fragment_suggestions) as SuggestionsFragment
     fragment.setConstructorListener(object : ConstructorListener {
