@@ -1,20 +1,15 @@
 [![Release](https://jitpack.io/v/Constructor-io/constructorio-client-android.svg)](https://jitpack.io/#Constructor-io/constructorio--client-android) ![Android min](https://img.shields.io/badge/Android-4.4%2B-green.svg) [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Constructor-io/constructorio-client-android/blob/master/LICENSE)
 
-# Constructor.io Android Client Library
+# Constructor.io Android Client
 
-An Android Client library for [Constructor.io](http://constructor.io/).  [Constructor.io](http://constructor.io/) provides search as a service that optimizes results using artificial intelligence (including natural language processing, re-ranking to optimize for conversions, and user personalization).
-
-# Usage
+An Android Client for [Constructor.io](http://constructor.io/).  [Constructor.io](http://constructor.io/) provides search as a service that optimizes results using artificial intelligence (including natural language processing, re-ranking to optimize for conversions, and user personalization).
 
 ## 1. Install
 
 Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v1.0.0) to add the client to your project.
 
-## 2. Retrieve an autocomplete key
-
-You can find this in your [Constructor.io dashboard](https://constructor.io/dashboard).
-
-Contact sales if you'd like to sign up, or support if you believe your company already has an account.
+## 2. Retrieve an API key
+You can find this in your [Constructor.io dashboard](https://constructor.io/dashboard).  Contact sales if you'd like to sign up, or support if you believe your company already has an account.
 
 ## 3. Init the Constructor.io Library
 
@@ -220,34 +215,25 @@ Manually track search using text in the input box.
 
 Clear input box and suggestion list.
 
-## ConstructorIO public API
+## 5. Instrument Behavioral Events
 
-### trackConversion(term: String, itemId: String, revenue: String?)
+The Android Client sends behavioral events to [Constructor.io](http://constructor.io/) in order to continuously learn and improve results for future Autosuggest and Search requests.  The Client only sends events in response to being called by the consuming app or in response to user interaction . For example, if the consuming app never calls the SDK code, no events will be sent.  Besides the explicitly passed in event parameters, all user events contain a GUID based user ID that the client sets to identify the user as well as a session ID.
 
-Track conversion event
+Three types of these events exist:
 
-|Parameter|Type|Description|
-|--|--|--|
-|`term`|String|Optional term for which tracking event is reported.|
-|`itemId`|String|Id of item for which we want to trigger an event.|
-|`revenue`|String|Optional revenue indicator.|
+1. **General Events** are sent as needed when an instance of the Client is created or initialized
+1. **Autocomplete Events** measure user interaction with autocomplete results and the `CIOAutocompleteViewController` sends them automatically.
+1. **Search Events** measure user interaction with search results and the consuming app has to explicitly instrument them itself
 
-### trackSearchResultClickThrough(term: String, itemId: String, position: String?)
+```kotlin
+import io.constructor.core.ConstructorIo
 
-Track search result click event
+// Track search results loaded (term, resultCount)
+ConstructorIo.trackSearchResultLoaded("a search term", 123)
 
-|Parameter|Type|Description|
-|--|--|--|
-|`term`|String|Term used for search.|
-|`itemId`|String|Id of item for which we want to track an event.|
-|`position`|String|Optional position of clicked item on the list.|
+// Track search result click (term, itemId, position)
+ConstructorIo.trackSearchResultClickThrough("a search term", "an item id", "1")
 
-### triggerSearchResultLoadedEvent(term: String, resultCount: Int)
-
-Track search results loaded event
-
-|Parameter|Type|Description|
-|--|--|--|
-|`term`|String|Term used for search.|
-|`resultCount`|Int|Number of items found.|
-
+// Track conversion (item id, term, revenue)
+constructorIO.trackConversion("an item id", "a search term", "45.00")
+```
