@@ -11,16 +11,43 @@ Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/
 ## 2. Retrieve an API key
 You can find this in your [Constructor.io dashboard](https://constructor.io/dashboard).  Contact sales if you'd like to sign up, or support if you believe your company already has an account.
 
-## 3. Init the Constructor.io Library
+## 3. Implement the Autocomplete UI
 
 In your Application class add the following code with your key:
 
 ```
-    override fun onCreate() {
-        super.onCreate()
-        ConstructorIo.init(this, "your-key")
-    }
+override fun onCreate() {
+    super.onCreate()
+    ConstructorIo.init(this, "your-key")
+    
+    val fragment = supportFragmentManager.findFragmentById(R.id.fragment_suggestions) as SuggestionsFragment
+    fragment.setConstructorListener(object : ConstructorListener {
+        override fun onSuggestionSelected(term: String, group: Group?, autocompleteSection: String?) {
+            Log.d(TAG, "onSuggestionSelected")
+        }
+        
+        override fun onQuerySentToServer(query: String) {
+            Log.d(TAG, "onQuerySentToServer")
+        }
+        
+        override fun onSuggestionsRetrieved(suggestions: List<Suggestion>) {
+            Log.d(TAG, "onSuggestionsRetrieved")
+        }
+        
+        override fun onErrorGettingSuggestions(error: Throwable) {
+            Log.d(TAG, "handle network error getting suggestion")
+        }
+    })
+}
 ```
+
+### Selecting Results
+To respond to a user selecting an autocomplete result, use the `onSuggestionSelected` method.  If the autocomplete result has both a suggested term to search for and a group to search within (as in Apples in Juice Drinks), the group will be passed into the method.
+
+### Performing Searches
+To respond to a user performing a search (instead of selecting an autocomplete result), use the `onQuerySentToServer` method.
+
+
 ## 4a. Use default out-of-the-box UI
 
 To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to your layout:
@@ -68,152 +95,6 @@ abstract val styleHighlightedSpans: ((spannable: Spannable, spanStart: Int, span
 In case you need to modify something in the ViewHolder (e.g make the group name bold) you can get a reference to it using `getHolder()`
 
 To see an example of usage, you can look at `SampleActivityCustom`.
-
-## 5. Get a reference to the `SuggestionsFragment` and add `ConstructorListener`:
-
-```
-        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_suggestions) as SuggestionsFragment
-        fragment.setConstructorListener(object : ConstructorListener {
-            override fun onSuggestionsRetrieved(suggestions: List<Suggestion>) {
-                //got suggestions for a query
-            }
-
-            override fun onQuerySentToServer(query: String) {
-                //request being made to server
-            }
-
-            override fun onSuggestionSelected(term: String, group: Group?, autocompleteSection: String?) {
-                //called when user taps on suggestion
-            }
-
-            override fun onErrorGettingSuggestions(error: Throwable) {
-                //called when there is error getting suggestions
-            }
-        })
-```
-# Additional references
-
-## Searching in Groups
-Any data value can belong to a group. We will show the group name right below the item itself, if available.
-
-Let's remember the selection event.
-
-```
-fun onSuggestionSelected(term: String, group: Group?, autocompleteSection: String?)
-```
-
-Note `group` of type Group. It represents the group for an item and includes the following parameters:
-
-|Type|Name|Description|
-|--|--|--|
-|String|groupId|The group's id.|
-|String|displayName|The group's display name.|
-|String|path|The path to get more data for the group.|
-
-Let's say you search for 'apple' and the results are:
-
-
-```
-"suggestions": [
-  {
-    "data": {
-      "groups": [
-        {
-          "display_name": "food",
-          "group_id": "12",
-          "path": "/0/222/344"
-        },
-        {
-          "display_name": "gadgets",
-          "group_id": "34",
-          "path": "/0/252/346/350"
-        }
-      ]
-    },
-    "value": "apple"
-  }
-]
-```
-
-We received two groups (food and gadgets) for our suggestion (apple). This means we'll have two suggestions in total:
-1. 'apple' in group 'food'
-2. 'apple' in group 'gadgets'
-
-When the user taps on (1), term will be `apple` and group name will be `food`.
-
-When the user taps on (2), term will be `apple` and group name will be `gadgets`.
-
-In other words, you can simply check whether the group property is null to find out if the user tapped on a search-in-group result:
-
-```
-fun onSuggestionSelected(term: String, group: Group?, autocompleteSection: String) {
-        if (group == null) {
-            // user tapped on an item
-
-        } else {
-            // user tapped on a group
-        }
-    }
-```
-
-## ConstructorListener Interface
-
-### onQuerySentToServer
-
-`onQuerySentToServer(query: String)`
-
-Triggered when the query is sent to the server.
-
-Parameter|Type|Description
-|--|--|--|
-`query`|String|The query made by the user.
-
-### onSuggestionSelected
-
-`onSuggestionSelected(term: String, group: Group?, autocompleteSection: String?)`
-
-Triggered when a suggestion is selected.
-
-|Parameter|Type|Description|
-|--|--|--|
-|`term`|String|The suggestion selected.|
-|`group`|Group|Provides data on the group the selected term belongs to. Otherwise null.|
-|`autocompleteSection`|String|The autocomplete section to which the selected term belongs (e.g "Search Suggestions", "Products"...)|
-
-### onSuggestionsRetrieved
-`onSuggestionsRetrieved(suggestions: List<Suggestion>)`
-
-Triggered when the results for the query in question is retrieved.
-
-`suggestions` is a list of `Suggestion`s  with the following parameters:
-
-|Parameter|Type|Description|
-|--|--|--|
-|`text`|String|The name of the suggestion.|
-|`groups`|List<Group>|The top groups containing items that match for the query.|
-|`matchedTerms`|List<String>|matched terms within the query|
-|`sectionName`|String|name of the section eg. "Search Suggestions", "Products"|
-
-### onErrorGettingSuggestions
-`override fun onErrorGettingSuggestions(error: Throwable)`
-
-Triggered when error occured while requesting suggestions.
-
-|Parameter|Type|Description|
-|--|--|--|
-|`error`|Throwable|Exception thrown.|
-
-## BaseSuggestionFragment Abstract Class
-
-Default fragment expose two additional methods for easier implementing custom UI:
-
-### trackSearch()
-
-Manually track search using text in the input box.
-
-### clearSuggestions()
-
-Clear input box and suggestion list.
 
 ## 5. Instrument Behavioral Events
 
