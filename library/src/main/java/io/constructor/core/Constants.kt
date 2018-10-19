@@ -21,6 +21,7 @@ class Constants {
         const val CLIENT = "c"
         const val EVENT = "tr"
         const val AUTOCOMPLETE_KEY = "autocomplete_key"
+        const val NUM_RESULTS = "num_results_"
         const val GROUP_ID = "group[group_id]"
         const val GROUP_DISPLAY_NAME = "group[display_name]"
     }
@@ -30,6 +31,7 @@ class Constants {
         const val EVENT_SEARCH = "search"
         const val EVENT_SESSION_START = "session_start"
         const val SEARCH_SUGGESTIONS = "Search Suggestions"
+        const val PRODUCTS = "Products"
         const val EVENT_SEARCH_RESULTS = "search-results"
         const val EVENT_INPUT_FOCUS = "focus"
     }

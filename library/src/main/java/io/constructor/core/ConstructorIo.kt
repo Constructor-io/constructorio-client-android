@@ -5,7 +5,7 @@ import android.content.Context
 import io.constructor.BuildConfig
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.memory.TestCellMemoryHolder
+import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.SuggestionViewModel
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
@@ -26,7 +26,7 @@ object ConstructorIo {
 
     private lateinit var dataManager: DataManager
     private lateinit var preferenceHelper: PreferencesHelper
-    private lateinit var testCellMemoryHolder: TestCellMemoryHolder
+    private lateinit var configMemoryHolder: ConfigMemoryHolder
     private lateinit var context: Context
     private var disposable = CompositeDisposable()
 
@@ -49,15 +49,18 @@ object ConstructorIo {
         }))
     }
 
-    fun init(context: Context?, apiKey: String, defaultItemSection: String = BuildConfig.AUTOCOMPLETE_SECTION) {
+    fun init(context: Context?, apiKey: String, autocompleteResultCount: Map<String, Int> = mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10,
+            Constants.QueryValues.PRODUCTS to 0), defaultItemSection: String = BuildConfig.AUTOCOMPLETE_SECTION) {
         if (context == null) {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
         dataManager = component.dataManager()
         preferenceHelper = component.preferenceHelper()
-        testCellMemoryHolder = component.testCellMemoryHolder()
+        configMemoryHolder = component.testCellMemoryHolder()
+        configMemoryHolder.autocompleteResultCount = autocompleteResultCount
         preferenceHelper.token = apiKey
+
         preferenceHelper.defaultItemSection = defaultItemSection
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
@@ -69,21 +72,21 @@ object ConstructorIo {
     fun getClientId() = preferenceHelper.id
 
     fun setTestCellValues(pair1: Pair<String, String>, pair2: Pair<String, String>? = null, pair3: Pair<String, String>? = null) {
-        testCellMemoryHolder.testCellParams = listOf(pair1, pair2, pair3)
+        configMemoryHolder.testCellParams = listOf(pair1, pair2, pair3)
     }
 
     fun clearTestCellValues() {
-        testCellMemoryHolder.testCellParams = emptyList()
+        configMemoryHolder.testCellParams = emptyList()
     }
 
-    internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper, testCellMemoryHolder: TestCellMemoryHolder) {
+    internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder) {
         if (context == null) {
             throw IllegalStateException("Context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
         this.dataManager = dataManager
         this.preferenceHelper = preferenceHelper
-        this.testCellMemoryHolder = testCellMemoryHolder
+        this.configMemoryHolder = configMemoryHolder
         preferenceHelper.token = apiKey
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()

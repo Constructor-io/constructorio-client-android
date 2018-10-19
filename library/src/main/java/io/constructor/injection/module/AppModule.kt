@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.memory.TestCellMemoryHolder
+import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.injection.ApplicationContext
 import javax.inject.Singleton
 
@@ -24,7 +24,7 @@ class AppModule(private val application: Context) {
 
     @Provides
     @Singleton
-    internal fun provideTestCellHolder(): TestCellMemoryHolder {
-        return TestCellMemoryHolder()
+    internal fun provideTestCellHolder(): ConfigMemoryHolder {
+        return ConfigMemoryHolder()
     }
 }

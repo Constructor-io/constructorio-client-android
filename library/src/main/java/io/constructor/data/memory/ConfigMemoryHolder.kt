@@ -4,7 +4,7 @@ import io.constructor.util.base64Decode
 import io.constructor.util.base64Encode
 import javax.inject.Inject
 
-class TestCellMemoryHolder @Inject constructor() {
+class ConfigMemoryHolder @Inject constructor() {
 
     private var backingString = ""
 
@@ -32,4 +32,5 @@ class TestCellMemoryHolder @Inject constructor() {
             backingString = combined
         }
 
+    var autocompleteResultCount: Map<String, Int>? = null
 }
