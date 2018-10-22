@@ -24,7 +24,7 @@ class AppModule(private val application: Context) {
 
     @Provides
     @Singleton
-    internal fun provideTestCellHolder(): ConfigMemoryHolder {
+    internal fun provideConfigMemoryHolder(): ConfigMemoryHolder {
         return ConfigMemoryHolder()
     }
 }

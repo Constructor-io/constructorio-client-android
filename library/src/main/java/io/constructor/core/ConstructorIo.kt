@@ -57,7 +57,7 @@ object ConstructorIo {
         this.context = context.applicationContext
         dataManager = component.dataManager()
         preferenceHelper = component.preferenceHelper()
-        configMemoryHolder = component.testCellMemoryHolder()
+        configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = autocompleteResultCount
         preferenceHelper.token = apiKey
 

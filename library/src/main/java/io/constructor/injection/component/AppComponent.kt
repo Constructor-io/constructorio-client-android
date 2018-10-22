@@ -21,7 +21,7 @@ interface AppComponent {
 
     fun preferenceHelper(): PreferencesHelper
 
-    fun testCellMemoryHolder(): ConfigMemoryHolder
+    fun configMemoryHolder(): ConfigMemoryHolder
 
     fun constructorApi(): ConstructorApi
 }
