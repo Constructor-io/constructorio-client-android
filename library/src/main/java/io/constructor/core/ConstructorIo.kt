@@ -2,7 +2,6 @@ package io.constructor.core
 
 import android.annotation.SuppressLint
 import android.content.Context
-import io.constructor.BuildConfig
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
@@ -49,8 +48,7 @@ object ConstructorIo {
         }))
     }
 
-    fun init(context: Context?, apiKey: String, autocompleteResultCount: Map<String, Int> = mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10,
-            Constants.QueryValues.PRODUCTS to 0), defaultItemSection: String = BuildConfig.AUTOCOMPLETE_SECTION) {
+    fun init(context: Context?, constructorIoConfig: ConstructorIoConfig) {
         if (context == null) {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
         }
@@ -58,10 +56,11 @@ object ConstructorIo {
         dataManager = component.dataManager()
         preferenceHelper = component.preferenceHelper()
         configMemoryHolder = component.configMemoryHolder()
-        configMemoryHolder.autocompleteResultCount = autocompleteResultCount
-        preferenceHelper.token = apiKey
+        configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
+        configMemoryHolder.testCellParams = constructorIoConfig.testCells
+        preferenceHelper.token = constructorIoConfig.apiKey
 
-        preferenceHelper.defaultItemSection = defaultItemSection
+        preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
         }
@@ -71,15 +70,7 @@ object ConstructorIo {
 
     fun getClientId() = preferenceHelper.id
 
-    fun setTestCellValues(pair1: Pair<String, String>, pair2: Pair<String, String>? = null, pair3: Pair<String, String>? = null) {
-        configMemoryHolder.testCellParams = listOf(pair1, pair2, pair3)
-    }
-
-    fun clearTestCellValues() {
-        configMemoryHolder.testCellParams = emptyList()
-    }
-
-    internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder) {
+    internal fun testInit(context: Context?, constructorIoConfig: ConstructorIoConfig, dataManager: DataManager, preferenceHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder) {
         if (context == null) {
             throw IllegalStateException("Context is null, please init library using ConstructorIo.with(context)")
         }
@@ -87,7 +78,7 @@ object ConstructorIo {
         this.dataManager = dataManager
         this.preferenceHelper = preferenceHelper
         this.configMemoryHolder = configMemoryHolder
-        preferenceHelper.token = apiKey
+        preferenceHelper.token = constructorIoConfig.apiKey
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
         }

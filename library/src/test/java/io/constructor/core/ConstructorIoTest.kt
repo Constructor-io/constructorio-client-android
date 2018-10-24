@@ -44,7 +44,8 @@ class ConstructorIoTest {
         every { pref.id } returns "1"
         every { pref.getSessionId() } returns 1
         every { pref.getSessionId(any()) } returns 1
-        constructorIo.testInit(ctx, "dummyKey", data, pref, configMemoryHolder)
+        constructorIo.testInit(ctx, ConstructorIoConfig("dummyKey",
+                testCells = listOf("1" to "2", "3" to "4")), data, pref, configMemoryHolder)
     }
 
     @After
@@ -213,8 +214,6 @@ class ConstructorIoTest {
         every { configMemoryHolder.testCellParams = any() } just Runs
         every { configMemoryHolder.autocompleteResultCount } returns mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10, Constants.QueryValues.PRODUCTS to 0)
         every { configMemoryHolder.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
-        constructorIo.setTestCellValues("1" to "2", "3" to "4")
-        verify(exactly = 1) { configMemoryHolder.testCellParams = any() }
         mockServer.start()
         mockServer.enqueue(MockResponse())
         var client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, configMemoryHolder)).build()
