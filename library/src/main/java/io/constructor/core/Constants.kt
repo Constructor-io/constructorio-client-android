@@ -20,7 +20,7 @@ class Constants {
         const val ORIGINAL_QUERY = "original_query"
         const val CLIENT = "c"
         const val EVENT = "tr"
-        const val AUTOCOMPLETE_KEY = "autocomplete_key"
+        const val API_KEY = "key"
         const val NUM_RESULTS = "num_results_"
         const val GROUP_ID = "group[group_id]"
         const val GROUP_DISPLAY_NAME = "group[display_name]"
