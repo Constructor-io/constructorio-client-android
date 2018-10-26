@@ -2,9 +2,11 @@ package io.constructor.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.Suggestion
 import io.constructor.data.model.SuggestionViewModel
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
@@ -14,6 +16,7 @@ import io.constructor.util.broadcastIntent
 import io.constructor.util.d
 import io.constructor.util.e
 import io.constructor.util.urlEncode
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -84,7 +87,13 @@ object ConstructorIo {
         }
     }
 
-    fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query)
+    fun getAutocompleteResults(query: String): Observable<ConstructorData<List<Suggestion>?>> {
+        val params = mutableListOf<Pair<String, String>>()
+        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
+            params.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+        }
+        return dataManager.getAutocompleteResults(query, params.toTypedArray())
+    }
 
     fun trackSelect(query: String, suggestion: SuggestionViewModel, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)

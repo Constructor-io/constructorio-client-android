@@ -27,7 +27,7 @@ class DataManagerTest {
 
     @Test
     fun getSuggestions() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponse())))
+        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponse())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.get()!!.isNotEmpty() && it.get()!!.size == 5
@@ -36,7 +36,7 @@ class DataManagerTest {
 
     @Test
     fun getSuggestionsBadServerResponse() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
+        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.networkError
@@ -45,7 +45,7 @@ class DataManagerTest {
 
     @Test
     fun getSuggestionsException() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.error<AutocompleteResult>(Exception()))
+        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.error<AutocompleteResult>(Exception()))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.isError
@@ -54,7 +54,7 @@ class DataManagerTest {
 
     @Test
     fun getSuggestionsUnexpectedDataResponse() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnexpectedData())))
+        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnexpectedData())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.get()!!.isNotEmpty() && it.get()!!.size == 5
@@ -63,7 +63,8 @@ class DataManagerTest {
 
     @Test
     fun getSuggestionsEmptyResponse() {
-        every { constructorApi.getSuggestions("titanic") } returns Single.just(Result.response(Response.success(TestDataLoader.loadEmptyResponse())))
+        every { constructorApi.getSuggestions("titanic", any()
+        ) } returns Single.just(Result.response(Response.success(TestDataLoader.loadEmptyResponse())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.isEmpty

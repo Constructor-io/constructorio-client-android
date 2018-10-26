@@ -12,7 +12,7 @@ import retrofit2.http.QueryMap
 interface ConstructorApi {
 
     @GET(ApiPaths.URL_GET_SUGGESTIONS)
-    fun getSuggestions(@Path("value") value: String): Single<Result<AutocompleteResult>>
+    fun getSuggestions(@Path("value") value: String, @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
 
     @GET(ApiPaths.URL_SELECT_EVENT)
     fun trackSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
