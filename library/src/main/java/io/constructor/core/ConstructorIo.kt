@@ -2,10 +2,11 @@ package io.constructor.core
 
 import android.annotation.SuppressLint
 import android.content.Context
-import io.constructor.BuildConfig
+import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.Suggestion
 import io.constructor.data.model.SuggestionViewModel
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
@@ -15,6 +16,7 @@ import io.constructor.util.broadcastIntent
 import io.constructor.util.d
 import io.constructor.util.e
 import io.constructor.util.urlEncode
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -49,8 +51,7 @@ object ConstructorIo {
         }))
     }
 
-    fun init(context: Context?, apiKey: String, autocompleteResultCount: Map<String, Int> = mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10,
-            Constants.QueryValues.PRODUCTS to 0), defaultItemSection: String = BuildConfig.AUTOCOMPLETE_SECTION) {
+    fun init(context: Context?, constructorIoConfig: ConstructorIoConfig) {
         if (context == null) {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
         }
@@ -58,10 +59,11 @@ object ConstructorIo {
         dataManager = component.dataManager()
         preferenceHelper = component.preferenceHelper()
         configMemoryHolder = component.configMemoryHolder()
-        configMemoryHolder.autocompleteResultCount = autocompleteResultCount
-        preferenceHelper.token = apiKey
+        configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
+        configMemoryHolder.testCellParams = constructorIoConfig.testCells
+        preferenceHelper.token = constructorIoConfig.apiKey
 
-        preferenceHelper.defaultItemSection = defaultItemSection
+        preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
         }
@@ -71,15 +73,7 @@ object ConstructorIo {
 
     fun getClientId() = preferenceHelper.id
 
-    fun setTestCellValues(pair1: Pair<String, String>, pair2: Pair<String, String>? = null, pair3: Pair<String, String>? = null) {
-        configMemoryHolder.testCellParams = listOf(pair1, pair2, pair3)
-    }
-
-    fun clearTestCellValues() {
-        configMemoryHolder.testCellParams = emptyList()
-    }
-
-    internal fun testInit(context: Context?, apiKey: String, dataManager: DataManager, preferenceHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder) {
+    internal fun testInit(context: Context?, constructorIoConfig: ConstructorIoConfig, dataManager: DataManager, preferenceHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder) {
         if (context == null) {
             throw IllegalStateException("Context is null, please init library using ConstructorIo.with(context)")
         }
@@ -87,13 +81,19 @@ object ConstructorIo {
         this.dataManager = dataManager
         this.preferenceHelper = preferenceHelper
         this.configMemoryHolder = configMemoryHolder
-        preferenceHelper.token = apiKey
+        preferenceHelper.token = constructorIoConfig.apiKey
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
         }
     }
 
-    fun getAutocompleteResults(query: String) = dataManager.getAutocompleteResults(query)
+    fun getAutocompleteResults(query: String): Observable<ConstructorData<List<Suggestion>?>> {
+        val params = mutableListOf<Pair<String, String>>()
+        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
+            params.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+        }
+        return dataManager.getAutocompleteResults(query, params.toTypedArray())
+    }
 
     fun trackSelect(query: String, suggestion: SuggestionViewModel, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)

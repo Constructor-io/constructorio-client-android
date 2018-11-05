@@ -23,9 +23,6 @@ class TokenInterceptor(val context: Context, private val preferencesHelper: Pref
                 builder.addQueryParameter(it.first, it.second)
             }
         }
-        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
-            builder.addQueryParameter(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString())
-        }
         val url = builder.build()
         request = request.newBuilder().url(url).build()
         return chain.proceed(request)
