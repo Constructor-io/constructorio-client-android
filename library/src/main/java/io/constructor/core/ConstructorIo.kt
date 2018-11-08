@@ -32,6 +32,12 @@ object ConstructorIo {
     private lateinit var context: Context
     private var disposable = CompositeDisposable()
 
+    var userId: String?
+        get() = configMemoryHolder.userId
+        set(value) {
+            configMemoryHolder.userId = value
+        }
+
     internal val component: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(context))

@@ -33,4 +33,6 @@ class ConfigMemoryHolder @Inject constructor() {
         }
 
     var autocompleteResultCount: Map<String, Int>? = null
+
+    var userId: String? = null
 }
