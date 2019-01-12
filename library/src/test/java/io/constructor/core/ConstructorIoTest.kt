@@ -5,7 +5,7 @@ import io.constructor.BuildConfig
 import io.constructor.data.DataManager
 import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.memory.TestCellMemoryHolder
+import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.SuggestionViewModel
 import io.constructor.util.RxSchedulersOverrideRule
@@ -31,7 +31,7 @@ class ConstructorIoTest {
 
     private val ctx = mockk<Context>()
     private val pref = mockk<PreferencesHelper>()
-    private val testCellMemoryHolder = mockk<TestCellMemoryHolder>()
+    private val configMemoryHolder = mockk<ConfigMemoryHolder>()
     private val data = mockk<DataManager>()
     private var constructorIo = ConstructorIo
     private val sampleMillis = "1520000000000"
@@ -44,7 +44,8 @@ class ConstructorIoTest {
         every { pref.id } returns "1"
         every { pref.getSessionId() } returns 1
         every { pref.getSessionId(any()) } returns 1
-        constructorIo.testInit(ctx, "dummyKey", data, pref, testCellMemoryHolder)
+        constructorIo.testInit(ctx, ConstructorIoConfig("dummyKey",
+                testCells = listOf("1" to "2", "3" to "4")), data, pref, configMemoryHolder)
     }
 
     @After
@@ -53,7 +54,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySelectUrl() {
-        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/select?s=1&i=1&_dt=1520000000000&autocomplete_section=Search%20Suggestions&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=click&c=cioand-${BuildConfig.VERSION_NAME}&autocomplete_key=testKey"
+        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/select?s=1&i=1&_dt=1520000000000&autocomplete_section=Search%20Suggestions&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=click&c=cioand-${BuildConfig.VERSION_NAME}&key=testKey"
         val searchQuery = "dog"
         val term = "hot dogs"
         val urlBuilder = HttpUrl.Builder().scheme("https")
@@ -70,20 +71,20 @@ class ConstructorIoTest {
                 .addEncodedQueryParameter(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode(), "Meat & Seafood".urlEncode())
                 .addQueryParameter(Constants.QueryConstants.EVENT, Constants.QueryValues.EVENT_CLICK)
                 .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.API_KEY, "testKey")
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
     }
 
     @Test
     fun verifyGetSuggestionsUrl() {
-        val expected = "https://ac.cnstrc.com/autocomplete/dog?autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/autocomplete/dog?key=testKey&_dt=1520000000000"
         val searchQuery = "dog"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("autocomplete")
                 .addPathSegment(searchQuery)
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.API_KEY, "testKey")
                 .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
@@ -91,14 +92,14 @@ class ConstructorIoTest {
 
     @Test
     fun verifySessionStartUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-1.0.0&s=1&action=session_start&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=session_start&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
                 .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
                 .addQueryParameter(Constants.QueryConstants.SESSION, "1")
                 .addQueryParameter(Constants.QueryConstants.ACTION, "session_start")
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.API_KEY, "testKey")
                 .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
@@ -106,7 +107,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchClickThroughEvent() {
-        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=cioand-1.0.0&s=1&autocomplete_section=Products&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=cioand-0.1.0&s=1&autocomplete_section=Products&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("autocomplete")
@@ -115,7 +116,7 @@ class ConstructorIoTest {
                 .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
                 .addQueryParameter(Constants.QueryConstants.SESSION, "1")
                 .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_SECTION, "Products")
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.API_KEY, "testKey")
                 .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
@@ -123,14 +124,14 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchLoadedEventUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-1.0.0&s=1&action=search-results&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=search-results&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
                 .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
                 .addQueryParameter(Constants.QueryConstants.SESSION, "1")
                 .addQueryParameter(Constants.QueryConstants.ACTION, Constants.QueryValues.EVENT_SEARCH_RESULTS)
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.API_KEY, "testKey")
                 .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
@@ -138,7 +139,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifyInputFocusEvent() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-1.0.0&i=user_id&s=1&action=focus&autocomplete_key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&i=user_id&s=1&action=focus&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -146,7 +147,7 @@ class ConstructorIoTest {
                 .addQueryParameter(Constants.QueryConstants.IDENTITY, "user_id")
                 .addQueryParameter(Constants.QueryConstants.SESSION, "1")
                 .addQueryParameter(Constants.QueryConstants.ACTION, Constants.QueryValues.EVENT_INPUT_FOCUS)
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.API_KEY, "testKey")
                 .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
@@ -184,7 +185,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchUrl() {
-        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/search?s=1&i=1&_dt=1520000000000&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=search&c=cioand-${BuildConfig.VERSION_NAME}&autocomplete_key=testKey"
+        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/search?s=1&i=1&_dt=1520000000000&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=search&c=cioand-${BuildConfig.VERSION_NAME}&key=testKey"
         val originalQuery = "dog"
         val term = "hot dogs"
         val urlBuilder = HttpUrl.Builder().scheme("https")
@@ -200,7 +201,7 @@ class ConstructorIoTest {
                 .addEncodedQueryParameter(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode(), "Meat & Seafood".urlEncode())
                 .addQueryParameter(Constants.QueryConstants.EVENT, Constants.QueryValues.EVENT_SEARCH)
                 .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, "testKey")
+                .addQueryParameter(Constants.QueryConstants.API_KEY, "testKey")
         val urlString = urlBuilder.build().url().toString()
         assertEquals(expected, urlString)
     }
@@ -210,16 +211,17 @@ class ConstructorIoTest {
         val mockServer = MockWebServer()
         every { pref.token } returns "123"
         every { pref.id } returns "1"
-        every { testCellMemoryHolder.testCellParams = any() } just Runs
-        every { testCellMemoryHolder.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
-        constructorIo.setTestCellValues("1" to "2", "3" to "4")
-        verify(exactly = 1) { testCellMemoryHolder.testCellParams = any() }
+        every { configMemoryHolder.testCellParams = any() } just Runs
+        every { configMemoryHolder.userId } returns "uid"
+        every { configMemoryHolder.autocompleteResultCount } returns mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10, Constants.QueryValues.PRODUCTS to 0)
+        every { configMemoryHolder.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
         mockServer.start()
         mockServer.enqueue(MockResponse())
-        var client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, testCellMemoryHolder)).build()
+        var client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, configMemoryHolder)).build()
         client.newCall(Request.Builder().url(mockServer.url("/")).build()).execute()
         var recordedRequest = mockServer.takeRequest()
         assert(recordedRequest.path.contains("ef-1=2"))
+        assert(recordedRequest.path.contains("ui=uid"))
     }
 
     @Test

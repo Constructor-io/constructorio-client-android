@@ -8,7 +8,7 @@ import dagger.Provides
 import io.constructor.BuildConfig
 import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.memory.TestCellMemoryHolder
+import io.constructor.data.memory.ConfigMemoryHolder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -50,7 +50,7 @@ class NetworkModule(private val context: Context) {
 
     @Provides
     @Singleton
-    internal fun provideTokenInterceptor(prefHelper: PreferencesHelper, testCellMemoryHolder: TestCellMemoryHolder): TokenInterceptor = TokenInterceptor(context, prefHelper, testCellMemoryHolder)
+    internal fun provideTokenInterceptor(prefHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder): TokenInterceptor = TokenInterceptor(context, prefHelper, configMemoryHolder)
 
     @Provides
     @Singleton

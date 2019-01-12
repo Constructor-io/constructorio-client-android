@@ -4,24 +4,27 @@ import android.content.Context
 import io.constructor.BuildConfig
 import io.constructor.core.Constants
 import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.memory.TestCellMemoryHolder
+import io.constructor.data.memory.ConfigMemoryHolder
 import okhttp3.Interceptor
 import okhttp3.Response
 
 
-class TokenInterceptor(val context: Context, private val preferencesHelper: PreferencesHelper, private val testCellMemoryHolder: TestCellMemoryHolder) : Interceptor {
+class TokenInterceptor(val context: Context, private val preferencesHelper: PreferencesHelper, private val configMemoryHolder: ConfigMemoryHolder) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
         val builder = request.url().newBuilder()
-                .addQueryParameter(Constants.QueryConstants.AUTOCOMPLETE_KEY, preferencesHelper.token)
+                .addQueryParameter(Constants.QueryConstants.API_KEY, preferencesHelper.token)
                 .addQueryParameter(Constants.QueryConstants.IDENTITY, preferencesHelper.id)
                 .addQueryParameter(Constants.QueryConstants.TIMESTAMP, System.currentTimeMillis().toString())
                 .addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
-        testCellMemoryHolder.testCellParams.forEach {
+        configMemoryHolder.testCellParams.forEach {
             it?.let {
                 builder.addQueryParameter(it.first, it.second)
             }
+        }
+        configMemoryHolder.userId?.let {
+            builder.addQueryParameter(Constants.QueryConstants.USER_ID, it)
         }
         val url = builder.build()
         request = request.newBuilder().url(url).build()

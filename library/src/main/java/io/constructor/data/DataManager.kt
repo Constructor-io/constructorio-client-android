@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi) {
 
-    fun getAutocompleteResults(text: String): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getSuggestions(text).map {
+    fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getSuggestions(text, params.toMap()).map {
         if (!it.isError) {
             it.response()?.let {
                 if (it.isSuccessful) {
