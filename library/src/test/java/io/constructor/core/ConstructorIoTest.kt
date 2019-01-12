@@ -212,6 +212,7 @@ class ConstructorIoTest {
         every { pref.token } returns "123"
         every { pref.id } returns "1"
         every { configMemoryHolder.testCellParams = any() } just Runs
+        every { configMemoryHolder.userId } returns "uid"
         every { configMemoryHolder.autocompleteResultCount } returns mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10, Constants.QueryValues.PRODUCTS to 0)
         every { configMemoryHolder.testCellParams } returns listOf("ef-1" to "2", "ef-3" to "4")
         mockServer.start()
@@ -220,6 +221,7 @@ class ConstructorIoTest {
         client.newCall(Request.Builder().url(mockServer.url("/")).build()).execute()
         var recordedRequest = mockServer.takeRequest()
         assert(recordedRequest.path.contains("ef-1=2"))
+        assert(recordedRequest.path.contains("ui=uid"))
     }
 
     @Test

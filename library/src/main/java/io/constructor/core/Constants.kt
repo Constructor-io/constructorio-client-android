@@ -24,6 +24,7 @@ class Constants {
         const val NUM_RESULTS = "num_results_"
         const val GROUP_ID = "group[group_id]"
         const val GROUP_DISPLAY_NAME = "group[display_name]"
+        const val USER_ID = "ui"
     }
 
     object QueryValues {

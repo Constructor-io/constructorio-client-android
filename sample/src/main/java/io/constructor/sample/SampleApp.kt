@@ -10,5 +10,6 @@ class SampleApp : Application() {
         super.onCreate()
         ConstructorIo.init(this, ConstructorIoConfig("key_OucJxxrfiTVUQx0C",
                 testCells = listOf("ab" to "cd", "11" to "22")))
+        ConstructorIo.userId = "uid"
     }
 }

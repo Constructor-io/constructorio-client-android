@@ -23,6 +23,9 @@ class TokenInterceptor(val context: Context, private val preferencesHelper: Pref
                 builder.addQueryParameter(it.first, it.second)
             }
         }
+        configMemoryHolder.userId?.let {
+            builder.addQueryParameter(Constants.QueryConstants.USER_ID, it)
+        }
         val url = builder.build()
         request = request.newBuilder().url(url).build()
         return chain.proceed(request)
