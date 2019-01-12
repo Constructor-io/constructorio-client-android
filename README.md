@@ -6,7 +6,7 @@ An Android Client for [Constructor.io](http://constructor.io/).  [Constructor.io
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v1.0.0) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v1.1.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 You can find this in your [Constructor.io dashboard](https://constructor.io/dashboard).  Contact sales if you'd like to sign up, or support if you believe your company already has an account.
