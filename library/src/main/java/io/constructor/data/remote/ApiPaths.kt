@@ -8,5 +8,6 @@ object ApiPaths {
     const val URL_CONVERT_EVENT = "autocomplete/{term}/conversion"
     const val URL_CLICK_THROUGH_EVENT = "autocomplete/{term}/click_through"
     const val URL_BEHAVIOR = "behavior"
+    const val URL_PURCHASE = "autocomplete/TERM_UNKNOWN/purchase"
 
 }
