@@ -92,7 +92,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySessionStartUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=session_start&key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&s=1&action=session_start&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -107,7 +107,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchClickThroughEvent() {
-        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=cioand-0.1.0&s=1&autocomplete_section=Products&key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=${BuildConfig.CLIENT_VERSION}&s=1&autocomplete_section=Products&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("autocomplete")
@@ -124,7 +124,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchLoadedEventUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=search-results&key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&s=1&action=search-results&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -139,7 +139,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifyInputFocusEvent() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&i=user_id&s=1&action=focus&key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&i=user_id&s=1&action=focus&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -267,6 +267,14 @@ class ConstructorIoTest {
         every { data.trackInputFocus(any(), any()) } returns Completable.complete()
         constructorIo.trackInputFocus("1")
         verify(exactly = 1) { data.trackInputFocus(any(), any()) }
+    }
+
+    @Test
+    fun trackPurchase() {
+        every { pref.defaultItemSection } returns "Products"
+        every { data.trackPurchase(any()) } returns Completable.complete()
+        constructorIo.trackPurchase(arrayOf("id1"))
+        verify(exactly = 1) { data.trackPurchase(any()) }
     }
 
 }

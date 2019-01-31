@@ -187,4 +187,18 @@ object ConstructorIo {
                 }))
     }
 
+    fun trackPurchase(clientIds: Array<String>, sectionName: String? = null, errorCallback: ConstructorError = null) {
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
+        val params = mutableListOf(Constants.QueryConstants.SESSION to sessionId.toString(),
+                Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
+        clientIds.forEach { params.add(Constants.QueryConstants.CUSTOMER_ID to it) }
+        disposable.add(dataManager.trackPurchase(params.toTypedArray()).subscribeOn(Schedulers.io())
+                .subscribe({}, { t ->
+                    t.printStackTrace()
+                    errorCallback?.invoke(t)
+                    e("Input focus event error: ${t.message}")
+                }))
+    }
+
 }

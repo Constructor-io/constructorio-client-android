@@ -34,4 +34,7 @@ interface ConstructorApi {
 
     @GET(ApiPaths.URL_BEHAVIOR)
     fun trackInputFocus(@Query("term") term: String?, @QueryMap params: Map<String, String>): Completable
+
+    @GET(ApiPaths.URL_PURCHASE)
+    fun trackPurchase(@QueryMap params: Map<String, String>): Completable
 }

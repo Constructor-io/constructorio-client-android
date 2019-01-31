@@ -184,4 +184,11 @@ class DataManagerTest {
         verify(exactly = 1) { constructorApi.trackInputFocus(any(), any()) }
     }
 
+    @Test
+    fun trackPurchase() {
+        every { constructorApi.trackPurchase(any()) } returns Completable.complete()
+        dataManager.trackPurchase(arrayOf())
+        verify(exactly = 1) { constructorApi.trackPurchase(any()) }
+    }
+
 }

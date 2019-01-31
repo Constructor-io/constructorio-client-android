@@ -22,6 +22,7 @@ class Constants {
         const val EVENT = "tr"
         const val API_KEY = "key"
         const val NUM_RESULTS = "num_results_"
+        const val CUSTOMER_ID = "customer_ids"
         const val GROUP_ID = "group[group_id]"
         const val GROUP_DISPLAY_NAME = "group[display_name]"
         const val USER_ID = "ui"
