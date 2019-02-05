@@ -157,8 +157,8 @@ class ConstructorIoTest {
     fun trackSelectSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Completable.complete()
-            constructorIo.trackSelect("doggy dog", dummySuggestion)
+            every { data.trackAutocompleteSelect(any(), any(), any()) } returns Completable.complete()
+            constructorIo.trackAutocompleteSelect("doggy dog", "dog", "section1", dummySuggestion.group)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
     }
@@ -167,8 +167,8 @@ class ConstructorIoTest {
     fun trackSelectError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Completable.error(Exception())
-            constructorIo.trackSelect("doggy dog", dummySuggestion)
+            every { data.trackAutocompleteSelect(any(), any(), any()) } returns Completable.error(Exception())
+            constructorIo.trackAutocompleteSelect("doggy dog", "dog", "section1", dummySuggestion.group)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
     }
@@ -177,8 +177,8 @@ class ConstructorIoTest {
     fun trackSearchSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Completable.complete()
-            constructorIo.trackSearch("doggy dog", dummySuggestion)
+            every { data.trackSearchSubmit(any(), any(), any()) } returns Completable.complete()
+            constructorIo.trackSearchSubmit("doggy dog", "dog", dummySuggestion.group)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
     }
@@ -228,8 +228,8 @@ class ConstructorIoTest {
     fun trackSearchError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Completable.error(Exception())
-            constructorIo.trackSearch("doggy dog", dummySuggestion)
+            every { data.trackSearchSubmit(any(), any(), any()) } returns Completable.error(Exception())
+            constructorIo.trackSearchSubmit("doggy dog", "dog", dummySuggestion.group)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
     }
@@ -237,17 +237,17 @@ class ConstructorIoTest {
     @Test
     fun trackConversion() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackConversion(any(), any(), any(), any()) } returns Completable.complete()
-        constructorIo.trackConversion(itemId = "1")
-        verify(exactly = 1) { data.trackConversion(any(), any(), any(), any()) }
+        every { data.trackConversion(any(), any(), any(), any(), any()) } returns Completable.complete()
+        constructorIo.trackConversion("corn", "id1", 11.99)
+        verify(exactly = 1) { data.trackConversion("TERM_UNKNOWN", any(), any(), any(), any()) }
     }
 
     @Test
     fun trackSearchResultClickThrough() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackSearchResultClickThrough(any(), any(), any(), any()) } returns Completable.complete()
-        constructorIo.trackSearchResultClickThrough("1", "1")
-        verify(exactly = 1) { data.trackSearchResultClickThrough(any(), any(), any(), any()) }
+        every { data.trackSearchResultClick(any(), any(), any(), any()) } returns Completable.complete()
+        constructorIo.trackSearchResultClick("1", "1")
+        verify(exactly = 1) { data.trackSearchResultClick(any(), any(), any(), any()) }
     }
 
     @Test

@@ -15,19 +15,19 @@ interface ConstructorApi {
     fun getSuggestions(@Path("value") value: String, @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
 
     @GET(ApiPaths.URL_SELECT_EVENT)
-    fun trackSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
+    fun trackAutocompleteSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_SEARCH_EVENT)
-    fun trackSearch(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
+    fun trackSearchSubmit(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_SESSION_START_EVENT)
     fun trackSessionStart(@QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_CONVERT_EVENT)
-    fun trackConversion(@Path("term") term: String, @Query("item_id") itemId: String, @Query("revenue") revenue: String?, @QueryMap params: Map<String, String>): Completable
+    fun trackConversion(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @Query("revenue") revenue: String?, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_CLICK_THROUGH_EVENT)
-    fun trackSearchResultClickThrough(@Path("term") term: String, @Query("item_id") itemId: String, @Query("position") position: String?, @QueryMap params: Map<String, String>): Completable
+    fun trackSearchResultTerm(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_BEHAVIOR)
     fun trackSearchResultLoaded(@Query("term") term: String, @Query("num_results") resultCount: Int, @QueryMap params: Map<String, String>): Completable
