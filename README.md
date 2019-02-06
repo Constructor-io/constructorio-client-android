@@ -146,13 +146,13 @@ If you decide to extend from the `BaseSuggestionFragment`, these events are sent
 ```kotlin
 import io.constructor.core.ConstructorIo
 
-// Track when the user focuses into the search bar
+// Track when the user focuses into the search bar (searchTerm)
 ConstructorIo.trackInputFocus("")
 
-// Track when the user selects an autocomplete suggestion
+// Track when the user selects an autocomplete suggestion (searchTerm, originalQuery, sectionName)
 ConstructorIo.trackAutocompleteSelect("toothpicks", "tooth", "Search Suggestions")
 
-// Track when the user submits a search (either by selecting a suggestion or not selecting a suggestion)
+// Track when the user submits a search  (searchTerm, originalQuery)
 ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 ```
 
@@ -163,15 +163,15 @@ These events should be sent manually by the consuming app.
 ```kotlin
 import io.constructor.core.ConstructorIo
 
-// Track when search results are loaded into view
+// Track when search results are loaded into view (searchTerm, resultCount)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789)
 
-// Track when a search result is clicked
+// Track when a search result is clicked (itemName, customerId, searchTerm)
 ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth")
 
-// Track when a search result converts
+// Track when a search result converts (itemName, customerId, revenue, searchTerm)
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
 
-// Track when products are purchased
+// Track when products are purchased (customerIds)
 ConstructorIo.trackPurchase(customerIDs: ["123-AB", "456-CD"])
 ```
