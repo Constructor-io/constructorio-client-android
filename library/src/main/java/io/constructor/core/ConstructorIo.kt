@@ -6,8 +6,8 @@ import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.Group
 import io.constructor.data.model.Suggestion
-import io.constructor.data.model.SuggestionViewModel
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -101,19 +101,19 @@ object ConstructorIo {
         return dataManager.getAutocompleteResults(query, params.toTypedArray())
     }
 
-    fun trackSelect(query: String, suggestion: SuggestionViewModel, errorCallback: ConstructorError = null) {
+    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
-        suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-        disposable.add(dataManager.trackSelect(suggestion.term,
+        group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
+        group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
+        disposable.add(dataManager.trackAutocompleteSelect(searchTerm,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
-                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to suggestion.section!!,
-                        Constants.QueryConstants.ORIGINAL_QUERY to query,
+                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionName,
+                        Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
                         Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK),
                 encodedParams.toTypedArray())
                 .subscribe({
-                    context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
+                    context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
                 }, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
@@ -121,17 +121,17 @@ object ConstructorIo {
                 }))
     }
 
-    fun trackSearch(query: String, suggestion: SuggestionViewModel, errorCallback: ConstructorError = null) {
+    fun trackSearchSubmit(searchTerm: String, originalQuery: String, group: Group?, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        suggestion.group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
-        suggestion.group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-        disposable.add(dataManager.trackSearch(suggestion.term,
+        group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
+        group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
+        disposable.add(dataManager.trackSearchSubmit(searchTerm,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
-                        Constants.QueryConstants.ORIGINAL_QUERY to query,
+                        Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
                         Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH), encodedParams.toTypedArray())
                 .subscribe({
-                    context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to query)
+                    context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
                 }, {
                     it.printStackTrace()
                     errorCallback?.invoke(it)
@@ -139,11 +139,11 @@ object ConstructorIo {
                 }))
     }
 
-    fun trackConversion(itemId: String, term: String = "TERM_UNKNOWN", revenue: String? = null, errorCallback: ConstructorError = null) {
+    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        disposable.add(dataManager.trackConversion(term, itemId, revenue,
+        disposable.add(dataManager.trackConversion(searchTerm, itemName, customerId, "%.2f".format(revenue),
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
-                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to preferenceHelper.defaultItemSection)).subscribeOn(Schedulers.io())
+                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to (sectionName ?: preferenceHelper.defaultItemSection))).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
@@ -151,21 +151,22 @@ object ConstructorIo {
                 }))
     }
 
-    fun trackSearchResultClickThrough(term: String, itemId: String, position: String? = null, errorCallback: ConstructorError = null) {
+    fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        disposable.add(dataManager.trackSearchResultClickThrough(term, itemId, position,
+        val sName = sectionName ?: preferenceHelper.defaultItemSection
+        disposable.add(dataManager.trackSearchResultClick(itemName, customerId, searchTerm,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
-                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to preferenceHelper.defaultItemSection)).subscribeOn(Schedulers.io())
+                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName)).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Conversion click through event error: ${t.message}")
+                    e("Search result click event error: ${t.message}")
                 }))
     }
 
-    fun trackSearchResultLoaded(term: String, resultCount: Int, errorCallback: ConstructorError = null) {
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        disposable.add(dataManager.trackSearchResultLoaded(term, resultCount,
+        disposable.add(dataManager.trackSearchResultsLoaded(term, resultCount,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS)).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->
