@@ -14,10 +14,10 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_GET_SUGGESTIONS)
     fun getSuggestions(@Path("value") value: String, @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
 
-    @GET(ApiPaths.URL_SELECT_EVENT)
+    @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_SEARCH_EVENT)
+    @GET(ApiPaths.URL_SEARCH_SUBMIT_EVENT)
     fun trackSearchSubmit(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_SESSION_START_EVENT)
@@ -26,7 +26,7 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_CONVERSION_EVENT)
     fun trackConversion(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @Query("revenue") revenue: String?, @QueryMap params: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_SEARCH_CLICK_EVENT)
+    @GET(ApiPaths.URL_SEARCH_RESULT_CLICK_EVENT)
     fun trackSearchResultTerm(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_BEHAVIOR)
