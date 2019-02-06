@@ -23,14 +23,14 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_SESSION_START_EVENT)
     fun trackSessionStart(@QueryMap params: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_CONVERT_EVENT)
+    @GET(ApiPaths.URL_CONVERSION_EVENT)
     fun trackConversion(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @Query("revenue") revenue: String?, @QueryMap params: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_CLICK_THROUGH_EVENT)
+    @GET(ApiPaths.URL_SEARCH_CLICK_EVENT)
     fun trackSearchResultTerm(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_BEHAVIOR)
-    fun trackSearchResultLoaded(@Query("term") term: String, @Query("num_results") resultCount: Int, @QueryMap params: Map<String, String>): Completable
+    fun trackSearchResultsLoaded(@Query("term") term: String, @Query("num_results") resultCount: Int, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_BEHAVIOR)
     fun trackInputFocus(@Query("term") term: String?, @QueryMap params: Map<String, String>): Completable

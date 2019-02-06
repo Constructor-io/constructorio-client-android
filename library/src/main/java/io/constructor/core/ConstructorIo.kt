@@ -160,13 +160,13 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Conversion click through event error: ${t.message}")
+                    e("Search result click event error: ${t.message}")
                 }))
     }
 
-    fun trackSearchResultLoaded(term: String, resultCount: Int, errorCallback: ConstructorError = null) {
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        disposable.add(dataManager.trackSearchResultLoaded(term, resultCount,
+        disposable.add(dataManager.trackSearchResultsLoaded(term, resultCount,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS)).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->

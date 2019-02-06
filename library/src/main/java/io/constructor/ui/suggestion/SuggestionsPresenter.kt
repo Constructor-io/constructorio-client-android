@@ -48,7 +48,7 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
         }
         disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<ConstructorData<List<Suggestion>?>>()).subscribe { data ->
             data.onValue {
-                ConstructorIo.trackSearchResultLoaded(text, it!!.size)
+                ConstructorIo.trackSearchResultsLoaded(text, it!!.size)
                 mvpView.showSuggestions(it, preferencesHelper.groupsShownForFirstTerm)
             }
             data.onError {

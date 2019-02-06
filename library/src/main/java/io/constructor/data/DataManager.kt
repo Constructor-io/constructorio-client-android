@@ -45,8 +45,8 @@ constructor(private val constructorApi: ConstructorApi) {
         return constructorApi.trackSearchResultTerm(term, itemName, customerId, params.toMap())
     }
 
-    fun trackSearchResultLoaded(term: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackSearchResultLoaded(term, resultCount, params.toMap())
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackSearchResultsLoaded(term, resultCount, params.toMap())
     }
 
     fun trackInputFocus(term: String?, params: Array<Pair<String, String>>): Completable {
