@@ -93,6 +93,10 @@ object ConstructorIo {
         }
     }
 
+    fun appMovedToForeground() {
+        preferenceHelper.getSessionId(sessionIncrementEventHandler, true)
+    }
+
     fun getAutocompleteResults(query: String): Observable<ConstructorData<List<Suggestion>?>> {
         val params = mutableListOf<Pair<String, String>>()
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {

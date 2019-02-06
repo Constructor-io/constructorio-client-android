@@ -44,6 +44,7 @@ class ConstructorIoTest {
         every { pref.id } returns "1"
         every { pref.getSessionId() } returns 1
         every { pref.getSessionId(any()) } returns 1
+        every { pref.getSessionId(any(), any()) } returns 1
         constructorIo.testInit(ctx, ConstructorIoConfig("dummyKey",
                 testCells = listOf("1" to "2", "3" to "4")), data, pref, configMemoryHolder)
     }

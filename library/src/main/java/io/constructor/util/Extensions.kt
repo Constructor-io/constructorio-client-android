@@ -6,6 +6,9 @@ import android.os.Parcelable
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Base64
 import android.util.Log
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.io.Serializable
 import java.net.URLEncoder
 
@@ -42,4 +45,10 @@ fun String.base64Encode(): String? {
 
 fun String.base64Decode(): String {
     return String(Base64.decode(this, Base64.NO_WRAP or Base64.NO_PADDING))
+}
+
+fun <T : Any> Observable<T>.io2ui(): Observable<T> {
+    return compose {
+        it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    }
 }
