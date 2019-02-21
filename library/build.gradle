@@ -78,7 +78,17 @@ android {
     androidExtensions {
         experimental = true
     }
+
+    libraryVariants.all { variant ->
+        variant.outputs.each { output ->
+            def lintTask = tasks["lint${variant.name.capitalize()}"]
+            output.assemble.dependsOn lintTask
+        }
+    }
+
 }
+
+
 
 apply from: 'dependencies.gradle'
 
