@@ -18,11 +18,11 @@ class OnSearchService : IntentService("OnSearchService") {
         }
     }
 
-    override fun onHandleIntent(intent: Intent?) {
-        val query: String? = intent?.getStringExtra(Constants.EXTRA_QUERY)
-        val suggestion: SuggestionViewModel = intent?.getSerializableExtra(Constants.EXTRA_SUGGESTION) as SuggestionViewModel
+    override fun onHandleIntent(intent: Intent) {
+        val query: String = intent.getStringExtra(Constants.EXTRA_QUERY)
+        val suggestion: SuggestionViewModel = intent.getSerializableExtra(Constants.EXTRA_SUGGESTION) as SuggestionViewModel
             if (!suggestion.term.isBlank()) {
-                ConstructorIo.trackSearch(query!!, suggestion)
+                ConstructorIo.trackSearchSubmit(suggestion.term, query, suggestion.group)
             }
     }
 }

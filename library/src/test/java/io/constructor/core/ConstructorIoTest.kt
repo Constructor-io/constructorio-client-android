@@ -44,6 +44,7 @@ class ConstructorIoTest {
         every { pref.id } returns "1"
         every { pref.getSessionId() } returns 1
         every { pref.getSessionId(any()) } returns 1
+        every { pref.getSessionId(any(), any()) } returns 1
         constructorIo.testInit(ctx, ConstructorIoConfig("dummyKey",
                 testCells = listOf("1" to "2", "3" to "4")), data, pref, configMemoryHolder)
     }
@@ -91,8 +92,8 @@ class ConstructorIoTest {
     }
 
     @Test
-    fun verifySessionStartUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=session_start&key=testKey&_dt=1520000000000"
+    fun verifySessionStartEventUrl() {
+        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&s=1&action=session_start&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -106,8 +107,8 @@ class ConstructorIoTest {
     }
 
     @Test
-    fun verifySearchClickThroughEvent() {
-        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=cioand-0.1.0&s=1&autocomplete_section=Products&key=testKey&_dt=1520000000000"
+    fun verifySearchResultClickEventUrl() {
+        val expected = "https://ac.cnstrc.com/autocomplete/term/click_through?c=${BuildConfig.CLIENT_VERSION}&s=1&autocomplete_section=Products&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("autocomplete")
@@ -123,8 +124,8 @@ class ConstructorIoTest {
     }
 
     @Test
-    fun verifySearchLoadedEventUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&s=1&action=search-results&key=testKey&_dt=1520000000000"
+    fun verifySearchResultsLoadedEventUrl() {
+        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&s=1&action=search-results&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -139,7 +140,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifyInputFocusEvent() {
-        val expected = "https://ac.cnstrc.com/behavior?c=cioand-0.1.0&i=user_id&s=1&action=focus&key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&i=user_id&s=1&action=focus&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -154,31 +155,31 @@ class ConstructorIoTest {
     }
 
     @Test
-    fun trackSelectSuccess() {
+    fun trackAutocompleteSelectSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Completable.complete()
-            constructorIo.trackSelect("doggy dog", dummySuggestion)
+            every { data.trackAutocompleteSelect(any(), any(), any()) } returns Completable.complete()
+            constructorIo.trackAutocompleteSelect("doggy dog", "dog", "section1", dummySuggestion.group)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
     }
 
     @Test
-    fun trackSelectError() {
+    fun trackAutocompleteSelectError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSelect(any(), any(), any()) } returns Completable.error(Exception())
-            constructorIo.trackSelect("doggy dog", dummySuggestion)
+            every { data.trackAutocompleteSelect(any(), any(), any()) } returns Completable.error(Exception())
+            constructorIo.trackAutocompleteSelect("doggy dog", "dog", "section1", dummySuggestion.group)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
     }
 
     @Test
-    fun trackSearchSuccess() {
+    fun trackSearchSubmitSuccess() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Completable.complete()
-            constructorIo.trackSearch("doggy dog", dummySuggestion)
+            every { data.trackSearchSubmit(any(), any(), any()) } returns Completable.complete()
+            constructorIo.trackSearchSubmit("doggy dog", "dog", dummySuggestion.group)
             verify(exactly = 1) { ctx.broadcastIntent(any(), any()) }
         }
     }
@@ -225,11 +226,11 @@ class ConstructorIoTest {
     }
 
     @Test
-    fun trackSearchError() {
+    fun trackSearchSubmitError() {
         staticMockk("io.constructor.util.ExtensionsKt").use {
             every { ctx.broadcastIntent(any(), any()) } returns Unit
-            every { data.trackSearch(any(), any(), any()) } returns Completable.error(Exception())
-            constructorIo.trackSearch("doggy dog", dummySuggestion)
+            every { data.trackSearchSubmit(any(), any(), any()) } returns Completable.error(Exception())
+            constructorIo.trackSearchSubmit("doggy dog", "dog", dummySuggestion.group)
             verify(exactly = 0) { ctx.broadcastIntent(any(), any()) }
         }
     }
@@ -237,17 +238,17 @@ class ConstructorIoTest {
     @Test
     fun trackConversion() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackConversion(any(), any(), any(), any()) } returns Completable.complete()
-        constructorIo.trackConversion(itemId = "1")
-        verify(exactly = 1) { data.trackConversion(any(), any(), any(), any()) }
+        every { data.trackConversion(any(), any(), any(), any(), any()) } returns Completable.complete()
+        constructorIo.trackConversion("corn", "id1", 11.99)
+        verify(exactly = 1) { data.trackConversion("TERM_UNKNOWN", any(), any(), any(), any()) }
     }
 
     @Test
-    fun trackSearchResultClickThrough() {
+    fun trackSearchResultClick() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackSearchResultClickThrough(any(), any(), any(), any()) } returns Completable.complete()
-        constructorIo.trackSearchResultClickThrough("1", "1")
-        verify(exactly = 1) { data.trackSearchResultClickThrough(any(), any(), any(), any()) }
+        every { data.trackSearchResultClick(any(), any(), any(), any()) } returns Completable.complete()
+        constructorIo.trackSearchResultClick("1", "1")
+        verify(exactly = 1) { data.trackSearchResultClick(any(), any(), any(), any()) }
     }
 
     @Test
@@ -267,6 +268,14 @@ class ConstructorIoTest {
         every { data.trackInputFocus(any(), any()) } returns Completable.complete()
         constructorIo.trackInputFocus("1")
         verify(exactly = 1) { data.trackInputFocus(any(), any()) }
+    }
+
+    @Test
+    fun trackPurchase() {
+        every { pref.defaultItemSection } returns "Products"
+        every { data.trackPurchase(any()) } returns Completable.complete()
+        constructorIo.trackPurchase(arrayOf("id1"))
+        verify(exactly = 1) { data.trackPurchase(any()) }
     }
 
 }

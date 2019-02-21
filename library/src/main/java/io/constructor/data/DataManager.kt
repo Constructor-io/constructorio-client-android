@@ -25,32 +25,36 @@ constructor(private val constructorApi: ConstructorApi) {
         }
     }.toObservable()
 
-    fun trackSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackSelect(term, params.toMap(), encodedParams.toMap())
+    fun trackAutocompleteSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackAutocompleteSelect(term, params.toMap(), encodedParams.toMap())
     }
 
-    fun trackSearch(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackSearch(term, params.toMap(), encodedParams.toMap())
+    fun trackSearchSubmit(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackSearchSubmit(term, params.toMap(), encodedParams.toMap())
     }
 
     fun trackSessionStart(params: Array<Pair<String, String>>): Completable {
         return constructorApi.trackSessionStart(params.toMap())
     }
 
-    fun trackConversion(term: String, itemId: String, revenue: String? = null, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackConversion(term, itemId, revenue, params.toMap())
+    fun trackConversion(term: String, itemName: String, customerId: String, revenue: String? = null, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackConversion(term, itemName, customerId, revenue, params.toMap())
     }
 
-    fun trackSearchResultClickThrough(term: String, itemId: String, position: String? = null, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackSearchResultClickThrough(term, itemId, position, params.toMap())
+    fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackSearchResultTerm(term, itemName, customerId, params.toMap())
     }
 
-    fun trackSearchResultLoaded(term: String, reultCount: Int, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackSearchResultLoaded(term, reultCount, params.toMap())
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackSearchResultsLoaded(term, resultCount, params.toMap())
     }
 
     fun trackInputFocus(term: String?, params: Array<Pair<String, String>>): Completable {
         return constructorApi.trackInputFocus(term, params.toMap())
+    }
+
+    fun trackPurchase(params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackPurchase(params.toMap())
     }
 
 }
