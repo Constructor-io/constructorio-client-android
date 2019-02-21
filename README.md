@@ -9,6 +9,7 @@ An Android Client for [Constructor.io](http://constructor.io/).  [Constructor.io
 Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v1.1.0) to add the client to your project.
 
 ## 2. Retrieve an API key
+
 You can find this in your [Constructor.io dashboard](https://constructor.io/dashboard).  Contact sales if you'd like to sign up, or support if you believe your company already has an account.
 
 ## 3. Implement the Autocomplete UI
@@ -136,18 +137,42 @@ The Android Client sends behavioral events to [Constructor.io](http://constructo
 Three types of these events exist:
 
 1. **General Events** are sent as needed when an instance of the Client is created or initialized
-1. **Autocomplete Events** measure user interaction with autocomplete results and the `CIOAutocompleteViewController` sends them automatically.
+1. **Autocomplete Events** measure user interaction with autocomplete results and extending from `BaseSuggestionFragment` sends them automatically.
 1. **Search Events** measure user interaction with search results and the consuming app has to explicitly instrument them itself
+
+### Autocomplete Events
+
+If you decide to extend from the `BaseSuggestionFragment`, these events are sent automatically.
 
 ```kotlin
 import io.constructor.core.ConstructorIo
 
-// Track search results loaded (term, resultCount)
-ConstructorIo.trackSearchResultLoaded("a search term", 123)
+// Track when the user focuses into the search bar (searchTerm)
+ConstructorIo.trackInputFocus("")
 
-// Track search result click (term, itemId, position)
-ConstructorIo.trackSearchResultClickThrough("a search term", "an item id", "1")
+// Track when the user selects an autocomplete suggestion (searchTerm, originalQuery, sectionName)
+ConstructorIo.trackAutocompleteSelect("toothpicks", "tooth", "Search Suggestions")
 
-// Track conversion (item id, term, revenue)
-constructorIO.trackConversion("an item id", "a search term", "45.00")
+// Track when the user submits a search  (searchTerm, originalQuery)
+ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
+```
+
+### Search Events
+
+These events should be sent manually by the consuming app.
+
+```kotlin
+import io.constructor.core.ConstructorIo
+
+// Track when search results are loaded into view (searchTerm, resultCount)
+ConstructorIo.trackSearchResultsLoaded("tooth", 789)
+
+// Track when a search result is clicked (itemName, customerId, searchTerm)
+ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth")
+
+// Track when a search result converts (itemName, customerId, revenue, searchTerm)
+ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
+
+// Track when products are purchased (customerIds)
+ConstructorIo.trackPurchase(customerIDs: ["123-AB", "456-CD"])
 ```

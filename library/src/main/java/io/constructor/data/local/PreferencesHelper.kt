@@ -30,13 +30,13 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         get() = preferences.getLong(SESSION_LAST_ACCESS, System.currentTimeMillis())
         set(value) = preferences.edit().putLong(SESSION_LAST_ACCESS, value).apply()
 
-    fun getSessionId(sessionIncrementAction: ((String) -> Unit)? = null): Int {
+    fun getSessionId(sessionIncrementAction: ((String) -> Unit)? = null, forceIncrement: Boolean = false): Int {
         if (!preferences.contains(SESSION_ID)) {
             return resetSession(sessionIncrementAction)
         }
         val sessionTime = lastSessionAccess
         val timeDiff = System.currentTimeMillis() - sessionTime
-        if (timeDiff > SESSION_TIME_THRESHOLD) {
+        if (timeDiff > SESSION_TIME_THRESHOLD || forceIncrement) {
             var sessionId = preferences.getInt(SESSION_ID, 1)
             preferences.edit().putInt(SESSION_ID, ++sessionId).apply()
             sessionIncrementAction?.invoke(sessionId.toString())
