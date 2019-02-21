@@ -1,13 +1,11 @@
 package io.constructor.ui.suggestion
 
 import io.constructor.core.ConstructorIo
-import io.constructor.data.ConstructorData
 import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.model.Suggestion
 import io.constructor.features.base.BasePresenter
 import io.constructor.injection.ConfigPersistent
 import io.constructor.util.d
-import io.constructor.util.rx.scheduler.SchedulerUtils
+import io.constructor.util.io2ui
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -21,7 +19,7 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
 
     override fun attachView(mvpView: SuggestionsView) {
         super.attachView(mvpView)
-        disposables.add(mvpView.queryChanged().debounce(300, TimeUnit.MILLISECONDS).compose(SchedulerUtils.ioToMain<String>()).subscribe({ query ->
+        disposables.add(mvpView.queryChanged().debounce(300, TimeUnit.MILLISECONDS).io2ui().subscribe({ query ->
             getSuggestions(query)
         }, {error ->
             error.printStackTrace()
@@ -46,10 +44,11 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
             mvpView.onError(IllegalStateException("token is null, please init library with token using ConstructorIo.init"))
             return
         }
-        disposables.add(ConstructorIo.getAutocompleteResults(text).compose(SchedulerUtils.ioToMain<ConstructorData<List<Suggestion>?>>()).subscribe { data ->
+        disposables.add(ConstructorIo.getAutocompleteResults(text).io2ui().subscribe { data ->
             data.onValue {
-                ConstructorIo.trackSearchResultsLoaded(text, it!!.size)
-                mvpView.showSuggestions(it, preferencesHelper.groupsShownForFirstTerm)
+                it?.let {
+                    mvpView.showSuggestions(it, preferencesHelper.groupsShownForFirstTerm)
+                }
             }
             data.onError {
                     if (it is NoSuchElementException) {
