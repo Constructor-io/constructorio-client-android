@@ -20,7 +20,7 @@ android {
         targetSdkVersion 27
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
-        versionName '1.1.0'
+        versionName '1.2.0'
         buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
         buildConfigField("String", "AUTOCOMPLETE_SECTION", "\"Products\"")
         buildConfigField("String", "BASE_API_URL", "\"https://ac.cnstrc.com\"")
