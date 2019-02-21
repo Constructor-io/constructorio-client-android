@@ -94,7 +94,7 @@ object ConstructorIo {
     }
 
     fun appMovedToForeground() {
-        preferenceHelper.getSessionId(sessionIncrementEventHandler, true)
+        preferenceHelper.getSessionId(sessionIncrementEventHandler)
     }
 
     fun getAutocompleteResults(query: String): Observable<ConstructorData<List<Suggestion>?>> {
