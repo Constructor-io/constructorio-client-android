@@ -3,6 +3,7 @@ package io.constructor.data
 import android.content.Context
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
+import io.constructor.core.Constants
 import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
@@ -23,6 +24,7 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 class DataManagerHttpTest {
@@ -70,7 +72,7 @@ class DataManagerHttpTest {
     }
 
     @Test
-    fun getSuggestions() {
+    fun getAutocompleteResults() {
         val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response.json"))
         mockServer.enqueue(mockResponse)
@@ -83,7 +85,7 @@ class DataManagerHttpTest {
     }
 
     @Test
-    fun getSuggestionsBadServerResponse() {
+    fun getAutocompleteResultsBadServerResponse() {
         val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -96,7 +98,7 @@ class DataManagerHttpTest {
     }
 
     @Test
-    fun getSuggestionsTimeoutException() {
+    fun getAutocompleteResultsTimeoutException() {
         val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response.json"))
         mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
@@ -110,7 +112,7 @@ class DataManagerHttpTest {
     }
 
     @Test
-    fun getSuggestionsUnexpectedDataResponse() {
+    fun getAutocompleteResultsUnexpectedDataResponse() {
         val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response_with_unexpected_data.json"))
         mockServer.enqueue(mockResponse)
@@ -123,7 +125,7 @@ class DataManagerHttpTest {
     }
 
     @Test
-    fun getSuggestionsEmptyResponse() {
+    fun getAutocompleteResultsEmptyResponse() {
         val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("empty_response.json"))
         mockServer.enqueue(mockResponse)
@@ -133,6 +135,305 @@ class DataManagerHttpTest {
         }
         val request = mockServer.takeRequest()
         assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackAutocompleteSelect() {
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackAutocompleteSelect("titanic").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackAutocompleteSelect500() {
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackAutocompleteSelect("titanic").test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackAutocompleteTimeout() {
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackAutocompleteSelect("titanic").test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchSubmit() {
+        val path = "/" + ApiPaths.URL_SEARCH_SUBMIT_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchSubmit("titanic").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchSubmit500() {
+        val path = "/" + ApiPaths.URL_SEARCH_SUBMIT_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchSubmit("titanic").test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchSubmitTimeout() {
+        val path = "/" + ApiPaths.URL_SEARCH_SUBMIT_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchSubmit("titanic").test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackSessionStart() {
+        val path = "/" + ApiPaths.URL_SESSION_START_EVENT
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSessionStart(arrayOf(Constants.QueryConstants.SESSION to "1")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("s=1"))
+    }
+
+    @Test
+    fun trackSessionStart500() {
+        val path = "/" + ApiPaths.URL_SESSION_START_EVENT
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSessionStart(arrayOf(Constants.QueryConstants.SESSION to "1")).test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("s=1"))
+    }
+
+    @Test
+    fun trackSessionStartTimeout() {
+        val path = "/" + ApiPaths.URL_SESSION_START_EVENT
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSessionStart(arrayOf(Constants.QueryConstants.SESSION to "1")).test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("s=1"))
+    }
+
+    @Test
+    fun trackConversion() {
+        val path = "/" + ApiPaths.URL_CONVERSION_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackConversion("titanic", "ship", "cid").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("name=ship"))
+        assert(request.path.contains("customer_id=cid"))
+    }
+
+    @Test
+    fun trackConversion500() {
+        val path = "/" + ApiPaths.URL_CONVERSION_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackConversion("titanic", "ship", "cid").test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("name=ship"))
+        assert(request.path.contains("customer_id=cid"))
+    }
+
+    @Test
+    fun trackConversionTimeout() {
+        val path = "/" + ApiPaths.URL_CONVERSION_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackConversion("titanic", "ship", "cid").test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("name=ship"))
+        assert(request.path.contains("customer_id=cid"))
+    }
+
+    @Test
+    fun trackSearchResultClick() {
+        val path = "/" + ApiPaths.URL_SEARCH_RESULT_CLICK_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchResultClick("ship", "cid", "titanic").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("name=ship"))
+        assert(request.path.contains("customer_id=cid"))
+    }
+
+    @Test
+    fun trackSearchResultClick500() {
+        val path = "/" + ApiPaths.URL_SEARCH_RESULT_CLICK_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchResultClick("ship", "cid", "titanic").test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("name=ship"))
+        assert(request.path.contains("customer_id=cid"))
+    }
+
+    @Test
+    fun trackSearchResultClickTimeout() {
+        val path = "/" + ApiPaths.URL_SEARCH_RESULT_CLICK_EVENT.replace("{term}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchResultClick("ship", "cid", "titanic").test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("name=ship"))
+        assert(request.path.contains("customer_id=cid"))
+    }
+
+    @Test
+    fun trackSearchResultLoaded() {
+        val path = "/" + ApiPaths.URL_BEHAVIOR
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchResultsLoaded("titanic", 10, arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS)).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.ACTION}=${Constants.QueryValues.EVENT_SEARCH_RESULTS}"))
+    }
+
+    @Test
+    fun trackSearchResultLoaded500() {
+        val path = "/" + ApiPaths.URL_BEHAVIOR
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchResultsLoaded("titanic", 10, arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS)).test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.ACTION}=${Constants.QueryValues.EVENT_SEARCH_RESULTS}"))
+    }
+
+    @Test
+    fun trackSearchResultLoadedTimeout() {
+        val path = "/" + ApiPaths.URL_BEHAVIOR
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackSearchResultsLoaded("titanic", 10, arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS)).test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.ACTION}=${Constants.QueryValues.EVENT_SEARCH_RESULTS}"))
+    }
+
+    @Test
+    fun trackInputFocus() {
+        val path = "/" + ApiPaths.URL_BEHAVIOR
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackInputFocus("titanic", arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS)).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.ACTION}=${Constants.QueryValues.EVENT_INPUT_FOCUS}"))
+    }
+
+    @Test
+    fun trackInputFocus500() {
+        val path = "/" + ApiPaths.URL_BEHAVIOR
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackInputFocus("titanic", arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS)).test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.ACTION}=${Constants.QueryValues.EVENT_INPUT_FOCUS}"))
+    }
+
+    @Test
+    fun trackInputFocusTimeout() {
+        val path = "/" + ApiPaths.URL_BEHAVIOR
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackInputFocus("titanic", arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS)).test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.ACTION}=${Constants.QueryValues.EVENT_INPUT_FOCUS}"))
+    }
+
+    @Test
+    fun trackPurchase() {
+        val path = "/" + ApiPaths.URL_PURCHASE
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackPurchase(listOf("1", "2"), arrayOf()).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=1"))
+        assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=2"))
+    }
+
+    @Test
+    fun trackPurchase500() {
+        val path = "/" + ApiPaths.URL_PURCHASE
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackPurchase(listOf("1", "2"), arrayOf()).test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=1"))
+        assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=2"))
+    }
+
+    @Test
+    fun trackPurchaseTimeout() {
+        val path = "/" + ApiPaths.URL_PURCHASE
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.trackPurchase(listOf("1", "2"), arrayOf()).test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        assert(request.path.startsWith(path))
+        assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=1"))
+        assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=2"))
     }
 
 }
