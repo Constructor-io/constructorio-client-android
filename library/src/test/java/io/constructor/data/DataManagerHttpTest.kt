@@ -401,7 +401,7 @@ class DataManagerHttpTest {
         val path = "/" + ApiPaths.URL_PURCHASE
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = dataManager.trackPurchase(listOf("1", "2"), arrayOf()).test()
+        val observer = dataManager.trackPurchase(listOf("1", "2"), "12.99", arrayOf()).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         assert(request.path.startsWith(path))
@@ -414,7 +414,7 @@ class DataManagerHttpTest {
         val path = "/" + ApiPaths.URL_PURCHASE
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = dataManager.trackPurchase(listOf("1", "2"), arrayOf()).test()
+        val observer = dataManager.trackPurchase(listOf("1", "2"), "12.99", arrayOf()).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
         assert(request.path.startsWith(path))
@@ -428,7 +428,7 @@ class DataManagerHttpTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = dataManager.trackPurchase(listOf("1", "2"), arrayOf()).test()
+        val observer = dataManager.trackPurchase(listOf("1", "2"), "12.99", arrayOf()).test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest()
         assert(request.path.startsWith(path))

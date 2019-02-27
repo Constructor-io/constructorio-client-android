@@ -145,7 +145,8 @@ object ConstructorIo {
 
     fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        disposable.add(dataManager.trackConversion(searchTerm, itemName, customerId, "%.2f".format(revenue),
+        val revenueString = revenue?.let { "%.2f".format(revenue) }
+        disposable.add(dataManager.trackConversion(searchTerm, itemName, customerId, revenueString,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to (sectionName ?: preferenceHelper.defaultItemSection))).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->
@@ -192,12 +193,13 @@ object ConstructorIo {
                 }))
     }
 
-    fun trackPurchase(clientIds: Array<String>, sectionName: String? = null, errorCallback: ConstructorError = null) {
+    fun trackPurchase(clientIds: Array<String>, revenue: Double?, sectionName: String? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
+        val revenueString = revenue?.let { "%.2f".format(revenue) }
         val params = mutableListOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                 Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
-        disposable.add(dataManager.trackPurchase(clientIds.toList(), params.toTypedArray()).subscribeOn(Schedulers.io())
+        disposable.add(dataManager.trackPurchase(clientIds.toList(), revenueString, params.toTypedArray()).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
