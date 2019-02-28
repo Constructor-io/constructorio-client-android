@@ -13,15 +13,6 @@ import io.constructor.injection.module.ActivityModule
 import io.constructor.util.d
 import java.util.concurrent.atomic.AtomicLong
 
-/**
- * Abstract activity that every other Activity in this application must implement. It provides the
- * following functionality:
- * - Handles creation of Dagger components and makes sure that instances of
- * ConfigPersistentComponent are kept across configuration changes.
- * - Set up and handles a GoogleApiClient instance that can be used to access the Google sign in
- * api.
- * - Handles signing out when an authentication error event is received.
- */
 abstract class BaseActivity : AppCompatActivity() {
 
     private var activityComponent: ActivityComponent? = null
@@ -48,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
             componentsArray.put(activityId, configPersistentComponent)
         } else {
             d("Reusing ConfigPersistentComponent id=${activityId}")
-            configPersistentComponent = componentsArray.get(activityId)
+            configPersistentComponent = componentsArray.get(activityId)!!
         }
         activityComponent = configPersistentComponent.activityComponent(ActivityModule(this))
         activityComponent?.inject(this)
