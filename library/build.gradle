@@ -3,12 +3,20 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'jacoco'
 
 group='com.github.Constructor-io'
 
+jacoco {
+    toolVersion = '0.8.3'
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
 
     dexOptions {
         maxProcessCount 4
@@ -17,7 +25,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
         versionName '1.2.0'
@@ -88,6 +96,61 @@ android {
 
 }
 
+task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+
+    def buildDir = "build/"
+
+    def coverageSourceDirs = [
+            "src/main/java"
+    ]
+
+    def excludedClasses = [
+            '**/databinding/**/*.*',
+            '**/android/databinding/*Binding.*',
+            '**/BR.*',
+            '**/R.*',
+            '**/R$*.*',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*_MembersInjector.*',
+            '**/Dagger*Component.*',
+            '**/Dagger*Component$Builder.*',
+            '**/*Module_*Factory.*',
+            '**/*Fragment*.*',
+            '**/*Activity*.*',
+            '**/*Adapter*.*',
+            '**/*ViewPager*.*',
+            '**/*ViewHolder*.*',
+            '**/*Module*.*'
+    ]
+
+    def javaClasses = fileTree(
+            dir: "$buildDir/intermediates/classes/debug",
+            excludes: excludedClasses
+    )
+
+    def kotlinClasses = fileTree(
+            dir: "$buildDir/tmp/kotlin-classes/debug",
+            excludes: excludedClasses
+    )
+
+    classDirectories = files([ javaClasses ], [ kotlinClasses ])
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = fileTree(dir: "$buildDir/jacoco", includes: [
+            "testDebugUnitTest.exec"
+    ])
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+task getCoverage(type: Exec, dependsOn: 'jacocoUnitTestReport') {
+    group = "Reporting"
+    commandLine "open", "$buildDir/reports/jacoco/jacocoUnitTestReport/html/index.html"
+}
 
 
 apply from: 'dependencies.gradle'
@@ -104,8 +167,8 @@ dependencies {
     implementation supportLibs
     implementation networkLibs
     implementation otherLibs
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
     kapt annotationProcessorLibs
     kaptTest daggerCompiler
     kaptAndroidTest daggerCompiler
