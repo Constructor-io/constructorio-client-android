@@ -186,9 +186,9 @@ class DataManagerTest {
 
     @Test
     fun trackPurchase() {
-        every { constructorApi.trackPurchase(any(), any()) } returns Completable.complete()
-        dataManager.trackPurchase(listOf(), arrayOf())
-        verify(exactly = 1) { constructorApi.trackPurchase(any(), any()) }
+        every { constructorApi.trackPurchase(any(), any(), any()) } returns Completable.complete()
+        dataManager.trackPurchase(listOf(), "12.99", arrayOf())
+        verify(exactly = 1) { constructorApi.trackPurchase(any(), any(), any()) }
     }
 
 }
