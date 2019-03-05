@@ -197,8 +197,7 @@ object ConstructorIo {
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val params = mutableListOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                 Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
-        clientIds.forEach { params.add(Constants.QueryConstants.CUSTOMER_ID to it) }
-        disposable.add(dataManager.trackPurchase(params.toTypedArray()).subscribeOn(Schedulers.io())
+        disposable.add(dataManager.trackPurchase(clientIds.toList(), params.toTypedArray()).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)

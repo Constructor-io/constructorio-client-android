@@ -1,5 +1,6 @@
 package io.constructor.data.remote
 
+import io.constructor.core.Constants
 import io.constructor.data.model.AutocompleteResult
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -36,5 +37,5 @@ interface ConstructorApi {
     fun trackInputFocus(@Query("term") term: String?, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_PURCHASE)
-    fun trackPurchase(@QueryMap params: Map<String, String>): Completable
+    fun trackPurchase(@Query(Constants.QueryConstants.CUSTOMER_ID) customerIds: List<String>, @QueryMap params: Map<String, String>): Completable
 }

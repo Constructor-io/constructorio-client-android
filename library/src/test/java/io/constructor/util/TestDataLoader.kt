@@ -7,6 +7,7 @@ import okio.Buffer
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.nio.charset.Charset
 
 
 object TestDataLoader {
@@ -29,5 +30,16 @@ object TestDataLoader {
         }
         return result
     }
+
+    fun loadAsString(fileName: String): String {
+        var result = ""
+        try {
+            result = File(TestDataLoader::class.java.classLoader.getResource(fileName).path).inputStream().readBytes().toString(Charset.defaultCharset())
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return result
+    }
+
 
 }
