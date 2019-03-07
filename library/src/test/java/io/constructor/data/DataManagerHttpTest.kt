@@ -27,6 +27,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
+
 class DataManagerHttpTest {
 
     @Rule
@@ -68,7 +69,7 @@ class DataManagerHttpTest {
                 .build()
 
         constructorApi = retrofit.create(ConstructorApi::class.java)
-        dataManager = DataManager(constructorApi)
+        dataManager = DataManager(constructorApi, moshi)
     }
 
     @Test
@@ -435,5 +436,59 @@ class DataManagerHttpTest {
         assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=1"))
         assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=2"))
     }
+
+//    @Test
+//    fun getSearchResult() {
+//        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+//        mockServer.enqueue(mockResponse)
+//        val observer = dataManager.getSearchResults("corn").test()
+//        observer.assertComplete().assertValue {
+//            it.get()!!.searchData.results!!.size == 5
+//        }
+//    }
+//
+//    @Test
+//    fun getSearchResultsBadServerResponse() {
+//        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+//        mockServer.enqueue(mockResponse)
+//        val observer = dataManager.getSearchResults("corn").test()
+//        observer.assertComplete().assertValue {
+//            it.networkError
+//        }
+//    }
+//
+//    @Test
+//    fun getSearchResultsTimeoutException() {
+//        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+//        mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
+//        mockServer.enqueue(mockResponse)
+//        val observer = dataManager.getSearchResults("corn").test()
+//        observer.assertComplete().assertValue {
+//            it.isError
+//        }
+//    }
+//
+//    @Test
+//    fun getSearchUnexpectedDataResponse() {
+//        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_unexpected_data.json"))
+//        mockServer.enqueue(mockResponse)
+//        val observer = dataManager.getSearchResults("corn").test()
+//        observer.assertComplete().assertValue {
+//            it.get()!!.searchData.resultCount == 23
+//        }
+//    }
+//
+//    @Test
+//    fun getSearchResultsEmptyResponse() {
+//        val path = "/" + ApiPaths.URL_SEARCH.format("corn")
+//        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("empty_response.json"))
+//        mockServer.enqueue(mockResponse)
+//        val observer = dataManager.getSearchResults("corn").test()
+//        observer.assertComplete().assertValue {
+//            it.isEmpty
+//        }
+//        val request = mockServer.takeRequest()
+//        assert(request.path.startsWith(path))
+//    }
 
 }

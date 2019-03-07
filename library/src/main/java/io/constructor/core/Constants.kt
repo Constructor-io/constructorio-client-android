@@ -27,15 +27,19 @@ class Constants {
         const val GROUP_DISPLAY_NAME = "group[display_name]"
         const val USER_ID = "ui"
         const val TERM_UNKNOWN = "TERM_UNKNOWN"
+        const val PAGE = "page"
+        const val PER_PAGE = "num_results_per_page"
+        const val FILTER_GROUP_ID = "filters[group_id]"
+        const val FILTER_FACET = "filters[%s]"
     }
 
     object QueryValues {
         const val EVENT_CLICK = "click"
-        const val EVENT_SEARCH = "search"
+        const val EVENT_SEARCH = "getSearchResults"
         const val EVENT_SESSION_START = "session_start"
         const val SEARCH_SUGGESTIONS = "Search Suggestions"
         const val PRODUCTS = "Products"
-        const val EVENT_SEARCH_RESULTS = "search-results"
+        const val EVENT_SEARCH_RESULTS = "getSearchResults-results"
         const val EVENT_INPUT_FOCUS = "focus"
     }
 }

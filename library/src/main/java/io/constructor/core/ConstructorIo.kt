@@ -8,6 +8,7 @@ import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.Suggestion
+import io.constructor.data.model.search.SearchResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -105,6 +106,25 @@ object ConstructorIo {
         return dataManager.getAutocompleteResults(query, params.toTypedArray())
     }
 
+    fun getSearchResults(text: String, vararg facets: Pair<String, List<String>>, page: Int? = null, perPage: Int? = null, groupId: Int? = null): Observable<ConstructorData<SearchResponse>> {
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        page?.let {
+            encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode())
+        }
+        perPage?.let {
+            encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode())
+        }
+        encodedParams.add(Constants.QueryConstants.SESSION.urlEncode() to sessionId.toString().urlEncode())
+        facets.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
+        }
+        return dataManager.getSearchResults(text, encodedParams = encodedParams.toTypedArray())
+    }
+
     fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
@@ -139,7 +159,7 @@ object ConstructorIo {
                 }, {
                     it.printStackTrace()
                     errorCallback?.invoke(it)
-                    e("trigger search error: ${it.message}")
+                    e("trigger getSearchResults error: ${it.message}")
                 }))
     }
 

@@ -1,5 +1,7 @@
 package io.constructor.data
 
+import com.squareup.moshi.KotlinJsonAdapterFactory
+import com.squareup.moshi.Moshi
 import io.constructor.data.model.AutocompleteResult
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.util.RxSchedulersOverrideRule
@@ -23,7 +25,12 @@ class DataManagerTest {
 
     private var constructorApi = mockk<ConstructorApi>()
 
-    private var dataManager = DataManager(constructorApi)
+    private var moshi = Moshi
+            .Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+    private var dataManager = DataManager(constructorApi, moshi)
 
     @Test
     fun getSuggestions() {
@@ -189,6 +196,34 @@ class DataManagerTest {
         every { constructorApi.trackPurchase(any(), any(), any()) } returns Completable.complete()
         dataManager.trackPurchase(listOf(), "12.99", arrayOf())
         verify(exactly = 1) { constructorApi.trackPurchase(any(), any(), any()) }
+    }
+
+    @Test
+    fun search() {
+        val rb = ResponseBody.create(MediaType.get("application/json"), TestDataLoader.loadAsString("search_response.json"))
+        every { constructorApi.search(any()) } returns Single.just(Result.response(Response.success(rb)))
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.get()!!.searchData.resultCount == 23
+        }
+    }
+
+    @Test
+    fun searchBadServerResponse() {
+        every { constructorApi.search("https://ac.cnstrc.com/getSearchResults/corn") } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.networkError
+        }
+    }
+
+    @Test
+    fun searchException() {
+        every { constructorApi.search("https://ac.cnstrc.com/getSearchResults/corn") } returns Single.just(Result.error<ResponseBody>(Exception()))
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.isError
+        }
     }
 
 }

@@ -1,6 +1,10 @@
 package io.constructor.data
 
+import com.squareup.moshi.Moshi
+import io.constructor.BuildConfig
 import io.constructor.data.model.Suggestion
+import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -9,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class DataManager @Inject
-constructor(private val constructorApi: ConstructorApi) {
+constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
 
     fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getSuggestions(text, params.toMap()).map {
         if (!it.isError) {
@@ -24,6 +28,30 @@ constructor(private val constructorApi: ConstructorApi) {
             ConstructorData.error(it.error())
         }
     }.toObservable()
+
+    fun getSearchResults(text: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {
+        var dynamicUrl = BuildConfig.BASE_API_URL + "/${ApiPaths.URL_SEARCH.format(text)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.search(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
+                    if (it.isSuccessful){
+                        val adapter = moshi.adapter(SearchResponse::class.java)
+                        val response = it.body()?.string()
+                        val result = response?.let { adapter.fromJson(it) }
+                        result?.rawData = response
+                        ConstructorData.of(result!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(result.error())
+            } else {
+                ConstructorData.error(result.error())
+            }
+        }.toObservable()
+    }
 
     fun trackAutocompleteSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackAutocompleteSelect(term, params.toMap(), encodedParams.toMap())
