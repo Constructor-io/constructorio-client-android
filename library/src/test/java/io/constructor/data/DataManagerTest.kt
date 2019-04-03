@@ -199,7 +199,7 @@ class DataManagerTest {
     }
 
     @Test
-    fun search() {
+    fun getSearchResults() {
         val rb = ResponseBody.create(MediaType.get("application/json"), TestDataLoader.loadAsString("search_response.json"))
         every { constructorApi.getSearchResults(any()) } returns Single.just(Result.response(Response.success(rb)))
         val observer = dataManager.getSearchResults("corn").test()
@@ -209,7 +209,7 @@ class DataManagerTest {
     }
 
     @Test
-    fun searchBadServerResponse() {
+    fun getSearchResultsBadServerResponse() {
         every { constructorApi.getSearchResults("https://ac.cnstrc.com/search/corn") } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
         val observer = dataManager.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
@@ -218,7 +218,7 @@ class DataManagerTest {
     }
 
     @Test
-    fun searchException() {
+    fun getSearchResultsException() {
         every { constructorApi.getSearchResults("https://ac.cnstrc.com/search/corn") } returns Single.just(Result.error<ResponseBody>(Exception()))
         val observer = dataManager.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
