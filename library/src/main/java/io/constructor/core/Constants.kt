@@ -35,11 +35,11 @@ class Constants {
 
     object QueryValues {
         const val EVENT_CLICK = "click"
-        const val EVENT_SEARCH = "getSearchResults"
+        const val EVENT_SEARCH = "search"
         const val EVENT_SESSION_START = "session_start"
         const val SEARCH_SUGGESTIONS = "Search Suggestions"
         const val PRODUCTS = "Products"
-        const val EVENT_SEARCH_RESULTS = "getSearchResults-results"
+        const val EVENT_SEARCH_RESULTS = "search-results"
         const val EVENT_INPUT_FOCUS = "focus"
     }
 }

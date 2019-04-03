@@ -125,7 +125,7 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchResultsLoadedEventUrl() {
-        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&s=1&action=getSearchResults-results&key=testKey&_dt=1520000000000"
+        val expected = "https://ac.cnstrc.com/behavior?c=${BuildConfig.CLIENT_VERSION}&s=1&action=search-results&key=testKey&_dt=1520000000000"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("behavior")
@@ -186,14 +186,14 @@ class ConstructorIoTest {
 
     @Test
     fun verifySearchUrl() {
-        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/getSearchResults?s=1&i=1&_dt=1520000000000&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=getSearchResults&c=cioand-${BuildConfig.VERSION_NAME}&key=testKey"
+        val expected = "https://ac.cnstrc.com/autocomplete/hot%20dogs/search?s=1&i=1&_dt=1520000000000&original_query=dog&group%5Bgroup_id%5D=Meat%20%26%20Seafood&group%5Bdisplay_name%5D=Meat%20%26%20Seafood&tr=search&c=cioand-${BuildConfig.VERSION_NAME}&key=testKey"
         val originalQuery = "dog"
         val term = "hot dogs"
         val urlBuilder = HttpUrl.Builder().scheme("https")
                 .host("ac.cnstrc.com")
                 .addPathSegment("autocomplete")
                 .addPathSegment(term)
-                .addPathSegment("getSearchResults")
+                .addPathSegment("search")
                 .addQueryParameter(Constants.QueryConstants.SESSION, "1")
                 .addQueryParameter(Constants.QueryConstants.IDENTITY, "1")
                 .addQueryParameter(Constants.QueryConstants.TIMESTAMP, sampleMillis)

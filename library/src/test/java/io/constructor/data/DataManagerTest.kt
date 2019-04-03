@@ -33,8 +33,8 @@ class DataManagerTest {
     private var dataManager = DataManager(constructorApi, moshi)
 
     @Test
-    fun getSuggestions() {
-        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponse())))
+    fun getAutocompleteResults() {
+        every { constructorApi.getAutocompleteResults("titanic", any()) } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponse())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.get()!!.isNotEmpty() && it.get()!!.size == 5
@@ -42,8 +42,8 @@ class DataManagerTest {
     }
 
     @Test
-    fun getSuggestionsBadServerResponse() {
-        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
+    fun getAutocompleteResultsBadServerResponse() {
+        every { constructorApi.getAutocompleteResults("titanic", any()) } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.networkError
@@ -51,8 +51,8 @@ class DataManagerTest {
     }
 
     @Test
-    fun getSuggestionsException() {
-        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.error<AutocompleteResult>(Exception()))
+    fun getAutocompleteResultsException() {
+        every { constructorApi.getAutocompleteResults("titanic", any()) } returns Single.just(Result.error<AutocompleteResult>(Exception()))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.isError
@@ -60,8 +60,8 @@ class DataManagerTest {
     }
 
     @Test
-    fun getSuggestionsUnexpectedDataResponse() {
-        every { constructorApi.getSuggestions("titanic", any()) } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnexpectedData())))
+    fun getAutocompleteResultsUnexpectedDataResponse() {
+        every { constructorApi.getAutocompleteResults("titanic", any()) } returns Single.just(Result.response(Response.success(TestDataLoader.loadResponseWithUnexpectedData())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             it.get()!!.isNotEmpty() && it.get()!!.size == 5
@@ -69,8 +69,8 @@ class DataManagerTest {
     }
 
     @Test
-    fun getSuggestionsEmptyResponse() {
-        every { constructorApi.getSuggestions("titanic", any()
+    fun getAutocompleteResultsEmptyResponse() {
+        every { constructorApi.getAutocompleteResults("titanic", any()
         ) } returns Single.just(Result.response(Response.success(TestDataLoader.loadEmptyResponse())))
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
@@ -201,7 +201,7 @@ class DataManagerTest {
     @Test
     fun search() {
         val rb = ResponseBody.create(MediaType.get("application/json"), TestDataLoader.loadAsString("search_response.json"))
-        every { constructorApi.search(any()) } returns Single.just(Result.response(Response.success(rb)))
+        every { constructorApi.getSearchResults(any()) } returns Single.just(Result.response(Response.success(rb)))
         val observer = dataManager.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
             it.get()!!.searchData.resultCount == 23
@@ -210,7 +210,7 @@ class DataManagerTest {
 
     @Test
     fun searchBadServerResponse() {
-        every { constructorApi.search("https://ac.cnstrc.com/getSearchResults/corn") } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
+        every { constructorApi.getSearchResults("https://ac.cnstrc.com/search/corn") } returns Single.just(Result.response(Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), "Error"))))
         val observer = dataManager.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
             it.networkError
@@ -219,7 +219,7 @@ class DataManagerTest {
 
     @Test
     fun searchException() {
-        every { constructorApi.search("https://ac.cnstrc.com/getSearchResults/corn") } returns Single.just(Result.error<ResponseBody>(Exception()))
+        every { constructorApi.getSearchResults("https://ac.cnstrc.com/search/corn") } returns Single.just(Result.error<ResponseBody>(Exception()))
         val observer = dataManager.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
             it.isError

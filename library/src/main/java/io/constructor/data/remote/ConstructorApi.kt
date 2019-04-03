@@ -10,8 +10,8 @@ import retrofit2.http.*
 
 interface ConstructorApi {
 
-    @GET(ApiPaths.URL_GET_SUGGESTIONS)
-    fun getSuggestions(@Path("value") value: String, @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
+    @GET(ApiPaths.URL_AUTOCOMPLETE)
+    fun getAutocompleteResults(@Path("value") value: String, @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
 
     @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
@@ -40,6 +40,6 @@ interface ConstructorApi {
                       @QueryMap params: Map<String, String>): Completable
 
     @GET
-    fun search(@Url searchUrl: String): Single<Result<ResponseBody>>
+    fun getSearchResults(@Url searchUrl: String): Single<Result<ResponseBody>>
 
 }

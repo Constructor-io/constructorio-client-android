@@ -141,7 +141,7 @@ object ConstructorIo {
                 }, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("trigger select error: ${t.message}") //To change body of created functions use File | Settings | File Templates.
+                    e("Autocomplete Select event error: ${t.message}")
                 }))
     }
 
@@ -159,7 +159,7 @@ object ConstructorIo {
                 }, {
                     it.printStackTrace()
                     errorCallback?.invoke(it)
-                    e("trigger getSearchResults error: ${it.message}")
+                    e("Search Submit event error: ${it.message}")
                 }))
     }
 
@@ -185,7 +185,7 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Search result click event error: ${t.message}")
+                    e("Search Result Click event error: ${t.message}")
                 }))
     }
 
@@ -197,7 +197,7 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Conversion event error: ${t.message}")
+                    e("Search Results Loaded event error: ${t.message}")
                 }))
     }
 
@@ -209,7 +209,7 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Input focus event error: ${t.message}")
+                    e("Input Focus event error: ${t.message}")
                 }))
     }
 
@@ -223,7 +223,7 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Input focus event error: ${t.message}")
+                    e("Purchase event error: ${t.message}")
                 }))
     }
 

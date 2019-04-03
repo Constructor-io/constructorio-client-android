@@ -74,7 +74,7 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResults() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response.json"))
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
@@ -87,7 +87,7 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsBadServerResponse() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
@@ -100,7 +100,7 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsTimeoutException() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response.json"))
         mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
@@ -114,7 +114,7 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsUnexpectedDataResponse() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response_with_unexpected_data.json"))
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
@@ -127,7 +127,7 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsEmptyResponse() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("empty_response.json"))
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()

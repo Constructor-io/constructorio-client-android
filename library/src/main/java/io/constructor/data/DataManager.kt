@@ -15,7 +15,7 @@ import javax.inject.Singleton
 class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
 
-    fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getSuggestions(text, params.toMap()).map {
+    fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getAutocompleteResults(text, params.toMap()).map {
         if (!it.isError) {
             it.response()?.let {
                 if (it.isSuccessful) {
@@ -34,7 +34,7 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         encodedParams.forEachIndexed { index, pair ->
             dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
         }
-        return constructorApi.search(dynamicUrl).map { result ->
+        return constructorApi.getSearchResults(dynamicUrl).map { result ->
             if (!result.isError) {
                 result.response()?.let {
                     if (it.isSuccessful){
