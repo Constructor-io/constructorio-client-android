@@ -1,0 +1,24 @@
+{
+  "request": {
+    "ef-11": "22",
+    "ef-ab": "cd",
+    "fmt_options": {
+      "groups_max_depth": 1,
+      "groups_start": "current"
+    },
+    "num_results_per_page": 20,
+    "page": 1,
+    "section": "Products",
+    "sort_by": "relevance",
+    "sort_order": "descending",
+    "term": "cornucopiasofcorndogs"
+  },
+  "response": {
+    "facets": [],
+    "groups": [],
+    "results": [],
+    "sort_options": [],
+    "total_num_results": 0
+  },
+  "result_id": "2ea93527-91d6-4dfa-86b0-6a0e8158bfd1"
+}
