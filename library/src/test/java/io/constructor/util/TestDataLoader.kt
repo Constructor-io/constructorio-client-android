@@ -13,11 +13,11 @@ import java.nio.charset.Charset
 
 object TestDataLoader {
 
-    fun loadResponse() : AutocompleteResult? = loadResult("response.json")
+    fun loadResponse() : AutocompleteResult? = loadResult("autocomplete_response.json")
 
-    fun loadResponseWithUnexpectedData() : AutocompleteResult? = loadResult("response_with_unexpected_data.json")
+    fun loadResponseWithUnexpectedData() : AutocompleteResult? = loadResult("autocomplete_response_with_unexpected_data.json")
 
-    fun loadEmptyResponse() : AutocompleteResult? = loadResult("empty_response.json")
+    fun loadEmptyResponse() : AutocompleteResult? = loadResult("autocomplete_response_empty.json")
 
     private fun loadResult(fileName: String): AutocompleteResult? {
         val file = File(TestDataLoader::class.java.classLoader.getResource(fileName).path)
