@@ -22,6 +22,5 @@ class MainActivity : AppCompatActivity() {
         button6.setOnClickListener { ConstructorIo.getSearchResults("corn").subscribeOn(Schedulers.io()).subscribe {
 
         } }
-
     }
 }

@@ -10,5 +10,4 @@ object ApiPaths {
     const val URL_BEHAVIOR = "behavior"
     const val URL_PURCHASE = "autocomplete/TERM_UNKNOWN/purchase"
     const val URL_SEARCH = "search/%s"
-
 }
