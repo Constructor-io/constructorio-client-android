@@ -15,6 +15,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -26,6 +27,9 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
+
+
+
 
 class DataManagerHttpTest {
 
@@ -51,8 +55,26 @@ class DataManagerHttpTest {
         every { configMemoryHolder.testCellParams } returns emptyList()
         mockServer = MockWebServer()
         mockServer.start()
+        val basePath = mockServer.url("" )
 
-        val client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, configMemoryHolder)).readTimeout(4, TimeUnit.SECONDS).build()
+        val client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, configMemoryHolder))
+                .addInterceptor { chain ->
+                    var request = chain.request()
+                    if (!request.url().toString().startsWith(basePath.toString())) {
+                        val requestUrl = request.url()
+                        val newRequestUrl = HttpUrl.Builder().scheme(basePath.scheme())
+                                .encodedQuery(requestUrl.encodedQuery())
+                                .host(basePath.host())
+                                .port(basePath.port())
+                                .encodedPath(requestUrl.encodedPath()).build()
+                        request = request.newBuilder()
+                                .url(newRequestUrl)
+                                .build()
+                    }
+                    chain.proceed(request)
+                }
+                .readTimeout(4, TimeUnit.SECONDS).build()
+
 
         val moshi = Moshi
                 .Builder()
@@ -61,20 +83,20 @@ class DataManagerHttpTest {
 
         // Get an instance of Retrofit
         val retrofit = Retrofit.Builder()
-                .baseUrl(mockServer.url("").toString())
+                .baseUrl(basePath.toString())
                 .client(client)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
 
         constructorApi = retrofit.create(ConstructorApi::class.java)
-        dataManager = DataManager(constructorApi)
+        dataManager = DataManager(constructorApi, moshi)
     }
 
     @Test
     fun getAutocompleteResults() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response.json"))
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
@@ -86,7 +108,7 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsBadServerResponse() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
@@ -99,8 +121,8 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsTimeoutException() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response.json"))
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
         mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
@@ -113,8 +135,8 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsUnexpectedDataResponse() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("response_with_unexpected_data.json"))
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response_with_unexpected_data.json"))
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
@@ -126,8 +148,8 @@ class DataManagerHttpTest {
 
     @Test
     fun getAutocompleteResultsEmptyResponse() {
-        val path = "/" + ApiPaths.URL_GET_SUGGESTIONS.replace("{value}", "titanic")
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("empty_response.json"))
+        val path = "/" + ApiPaths.URL_AUTOCOMPLETE.replace("{value}", "titanic")
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response_empty.json"))
         mockServer.enqueue(mockResponse)
         val observer = dataManager.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
@@ -434,6 +456,58 @@ class DataManagerHttpTest {
         assert(request.path.startsWith(path))
         assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=1"))
         assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=2"))
+    }
+
+    @Test
+    fun getSearchResult() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.get()!!.searchData.results!!.size == 20
+        }
+    }
+
+    @Test
+    fun getSearchResultsBadServerResponse() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.networkError
+        }
+    }
+
+    @Test
+    fun getSearchResultsTimeoutException() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.isError
+        }
+    }
+
+    @Test
+    fun getSearchUnexpectedDataResponse() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_unexpected_data.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.get()!!.searchData.resultCount == 23
+        }
+    }
+
+    @Test
+    fun getSearchResultsEmptyResponse() {
+        val path = "/" + ApiPaths.URL_SEARCH.format("corn")
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_empty.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = dataManager.getSearchResults("corn").test()
+        observer.assertComplete().assertValue {
+            it.get()!!.searchData.results!!.isEmpty()
+        }
     }
 
 }

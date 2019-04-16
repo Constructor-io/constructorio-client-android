@@ -27,6 +27,10 @@ class Constants {
         const val GROUP_DISPLAY_NAME = "group[display_name]"
         const val USER_ID = "ui"
         const val TERM_UNKNOWN = "TERM_UNKNOWN"
+        const val PAGE = "page"
+        const val PER_PAGE = "num_results_per_page"
+        const val FILTER_GROUP_ID = "filters[group_id]"
+        const val FILTER_FACET = "filters[%s]"
     }
 
     object QueryValues {

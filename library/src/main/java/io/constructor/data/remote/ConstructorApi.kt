@@ -4,16 +4,14 @@ import io.constructor.core.Constants
 import io.constructor.data.model.AutocompleteResult
 import io.reactivex.Completable
 import io.reactivex.Single
+import okhttp3.ResponseBody
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 
 interface ConstructorApi {
 
-    @GET(ApiPaths.URL_GET_SUGGESTIONS)
-    fun getSuggestions(@Path("value") value: String, @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
+    @GET(ApiPaths.URL_AUTOCOMPLETE)
+    fun getAutocompleteResults(@Path("value") value: String, @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
 
     @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String, @QueryMap data: Map<String, String>, @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
@@ -40,4 +38,8 @@ interface ConstructorApi {
     fun trackPurchase(@Query(Constants.QueryConstants.CUSTOMER_ID) customerIds: List<String>,
                       @Query("revenue") revenue: String?,
                       @QueryMap params: Map<String, String>): Completable
+
+    @GET
+    fun getSearchResults(@Url searchUrl: String): Single<Result<ResponseBody>>
+
 }

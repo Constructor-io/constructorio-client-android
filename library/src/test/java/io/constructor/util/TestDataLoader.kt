@@ -3,6 +3,7 @@ package io.constructor.util
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import io.constructor.data.model.AutocompleteResult
+import io.constructor.data.model.search.SearchResponse
 import okio.Buffer
 import java.io.File
 import java.io.FileInputStream
@@ -12,11 +13,11 @@ import java.nio.charset.Charset
 
 object TestDataLoader {
 
-    fun loadResponse() : AutocompleteResult? = loadResult("response.json")
+    fun loadResponse() : AutocompleteResult? = loadResult("autocomplete_response.json")
 
-    fun loadResponseWithUnexpectedData() : AutocompleteResult? = loadResult("response_with_unexpected_data.json")
+    fun loadResponseWithUnexpectedData() : AutocompleteResult? = loadResult("autocomplete_response_with_unexpected_data.json")
 
-    fun loadEmptyResponse() : AutocompleteResult? = loadResult("empty_response.json")
+    fun loadEmptyResponse() : AutocompleteResult? = loadResult("autocomplete_response_empty.json")
 
     private fun loadResult(fileName: String): AutocompleteResult? {
         val file = File(TestDataLoader::class.java.classLoader.getResource(fileName).path)
@@ -25,6 +26,18 @@ object TestDataLoader {
         var result: AutocompleteResult? = null
         try {
             result = jsonAdapter.fromJson(Buffer().readFrom(FileInputStream(file)))
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return result
+    }
+
+    private fun convertToSearchResult(stringResponse: String): SearchResponse? {
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val jsonAdapter = moshi.adapter(SearchResponse::class.java)
+        var result: SearchResponse? = null
+        try {
+            result = jsonAdapter.fromJson(stringResponse)
         } catch (e: IOException) {
             e.printStackTrace()
         }
