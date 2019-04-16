@@ -26,7 +26,7 @@ interface ConstructorApi {
     fun trackConversion(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @Query("revenue") revenue: String?, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_SEARCH_RESULT_CLICK_EVENT)
-    fun trackSearchResultTerm(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @QueryMap params: Map<String, String>): Completable
+    fun trackSearchResultClick(@Path("term") term: String, @Query("name") itemName: String, @Query("customer_id") customerId: String, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_BEHAVIOR)
     fun trackSearchResultsLoaded(@Query("term") term: String, @Query("num_results") resultCount: Int, @QueryMap params: Map<String, String>): Completable

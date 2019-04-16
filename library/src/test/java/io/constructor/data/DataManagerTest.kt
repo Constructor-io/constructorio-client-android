@@ -148,17 +148,17 @@ class DataManagerTest {
 
     @Test
     fun trackSearchResultClick() {
-        every { constructorApi.trackSearchResultTerm(any(), any(), any(), any()) } returns Completable.complete()
+        every { constructorApi.trackSearchResultClick(any(), any(), any(), any()) } returns Completable.complete()
         dataManager.trackSearchResultClick("term", "id1", "term1")
-        verify(exactly = 1) { constructorApi.trackSearchResultTerm(any(), any(), any(), any())}
+        verify(exactly = 1) { constructorApi.trackSearchResultClick(any(), any(), any(), any())}
     }
 
     @Test
     fun trackSearchResultClickError() {
-        every { constructorApi.trackSearchResultTerm(any(), any(), any(), any()) } returns Completable.error(Exception())
+        every { constructorApi.trackSearchResultClick(any(), any(), any(), any()) } returns Completable.error(Exception())
         val observer = dataManager.trackSearchResultClick("term", "1", "term1").test()
         observer.assertError { true }
-        verify(exactly = 1) { constructorApi.trackSearchResultTerm(any(), any(), any(), any())}
+        verify(exactly = 1) { constructorApi.trackSearchResultClick(any(), any(), any(), any())}
     }
 
     @Test

@@ -70,7 +70,7 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
     }
 
     fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackSearchResultTerm(term, itemName, customerId, params.toMap())
+        return constructorApi.trackSearchResultClick(term, itemName, customerId, params.toMap())
     }
 
     fun trackSearchResultsLoaded(term: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {
