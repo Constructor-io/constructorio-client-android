@@ -273,9 +273,9 @@ class ConstructorIoTest {
     @Test
     fun trackPurchase() {
         every { pref.defaultItemSection } returns "Products"
-        every { data.trackPurchase(any()) } returns Completable.complete()
-        constructorIo.trackPurchase(arrayOf("id1"))
-        verify(exactly = 1) { data.trackPurchase(any()) }
+        every { data.trackPurchase(any(), any(), any()) } returns Completable.complete()
+        constructorIo.trackPurchase(arrayOf("id1"), 12.99)
+        verify(exactly = 1) { data.trackPurchase(any(), any(), any()) }
     }
 
 }

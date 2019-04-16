@@ -8,6 +8,7 @@ import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.Suggestion
+import io.constructor.data.model.search.SearchResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -105,6 +106,25 @@ object ConstructorIo {
         return dataManager.getAutocompleteResults(query, params.toTypedArray())
     }
 
+    fun getSearchResults(text: String, vararg facets: Pair<String, List<String>>, page: Int? = null, perPage: Int? = null, groupId: Int? = null): Observable<ConstructorData<SearchResponse>> {
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        page?.let {
+            encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode())
+        }
+        perPage?.let {
+            encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode())
+        }
+        encodedParams.add(Constants.QueryConstants.SESSION.urlEncode() to sessionId.toString().urlEncode())
+        facets.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
+        }
+        return dataManager.getSearchResults(text, encodedParams = encodedParams.toTypedArray())
+    }
+
     fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
@@ -121,7 +141,7 @@ object ConstructorIo {
                 }, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("trigger select error: ${t.message}") //To change body of created functions use File | Settings | File Templates.
+                    e("Autocomplete Select event error: ${t.message}")
                 }))
     }
 
@@ -139,13 +159,14 @@ object ConstructorIo {
                 }, {
                     it.printStackTrace()
                     errorCallback?.invoke(it)
-                    e("trigger search error: ${it.message}")
+                    e("Search Submit event error: ${it.message}")
                 }))
     }
 
     fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, errorCallback: ConstructorError = null) {
         val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
-        disposable.add(dataManager.trackConversion(searchTerm, itemName, customerId, "%.2f".format(revenue),
+        val revenueString = revenue?.let { "%.2f".format(revenue) }
+        disposable.add(dataManager.trackConversion(searchTerm, itemName, customerId, revenueString,
                 arrayOf(Constants.QueryConstants.SESSION to sessionId.toString(),
                         Constants.QueryConstants.AUTOCOMPLETE_SECTION to (sectionName ?: preferenceHelper.defaultItemSection))).subscribeOn(Schedulers.io())
                 .subscribe({}, { t ->
@@ -164,7 +185,7 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Search result click event error: ${t.message}")
+                    e("Search Result Click event error: ${t.message}")
                 }))
     }
 
@@ -176,7 +197,7 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Conversion event error: ${t.message}")
+                    e("Search Results Loaded event error: ${t.message}")
                 }))
     }
 
@@ -188,7 +209,21 @@ object ConstructorIo {
                 .subscribe({}, { t ->
                     t.printStackTrace()
                     errorCallback?.invoke(t)
-                    e("Input focus event error: ${t.message}")
+                    e("Input Focus event error: ${t.message}")
+                }))
+    }
+
+    fun trackPurchase(clientIds: Array<String>, revenue: Double?, sectionName: String? = null, errorCallback: ConstructorError = null) {
+        val sessionId = preferenceHelper.getSessionId(sessionIncrementEventHandler)
+        val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
+        val revenueString = revenue?.let { "%.2f".format(revenue) }
+        val params = mutableListOf(Constants.QueryConstants.SESSION to sessionId.toString(),
+                Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
+        disposable.add(dataManager.trackPurchase(clientIds.toList(), revenueString, params.toTypedArray()).subscribeOn(Schedulers.io())
+                .subscribe({}, { t ->
+                    t.printStackTrace()
+                    errorCallback?.invoke(t)
+                    e("Purchase event error: ${t.message}")
                 }))
     }
 

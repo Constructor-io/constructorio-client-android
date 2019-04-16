@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import io.constructor.core.ConstructorIo
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -18,5 +19,8 @@ class MainActivity : AppCompatActivity() {
         button3.setOnClickListener { ConstructorIo.trackConversion("testId", "id", 11.0) }
         button4.setOnClickListener { ConstructorIo.trackSearchResultClick("testTerm", "testId", "1") }
         button5.setOnClickListener { ConstructorIo.trackSearchResultsLoaded("testTerm", Random().nextInt(99) + 1) }
+        button6.setOnClickListener { ConstructorIo.getSearchResults("corn").subscribeOn(Schedulers.io()).subscribe {
+
+        } }
     }
 }
