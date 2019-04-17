@@ -24,13 +24,6 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        force 'com.squareup.okio:okio:1.11.0'
-        force "com.squareup.okhttp3:okhttp:3.5.0"
-    }
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':library')
