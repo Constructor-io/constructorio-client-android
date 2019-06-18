@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Constructor.io</string>
     <string name="search_hint">Search…</string>
     <string name="group_text">in %s</string>
-
 </resources>
