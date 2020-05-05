@@ -1,14 +1,12 @@
 package io.constructor.data
 
 import android.content.Context
-import com.squareup.moshi.KotlinJsonAdapterFactory
-import com.squareup.moshi.Moshi
 import io.constructor.core.Constants
-import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
+import io.constructor.injection.module.NetworkModule
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
 import io.mockk.Runs
@@ -16,20 +14,13 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
-
-
-
 
 class DataManagerHttpTest {
 
@@ -37,57 +28,44 @@ class DataManagerHttpTest {
     @JvmField val overrideSchedulersRule = RxSchedulersOverrideRule()
 
     private lateinit var constructorApi: ConstructorApi
+    private lateinit var dataManager: DataManager
+    private lateinit var mockServer: MockWebServer
 
     private val ctx = mockk<Context>()
-    private val pref = mockk<PreferencesHelper>()
+    private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
-
-    private lateinit var dataManager: DataManager
-
-    private lateinit var mockServer: MockWebServer
 
     @Before
     fun setup() {
-        every { pref.token } returns "123"
-        every { pref.id } returns "1"
+        every { preferencesHelper.token } returns "123"
+        every { preferencesHelper.id } returns "1"
         every { configMemoryHolder.testCellParams = any() } just Runs
         every { configMemoryHolder.userId } returns "id1"
         every { configMemoryHolder.testCellParams } returns emptyList()
         mockServer = MockWebServer()
         mockServer.start()
-        val basePath = mockServer.url("" )
 
-        val client = OkHttpClient.Builder().addInterceptor(TokenInterceptor(ctx, pref, configMemoryHolder))
-                .addInterceptor { chain ->
-                    var request = chain.request()
-                    if (!request.url().toString().startsWith(basePath.toString())) {
-                        val requestUrl = request.url()
-                        val newRequestUrl = HttpUrl.Builder().scheme(basePath.scheme())
-                                .encodedQuery(requestUrl.encodedQuery())
-                                .host(basePath.host())
-                                .port(basePath.port())
-                                .encodedPath(requestUrl.encodedPath()).build()
-                        request = request.newBuilder()
-                                .url(newRequestUrl)
-                                .build()
-                    }
-                    chain.proceed(request)
-                }
-                .readTimeout(4, TimeUnit.SECONDS).build()
+        val basePath = mockServer.url("")
+        val networkModule = NetworkModule(ctx);
+        val loggingInterceptor = networkModule.provideHttpLoggingInterceptor()
+        val tokenInterceptor = networkModule.provideTokenInterceptor(preferencesHelper, configMemoryHolder)
+        val moshi = networkModule.provideMoshi()
 
-
-        val moshi = Moshi
-                .Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
-
-        // Get an instance of Retrofit
-        val retrofit = Retrofit.Builder()
-                .baseUrl(basePath.toString())
-                .client(client)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
+        // Intercept all requests to the Constructor API and point them to a mock web server
+        val okHttpClient = networkModule.provideOkHttpClient(loggingInterceptor, tokenInterceptor).newBuilder().addInterceptor { chain ->
+            var request = chain.request()
+            val requestUrl = request.url()
+            val newRequestUrl = HttpUrl.Builder().scheme(basePath.scheme())
+                    .encodedQuery(requestUrl.encodedQuery())
+                    .host(basePath.host())
+                    .port(basePath.port())
+                    .encodedPath(requestUrl.encodedPath()).build()
+            request = request.newBuilder()
+                    .url(newRequestUrl)
+                    .build()
+            chain.proceed(request)
+        }.readTimeout(1, TimeUnit.SECONDS).build()
+        val retrofit = networkModule.provideRetrofit(okHttpClient, moshi)
 
         constructorApi = retrofit.create(ConstructorApi::class.java)
         dataManager = DataManager(constructorApi, moshi)
