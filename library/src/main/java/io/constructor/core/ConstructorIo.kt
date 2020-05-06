@@ -88,10 +88,6 @@ object ConstructorIo {
         this.dataManager = dataManager
         this.preferenceHelper = preferenceHelper
         this.configMemoryHolder = configMemoryHolder
-        preferenceHelper.token = constructorIoConfig.apiKey
-        if (preferenceHelper.id.isBlank()) {
-            preferenceHelper.id = UUID.randomUUID().toString()
-        }
     }
 
     fun appMovedToForeground() {
