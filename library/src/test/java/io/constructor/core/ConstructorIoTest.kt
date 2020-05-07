@@ -5,15 +5,12 @@ import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.remote.ApiPaths
-import io.constructor.data.remote.ConstructorApi
-import io.constructor.injection.module.NetworkModule
+import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
-import io.constructor.util.TestDataLoader
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
@@ -27,11 +24,9 @@ class ConstructorIoTest {
     @Rule
     @JvmField val overrideSchedulersRule = RxSchedulersOverrideRule()
 
-    private lateinit var constructorApi: ConstructorApi
     private lateinit var dataManager: DataManager
     private lateinit var mockServer: MockWebServer
     private var constructorIo = ConstructorIo
-
     private val ctx = mockk<Context>()
     private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
@@ -45,101 +40,13 @@ class ConstructorIoTest {
         every { configMemoryHolder.testCellParams = any() } just Runs
         every { configMemoryHolder.userId } returns "id1"
         every { configMemoryHolder.testCellParams } returns emptyList()
-        mockServer = MockWebServer()
-        mockServer.start()
 
-        val basePath = mockServer.url("")
-        val networkModule = NetworkModule(ctx);
-        val loggingInterceptor = networkModule.provideHttpLoggingInterceptor()
-        val tokenInterceptor = networkModule.provideTokenInterceptor(preferencesHelper, configMemoryHolder)
-        val moshi = networkModule.provideMoshi()
         val config = ConstructorIoConfig("dummyKey", testCells = listOf("1" to "2", "3" to "4"))
 
-        // Intercept all requests to the Constructor API and point them to a mock web server
-        val okHttpClient = networkModule.provideOkHttpClient(loggingInterceptor, tokenInterceptor).newBuilder().addInterceptor { chain ->
-            var request = chain.request()
-            val requestUrl = request.url()
-            val newRequestUrl = HttpUrl.Builder().scheme(basePath.scheme())
-                    .encodedQuery(requestUrl.encodedQuery())
-                    .host(basePath.host())
-                    .port(basePath.port())
-                    .encodedPath(requestUrl.encodedPath()).build()
-            request = request.newBuilder()
-                    .url(newRequestUrl)
-                    .build()
-            chain.proceed(request)
-        }.readTimeout(1, TimeUnit.SECONDS).build()
-        val retrofit = networkModule.provideRetrofit(okHttpClient, moshi)
-
-        constructorApi = retrofit.create(ConstructorApi::class.java)
-        dataManager = DataManager(constructorApi, moshi)
+        mockServer = MockWebServer()
+        mockServer.start()
+        dataManager = createTestDataManager(mockServer, preferencesHelper, configMemoryHolder, ctx)
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
-    }
-
-    @Test
-    fun getAutocompleteResults() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getAutocompleteResults("titanic").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.isNotEmpty() && it.get()!!.size == 5
-        }
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=123&i=1&ui=id1&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
-    }
-
-    @Test
-    fun getAutocompleteResultsWithServerError() {
-        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getAutocompleteResults("titanic").test()
-        observer.assertComplete().assertValue {
-            it.networkError
-        }
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=123&i=1&ui=id1&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
-    }
-
-    @Test
-    fun getAutocompleteResultsWithTimeout() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
-        mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getAutocompleteResults("titanic").test()
-        observer.assertComplete().assertValue {
-            it.isError
-        }
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=123&i=1&ui=id1&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
-    }
-
-    @Test
-    fun getAutocompleteResultsWithUnexpectedResponse() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response_with_unexpected_data.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getAutocompleteResults("titanic").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.isNotEmpty() && it.get()!!.size == 5
-        }
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=123&i=1&ui=id1&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
-    }
-
-    @Test
-    fun getAutocompleteResultsWithEmptyResponse() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response_empty.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getAutocompleteResults("titanic").test()
-        observer.assertComplete().assertValue {
-            it.isEmpty
-        }
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=123&i=1&ui=id1&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
     }
 
     @Test
@@ -440,57 +347,4 @@ class ConstructorIoTest {
         assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=1"))
         assert(request.path.contains("${Constants.QueryConstants.CUSTOMER_ID}=2"))
     }
-
-    @Test
-    fun getSearchResult() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.searchData.results!!.size == 20
-        }
-    }
-
-    @Test
-    fun getSearchResultsBadServerResponse() {
-        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.networkError
-        }
-    }
-
-    @Test
-    fun getSearchResultsTimeoutException() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.isError
-        }
-    }
-
-    @Test
-    fun getSearchUnexpectedDataResponse() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_unexpected_data.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.searchData.resultCount == 23
-        }
-    }
-
-    @Test
-    fun getSearchResultsEmptyResponse() {
-        val path = "/" + ApiPaths.URL_SEARCH.format("corn")
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_empty.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = dataManager.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.searchData.results!!.isEmpty()
-        }
-    }
-
 }
