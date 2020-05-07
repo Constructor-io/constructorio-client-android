@@ -34,7 +34,7 @@ class ConstructorIoSearchTest {
         every { ctx.applicationContext } returns ctx
         every { preferencesHelper.token } returns "silver-key"
         every { preferencesHelper.id } returns "guapo-the-guid"
-        every { preferencesHelper.getSessionId(any(), false) } returns 1
+        every { preferencesHelper.getSessionId(any(), any()) } returns 92
         every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.testCellParams = any() } just Runs
         every { configMemoryHolder.userId } returns "player-two"
@@ -57,7 +57,7 @@ class ConstructorIoSearchTest {
             it.get()!!.searchData.results!!.size == 20
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?s=1&key=silver-key&i=guapo-the-guid&ui=player-two&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -70,7 +70,7 @@ class ConstructorIoSearchTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?s=1&key=silver-key&i=guapo-the-guid&ui=player-two&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -84,7 +84,7 @@ class ConstructorIoSearchTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?s=1&key=silver-key&i=guapo-the-guid&ui=player-two&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -97,7 +97,7 @@ class ConstructorIoSearchTest {
             it.get()!!.searchData.resultCount == 23
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?s=1&key=silver-key&i=guapo-the-guid&ui=player-two&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -110,7 +110,7 @@ class ConstructorIoSearchTest {
             it.get()!!.searchData.results!!.isEmpty()
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?s=1&key=silver-key&i=guapo-the-guid&ui=player-two&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 }

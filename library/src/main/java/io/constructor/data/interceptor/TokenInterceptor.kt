@@ -5,6 +5,7 @@ import io.constructor.BuildConfig
 import io.constructor.core.Constants
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.util.urlEncode
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -21,6 +22,8 @@ class TokenInterceptor(val context: Context, private val preferencesHelper: Pref
         configMemoryHolder.userId?.let {
             builder.addQueryParameter(Constants.QueryConstants.USER_ID, it)
         }
+
+        builder.addQueryParameter(Constants.QueryConstants.SESSION, preferencesHelper.getSessionId().toString())
 
         configMemoryHolder.testCellParams.forEach {
             it?.let {
