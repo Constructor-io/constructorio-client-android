@@ -19,12 +19,14 @@ class TokenInterceptor(val context: Context, private val preferencesHelper: Pref
             .addQueryParameter(Constants.QueryConstants.API_KEY, preferencesHelper.token)
             .addQueryParameter(Constants.QueryConstants.IDENTITY, preferencesHelper.id)
 
+        // TODO : Urlencode
         configMemoryHolder.userId?.let {
             builder.addQueryParameter(Constants.QueryConstants.USER_ID, it)
         }
 
         builder.addQueryParameter(Constants.QueryConstants.SESSION, preferencesHelper.getSessionId().toString())
 
+        // TODO : Urlencode
         configMemoryHolder.testCellParams.forEach {
             it?.let {
                 builder.addQueryParameter(it.first, it.second)
