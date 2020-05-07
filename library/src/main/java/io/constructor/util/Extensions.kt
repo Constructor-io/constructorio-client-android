@@ -37,8 +37,6 @@ fun String.urlEncode() = URLEncoder.encode(this, "UTF-8").replace("+", "%20")
 
 fun Any.d(msg: String) = Log.d(this::class.qualifiedName, msg)
 
-fun Any.e(msg: String) = Log.e(this::class.qualifiedName, msg)
-
 fun String.base64Encode(): String? {
     return String(Base64.encode(toByteArray(), Base64.NO_WRAP or Base64.NO_PADDING))
 }

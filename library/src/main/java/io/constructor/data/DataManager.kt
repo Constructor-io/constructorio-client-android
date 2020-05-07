@@ -15,21 +15,19 @@ import javax.inject.Singleton
 class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
 
-    fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<List<Suggestion>?>> {
-        return constructorApi.getAutocompleteResults(text, params.toMap()).map {
-            if (!it.isError) {
-                it.response()?.let {
-                    if (it.isSuccessful) {
-                        ConstructorData.of(it.body()?.sections?.suggestions)
-                    } else {
-                        ConstructorData.networkError(it.errorBody()?.string())
-                    }
-                } ?: ConstructorData.error(it.error())
-            } else {
-                ConstructorData.error(it.error())
-            }
-        }.toObservable()
-    }
+    fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getAutocompleteResults(text, params.toMap()).map {
+        if (!it.isError) {
+            it.response()?.let {
+                if (it.isSuccessful) {
+                    ConstructorData.of(it.body()?.sections?.suggestions)
+                } else {
+                    ConstructorData.networkError(it.errorBody()?.string())
+                }
+            } ?: ConstructorData.error(it.error())
+        } else {
+            ConstructorData.error(it.error())
+        }
+    }.toObservable()
 
     fun getSearchResults(text: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {
         var dynamicUrl = BuildConfig.BASE_API_URL + "/${ApiPaths.URL_SEARCH.format(text)}"
