@@ -42,7 +42,7 @@ class ConstructorIoAutocompleteTest {
 
         mockServer = MockWebServer()
         mockServer.start()
-        val config = ConstructorIoConfig("dummyKey", testCells = listOf("flavor" to "chocolate", "topping" to "sprinkes"))
+        val config = ConstructorIoConfig("dummyKey", testCells = listOf("flavor" to "chocolate", "topping" to "sprinkles"))
         val dataManager = createTestDataManager(mockServer, preferencesHelper, configMemoryHolder, ctx)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
