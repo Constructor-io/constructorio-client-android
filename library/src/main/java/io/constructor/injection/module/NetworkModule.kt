@@ -37,7 +37,7 @@ class NetworkModule(private val context: Context) {
         val httpClientBuilder = OkHttpClient.Builder()
         httpClientBuilder.addInterceptor(tokenInterceptor)
         if (BuildConfig.DEBUG) {
-            httpClientBuilder.addInterceptor(httpLoggingInterceptor)
+            // httpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }
         return httpClientBuilder.build()
 

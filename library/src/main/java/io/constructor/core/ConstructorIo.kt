@@ -17,7 +17,6 @@ import io.constructor.util.broadcastIntent
 import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -30,7 +29,7 @@ object ConstructorIo {
     private lateinit var preferenceHelper: PreferencesHelper
     private lateinit var configMemoryHolder: ConfigMemoryHolder
     private lateinit var context: Context
-    private var disposable = CompositeDisposable()
+    private var broadcast = true
 
     var userId: String?
         get() = configMemoryHolder.userId
@@ -79,6 +78,7 @@ object ConstructorIo {
         this.dataManager = dataManager
         this.preferenceHelper = preferenceHelper
         this.configMemoryHolder = configMemoryHolder
+        this.broadcast = false
     }
 
     fun appMovedToForeground() {
@@ -140,10 +140,11 @@ object ConstructorIo {
             Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK
         ), encodedParams.toTypedArray()).subscribeOn(Schedulers.io())
 
-        // TODO : Fix tests and re-enable
-        /*completable.subscribeOn(Schedulers.io()).subscribe {
-            context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
-        }*/
+        if (this.broadcast) {
+            completable.subscribeOn(Schedulers.io()).subscribe {
+                context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
+            }
+        }
 
         return completable
     }
@@ -161,10 +162,11 @@ object ConstructorIo {
                 Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH
         ), encodedParams.toTypedArray())
 
-        // TODO : Fix tests and re-enable
-        /*completable.subscribeOn(Schedulers.io()).subscribe {
-            context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
-        }*/
+        if (this.broadcast) {
+            completable.subscribeOn(Schedulers.io()).subscribe {
+                context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
+            }
+        }
 
         return completable
     }
