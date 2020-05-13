@@ -5,18 +5,17 @@ import io.constructor.BuildConfig
 import io.constructor.core.Constants
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
-import io.constructor.util.urlEncode
 import okhttp3.Interceptor
 import okhttp3.Response
 
 /**
  * Adds common request query parameters to all API requests
  */
-class TokenInterceptor(val context: Context, private val preferencesHelper: PreferencesHelper, private val configMemoryHolder: ConfigMemoryHolder) : Interceptor {
+class RequestInterceptor(val context: Context, private val preferencesHelper: PreferencesHelper, private val configMemoryHolder: ConfigMemoryHolder) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val builder = request.url().newBuilder()
-            .addQueryParameter(Constants.QueryConstants.API_KEY, preferencesHelper.token)
+            .addQueryParameter(Constants.QueryConstants.API_KEY, preferencesHelper.apiKey)
             .addQueryParameter(Constants.QueryConstants.IDENTITY, preferencesHelper.id)
 
         // TODO : Urlencode

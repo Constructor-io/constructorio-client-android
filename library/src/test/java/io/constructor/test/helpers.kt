@@ -22,11 +22,11 @@ fun createTestDataManager(mockServer : MockWebServer,
     val basePath = mockServer.url("")
     val networkModule = NetworkModule(ctx);
     val loggingInterceptor = networkModule.provideHttpLoggingInterceptor()
-    val tokenInterceptor = networkModule.provideTokenInterceptor(preferencesHelper, configMemoryHolder)
+    val requestInterceptor = networkModule.provideRequestInterceptor(preferencesHelper, configMemoryHolder)
     val moshi = networkModule.provideMoshi()
 
     // Intercept all requests to the Constructor API and point them to a mock web server
-    val okHttpClient = networkModule.provideOkHttpClient(loggingInterceptor, tokenInterceptor).newBuilder().addInterceptor { chain ->
+    val okHttpClient = networkModule.provideOkHttpClient(loggingInterceptor, requestInterceptor).newBuilder().addInterceptor { chain ->
         var request = chain.request()
         val requestUrl = request.url()
         val newRequestUrl = HttpUrl.Builder().scheme(basePath.scheme())

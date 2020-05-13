@@ -32,7 +32,7 @@ class ConstructorIoAutocompleteTest {
     @Before
     fun setup() {
         every { ctx.applicationContext } returns ctx
-        every { preferencesHelper.token } returns "golden-key"
+        every { preferencesHelper.apiKey } returns "golden-key"
         every { preferencesHelper.id } returns "guido-the-guid"
         every { preferencesHelper.getSessionId(any(), any()) } returns 79
         every { configMemoryHolder.autocompleteResultCount } returns null

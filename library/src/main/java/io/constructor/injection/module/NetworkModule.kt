@@ -6,7 +6,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import io.constructor.BuildConfig
-import io.constructor.data.interceptor.TokenInterceptor
+import io.constructor.data.interceptor.RequestInterceptor
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import okhttp3.OkHttpClient
@@ -33,9 +33,9 @@ class NetworkModule(private val context: Context) {
     @Provides
     @Singleton
     internal fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor,
-                                     tokenInterceptor: TokenInterceptor): OkHttpClient {
+                                     requestInterceptor: RequestInterceptor): OkHttpClient {
         val httpClientBuilder = OkHttpClient.Builder()
-        httpClientBuilder.addInterceptor(tokenInterceptor)
+        httpClientBuilder.addInterceptor(requestInterceptor)
         if (BuildConfig.DEBUG) {
             // httpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }
@@ -50,7 +50,7 @@ class NetworkModule(private val context: Context) {
 
     @Provides
     @Singleton
-    internal fun provideTokenInterceptor(prefHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder): TokenInterceptor = TokenInterceptor(context, prefHelper, configMemoryHolder)
+    internal fun provideRequestInterceptor(prefHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder): RequestInterceptor = RequestInterceptor(context, prefHelper, configMemoryHolder)
 
     @Provides
     @Singleton
