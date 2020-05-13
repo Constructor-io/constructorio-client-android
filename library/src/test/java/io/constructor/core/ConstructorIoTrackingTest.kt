@@ -31,7 +31,7 @@ class ConstructorIoTest {
     @Before
     fun setup() {
         every { ctx.applicationContext } returns ctx
-        every { preferencesHelper.token } returns "copper-key"
+        every { preferencesHelper.apiKey } returns "copper-key"
         every { preferencesHelper.id } returns "wacko-the-guid"
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
         every { preferencesHelper.defaultItemSection  } returns "Products"
