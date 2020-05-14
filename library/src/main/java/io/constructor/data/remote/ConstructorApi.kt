@@ -35,10 +35,10 @@ interface ConstructorApi {
     fun trackInputFocus(@Query("term") term: String?, @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_PURCHASE)
-    fun trackPurchase(@Query("order_id") orderID: String,
-                      @Query(Constants.QueryConstants.CUSTOMER_ID) customerIds: List<String>,
+    fun trackPurchase(@Query(Constants.QueryConstants.CUSTOMER_ID) customerIds: List<String>,
                       @Query("revenue") revenue: String?,
-                      @QueryMap params: Map<String, String>): Completable
+                      @QueryMap params: Map<String, String>,
+                      @Query("order_id") orderID: String): Completable
 
     @GET
     fun getSearchResults(@Url searchUrl: String): Single<Result<ResponseBody>>
