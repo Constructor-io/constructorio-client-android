@@ -207,12 +207,12 @@ object ConstructorIo {
     /**
      * Tracks purchase events
      */
-    fun trackPurchase(orderID: String, clientIds: Array<String>, revenue: Double?, sectionName: String? = null): Completable {
+    fun trackPurchase(clientIds: Array<String>, revenue: Double?, sectionName: String? = null, orderID: String): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val revenueString = revenue?.let { "%.2f".format(revenue) }
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
-        return dataManager.trackPurchase(orderID, clientIds.toList(), revenueString, params.toTypedArray())
+        return dataManager.trackPurchase(clientIds.toList(), revenueString, params.toTypedArray(), orderID)
     }
 
 }

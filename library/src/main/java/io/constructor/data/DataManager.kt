@@ -81,8 +81,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         return constructorApi.trackInputFocus(term, params.toMap())
     }
 
-    fun trackPurchase(orderID: String, customerIds: List<String>, revenue: String? = null, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackPurchase(orderID, customerIds, revenue, params.toMap())
+    fun trackPurchase(customerIds: List<String>, revenue: String? = null, params: Array<Pair<String, String>>, orderID: String): Completable {
+        return constructorApi.trackPurchase(customerIds, revenue, params.toMap(), orderID)
     }
 
 }
