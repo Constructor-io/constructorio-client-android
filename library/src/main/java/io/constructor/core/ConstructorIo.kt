@@ -58,7 +58,7 @@ object ConstructorIo {
         configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
-        preferenceHelper.token = constructorIoConfig.apiKey
+        preferenceHelper.apiKey = constructorIoConfig.apiKey
 
         preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
         if (preferenceHelper.id.isBlank()) {

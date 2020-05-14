@@ -32,7 +32,7 @@ class ConstructorIoSearchTest {
     @Before
     fun setup() {
         every { ctx.applicationContext } returns ctx
-        every { preferencesHelper.token } returns "silver-key"
+        every { preferencesHelper.apiKey } returns "silver-key"
         every { preferencesHelper.id } returns "guapo-the-guid"
         every { preferencesHelper.getSessionId(any(), any()) } returns 92
         every { configMemoryHolder.autocompleteResultCount } returns null
