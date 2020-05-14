@@ -53,8 +53,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
-    fun trackAutocompleteSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackAutocompleteSelect(term, params.toMap(), encodedParams.toMap())
+    fun trackAutocompleteSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf(), resultID: String? = null): Completable {
+        return constructorApi.trackAutocompleteSelect(term, params.toMap(), encodedParams.toMap(), resultID)
     }
 
     fun trackSearchSubmit(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
@@ -69,8 +69,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         return constructorApi.trackConversion(term, itemName, customerId, revenue, params.toMap())
     }
 
-    fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackSearchResultClick(term, itemName, customerId, params.toMap())
+    fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf(), resultID: String? = null): Completable {
+        return constructorApi.trackSearchResultClick(term, itemName, customerId, params.toMap(), resultID)
     }
 
     fun trackSearchResultsLoaded(term: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {
@@ -81,8 +81,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         return constructorApi.trackInputFocus(term, params.toMap())
     }
 
-    fun trackPurchase(customerIds: List<String>, revenue: String? = null, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackPurchase(customerIds, revenue, params.toMap())
+    fun trackPurchase(orderID: String, customerIds: List<String>, revenue: String? = null, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackPurchase(orderID, customerIds, revenue, params.toMap())
     }
 
 }

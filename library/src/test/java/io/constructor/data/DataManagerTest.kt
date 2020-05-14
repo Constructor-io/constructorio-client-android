@@ -80,19 +80,19 @@ class DataManagerTest {
 
     @Test
     fun trackAutocompleteSelect() {
-        every { constructorApi.trackAutocompleteSelect(any(), any(),any()) } returns Completable.complete()
+        every { constructorApi.trackAutocompleteSelect(any(), any(), any(), any()) } returns Completable.complete()
         dataManager.trackAutocompleteSelect("titanic")
-        verify(exactly = 1) { constructorApi.trackAutocompleteSelect(any(), any(), any())}
+        verify(exactly = 1) { constructorApi.trackAutocompleteSelect(any(), any(), any(), any())}
     }
 
     @Test
     fun trackAutocompleteSelectError() {
-        every { constructorApi.trackAutocompleteSelect(any(), any(),any()) } returns Completable.error(Exception())
+        every { constructorApi.trackAutocompleteSelect(any(), any(), any(), any()) } returns Completable.error(Exception())
         val observer = dataManager.trackAutocompleteSelect("titanic").test()
         observer.assertError {
             true
         }
-        verify(exactly = 1) { constructorApi.trackAutocompleteSelect(any(), any(), any())}
+        verify(exactly = 1) { constructorApi.trackAutocompleteSelect(any(), any(), any(), any())}
     }
 
     @Test
@@ -148,17 +148,17 @@ class DataManagerTest {
 
     @Test
     fun trackSearchResultClick() {
-        every { constructorApi.trackSearchResultClick(any(), any(), any(), any()) } returns Completable.complete()
+        every { constructorApi.trackSearchResultClick(any(), any(), any(), any(), any()) } returns Completable.complete()
         dataManager.trackSearchResultClick("term", "id1", "term1")
-        verify(exactly = 1) { constructorApi.trackSearchResultClick(any(), any(), any(), any())}
+        verify(exactly = 1) { constructorApi.trackSearchResultClick(any(), any(), any(), any(), any())}
     }
 
     @Test
     fun trackSearchResultClickError() {
-        every { constructorApi.trackSearchResultClick(any(), any(), any(), any()) } returns Completable.error(Exception())
+        every { constructorApi.trackSearchResultClick(any(), any(), any(), any(), any()) } returns Completable.error(Exception())
         val observer = dataManager.trackSearchResultClick("term", "1", "term1").test()
         observer.assertError { true }
-        verify(exactly = 1) { constructorApi.trackSearchResultClick(any(), any(), any(), any())}
+        verify(exactly = 1) { constructorApi.trackSearchResultClick(any(), any(), any(), any(), any())}
     }
 
     @Test
@@ -193,9 +193,9 @@ class DataManagerTest {
 
     @Test
     fun trackPurchase() {
-        every { constructorApi.trackPurchase(any(), any(), any()) } returns Completable.complete()
-        dataManager.trackPurchase(listOf(), "12.99", arrayOf())
-        verify(exactly = 1) { constructorApi.trackPurchase(any(), any(), any()) }
+        every { constructorApi.trackPurchase(any(), any(), any(), any()) } returns Completable.complete()
+        dataManager.trackPurchase("1312343", listOf(), "12.99", arrayOf())
+        verify(exactly = 1) { constructorApi.trackPurchase(any(), any(), any(), any()) }
     }
 
     @Test
