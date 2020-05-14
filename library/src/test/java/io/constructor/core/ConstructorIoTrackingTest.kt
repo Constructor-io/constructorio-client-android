@@ -52,10 +52,10 @@ class ConstructorIoTest {
     fun trackAutocompleteSelect() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackAutocompleteSelect("titanic", "tit", "Search Suggestions").test()
+        val observer = ConstructorIo.trackAutocompleteSelect("titanic", "tit", "Search Suggestions", null, "2347874").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt="
+        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&result_id=2347874&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -63,10 +63,10 @@ class ConstructorIoTest {
     fun trackAutocompleteSelectWithServerError() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackAutocompleteSelect("titanic", "tit", "Search Suggestions").test()
+        val observer = ConstructorIo.trackAutocompleteSelect("titanic", "tit", "Search Suggestions", null, "2347874").test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt="
+        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&result_id=2347874&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -75,10 +75,10 @@ class ConstructorIoTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackAutocompleteSelect("titanic", "tit", "Search Suggestions").test()
+        val observer = ConstructorIo.trackAutocompleteSelect("titanic", "tit", "Search Suggestions", null, "2347874").test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt="
+        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&result_id=2347874&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -188,10 +188,10 @@ class ConstructorIoTest {
     fun trackSearchResultClick() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackSearchResultClick("titanic replica", "TIT-REP-1997", "titanic").test()
+        val observer = ConstructorIo.trackSearchResultClick("titanic replica", "TIT-REP-1997", "titanic", null, "2347874").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
+        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&result_id=2347874&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -199,10 +199,10 @@ class ConstructorIoTest {
     fun trackSearchResultClick500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackSearchResultClick("titanic replica", "TIT-REP-1997", "titanic").test()
+        val observer = ConstructorIo.trackSearchResultClick("titanic replica", "TIT-REP-1997", "titanic", null, "2347874").test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
+        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&result_id=2347874&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -211,10 +211,10 @@ class ConstructorIoTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackSearchResultClick("titanic replica", "TIT-REP-1997", "titanic").test()
+        val observer = ConstructorIo.trackSearchResultClick("titanic replica", "TIT-REP-1997", "titanic", null, "2347874").test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
+        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&result_id=2347874&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -290,10 +290,10 @@ class ConstructorIoTest {
     fun trackPurchase() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchase(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "Products").test()
+        val observer = ConstructorIo.trackPurchase("1312343", arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "Products").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/purchase?customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
+        val path = "/autocomplete/TERM_UNKNOWN/purchase?order_id=1312343&customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -301,10 +301,10 @@ class ConstructorIoTest {
     fun trackPurchase500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchase(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "Products").test()
+        val observer = ConstructorIo.trackPurchase("1312343", arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "Products").test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/purchase?customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
+        val path = "/autocomplete/TERM_UNKNOWN/purchase?order_id=1312343&customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -313,10 +313,10 @@ class ConstructorIoTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchase(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "Products").test()
+        val observer = ConstructorIo.trackPurchase("1312343", arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "Products").test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/purchase?customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
+        val path = "/autocomplete/TERM_UNKNOWN/purchase?order_id=1312343&customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-1.3.0&_dt=";
         assert(request.path.startsWith(path))
     }
 }

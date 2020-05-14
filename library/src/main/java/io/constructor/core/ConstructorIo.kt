@@ -129,7 +129,7 @@ object ConstructorIo {
     /**
      * Tracks autocomplete select events
      */
-    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null): Completable {
+    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
@@ -138,7 +138,7 @@ object ConstructorIo {
             Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionName,
             Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
             Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK
-        ), encodedParams.toTypedArray()).subscribeOn(Schedulers.io())
+        ), encodedParams.toTypedArray(), resultID).subscribeOn(Schedulers.io())
 
         if (this.broadcast) {
             completable.subscribeOn(Schedulers.io()).subscribe {
@@ -184,12 +184,12 @@ object ConstructorIo {
     /**
      * Tracks search result click events
      */
-    fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null): Completable {
+    fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val sName = sectionName ?: preferenceHelper.defaultItemSection
         return dataManager.trackSearchResultClick(itemName, customerId, searchTerm, arrayOf(
                 Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
-        ))
+        ), resultID)
 
     }
 
@@ -207,12 +207,12 @@ object ConstructorIo {
     /**
      * Tracks purchase events
      */
-    fun trackPurchase(clientIds: Array<String>, revenue: Double?, sectionName: String? = null): Completable {
+    fun trackPurchase(orderID: String, clientIds: Array<String>, revenue: Double?, sectionName: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val revenueString = revenue?.let { "%.2f".format(revenue) }
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
-        return dataManager.trackPurchase(clientIds.toList(), revenueString, params.toTypedArray())
+        return dataManager.trackPurchase(orderID, clientIds.toList(), revenueString, params.toTypedArray())
     }
 
 }
