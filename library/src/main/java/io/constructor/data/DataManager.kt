@@ -53,7 +53,7 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
-    fun trackAutocompleteSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
+    fun trackAutocompleteSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
         return constructorApi.trackAutocompleteSelect(term, params.toMap(), encodedParams.toMap())
     }
 
@@ -69,8 +69,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         return constructorApi.trackConversion(term, itemName, customerId, revenue, params.toMap())
     }
 
-    fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackSearchResultClick(term, itemName, customerId, params.toMap())
+    fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
+        return constructorApi.trackSearchResultClick(term, itemName, customerId, params.toMap(), encodedParams.toMap())
     }
 
     fun trackSearchResultsLoaded(term: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {
@@ -81,8 +81,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         return constructorApi.trackInputFocus(term, params.toMap())
     }
 
-    fun trackPurchase(customerIds: List<String>, revenue: String? = null, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackPurchase(customerIds, revenue, params.toMap())
+    fun trackPurchase(customerIds: List<String>, revenue: String? = null, orderID: String, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackPurchase(customerIds, revenue, orderID, params.toMap())
     }
 
 }
