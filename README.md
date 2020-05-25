@@ -146,6 +146,10 @@ If you decide to extend from the `BaseSuggestionFragment`, these events are sent
 
 ```kotlin
 import io.constructor.core.ConstructorIo
+import io.constructor.core.ConstructorIoConfig
+
+val config = ConstructorIoConfig("pharmacy-api-key")
+ConstructorIo.init(this, config)
 
 // Track when the user focuses into the search bar (searchTerm)
 ConstructorIo.trackInputFocus("")
@@ -163,6 +167,10 @@ These events should be sent manually by the consuming app.
 
 ```kotlin
 import io.constructor.core.ConstructorIo
+import io.constructor.core.ConstructorIoConfig
+
+val config = ConstructorIoConfig("pharmacy-api-key")
+ConstructorIo.init(this, config)
 
 // Track when search results are loaded into view (searchTerm, resultCount)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789)
