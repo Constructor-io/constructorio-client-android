@@ -42,6 +42,7 @@ class ConstructorioTestCellTest {
         val config = ConstructorIoConfig("dummyKey", testCells = listOf("cellone" to "vanilla", "celltwo" to "whipped-cream"))
         val dataManager = createTestDataManager(mockServer, preferencesHelper, configMemoryHolder, ctx)
 
+        constructorIo.init(this, config);
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
     }
 
