@@ -54,7 +54,7 @@ class ConstructorIoSearchTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
-            it.get()!!.searchData.searchResults!!.size == 20
+            it.get()!!.searchData.searchResults!!.size == 24
         }
         val request = mockServer.takeRequest()
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="

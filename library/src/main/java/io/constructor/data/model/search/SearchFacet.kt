@@ -7,6 +7,6 @@ data class SearchFacet(val name: String,
                        @Json(name = "display_name") val displayName: String?,
                        val status: Map<String, Any>?,
                        val type: String?,
-                       val min: Int?,
-                       val max: Int?,
+                       val min: Double?,
+                       val max: Double?,
                        val options: List<FacetOption>?) : Serializable
