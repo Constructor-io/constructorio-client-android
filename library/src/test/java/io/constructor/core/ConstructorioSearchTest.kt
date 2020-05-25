@@ -6,9 +6,7 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -36,13 +34,12 @@ class ConstructorIoSearchTest {
         every { preferencesHelper.id } returns "guapo-the-guid"
         every { preferencesHelper.getSessionId(any(), any()) } returns 92
         every { configMemoryHolder.autocompleteResultCount } returns null
-        every { configMemoryHolder.testCellParams = any() } just Runs
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns emptyList()
 
         mockServer = MockWebServer()
         mockServer.start()
-        val config = ConstructorIoConfig("dummyKey", testCells = listOf("flavor" to "vanilla", "topping" to "whipped-cream"))
+        val config = ConstructorIoConfig("dummyKey")
         val dataManager = createTestDataManager(mockServer, preferencesHelper, configMemoryHolder, ctx)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
