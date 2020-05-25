@@ -33,6 +33,7 @@ class Constants {
         const val SORT_ORDER = "sort_order"
         const val FILTER_GROUP_ID = "filters[group_id]"
         const val FILTER_FACET = "filters[%s]"
+        const val RESULT_ID = "result_id"
     }
 
     object QueryValues {
