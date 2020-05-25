@@ -173,6 +173,6 @@ ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "to
 // Track when a search result converts (itemName, customerId, revenue, searchTerm)
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
 
-// Track when products are purchased (customerIds)
-ConstructorIo.trackPurchase(customerIDs: ["123-AB", "456-CD"])
+// Track when products are purchased (customerIds, revenue, orderId)
+ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
 ```
