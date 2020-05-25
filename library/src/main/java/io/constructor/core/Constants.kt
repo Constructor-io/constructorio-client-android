@@ -29,6 +29,8 @@ class Constants {
         const val TERM_UNKNOWN = "TERM_UNKNOWN"
         const val PAGE = "page"
         const val PER_PAGE = "num_results_per_page"
+        const val SORT_BY = "sort_by"
+        const val SORT_ORDER = "sort_order"
         const val FILTER_GROUP_ID = "filters[group_id]"
         const val FILTER_FACET = "filters[%s]"
         const val RESULT_ID = "result_id"

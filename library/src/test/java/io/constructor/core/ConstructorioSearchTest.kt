@@ -54,7 +54,17 @@ class ConstructorIoSearchTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
-            it.get()!!.searchData.results!!.size == 20
+            it.get()!!.searchData.searchResults!!.size == 24
+            it.get()!!.searchData.searchResults!![0].value == "Del Monte Fresh Cut Corn Whole Kernel Golden Sweet with Natural Sea Salt - 15.25 Oz"
+            it.get()!!.searchData.searchResults!![0].result.id == "121150086"
+            it.get()!!.searchData.searchResults!![0].result.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150086.png"
+            it.get()!!.searchData.searchResults!![0].result.metadata["price"] == 2.29
+            it.get()!!.searchData.searchResults!![0].matchedTerms!![0] == "corn"
+            it.get()!!.searchData.facets!!.size == 3
+            it.get()!!.searchData.facets!![0].displayName == "Brand"
+            it.get()!!.searchData.facets!![0].type == "multiple"
+            it.get()!!.searchData.groups!!.size == 1
+            it.get()!!.searchData.resultCount == 225
         }
         val request = mockServer.takeRequest()
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
@@ -89,25 +99,15 @@ class ConstructorIoSearchTest {
     }
 
     @Test
-    fun getSearchResultsWithUnexpectedResponse() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_unexpected_data.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.searchData.resultCount == 23
-        }
-        val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
-    }
-
-    @Test
     fun getSearchResultsWithEmptyResponse() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_empty.json"))
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("corn").test()
         observer.assertComplete().assertValue {
-            it.get()!!.searchData.results!!.isEmpty()
+            it.get()!!.searchData.searchResults!!.isEmpty()
+            it.get()!!.searchData.facets!!.isEmpty()
+            it.get()!!.searchData.groups!!.isEmpty()
+            it.get()!!.searchData.resultCount == 0
         }
         val request = mockServer.takeRequest()
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="

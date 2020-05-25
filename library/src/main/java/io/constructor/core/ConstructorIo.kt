@@ -85,6 +85,9 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
     }
 
+    /**
+     * Returns a list of autocomplete suggestions
+     */
     fun getAutocompleteResults(query: String): Observable<ConstructorData<List<Suggestion>?>> {
         val params = mutableListOf<Pair<String, String>>()
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
@@ -93,13 +96,17 @@ object ConstructorIo {
         return dataManager.getAutocompleteResults(query, params.toTypedArray())
     }
 
-    fun getSearchResults(text: String, vararg facets: Pair<String, List<String>>, page: Int? = null, perPage: Int? = null, groupId: Int? = null): Observable<ConstructorData<SearchResponse>> {
-        preferenceHelper.getSessionId(sessionIncrementHandler)
+    /**
+     * Returns search results including filters, categories, sort options, etc.
+     */
+    fun getSearchResults(text: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
         perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
-        facets.forEach { facet ->
+        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        facets?.forEach { facet ->
             facet.second.forEach {
                 encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
             }

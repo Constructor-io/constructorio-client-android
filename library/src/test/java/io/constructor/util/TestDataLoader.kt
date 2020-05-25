@@ -15,8 +15,6 @@ object TestDataLoader {
 
     fun loadResponse() : AutocompleteResult? = loadResult("autocomplete_response.json")
 
-    fun loadResponseWithUnexpectedData() : AutocompleteResult? = loadResult("autocomplete_response_with_unexpected_data.json")
-
     fun loadEmptyResponse() : AutocompleteResult? = loadResult("autocomplete_response_empty.json")
 
     private fun loadResult(fileName: String): AutocompleteResult? {

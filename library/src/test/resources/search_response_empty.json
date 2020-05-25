@@ -1,17 +1,28 @@
 {
   "request": {
-    "ef-11": "22",
-    "ef-ab": "cd",
+    "feature_variants": {
+      "auto_generated_refined_query_rules": null,
+      "manual_searchandizing": null,
+      "personalization": null,
+      "query_items": null
+    },
+    "features": {
+      "auto_generated_refined_query_rules": true,
+      "manual_searchandizing": true,
+      "personalization": true,
+      "query_items": true
+    },
     "fmt_options": {
       "groups_max_depth": 1,
       "groups_start": "current"
     },
-    "num_results_per_page": 20,
+    "num_results_per_page": 24,
     "page": 1,
+    "searchandized_items": {},
     "section": "Products",
     "sort_by": "relevance",
     "sort_order": "descending",
-    "term": "cornucopiasofcorndogs"
+    "term": "corn"
   },
   "response": {
     "facets": [],
@@ -20,5 +31,5 @@
     "sort_options": [],
     "total_num_results": 0
   },
-  "result_id": "2ea93527-91d6-4dfa-86b0-6a0e8158bfd1"
+  "result_id": "49eb05c2-a3a3-4080-b238-82c5a44f8cf5"
 }
