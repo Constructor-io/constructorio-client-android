@@ -28,7 +28,7 @@ class RequestInterceptor(val context: Context, private val preferencesHelper: Pr
         // TODO : Urlencode
         configMemoryHolder.testCellParams.forEach {
             it?.let {
-                builder.addQueryParameter(it.first, it.second)
+                builder.addQueryParameter("ef-" + it.first, it.second)
             }
         }
 
