@@ -14,17 +14,17 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         get() = preferences.getString(PREF_ID, "")
         set(value) = preferences.edit().putString(PREF_ID, value).apply()
 
-    var apiKey: String
-        get() = preferences.getString(PREF_API_KEY, "")
-        set(value) = preferences.edit().putString(PREF_API_KEY, value).apply()
+    var token: String
+        get() = preferences.getString(PREF_TOKEN, "")
+        set(value) = preferences.edit().putString(PREF_TOKEN, value).apply()
 
     var defaultItemSection: String
         get() = preferences.getString(PREF_DEFAULT_ITEM_SECTION, "")
         set(value) = preferences.edit().putString(PREF_DEFAULT_ITEM_SECTION, value).apply()
 
     var groupsShownForFirstTerm: Int
-        get() = preferences.getInt(PREF_GROUPS_SHOWN_FOR_FIRST_TERM, 2)
-        set(value) = preferences.edit().putInt(PREF_GROUPS_SHOWN_FOR_FIRST_TERM, value).apply()
+        get() = preferences.getInt(GROUPS_SHOWN_FOR_FIRST_TERM, 2)
+        set(value) = preferences.edit().putInt(GROUPS_SHOWN_FOR_FIRST_TERM, value).apply()
 
     var lastSessionAccess: Long
         get() = preferences.getLong(SESSION_LAST_ACCESS, System.currentTimeMillis())
@@ -57,9 +57,9 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
     }
 
     companion object {
-        const val PREF_API_KEY = "api key"
+        const val PREF_TOKEN = "token"
         const val PREF_DEFAULT_ITEM_SECTION = "default_item_section"
-        const val PREF_GROUPS_SHOWN_FOR_FIRST_TERM = "groups_shown_for_first_term"
+        const val GROUPS_SHOWN_FOR_FIRST_TERM = "groups_shown_for_first_term"
         const val PREF_ID = "id"
         const val PREF_FILE_NAME = "constructor_pref_file"
         const val SESSION_ID = "session_id"

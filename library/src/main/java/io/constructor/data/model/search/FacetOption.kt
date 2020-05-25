@@ -1,3 +1,5 @@
 package io.constructor.data.model.search
 
-data class FacetOption(val count: Int, val value: String?)
+import java.io.Serializable
+
+data class FacetOption(val count: Int, val value: String?) : Serializable

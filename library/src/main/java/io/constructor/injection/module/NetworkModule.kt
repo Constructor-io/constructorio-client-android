@@ -1,14 +1,15 @@
 package io.constructor.injection.module
 
 import android.content.Context
-import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import io.constructor.BuildConfig
-import io.constructor.data.interceptor.RequestInterceptor
+import io.constructor.data.interceptor.TokenInterceptor
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.dataadapter.ResultDataAdapter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -33,11 +34,11 @@ class NetworkModule(private val context: Context) {
     @Provides
     @Singleton
     internal fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor,
-                                     requestInterceptor: RequestInterceptor): OkHttpClient {
+                                     tokenInterceptor: TokenInterceptor): OkHttpClient {
         val httpClientBuilder = OkHttpClient.Builder()
-        httpClientBuilder.addInterceptor(requestInterceptor)
+        httpClientBuilder.addInterceptor(tokenInterceptor)
         if (BuildConfig.DEBUG) {
-            // httpClientBuilder.addInterceptor(httpLoggingInterceptor)
+            httpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }
         return httpClientBuilder.build()
 
@@ -50,12 +51,13 @@ class NetworkModule(private val context: Context) {
 
     @Provides
     @Singleton
-    internal fun provideRequestInterceptor(prefHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder): RequestInterceptor = RequestInterceptor(context, prefHelper, configMemoryHolder)
+    internal fun provideTokenInterceptor(prefHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder): TokenInterceptor = TokenInterceptor(context, prefHelper, configMemoryHolder)
 
     @Provides
     @Singleton
     internal fun provideMoshi(): Moshi = Moshi
             .Builder()
+            .add(ResultDataAdapter())
             .add(KotlinJsonAdapterFactory())
             .build()
 }

@@ -1,6 +1,7 @@
 package io.constructor.data.model.search
 
 import com.squareup.moshi.Json
+import java.io.Serializable
 
 data class SearchFacet(val name: String,
                        @Json(name = "display_name") val displayName: String?,
@@ -8,4 +9,4 @@ data class SearchFacet(val name: String,
                        val type: String?,
                        val min: Int?,
                        val max: Int?,
-                       val options: List<FacetOption>?)
+                       val options: List<FacetOption>?) : Serializable

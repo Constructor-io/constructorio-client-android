@@ -40,8 +40,8 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
 
     fun getSuggestions(text: String) {
         mvpView.loading()
-        if (preferencesHelper.apiKey.isEmpty()) {
-            mvpView.onError(IllegalStateException("api key is null, please init library with api key using ConstructorIo.init"))
+        if (preferencesHelper.token.isEmpty()) {
+            mvpView.onError(IllegalStateException("token is null, please init library with token using ConstructorIo.init"))
             return
         }
         disposables.add(ConstructorIo.getAutocompleteResults(text).io2ui().subscribe { data ->
@@ -52,8 +52,8 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
             }
             data.onError {
                     if (it is NoSuchElementException) {
-                        d("throwing invalid api key error")
-                        mvpView.onError(IllegalStateException("invalid api key"))
+                        d("throwing invalid token error")
+                        mvpView.onError(IllegalStateException("invalid token"))
 
                     } else {
                         mvpView.onError(it)
