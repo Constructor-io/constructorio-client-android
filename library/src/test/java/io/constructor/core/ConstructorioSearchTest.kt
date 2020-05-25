@@ -99,19 +99,6 @@ class ConstructorIoSearchTest {
     }
 
     @Test
-    fun getSearchResultsWithUnexpectedResponse() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_unexpected_data.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.searchData.resultCount == 23
-        }
-        val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
-    }
-
-    @Test
     fun getSearchResultsWithEmptyResponse() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_empty.json"))
         mockServer.enqueue(mockResponse)

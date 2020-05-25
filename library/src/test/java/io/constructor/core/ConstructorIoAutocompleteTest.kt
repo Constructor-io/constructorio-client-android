@@ -89,19 +89,6 @@ class ConstructorIoAutocompleteTest {
     }
 
     @Test
-    fun getAutocompleteResultsWithUnexpectedResponse() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response_with_unexpected_data.json"))
-        mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getAutocompleteResults("titanic").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.isNotEmpty() && it.get()!!.size == 5
-        }
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-1.3.0&_dt="
-        assert(request.path.startsWith(path))
-    }
-
-    @Test
     fun getAutocompleteResultsWithEmptyResponse() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response_empty.json"))
         mockServer.enqueue(mockResponse)
