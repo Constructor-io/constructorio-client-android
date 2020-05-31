@@ -38,7 +38,7 @@ class NetworkModule(private val context: Context) {
         val httpClientBuilder = OkHttpClient.Builder()
         httpClientBuilder.addInterceptor(requestInterceptor)
         if (BuildConfig.DEBUG) {
-            // httpClientBuilder.addInterceptor(httpLoggingInterceptor)
+            httpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }
         return httpClientBuilder.build()
 
@@ -47,7 +47,7 @@ class NetworkModule(private val context: Context) {
     @Provides
     @Singleton
     internal fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor =
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
 
     @Provides
     @Singleton

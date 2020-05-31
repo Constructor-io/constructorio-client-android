@@ -4,12 +4,11 @@ import android.app.Application
 import io.constructor.core.ConstructorIo
 import io.constructor.core.ConstructorIoConfig
 
-class SampleApp : Application() {
+class BodegaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        ConstructorIo.init(this, ConstructorIoConfig("key_OucJxxrfiTVUQx0C",
-                testCells = listOf("ab" to "cd", "11" to "22")))
+        ConstructorIo.init(this, ConstructorIoConfig("key_K2hlXt5aVSwoI1Uw"))
         ConstructorIo.userId = "uid"
     }
 }
