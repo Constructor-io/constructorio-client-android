@@ -12,7 +12,7 @@ class CheckoutPresenter(view: CheckoutView, private val cartStorage: CartDataSto
         val total = cartStorage.getCartContent().map { it.value }.sumByDouble {
             ((it.first.result.price() ?: 0.0) * it.second)
         }
-        ConstructorIo.trackPurchase(arrayOf(ConstructorIo.getClientId()), total, "ORD" + Random.nextInt(0, 10000))
+        ConstructorIo.trackPurchase(arrayOf("item-001", "item-002", "item-003"), total, "ORD" + Random.nextInt(0, 10000))
     }
 
 }

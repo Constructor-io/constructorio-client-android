@@ -55,7 +55,7 @@ class SearchResultPresenter(view: SearchView) : BasePresenter<SearchView>(view) 
     }
 
     fun handleClick(it: SearchResult, query: String) {
-        ConstructorIo.trackSearchResultClick(it.value, ConstructorIo.userId ?: "", query)
+        ConstructorIo.trackSearchResultClick(it.value, it.result.id, query)
         view.navigateToDetails(it)
     }
 
