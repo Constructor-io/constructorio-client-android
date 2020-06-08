@@ -8,7 +8,7 @@ class BodegaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        ConstructorIo.init(this, ConstructorIoConfig("key_K2hlXt5aVSwoI1Uw"))
+        ConstructorIo.init(this, ConstructorIoConfig("key_K2hlXt5aVSwoI1Uw", null))
         ConstructorIo.userId = "uid"
     }
 }
