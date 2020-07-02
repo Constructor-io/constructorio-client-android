@@ -64,7 +64,7 @@ class ConstructorIoSearchTest {
             it.get()!!.searchData.resultCount == 225
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.0.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -77,7 +77,7 @@ class ConstructorIoSearchTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.0.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -91,7 +91,7 @@ class ConstructorIoSearchTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.0.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -107,7 +107,7 @@ class ConstructorIoSearchTest {
             it.get()!!.searchData.resultCount == 0
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-1.3.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.0.0&_dt="
         assert(request.path.startsWith(path))
     }
 }
