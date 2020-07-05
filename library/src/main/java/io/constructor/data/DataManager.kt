@@ -1,7 +1,6 @@
 package io.constructor.data
 
 import com.squareup.moshi.Moshi
-import io.constructor.BuildConfig
 import io.constructor.data.model.Suggestion
 import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.remote.ApiPaths
@@ -30,7 +29,7 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
     }.toObservable()
 
     fun getSearchResults(text: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {
-        var dynamicUrl = BuildConfig.BASE_API_URL + "/${ApiPaths.URL_SEARCH.format(text)}"
+        var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(text)}"
         encodedParams.forEachIndexed { index, pair ->
             dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
         }

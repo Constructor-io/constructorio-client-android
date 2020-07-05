@@ -17,6 +17,7 @@ class RequestInterceptor(val context: Context, private val preferencesHelper: Pr
         val builder = request.url().newBuilder()
             .host(preferencesHelper.serviceUrl)
             .port(preferencesHelper.port)
+            .scheme(preferencesHelper.scheme)
             .addQueryParameter(Constants.QueryConstants.API_KEY, preferencesHelper.apiKey)
             .addQueryParameter(Constants.QueryConstants.IDENTITY, preferencesHelper.id)
 
