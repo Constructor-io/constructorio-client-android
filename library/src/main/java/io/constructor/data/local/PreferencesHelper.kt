@@ -34,6 +34,10 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         get() = preferences.getString(PREF_SERVICE_URL, "")
         set(value) = preferences.edit().putString(PREF_SERVICE_URL, value).apply()
 
+    var port: Int
+        get() = preferences.getInt(PREF_SERVICE_PORT, 443)
+        set(value) = preferences.edit().putInt(PREF_SERVICE_PORT, value).apply()
+
     fun getSessionId(sessionIncrementAction: ((String) -> Unit)? = null, forceIncrement: Boolean = false): Int {
         if (!preferences.contains(SESSION_ID)) {
             return resetSession(sessionIncrementAction)
@@ -70,6 +74,7 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         const val SESSION_LAST_ACCESS = "session_last_access"
         const val SESSION_TIME_THRESHOLD = 1000 * 60 * 30
         const val PREF_SERVICE_URL = "service_url"
+        const val PREF_SERVICE_PORT = "service_port"
     }
 
 }

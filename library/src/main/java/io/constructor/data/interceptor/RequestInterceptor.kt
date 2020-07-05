@@ -19,6 +19,10 @@ class RequestInterceptor(val context: Context, private val preferencesHelper: Pr
             .addQueryParameter(Constants.QueryConstants.API_KEY, preferencesHelper.apiKey)
             .addQueryParameter(Constants.QueryConstants.IDENTITY, preferencesHelper.id)
 
+        preferencesHelper.port?.let {
+            builder.port(preferencesHelper.port!!)
+        }
+
         // TODO : Urlencode
         configMemoryHolder.userId?.let {
             builder.addQueryParameter(Constants.QueryConstants.USER_ID, it)
