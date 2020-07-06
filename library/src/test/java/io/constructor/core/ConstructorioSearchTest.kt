@@ -38,6 +38,7 @@ class ConstructorIoSearchTest {
         every { preferencesHelper.id } returns "guapo-the-guid"
         every { preferencesHelper.serviceUrl } returns mockServer.hostName
         every { preferencesHelper.port } returns mockServer.port
+        every { preferencesHelper.scheme } returns "http"
         every { preferencesHelper.getSessionId(any(), any()) } returns 92
 
         every { configMemoryHolder.autocompleteResultCount } returns null

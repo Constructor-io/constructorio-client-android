@@ -19,7 +19,7 @@ fun createTestDataManager(preferencesHelper: PreferencesHelper,
     val requestInterceptor = networkModule.provideRequestInterceptor(preferencesHelper, configMemoryHolder)
     val moshi = networkModule.provideMoshi()
     val okHttpClient = networkModule.provideOkHttpClient(loggingInterceptor, requestInterceptor)
-    val retrofit = networkModule.provideRetrofit(okHttpClient, moshi)
+    val retrofit = networkModule.provideRetrofit(okHttpClient, moshi, preferencesHelper)
     val constructorApi = retrofit.create(ConstructorApi::class.java)
     return DataManager(constructorApi, moshi);
 }

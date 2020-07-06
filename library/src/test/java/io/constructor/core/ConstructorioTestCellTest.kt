@@ -37,6 +37,7 @@ class ConstructorioTestCellTest {
         every { preferencesHelper.id } returns "koopa-the-guid"
         every { preferencesHelper.serviceUrl } returns mockServer.hostName
         every { preferencesHelper.port } returns mockServer.port
+        every { preferencesHelper.scheme } returns "http"
         every { preferencesHelper.getSessionId(any(), any()) } returns 14
 
         every { configMemoryHolder.autocompleteResultCount } returns null
