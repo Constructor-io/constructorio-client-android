@@ -53,12 +53,13 @@ object ConstructorIo {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
-        dataManager = component.dataManager()
 
+        // Instantiate the memory holder first
         configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
 
+        // Instantiate the preferences helper next
         preferenceHelper = component.preferenceHelper()
         preferenceHelper.apiKey = constructorIoConfig.apiKey
         preferenceHelper.serviceUrl = constructorIoConfig.serviceUrl
@@ -68,6 +69,9 @@ object ConstructorIo {
         if (preferenceHelper.id.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
         }
+
+        // Instantiate the data manager last as it depends on the preferences helper
+        dataManager = component.dataManager()
     }
 
     fun getSessionId() = preferenceHelper.getSessionId()
