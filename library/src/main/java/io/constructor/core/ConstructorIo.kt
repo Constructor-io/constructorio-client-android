@@ -54,12 +54,10 @@ object ConstructorIo {
         }
         this.context = context.applicationContext
 
-        // Instantiate the memory holder first
         configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
 
-        // Instantiate the preferences helper next
         preferenceHelper = component.preferenceHelper()
         preferenceHelper.apiKey = constructorIoConfig.apiKey
         preferenceHelper.serviceUrl = constructorIoConfig.serviceUrl
@@ -70,7 +68,7 @@ object ConstructorIo {
             preferenceHelper.id = UUID.randomUUID().toString()
         }
 
-        // Instantiate the data manager last as it depends on the preferences helper
+        // Instantiate the data manager last (depends on the preferences helper)
         dataManager = component.dataManager()
     }
 
