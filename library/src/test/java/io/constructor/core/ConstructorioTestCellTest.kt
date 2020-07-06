@@ -60,7 +60,7 @@ class ConstructorioTestCellTest {
             it.get()!!.isNotEmpty() && it.get()!!.size == 5
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt="
+        val path = "/autocomplete/titanic?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -71,7 +71,7 @@ class ConstructorioTestCellTest {
         val observer = constructorIo.trackSessionStartInternal().test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?action=session_start&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt=";
+        val path = "/behavior?action=session_start&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -82,7 +82,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackInputFocus("tita").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?term=tita&action=focus&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt=";
+        val path = "/behavior?term=tita&action=focus&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -93,7 +93,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackAutocompleteSelect("titanic", "tit", "Search Suggestions").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt="
+        val path = "/autocomplete/titanic/select?autocomplete_section=Search%20Suggestions&original_query=tit&tr=click&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -104,7 +104,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchSubmit("titanic", "tit", null).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt=";
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -115,7 +115,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchResultsLoaded("titanic", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt=";
+        val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -126,7 +126,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchResultClick("titanic replica", "TIT-REP-1997", "titanic").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt=";
+        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -137,7 +137,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackConversion("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/conversion?name=titanic%20replica&customer_id=TIT-REP-1997&revenue=89.00&autocomplete_section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt=";
+        val path = "/autocomplete/TERM_UNKNOWN/conversion?name=titanic%20replica&customer_id=TIT-REP-1997&revenue=89.00&autocomplete_section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -148,7 +148,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackPurchase(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "ORD-1312343").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/purchase?customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&order_id=ORD-1312343&autocomplete_section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.0.0&_dt=";
+        val path = "/autocomplete/TERM_UNKNOWN/purchase?customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&order_id=ORD-1312343&autocomplete_section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.0&_dt=";
         assert(request.path.startsWith(path))
     }
 }
