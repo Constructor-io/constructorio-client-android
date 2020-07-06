@@ -23,9 +23,9 @@ class NetworkModule(private val context: Context) {
 
     @Provides
     @Singleton
-    internal fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+    internal fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi, preferencesHelper: PreferencesHelper): Retrofit =
             Retrofit.Builder()
-                    .baseUrl(BuildConfig.BASE_API_URL)
+                    .baseUrl(preferencesHelper.scheme + "://" + preferencesHelper.serviceUrl)
                     .client(okHttpClient)
                     .addConverterFactory(MoshiConverterFactory.create(moshi))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

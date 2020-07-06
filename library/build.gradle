@@ -30,8 +30,10 @@ android {
         versionCode 1
         versionName '2.0.0'
         buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
-        buildConfigField("String", "AUTOCOMPLETE_SECTION", "\"Products\"")
-        buildConfigField("String", "BASE_API_URL", "\"https://ac.cnstrc.com\"")
+        buildConfigField("String", "DEFAULT_ITEM_SECTION", "\"Products\"")
+        buildConfigField("String", "SERVICE_URL", "\"ac.cnstrc.com\"")
+        buildConfigField("Integer", "SERVICE_PORT", "443")
+        buildConfigField("String", "SERVICE_SCHEME", "\"https\"")
     }
 
     buildTypes {

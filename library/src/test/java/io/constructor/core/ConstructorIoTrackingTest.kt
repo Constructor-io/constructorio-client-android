@@ -29,19 +29,25 @@ class ConstructorIoTest {
 
     @Before
     fun setup() {
+        mockServer = MockWebServer()
+        mockServer.start()
+
         every { ctx.applicationContext } returns ctx
+
         every { preferencesHelper.apiKey } returns "copper-key"
         every { preferencesHelper.id } returns "wacko-the-guid"
+        every { preferencesHelper.serviceUrl } returns mockServer.hostName
+        every { preferencesHelper.port } returns mockServer.port
+        every { preferencesHelper.scheme } returns "http"
+        every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
-        every { preferencesHelper.defaultItemSection  } returns "Products"
+
         every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-three"
         every { configMemoryHolder.testCellParams } returns emptyList()
 
-        mockServer = MockWebServer()
-        mockServer.start()
         val config = ConstructorIoConfig("dummyKey")
-        val dataManager = createTestDataManager(mockServer, preferencesHelper, configMemoryHolder, ctx)
+        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
     }
