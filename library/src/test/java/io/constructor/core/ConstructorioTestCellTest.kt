@@ -38,6 +38,7 @@ class ConstructorioTestCellTest {
         every { preferencesHelper.serviceUrl } returns mockServer.hostName
         every { preferencesHelper.port } returns mockServer.port
         every { preferencesHelper.scheme } returns "http"
+        every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 14
 
         every { configMemoryHolder.autocompleteResultCount } returns null

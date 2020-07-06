@@ -60,8 +60,8 @@ object ConstructorIo {
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
         preferenceHelper.apiKey = constructorIoConfig.apiKey
         preferenceHelper.serviceUrl = constructorIoConfig.serviceUrl
-        preferenceHelper.port = constructorIoConfig.port
-        preferenceHelper.scheme = constructorIoConfig.scheme
+        preferenceHelper.port = constructorIoConfig.servicePort
+        preferenceHelper.scheme = constructorIoConfig.serviceScheme
 
         preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
         if (preferenceHelper.id.isBlank()) {
