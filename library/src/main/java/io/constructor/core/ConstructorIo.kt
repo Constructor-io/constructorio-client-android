@@ -14,9 +14,11 @@ import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
 import io.constructor.injection.module.NetworkModule
 import io.constructor.util.broadcastIntent
+import io.constructor.util.e
 import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -30,6 +32,7 @@ object ConstructorIo {
     private lateinit var configMemoryHolder: ConfigMemoryHolder
     private lateinit var context: Context
     private var broadcast = true
+    private var disposable = CompositeDisposable()
 
     var userId: String?
         get() = configMemoryHolder.userId
@@ -132,7 +135,12 @@ object ConstructorIo {
     /**
      * Tracks input focus events
      */
-    fun trackInputFocus(term: String?): Completable {
+    fun trackInputFocus(term: String?) {
+        disposable.add(trackInputFocusInternal(term).subscribe({}, {
+            t -> e("Input Focus event error: ${t.message}")
+        }))
+    }
+    internal fun trackInputFocusInternal(term: String?): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         return dataManager.trackInputFocus(term, arrayOf(
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS
@@ -142,7 +150,12 @@ object ConstructorIo {
     /**
      * Tracks autocomplete select events
      */
-    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, resultID: String? = null): Completable {
+    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, resultID: String? = null) {
+        disposable.add(trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, group, resultID).subscribe({}, {
+            t -> e("Autocomplete Select error: ${t.message}")
+        }))
+    }
+    internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
@@ -166,7 +179,12 @@ object ConstructorIo {
     /**
      * Tracks search submit events
      */
-    fun trackSearchSubmit(searchTerm: String, originalQuery: String, group: Group?): Completable {
+    fun trackSearchSubmit(searchTerm: String, originalQuery: String, group: Group?) {
+        disposable.add(trackSearchSubmitInternal(searchTerm, originalQuery, group).subscribe({}, {
+            t -> e("Search Submit error: ${t.message}")
+        }))
+    }
+    internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, group: Group?): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
@@ -188,7 +206,12 @@ object ConstructorIo {
     /**
      * Tracks search results loaded (a.k.a. search results viewed) events
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int): Completable {
+    fun trackSearchResultsLoaded(term: String, resultCount: Int) {
+        disposable.add(trackSearchResultsLoadedInternal(term, resultCount).subscribe({}, {
+            t -> e("Search Results Loaded error: ${t.message}")
+        }))
+    }
+    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         return dataManager.trackSearchResultsLoaded(term, resultCount, arrayOf(
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS
@@ -198,7 +221,12 @@ object ConstructorIo {
     /**
      * Tracks search result click events
      */
-    fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
+    fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
+        disposable.add(trackSearchResultClickInternal(itemName, customerId, searchTerm, sectionName, resultID).subscribe({}, {
+            t -> e("Search Result Click error: ${t.message}")
+        }))
+    }
+    internal fun trackSearchResultClickInternal(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
@@ -212,7 +240,12 @@ object ConstructorIo {
     /**
      * Tracks conversion (a.k.a add to cart) events
      */
-    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null): Completable {
+    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null) {
+        disposable.add(trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName).subscribe({}, {
+            t -> e("Conversion error: ${t.message}")
+        }))
+    }
+    internal fun trackConversionInternal(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val revenueString = revenue?.let { "%.2f".format(revenue) }
         return dataManager.trackConversion(searchTerm, itemName, customerId, revenueString, arrayOf(
@@ -223,7 +256,12 @@ object ConstructorIo {
     /**
      * Tracks purchase events
      */
-    fun trackPurchase(clientIds: Array<String>, revenue: Double?,  orderID: String, sectionName: String? = null): Completable {
+    fun trackPurchase(clientIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
+        disposable.add(trackPurchaseInternal(clientIds, revenue, orderID, sectionName).subscribe({}, {
+            t -> e("Purchase error: ${t.message}")
+        }))
+    }
+    internal fun trackPurchaseInternal(clientIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val revenueString = revenue?.let { "%.2f".format(revenue) }
