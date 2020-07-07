@@ -47,7 +47,7 @@ object ConstructorIo {
     }
 
     private var sessionIncrementHandler: (String) -> Unit = {
-        trackSessionStartInternal()
+        trackSessionStart()
     }
 
     fun init(context: Context?, constructorIoConfig: ConstructorIoConfig) {
@@ -122,8 +122,14 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks Session Start Events
+     * Tracks session start events
      */
+    private fun trackSessionStart() {
+        var completable = trackSessionStartInternal()
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Session Start event error: ${t.message}")
+        }))
+    }
     internal fun trackSessionStartInternal (): Completable {
         return dataManager.trackSessionStart(
                 arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SESSION_START)
@@ -167,7 +173,7 @@ object ConstructorIo {
             Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionName,
             Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
             Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK
-        ), encodedParams.toTypedArray()).subscribeOn(Schedulers.io())
+        ), encodedParams.toTypedArray())
     }
 
     /**
@@ -261,5 +267,4 @@ object ConstructorIo {
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
         return dataManager.trackPurchase(clientIds.toList(), revenueString, orderID, params.toTypedArray())
     }
-
 }
