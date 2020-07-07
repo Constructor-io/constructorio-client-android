@@ -31,7 +31,6 @@ object ConstructorIo {
     private lateinit var preferenceHelper: PreferencesHelper
     private lateinit var configMemoryHolder: ConfigMemoryHolder
     private lateinit var context: Context
-    private var broadcast = true
     private var disposable = CompositeDisposable()
 
     var userId: String?
@@ -87,7 +86,6 @@ object ConstructorIo {
         this.dataManager = dataManager
         this.preferenceHelper = preferenceHelper
         this.configMemoryHolder = configMemoryHolder
-        this.broadcast = false
     }
 
     fun appMovedToForeground() {
@@ -136,7 +134,8 @@ object ConstructorIo {
      * Tracks input focus events
      */
     fun trackInputFocus(term: String?) {
-        disposable.add(trackInputFocusInternal(term).subscribe({}, {
+        var completable = trackInputFocusInternal(term)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Input Focus event error: ${t.message}")
         }))
     }
@@ -151,7 +150,10 @@ object ConstructorIo {
      * Tracks autocomplete select events
      */
     fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, resultID: String? = null) {
-        disposable.add(trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, group, resultID).subscribe({}, {
+        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, group, resultID);
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
+            context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
+        }, {
             t -> e("Autocomplete Select error: ${t.message}")
         }))
     }
@@ -161,26 +163,21 @@ object ConstructorIo {
         group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
-        val completable = dataManager.trackAutocompleteSelect(searchTerm, arrayOf(
+        return dataManager.trackAutocompleteSelect(searchTerm, arrayOf(
             Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionName,
             Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
             Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK
         ), encodedParams.toTypedArray()).subscribeOn(Schedulers.io())
-
-        if (this.broadcast) {
-            completable.subscribeOn(Schedulers.io()).subscribe {
-                context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
-            }
-        }
-
-        return completable
     }
 
     /**
      * Tracks search submit events
      */
     fun trackSearchSubmit(searchTerm: String, originalQuery: String, group: Group?) {
-        disposable.add(trackSearchSubmitInternal(searchTerm, originalQuery, group).subscribe({}, {
+        var completable = trackSearchSubmitInternal(searchTerm, originalQuery, group)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
+            context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
+        }, {
             t -> e("Search Submit error: ${t.message}")
         }))
     }
@@ -189,25 +186,18 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
         group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-        val completable = dataManager.trackSearchSubmit(searchTerm, arrayOf(
+        return dataManager.trackSearchSubmit(searchTerm, arrayOf(
                 Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
                 Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH
         ), encodedParams.toTypedArray())
-
-        if (this.broadcast) {
-            completable.subscribeOn(Schedulers.io()).subscribe {
-                context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
-            }
-        }
-
-        return completable
     }
 
     /**
      * Tracks search results loaded (a.k.a. search results viewed) events
      */
     fun trackSearchResultsLoaded(term: String, resultCount: Int) {
-        disposable.add(trackSearchResultsLoadedInternal(term, resultCount).subscribe({}, {
+        var completable = trackSearchResultsLoadedInternal(term, resultCount)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Results Loaded error: ${t.message}")
         }))
     }
@@ -222,7 +212,8 @@ object ConstructorIo {
      * Tracks search result click events
      */
     fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
-        disposable.add(trackSearchResultClickInternal(itemName, customerId, searchTerm, sectionName, resultID).subscribe({}, {
+        var completable = trackSearchResultClickInternal(itemName, customerId, searchTerm, sectionName, resultID)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Result Click error: ${t.message}")
         }))
     }
@@ -241,7 +232,8 @@ object ConstructorIo {
      * Tracks conversion (a.k.a add to cart) events
      */
     fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null) {
-        disposable.add(trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName).subscribe({}, {
+        var completable = trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Conversion error: ${t.message}")
         }))
     }
@@ -257,7 +249,8 @@ object ConstructorIo {
      * Tracks purchase events
      */
     fun trackPurchase(clientIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
-        disposable.add(trackPurchaseInternal(clientIds, revenue, orderID, sectionName).subscribe({}, {
+        var completable = trackPurchaseInternal(clientIds, revenue, orderID, sectionName)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Purchase error: ${t.message}")
         }))
     }
