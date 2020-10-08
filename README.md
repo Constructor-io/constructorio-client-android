@@ -12,145 +12,75 @@ Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/
 
 You can find this in your [Constructor.io dashboard](https://constructor.io/dashboard).  Contact sales if you'd like to sign up, or support if you believe your company already has an account.
 
-## 3. Implement the Autocomplete UI
-
-In your Application class add the following code with your key:
+## 3. Create a Client Instance
 
 ```kotlin
-override fun onCreate() {
-    super.onCreate()
-    ConstructorIo.init(this, "YOUR API KEY")
-    
-    val fragment = supportFragmentManager.findFragmentById(R.id.fragment_suggestions) as SuggestionsFragment
-    fragment.setConstructorListener(object : ConstructorListener {
-        override fun onSuggestionSelected(term: String, group: Group?, autocompleteSection: String?) {
-            Log.d(TAG, "onSuggestionSelected")
-        }
-        
-        override fun onQuerySentToServer(query: String) {
-            Log.d(TAG, "onQuerySentToServer")
-        }
-        
-        override fun onSuggestionsRetrieved(suggestions: List<Suggestion>) {
-            Log.d(TAG, "onSuggestionsRetrieved")
-        }
-        
-        override fun onErrorGettingSuggestions(error: Throwable) {
-            Log.d(TAG, "handle network error getting suggestion")
-        }
-    })
-}
+import io.constructor.core.ConstructorIo
+import io.constructor.core.ConstructorIoConfig
+
+// Create the client config
+let config = ConstructorIoConfig("YOUR API KEY")
+
+// Create the client instance
+ConstructorIo.init(this, config)
+
+// Set the user ID (if a logged in and known user) for cross device personalization
+ConstructorIo.userId = "uid"
 ```
 
-### Selecting Results
-To respond to a user selecting an autocomplete result, use the `onSuggestionSelected` method.  If the autocomplete result has both a suggested term to search for and a group to search within (as in Apples in Juice Drinks), the group will be passed into the method.
-
-### Performing Searches
-To respond to a user performing a search (instead of selecting an autocomplete result), use the `onQuerySentToServer` method.
-
-## 4. Customize the Autocomplete UI
-
-### Using the Default UI
-
-To use the default, out-of-the-box UI, add the Sample Suggestions Fragment to your layout:
-
-```xml
-<fragment
-    android:id="@+id/fragment_suggestions"
-    android:name="io.constructor.sample.SuggestionsFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
-```
-
-### Using a Custom UI
-
-To fully customize the UI, extend the `BaseSuggestionFragment` and the `BaseSuggestionsAdapter`
+## 4. Request Autocomplete Results
 
 ```kotlin
-class CustomSearchFragment : BaseSuggestionFragment() {
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        view?.backButton?.setOnClickListener {
-            view?.input?.text?.clear()
-            clearSuggestions()
-        }
-        view?.searchButton?.setOnClickListener { triggerSearch() }
+ConstructorIo.getAutocompleteResults("Dav")
+.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+.subscribe {
+  it.onValue {
+    it?.let {
+      view.renderData(it)
     }
-
-    // Return your custom adapter
-    override fun getSuggestionAdapter(): BaseSuggestionsAdapter {
-        return CustomSuggestionsAdapter()
-    }
-
-    // Return your id of the suggestion input field
-    override fun getSuggestionsInputId(): Int {
-        return R.id.input
-    }
-
-    // Return your id of the suggestion list
-    override fun getSuggestionListId(): Int {
-        return R.id.suggestions
-    }
-
-    // Return your progress indicator id, used when request is being in progress. Return 0 for no progress
-    override fun getProgressId(): Int {
-        return 0
-    }
-    
-    // Return your custom layout resource id for the fragment
-    override fun layoutId(): Int {
-        return R.layout.fragment_custom_suggestions
-    }
-
-}
-
-class CustomSuggestionsAdapter() : BaseSuggestionsAdapter() {
-    
-    // Triggered when inflating an item which is a suggestion.
-    override fun onViewTypeSuggestion(holder: ViewHolder, suggestion: String, highlightedSuggestion: Spannable, groupName: String?) {
-        holder.suggestionName.text = highlightedSuggestion
-        val spans = highlightedSuggestion.getSpans(0, highlightedSuggestion.length, StyleSpan::class.java)
-        spans.forEach { highlightedSuggestion.setSpan(ForegroundColorSpan(Color.parseColor("#222222")), highlightedSuggestion.getSpanStart(it), highlightedSuggestion.getSpanEnd(it), 0) }
-        groupName?.let { holder.suggestionGroupName.text = holder.suggestionGroupName.context.getString(R.string.suggestion_group, it) }
-    }
-
-    // Return your custom adapter item layout id for suggestion
-    override val itemLayoutId: Int
-        get() = R.layout.item_suggestion
-   
-    // Return your text view id - the text will be the suggestion.
-    override val suggestionNameId: Int
-        get() = R.id.suggestionName
-    
-    // Return your text view id - the text will be the suggestion group name, if present
-    override val suggestionGroupNameId: Int
-        get() = R.id.suggestionGroupName
-
+  }
 }
 ```
 
-## 5. Instrument Behavioral Events
+## 5. Request Search Results
+
+```kotlin
+var page = 1
+var perPage = 10
+var query = "Dave's bread"
+var selectedFacets: HashMap<String, MutableList<String>>? = null
+var selectedSortOption: SortOption? = null
+
+ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+.subscribe {
+  it.onValue {
+    it.searchData?.let {
+      view.renderData(it)
+    }
+  }
+}
+```
+
+## 6. Request Browse Events
+
+```kotlin
+// Coming end of October
+```
+
+## 7. Instrument Behavioral Events
 
 The Android Client sends behavioral events to [Constructor.io](http://constructor.io/) in order to continuously learn and improve results for future Autosuggest and Search requests.  The Client only sends events in response to being called by the consuming app or in response to user interaction . For example, if the consuming app never calls the SDK code, no events will be sent.  Besides the explicitly passed in event parameters, all user events contain a GUID based user ID that the client sets to identify the user as well as a session ID.
 
 Three types of these events exist:
 
 1. **General Events** are sent as needed when an instance of the Client is created or initialized
-1. **Autocomplete Events** measure user interaction with autocomplete results and extending from `BaseSuggestionFragment` sends them automatically.
-1. **Search Events** measure user interaction with search results and the consuming app has to explicitly instrument them itself
+1. **Autocomplete Events** measure user interaction with autocomplete results
+1. **Search Events** measure user interaction with search results
 
 ### Autocomplete Events
 
-If you decide to extend from the `BaseSuggestionFragment`, these events are sent automatically.
-
 ```kotlin
-import io.constructor.core.ConstructorIo
-import io.constructor.core.ConstructorIoConfig
-
-val config = ConstructorIoConfig("pharmacy-api-key")
-ConstructorIo.init(this, config)
-
 // Track when the user focuses into the search bar (searchTerm)
 ConstructorIo.trackInputFocus("")
 
@@ -163,15 +93,7 @@ ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 
 ### Search Events
 
-These events should be sent manually by the consuming app.
-
 ```kotlin
-import io.constructor.core.ConstructorIo
-import io.constructor.core.ConstructorIoConfig
-
-val config = ConstructorIoConfig("pharmacy-api-key")
-ConstructorIo.init(this, config)
-
 // Track when search results are loaded into view (searchTerm, resultCount)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789)
 
