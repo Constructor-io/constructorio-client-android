@@ -65,7 +65,22 @@ ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }
 ## 6. Request Browse Events
 
 ```kotlin
-// Coming end of October
+var page = 1
+var perPage = 10
+var filterName = "group_id"
+var filterValue = "Beverages"
+var selectedFacets: HashMap<String, MutableList<String>>? = null
+var selectedSortOption: SortOption? = null
+
+ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+.subscribe {
+  it.onValue {
+    it.browseData?.let {
+      view.renderData(it)
+    }
+  }
+}
 ```
 
 ## 7. Instrument Behavioral Events
@@ -105,4 +120,14 @@ ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "to
 
 // Track when products are purchased (customerIds, revenue, orderId)
 ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
+```
+
+### Browse Events
+
+```kotlin
+// Track when browse results are loaded into view (filterName, filterValue, resultCount)
+ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
+
+// Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage)
+ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4")
 ```

@@ -109,8 +109,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
-    fun trackBrowseResultClick(filterName: String, filterValue: String, itemName: String, customerId: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
-        return constructorApi.trackBrowseResultClick(filterName, filterValue, itemName, customerId, params.toMap(), encodedParams.toMap())
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
+        return constructorApi.trackBrowseResultClick(filterName, filterValue, customerId, resultPositionOnPage, params.toMap(), encodedParams.toMap())
     }
 
     fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {

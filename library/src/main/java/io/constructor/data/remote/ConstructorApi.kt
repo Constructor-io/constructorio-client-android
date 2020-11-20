@@ -64,8 +64,8 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
     fun trackBrowseResultClick(@Query("filter_name") filterName: String,
                                @Query("filter_value") filterValue: String,
-                               @Query("name") itemName: String,
                                @Query("customer_id") customerId: String,
+                               @Query("result_position_on_page") resultPositionOnPage: Int,
                                @QueryMap params: Map<String, String>,
                                @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 

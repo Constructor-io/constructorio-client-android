@@ -306,18 +306,18 @@ object ConstructorIo {
     /**
      * Tracks browse result click events
      */
-    fun trackBrowseResultClick(filterName: String, filterValue: String, itemName: String, customerId: String, sectionName: String? = null, resultID: String? = null) {
-        var completable = trackBrowseResultClickInternal(filterName, filterValue, itemName, customerId, sectionName, resultID)
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultID)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Result Click error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, itemName: String, customerId: String, sectionName: String? = null, resultID: String? = null): Completable {
+    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         val sName = sectionName ?: preferenceHelper.defaultItemSection
-        return dataManager.trackBrowseResultClick(filterName, filterValue, itemName, customerId, arrayOf(
+        return dataManager.trackBrowseResultClick(filterName, filterValue, customerId, resultPositionOnPage, arrayOf(
                 Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
         ), encodedParams.toTypedArray())
 

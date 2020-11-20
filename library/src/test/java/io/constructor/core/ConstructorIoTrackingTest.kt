@@ -395,10 +395,10 @@ class ConstructorIoTest {
     fun trackBrowseResultClick() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997").test()
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -406,10 +406,10 @@ class ConstructorIoTest {
     fun trackBrowseResultClickWithSectionAndResultID() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997", "Products", "3467632").test()
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4, "Products", "3467632").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -417,10 +417,10 @@ class ConstructorIoTest {
     fun trackBrowseResultClick500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997").test()
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
         assert(request.path.startsWith(path))
     }
 
@@ -429,10 +429,11 @@ class ConstructorIoTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997").test()
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
         assert(request.path.startsWith(path))
     }
+
 }
