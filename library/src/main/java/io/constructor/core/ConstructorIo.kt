@@ -9,6 +9,7 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.Suggestion
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -266,5 +267,23 @@ object ConstructorIo {
         val revenueString = revenue?.let { "%.2f".format(revenue) }
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
         return dataManager.trackPurchase(clientIds.toList(), revenueString, orderID, params.toTypedArray())
+    }
+
+    /**
+     * Returns browse results including filters, categories, sort options, etc.
+     */
+    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<BrowseResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
+        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
+        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
+        }
+        return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
 }

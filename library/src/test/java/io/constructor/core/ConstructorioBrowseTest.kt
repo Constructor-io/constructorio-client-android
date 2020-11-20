@@ -1,0 +1,119 @@
+package io.constructor.core
+
+import android.content.Context
+import io.constructor.data.local.PreferencesHelper
+import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.test.createTestDataManager
+import io.constructor.util.RxSchedulersOverrideRule
+import io.constructor.util.TestDataLoader
+import io.mockk.every
+import io.mockk.mockk
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import java.util.concurrent.TimeUnit
+
+class ConstructorIoBrowseTest {
+
+    @Rule
+    @JvmField
+    val overrideSchedulersRule = RxSchedulersOverrideRule()
+
+    private lateinit var mockServer: MockWebServer
+    private var constructorIo = ConstructorIo
+    private val ctx = mockk<Context>()
+    private val preferencesHelper = mockk<PreferencesHelper>()
+    private val configMemoryHolder = mockk<ConfigMemoryHolder>()
+
+    @Before
+    fun setup() {
+        mockServer = MockWebServer()
+        mockServer.start()
+
+        every { ctx.applicationContext } returns ctx
+
+        every { preferencesHelper.apiKey } returns "silver-key"
+        every { preferencesHelper.id } returns "guapo-the-guid"
+        every { preferencesHelper.serviceUrl } returns mockServer.hostName
+        every { preferencesHelper.port } returns mockServer.port
+        every { preferencesHelper.scheme } returns "http"
+        every { preferencesHelper.defaultItemSection } returns "Products"
+        every { preferencesHelper.getSessionId(any(), any()) } returns 92
+
+        every { configMemoryHolder.autocompleteResultCount } returns null
+        every { configMemoryHolder.userId } returns "player-two"
+        every { configMemoryHolder.testCellParams } returns emptyList()
+
+        val config = ConstructorIoConfig("dummyKey")
+        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
+
+        constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
+    }
+
+    @Test
+    fun getBrowseResults() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
+        observer.assertComplete().assertValue {
+            it.get()!!.browseData.browseResults!!.size == 24
+            it.get()!!.browseData.browseResults!![0].value == "Crystal Geyser Natural Alpine Spring Water - 1 Gallon"
+            it.get()!!.browseData.browseResults!![0].result.id == "108200440"
+            it.get()!!.browseData.browseResults!![0].result.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108200440.png"
+            it.get()!!.browseData.browseResults!![0].result.metadata["price"] == 1.25
+            it.get()!!.browseData.facets!!.size == 3
+            it.get()!!.browseData.facets!![0].displayName == "Brand"
+            it.get()!!.browseData.facets!![0].type == "multiple"
+            it.get()!!.browseData.groups!!.size == 1
+            it.get()!!.browseData.resultCount == 367
+        }
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.1.1&_dt"
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun getBrowseResultsWithServerError() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
+        observer.assertComplete().assertValue {
+            it.networkError
+        }
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.1.1&_dt"
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun getBrowseResultsWithTimeout() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
+        observer.assertComplete().assertValue {
+            it.isError
+        }
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.1.1&_dt"
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun getBrowseResultsWithEmptyResponse() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response_empty.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
+        observer.assertComplete().assertValue {
+            it.get()!!.browseData.browseResults!!.isEmpty()
+            it.get()!!.browseData.facets!!.isEmpty()
+            it.get()!!.browseData.groups!!.isEmpty()
+            it.get()!!.browseData.resultCount == 0
+        }
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.1.1&_dt"
+        assert(request.path.startsWith(path))
+    }
+}

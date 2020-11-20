@@ -58,4 +58,7 @@ interface ConstructorApi {
     @GET
     fun getSearchResults(@Url searchUrl: String): Single<Result<ResponseBody>>
 
+    @GET
+    fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>
+
 }

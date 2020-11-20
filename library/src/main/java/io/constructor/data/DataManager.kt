@@ -3,6 +3,7 @@ package io.constructor.data
 import com.squareup.moshi.Moshi
 import io.constructor.data.model.Suggestion
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.reactivex.Completable
@@ -82,6 +83,30 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
 
     fun trackPurchase(customerIds: List<String>, revenue: String? = null, orderID: String, params: Array<Pair<String, String>>): Completable {
         return constructorApi.trackPurchase(customerIds, revenue, orderID, params.toMap())
+    }
+
+    fun getBrowseResults(filterName: String, filterValue: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE.format(filterName, filterValue)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getBrowseResults(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
+                    if (it.isSuccessful){
+                        val adapter = moshi.adapter(BrowseResponse::class.java)
+                        val response = it.body()?.string()
+                        val result = response?.let { adapter.fromJson(it) }
+                        result?.rawData = response
+                        ConstructorData.of(result!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(result.error())
+            } else {
+                ConstructorData.error(result.error())
+            }
+        }.toObservable()
     }
 
 }
