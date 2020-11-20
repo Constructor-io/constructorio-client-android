@@ -356,4 +356,83 @@ class ConstructorIoTest {
         val path = "/autocomplete/TERM_UNKNOWN/purchase?customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&order_id=ORD-1312343&autocomplete_section=Recommendations&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
         assert(request.path.startsWith(path))
     }
+
+    @Test
+    fun trackBrowseResultLoaded() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/browse_result_load?filter_name=group_id&filter_value=Movies&num_results=10&action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultLoaded500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/browse_result_load?filter_name=group_id&filter_value=Movies&num_results=10&action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultLoadedTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/browse_result_load?filter_name=group_id&filter_value=Movies&num_results=10&action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultClick() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultClickWithSectionAndResultID() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997", "Products", "3467632").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultClick500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997").test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultClickTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","titanic replica", "TIT-REP-1997").test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&name=titanic%20replica&customer_id=TIT-REP-1997&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.1.1&_dt=";
+        assert(request.path.startsWith(path))
+    }
 }

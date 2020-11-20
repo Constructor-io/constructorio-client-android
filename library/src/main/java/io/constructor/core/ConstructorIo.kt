@@ -286,4 +286,41 @@ object ConstructorIo {
         }
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
+
+    /**
+     * Tracks browse results loaded (a.k.a. browse results viewed) events
+     */
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int) {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Browse Results Loaded error: ${t.message}")
+        }))
+    }
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        return dataManager.trackBrowseResultsLoaded(filterName, filterValue, resultCount, arrayOf(
+                Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS
+        ))
+    }
+
+    /**
+     * Tracks browse result click events
+     */
+    fun trackBrowseResultClick(filterName: String, filterValue: String, itemName: String, customerId: String, sectionName: String? = null, resultID: String? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, itemName, customerId, sectionName, resultID)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Browse Result Click error: ${t.message}")
+        }))
+    }
+    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, itemName: String, customerId: String, sectionName: String? = null, resultID: String? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
+        val sName = sectionName ?: preferenceHelper.defaultItemSection
+        return dataManager.trackBrowseResultClick(filterName, filterValue, itemName, customerId, arrayOf(
+                Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
+        ), encodedParams.toTypedArray())
+
+    }
+
 }

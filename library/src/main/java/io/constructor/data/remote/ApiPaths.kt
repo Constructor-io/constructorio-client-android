@@ -12,5 +12,5 @@ object ApiPaths {
     const val URL_SEARCH = "search/%s"
     const val URL_BROWSE = "browse/%s/%s"
     const val URL_BROWSE_RESULT_CLICK_EVENT = "v2/behavioral_action/browse_result_click"
-    const val URL_BROWSE_RESULT_LOAD = "v2/behavioral_action/browse_result_load"
+    const val URL_BROWSE_RESULT_LOAD_EVENT = "v2/behavioral_action/browse_result_load"
 }

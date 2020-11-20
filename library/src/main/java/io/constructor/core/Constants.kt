@@ -43,6 +43,7 @@ class Constants {
         const val SEARCH_SUGGESTIONS = "Search Suggestions"
         const val PRODUCTS = "Products"
         const val EVENT_SEARCH_RESULTS = "search-results"
+        const val EVENT_BROWSE_RESULTS = "browse-results"
         const val EVENT_INPUT_FOCUS = "focus"
     }
 }
