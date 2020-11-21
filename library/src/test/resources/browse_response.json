@@ -1,0 +1,1237 @@
+{
+  "request": {
+    "page": 1,
+    "num_results_per_page": 24,
+    "section": "Products",
+    "browse_filter_name": "group_id",
+    "browse_filter_value": "Beverages",
+    "term": "",
+    "fmt_options": {
+      "groups_start": "current",
+      "groups_max_depth": 1
+    },
+    "sort_by": "relevance",
+    "sort_order": "descending",
+    "features": {
+      "query_items": true,
+      "auto_generated_refined_query_rules": true,
+      "personalization": true,
+      "manual_searchandizing": true,
+      "filter_items": true
+    },
+    "feature_variants": {
+      "query_items": null,
+      "auto_generated_refined_query_rules": null,
+      "personalization": null,
+      "manual_searchandizing": null,
+      "filter_items": null
+    },
+    "searchandized_items": {}
+  },
+  "response": {
+    "facets": [
+      {
+        "display_name": "Brand",
+        "name": "Brand",
+        "type": "multiple",
+        "options": [
+          {
+            "status": "",
+            "count": 12,
+            "display_name": "Crystal Geyser",
+            "value": "Crystal Geyser",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 36,
+            "display_name": "Coca-Cola",
+            "value": "Coca-Cola",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 28,
+            "display_name": "PepsiCo",
+            "value": "PepsiCo",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 12,
+            "display_name": "Coke",
+            "value": "Coke",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 22,
+            "display_name": "Arrowhead",
+            "value": "Arrowhead",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 35,
+            "display_name": "Pepsi",
+            "value": "Pepsi",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 44,
+            "display_name": "Coca Cola",
+            "value": "Coca Cola",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 37,
+            "display_name": "JM Smucker",
+            "value": "JM Smucker",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 17,
+            "display_name": "Sprite",
+            "value": "Sprite",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 31,
+            "display_name": "Monster Beverage",
+            "value": "Monster Beverage",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 23,
+            "display_name": "Dr Pepper",
+            "value": "Dr Pepper",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 7,
+            "display_name": "Hershey",
+            "value": "Hershey",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 10,
+            "display_name": "LaCroix",
+            "value": "LaCroix",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 33,
+            "display_name": "Ocean Spray",
+            "value": "Ocean Spray",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 87,
+            "display_name": "Starbucks",
+            "value": "Starbucks",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 18,
+            "display_name": "Capri Sun",
+            "value": "Capri Sun",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 21,
+            "display_name": "Canada Dry",
+            "value": "Canada Dry",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 35,
+            "display_name": "PEPSICO, INC.",
+            "value": "PEPSICO, INC.",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 7,
+            "display_name": "Welchs",
+            "value": "Welchs",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 6,
+            "display_name": "Coffeemate",
+            "value": "Coffeemate",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 72,
+            "display_name": "Gatorade",
+            "value": "Gatorade",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 24,
+            "display_name": "V8",
+            "value": "V8",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 34,
+            "display_name": "Peets Coffee",
+            "value": "Peets Coffee",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 7,
+            "display_name": "Unilever",
+            "value": "Unilever",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 22,
+            "display_name": "Nestle Waters",
+            "value": "Nestle Waters",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 17,
+            "display_name": "Keurig",
+            "value": "Keurig",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 11,
+            "display_name": "A&W",
+            "value": "A&W",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 46,
+            "display_name": "O Organics",
+            "value": "O Organics",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 38,
+            "display_name": "Signature Kitchens",
+            "value": "Signature Kitchens",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 24,
+            "display_name": "Motts",
+            "value": "Motts",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 30,
+            "display_name": "Dr Pepper/Seven Up",
+            "value": "Dr Pepper/Seven Up",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 23,
+            "display_name": "Naked Juice",
+            "value": "Naked Juice",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 5,
+            "display_name": "Tree Top",
+            "value": "Tree Top",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 22,
+            "display_name": "Snapple",
+            "value": "Snapple",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 26,
+            "display_name": "Minute Maid",
+            "value": "Minute Maid",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 5,
+            "display_name": "Glaceau",
+            "value": "Glaceau",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 4,
+            "display_name": "7 Up",
+            "value": "7 Up",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 80,
+            "display_name": "Signature Select",
+            "value": "Signature Select",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 41,
+            "display_name": "Kraft Foods",
+            "value": "Kraft Foods",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 6,
+            "display_name": "Dole",
+            "value": "Dole",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 17,
+            "display_name": "vitaminwater",
+            "value": "vitaminwater",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 15,
+            "display_name": "Floridas Natural",
+            "value": "Floridas Natural",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 43,
+            "display_name": "AriZona",
+            "value": "AriZona",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 20,
+            "display_name": "Fanta",
+            "value": "Fanta",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 4,
+            "display_name": "Safeway",
+            "value": "Safeway",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 24,
+            "display_name": "F Gavina & Sons",
+            "value": "F Gavina & Sons",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 19,
+            "display_name": "Powerade",
+            "value": "Powerade",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 5,
+            "display_name": "S Martinelli",
+            "value": "S Martinelli",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 11,
+            "display_name": "Nestle",
+            "value": "Nestle",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 6,
+            "display_name": "Signature Farms",
+            "value": "Signature Farms",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "R.C. Bigelow, Inc.",
+            "value": "R.C. Bigelow, Inc.",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 4,
+            "display_name": "Safeway Inc.",
+            "value": "Safeway Inc.",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "Nesquik",
+            "value": "Nesquik",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 16,
+            "display_name": "Bai",
+            "value": "Bai",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 6,
+            "display_name": "Diet Coke",
+            "value": "Diet Coke",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 11,
+            "display_name": "Sunkist",
+            "value": "Sunkist",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 27,
+            "display_name": "Red Bull",
+            "value": "Red Bull",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "Yuban Coffee",
+            "value": "Yuban Coffee",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 13,
+            "display_name": "Kevita",
+            "value": "Kevita",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 5,
+            "display_name": "Natural Waters",
+            "value": "Natural Waters",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 22,
+            "display_name": "Bigelow Tea",
+            "value": "Bigelow Tea",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 8,
+            "display_name": "Schweppes",
+            "value": "Schweppes",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 28,
+            "display_name": "Kool-Aid",
+            "value": "Kool-Aid",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 5,
+            "display_name": "Pom Wonderful",
+            "value": "Pom Wonderful",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 17,
+            "display_name": "Rockstar",
+            "value": "Rockstar",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 8,
+            "display_name": "Cascade",
+            "value": "Cascade",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 6,
+            "display_name": "Voss",
+            "value": "Voss",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "Campbell Soup",
+            "value": "Campbell Soup",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 3,
+            "display_name": "Barqs",
+            "value": "Barqs",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 6,
+            "display_name": "ConAgra Foods",
+            "value": "ConAgra Foods",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "The Gatorade Co",
+            "value": "The Gatorade Co",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 26,
+            "display_name": "Twinings",
+            "value": "Twinings",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 11,
+            "display_name": "Bolthouse Farms",
+            "value": "Bolthouse Farms",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "Ito En",
+            "value": "Ito En",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "Farmer Brothers",
+            "value": "Farmer Brothers",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 2,
+            "display_name": "CJR Bottling",
+            "value": "CJR Bottling",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "VitaNourish",
+            "value": "VitaNourish",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "VitaCup",
+            "value": "VitaCup",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "TC Heartland",
+            "value": "TC Heartland",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "Southern Tea",
+            "value": "Southern Tea",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "Bread & Chocolate",
+            "value": "Bread & Chocolate",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "Brad Barry",
+            "value": "Brad Barry",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "Aspire Beverage",
+            "value": "Aspire Beverage",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "American Beverage",
+            "value": "American Beverage",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 1,
+            "display_name": "11 Productions",
+            "value": "11 Productions",
+            "data": {
+
+            }
+          }
+        ],
+        "data": {
+
+        }
+      },
+      {
+        "display_name": "Nutrition",
+        "name": "Nutrition",
+        "type": "multiple",
+        "options": [
+          {
+            "status": "",
+            "count": 1193,
+            "display_name": "Kosher",
+            "value": "Kosher",
+            "data": null
+          },
+          {
+            "status": "",
+            "count": 360,
+            "display_name": "Gluten Free",
+            "value": "Gluten Free",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 163,
+            "display_name": "Sugar Free",
+            "value": "Sugar Free",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 21,
+            "display_name": "Fat Free",
+            "value": "Fat Free",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 19,
+            "display_name": "Low Fat",
+            "value": "Low Fat",
+            "data": {
+
+            }
+          },
+          {
+            "status": "",
+            "count": 135,
+            "display_name": "Organic",
+            "value": "Organic",
+            "data": {
+
+            }
+          }
+        ],
+        "data": {
+
+        }
+      },
+      {
+        "min": 0.77,
+        "max": 28.09,
+        "display_name": "Price",
+        "name": "Price",
+        "data": {
+
+        },
+        "type": "range",
+        "status": {
+
+        }
+      }
+    ],
+    "groups": [
+      {
+        "group_id": "Beverages",
+        "display_name": "Beverages",
+        "count": 2126,
+        "data": null,
+        "children": [
+
+        ],
+        "parents": [
+          {
+            "display_name": "All",
+            "group_id": "all"
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "matched_terms": [
+
+        ],
+        "data": {
+          "id": "108200440",
+          "url": "/",
+          "price": 1.25,
+          "facets": [
+            {
+              "name": "Brand",
+              "values": [
+                "Crystal Geyser"
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                517
+              ]
+            },
+            {
+              "name": "Margin",
+              "values": [
+                0.07
+              ]
+            },
+            {
+              "name": "Nutrition",
+              "values": [
+                "Kosher"
+              ]
+            },
+            {
+              "name": "Price",
+              "values": [
+                1.25
+              ]
+            }
+          ],
+          "keywords": [
+            "water"
+          ],
+          "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108200440.png",
+          "description": "Bottled at the source. CrystalGeyserPlease.com. Bottled at the source, of course. Look closely at our source map on each bottle of Crystal Geyser Alpine Spring Water and locate our origins. No one else shows you a source map. We do because it's easy to tell the truth. Crystal Geyser bottles 100% of its water at the spring source; we're the only national spring water that does. Please recycle. Find us on Facebook. American Forests americanforests.org. Making a difference: CG Roxane is a proud sponsor of American Forests' tree-planting for environmental restoration. Crystal Geyser Alpine Spring Water: Always bottled at the spring to ensure quality, taste and freshness. There is a difference. For more information and to obtain additional consumer information relating to water quality, including a bottled water report, contact CG Roxane LLC at 1-800-4-GEYSER. Comments? 1-800-4-GEYSER.",
+          "weighted_keywords": {
+            "water": 2
+          },
+          "groups": [
+            {
+              "group_id": "Beverages",
+              "display_name": "Beverages",
+              "path": "/all",
+              "path_list": [
+                {
+                  "id": "all",
+                  "display_name": "All"
+                }
+              ]
+            }
+          ]
+        },
+        "value": "Crystal Geyser Natural Alpine Spring Water - 1 Gallon",
+        "is_slotted": false
+      },
+      {
+        "matched_terms": [
+
+        ],
+        "data": {
+          "id": "108010222",
+          "url": "/",
+          "price": 8.43,
+          "facets": [
+            {
+              "name": "Brand",
+              "values": [
+                "Coca-Cola"
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                590
+              ]
+            },
+            {
+              "name": "Margin",
+              "values": [
+                0.11
+              ]
+            },
+            {
+              "name": "Price",
+              "values": [
+                8.43
+              ]
+            }
+          ],
+          "keywords": [
+            "cola"
+          ],
+          "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108010222.png",
+          "description": "Original taste. Per 1 Can Serving: 140 calories; 0 g sat fat (0% DV); 45 mg sodium (2% DV); 39 g sugars. Please recycle cans & cartons. Caffeine Content: 34 mg/12 fl oz. Consumer information call 1-800-438-2653. coke.com. SmartLabel. Sip & Scan. No app required. Open coke.com on phone. Scan icon. Enjoy more.",
+          "groups": [
+            {
+              "group_id": "Beverages",
+              "display_name": "Beverages",
+              "path": "/all",
+              "path_list": [
+                {
+                  "id": "all",
+                  "display_name": "All"
+                }
+              ]
+            }
+          ]
+        },
+        "value": "Coca-Cola Soda - 12-12 Fl. Oz.",
+        "is_slotted": false
+      },
+      {
+        "matched_terms": [
+
+        ],
+        "data": {
+          "id": "960035196",
+          "url": "/",
+          "price": 7.99,
+          "facets": [
+            {
+              "name": "Brand",
+              "values": [
+                "Coca-Cola"
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                727
+              ]
+            },
+            {
+              "name": "Margin",
+              "values": [
+                0.05
+              ]
+            },
+            {
+              "name": "Price",
+              "values": [
+                7.99
+              ]
+            }
+          ],
+          "keywords": [
+            "cola"
+          ],
+          "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960035196.png",
+          "description": "Per 1 Can Serving: 140 calories; 0 g sat fat (0% DV); 45 mg sodium (2% DV); 39 g sugars. MyCokeRewards.com. Please recycle cans & cartons. Find the code inside. Enter code online at MyCokeRewards.com. See rules online or call 1-866-674-2653, open to legal residents of the 50 US (& D.C.) age 13 and older. Low sodium. Caffeine Content: 34 mg/12 fl oz. Consumer information call 1-800-438-2653 or Coke.com. Coke original formula.",
+          "groups": [
+            {
+              "group_id": "Beverages",
+              "display_name": "Beverages",
+              "path": "/all",
+              "path_list": [
+                {
+                  "id": "all",
+                  "display_name": "All"
+                }
+              ]
+            }
+          ]
+        },
+        "value": "Coca-Cola Classic Soda - 20-12 Fl. Oz.",
+        "is_slotted": false
+      },
+      {
+        "matched_terms": [
+
+        ],
+        "data": {
+          "id": "960160365",
+          "url": "/",
+          "price": 1.11,
+          "facets": [
+            {
+              "name": "Brand",
+              "values": [
+                "Crystal Geyser"
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                659
+              ]
+            },
+            {
+              "name": "Margin",
+              "values": [
+                0.12
+              ]
+            },
+            {
+              "name": "Price",
+              "values": [
+                1.11
+              ]
+            }
+          ],
+          "keywords": [
+            "water"
+          ],
+          "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960160365.png",
+          "description": "Bottled at the source. 100% natural spring water. There is a difference! All purified waters are man made. Crystal Geyser Alpine Spring Water is natural. Things are that simple. Now in new eco-friendly packaging. Bottled at the Spring source Olancha, California; Weed, California; Benton, Tennessee; Moultonborough, New Hampshire, Salem, South Carolina; Normal, Arkansas; Johnstown, New York; See bottle label for source and license information. www.crystalgeyserasw.com.",
+          "groups": [
+            {
+              "group_id": "Beverages",
+              "display_name": "Beverages",
+              "path": "/all",
+              "path_list": [
+                {
+                  "id": "all",
+                  "display_name": "All"
+                }
+              ]
+            }
+          ]
+        },
+        "value": "Crystal Geyser Spring Water Natural Alpine - 24-16.9 Fl. Oz.",
+        "is_slotted": false
+      },
+      {
+        "matched_terms": [
+
+        ],
+        "data": {
+          "id": "960137162",
+          "url": "/",
+          "price": 1.25,
+          "facets": [
+            {
+              "name": "Brand",
+              "values": [
+                "Crystal Geyser"
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                413
+              ]
+            },
+            {
+              "name": "Margin",
+              "values": [
+                0.1
+              ]
+            },
+            {
+              "name": "Nutrition",
+              "values": [
+                "Kosher"
+              ]
+            },
+            {
+              "name": "Price",
+              "values": [
+                1.25
+              ]
+            }
+          ],
+          "keywords": [
+            "water",
+            "sparkling"
+          ],
+          "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960137162.png",
+          "description": "No calories. Very low sodium. Contains no juice. The ultimate refresher.",
+          "groups": [
+            {
+              "group_id": "Beverages",
+              "display_name": "Beverages",
+              "path": "/all",
+              "path_list": [
+                {
+                  "id": "all",
+                  "display_name": "All"
+                }
+              ]
+            }
+          ]
+        },
+        "value": "Crystal Geyser Mineral Water Sparkling Natural Lime Flavor Bonus - 42.3 Fl. Oz.",
+        "is_slotted": false
+      }
+    ],
+    "sort_options": [
+
+    ],
+    "total_num_results": 367,
+    "features": [
+      {
+        "feature_name": "auto_generated_refined_query_rules",
+        "display_name": "Affinity Engine",
+        "enabled": true,
+        "variant": null
+      },
+      {
+        "feature_name": "filter_items",
+        "display_name": "Filter-item boosts",
+        "enabled": true,
+        "variant": null
+      },
+      {
+        "feature_name": "manual_searchandizing",
+        "display_name": "Searchandizing",
+        "enabled": true,
+        "variant": null
+      },
+      {
+        "feature_name": "personalization",
+        "display_name": "Personalization",
+        "enabled": true,
+        "variant": null
+      },
+      {
+        "feature_name": "query_items",
+        "display_name": "Learn To Rank",
+        "enabled": true,
+        "variant": null
+      }
+    ]
+  },
+  "result_id": "4cca9bb4-b5c4-4e15-af7a-5d68ee557d93"
+}

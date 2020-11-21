@@ -9,6 +9,7 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.Group
 import io.constructor.data.model.Suggestion
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -267,4 +268,59 @@ object ConstructorIo {
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
         return dataManager.trackPurchase(clientIds.toList(), revenueString, orderID, params.toTypedArray())
     }
+
+    /**
+     * Returns browse results including filters, categories, sort options, etc.
+     */
+    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<BrowseResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
+        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
+        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
+        }
+        return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Tracks browse results loaded (a.k.a. browse results viewed) events
+     */
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int) {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Browse Results Loaded error: ${t.message}")
+        }))
+    }
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        return dataManager.trackBrowseResultsLoaded(filterName, filterValue, resultCount, arrayOf(
+                Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS
+        ))
+    }
+
+    /**
+     * Tracks browse result click events
+     */
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultID)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Browse Result Click error: ${t.message}")
+        }))
+    }
+    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
+        val sName = sectionName ?: preferenceHelper.defaultItemSection
+        return dataManager.trackBrowseResultClick(filterName, filterValue, customerId, resultPositionOnPage, arrayOf(
+                Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
+        ), encodedParams.toTypedArray())
+
+    }
+
 }
