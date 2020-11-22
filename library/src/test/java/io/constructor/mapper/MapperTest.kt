@@ -8,8 +8,10 @@ class MapperTest {
 
     @Test
     fun mapDataToViewModel() {
-        val suggestions = TestDataLoader.loadResponse()!!.sections.suggestions
-        val viewModels = Mapper.toSuggestionsViewModel(suggestions)
-        assertEquals(10, viewModels.size)
+        val response = TestDataLoader.loadResponse()
+        val viewModels = response?.let { Mapper.toSuggestionsViewModel(it) }
+        if (viewModels != null) {
+            assertEquals(5, viewModels.size)
+        }
     }
 }

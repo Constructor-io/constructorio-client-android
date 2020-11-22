@@ -46,7 +46,7 @@ constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<Su
         }
         disposables.add(ConstructorIo.getAutocompleteResults(text).io2ui().subscribe { data ->
             data.onValue {
-                it?.let {
+                it.let {
                     mvpView.showSuggestions(it, preferencesHelper.groupsShownForFirstTerm)
                 }
             }

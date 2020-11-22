@@ -58,16 +58,16 @@ class ConstructorIoBrowseTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
         observer.assertComplete().assertValue {
-            it.get()!!.browseData.browseResults!!.size == 24
-            it.get()!!.browseData.browseResults!![0].value == "Crystal Geyser Natural Alpine Spring Water - 1 Gallon"
-            it.get()!!.browseData.browseResults!![0].result.id == "108200440"
-            it.get()!!.browseData.browseResults!![0].result.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108200440.png"
-            it.get()!!.browseData.browseResults!![0].result.metadata["price"] == 1.25
-            it.get()!!.browseData.facets!!.size == 3
-            it.get()!!.browseData.facets!![0].displayName == "Brand"
-            it.get()!!.browseData.facets!![0].type == "multiple"
-            it.get()!!.browseData.groups!!.size == 1
-            it.get()!!.browseData.resultCount == 367
+            it.get()!!.response?.results!!.size == 24
+            it.get()!!.response?.results!![0].value == "Crystal Geyser Natural Alpine Spring Water - 1 Gallon"
+            it.get()!!.response?.results!![0].data.id == "108200440"
+            it.get()!!.response?.results!![0].data.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108200440.png"
+            it.get()!!.response?.results!![0].data.metadata?.get("price") == 1.25
+            it.get()!!.response?.facets!!.size == 3
+            it.get()!!.response?.facets!![0].displayName == "Brand"
+            it.get()!!.response?.facets!![0].type == "multiple"
+            it.get()!!.response?.groups!!.size == 1
+            it.get()!!.response?.resultCount == 367
         }
         val request = mockServer.takeRequest()
         val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.1.1&_dt"
@@ -107,10 +107,10 @@ class ConstructorIoBrowseTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
         observer.assertComplete().assertValue {
-            it.get()!!.browseData.browseResults!!.isEmpty()
-            it.get()!!.browseData.facets!!.isEmpty()
-            it.get()!!.browseData.groups!!.isEmpty()
-            it.get()!!.browseData.resultCount == 0
+            it.get()!!.response?.results!!.isEmpty()
+            it.get()!!.response?.facets!!.isEmpty()
+            it.get()!!.response?.groups!!.isEmpty()
+            it.get()!!.response?.resultCount == 0
         }
         val request = mockServer.takeRequest()
         val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.1.1&_dt"

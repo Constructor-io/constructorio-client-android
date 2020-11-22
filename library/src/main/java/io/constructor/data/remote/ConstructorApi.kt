@@ -1,7 +1,7 @@
 package io.constructor.data.remote
 
 import io.constructor.core.Constants
-import io.constructor.data.model.AutocompleteResult
+import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -12,7 +12,7 @@ interface ConstructorApi {
 
     @GET(ApiPaths.URL_AUTOCOMPLETE)
     fun getAutocompleteResults(@Path("value") value: String,
-                               @QueryMap data: Map<String, String>): Single<Result<AutocompleteResult>>
+                               @QueryMap data: Map<String, String>): Single<Result<ResponseBody>>
 
     @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String,

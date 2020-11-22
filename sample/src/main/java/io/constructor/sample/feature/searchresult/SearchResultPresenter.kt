@@ -1,22 +1,22 @@
 package io.constructor.sample.feature.searchresult
 
 import io.constructor.core.ConstructorIo
-import io.constructor.data.model.search.SearchResult
-import io.constructor.data.model.search.SearchFacet
-import io.constructor.data.model.search.SortOption
+import io.constructor.data.model.common.Result
+import io.constructor.data.model.common.FilterFacet
+import io.constructor.data.model.common.FilterSortOption
 import io.constructor.sample.common.BasePresenter
 import io.constructor.sample.extensions.io2ui
 import io.constructor.sample.extensions.plusAssign
 
 class SearchResultPresenter(view: SearchView) : BasePresenter<SearchView>(view) {
 
-    var availableFacets: List<SearchFacet>? = null
-    var availableSortOptions: List<SortOption>? = null
+    var availableFacets: List<FilterFacet>? = null
+    var availableFilterSortOptions: List<FilterSortOption>? = null
     private var page = 1
     private val limit = 10
     private lateinit var query: String
     var selectedFacets: HashMap<String, MutableList<String>>? = null
-    var selectedSortOption: SortOption? = null
+    var selectedFilterSortOption: FilterSortOption? = null
 
     private var totalCount: Int? = null
 
@@ -38,14 +38,14 @@ class SearchResultPresenter(view: SearchView) : BasePresenter<SearchView>(view) 
     }
 
     private fun loadInternal(firstRun: Boolean) {
-        compositeDisposable += ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder).io2ui().subscribe {
+        compositeDisposable += ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedFilterSortOption?.sortBy, sortOrder = selectedFilterSortOption?.sortOrder).io2ui().subscribe {
             it.onValue {
                 if (firstRun) {
-                    availableFacets = it.searchData.facets
-                    availableSortOptions = it.searchData.sortOptions
-                    ConstructorIo.trackSearchResultsLoaded(query, it.searchData.resultCount)
+                    availableFacets = it.response?.facets
+                    availableFilterSortOptions = it.response?.filterSortOptions
+                    it.response?.resultCount?.let { it1 -> ConstructorIo.trackSearchResultsLoaded(query, it1) }
                 }
-                it.searchData?.let {
+                it.response?.let {
                     page += 1
                     totalCount = it.resultCount
                     view.renderData(it, totalCount!!)
@@ -54,8 +54,8 @@ class SearchResultPresenter(view: SearchView) : BasePresenter<SearchView>(view) 
         }
     }
 
-    fun handleClick(it: SearchResult, query: String) {
-        ConstructorIo.trackSearchResultClick(it.value, it.result.id, query)
+    fun handleClick(it: Result, query: String) {
+        it.data.id?.let { it1 -> ConstructorIo.trackSearchResultClick(it.value, it1, query) }
         view.navigateToDetails(it)
     }
 
@@ -66,9 +66,9 @@ class SearchResultPresenter(view: SearchView) : BasePresenter<SearchView>(view) 
         loadNextDataBatch()
     }
 
-    fun sortOptionSelected(option: SortOption?) {
+    fun sortOptionSelected(optionFilter: FilterSortOption?) {
         page = 1
-        selectedSortOption = option
+        selectedFilterSortOption = optionFilter
         view.clearData()
         loadNextDataBatch()
     }

@@ -1,6 +1,6 @@
 package io.constructor.sample.feature.cart
 
-import io.constructor.data.model.search.SearchResult
+import io.constructor.data.model.common.Result
 import io.constructor.sample.common.BasePresenter
 import io.constructor.sample.data.CartDataStorage
 import io.constructor.sample.feature.checkout.CheckoutView
@@ -12,12 +12,12 @@ class CartPresenter(view: CheckoutView, private val cartStorage: CartDataStorage
         view.renderContent(content)
     }
 
-    fun removeFromCart(item: SearchResult) {
+    fun removeFromCart(item: Result) {
         cartStorage.removeFromCart(item)
         loadCartContents()
     }
 
-    fun addToCart(it: SearchResult) {
+    fun addToCart(it: Result) {
         cartStorage.addToCart(it)
         loadCartContents()
     }

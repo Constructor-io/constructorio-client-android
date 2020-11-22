@@ -3,7 +3,7 @@ package io.constructor.sample.feature.cart
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import io.constructor.data.model.search.SearchResult
+import io.constructor.data.model.common.Result
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.di.DependencyProvider
@@ -44,7 +44,7 @@ class CartActivity : BaseActivity<CartPresenter>(), CheckoutView {
         }
     }
 
-    override fun renderContent(content: LinkedHashMap<String, Pair<SearchResult, Int>>) {
+    override fun renderContent(content: LinkedHashMap<String, Pair<Result, Int>>) {
         cartContent.layoutManager = LinearLayoutManager(this)
         adapter = CartContentAdapter({
             ProductDetailActivity.start(this, it.first)

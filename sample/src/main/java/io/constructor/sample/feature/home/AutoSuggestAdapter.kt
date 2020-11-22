@@ -2,15 +2,16 @@ package io.constructor.sample.feature.home
 
 import android.content.Context
 import android.widget.ArrayAdapter
-import io.constructor.data.model.Suggestion
+import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.common.Result
 
 class AutoSuggestAdapter(context: Context, resource: Int) : ArrayAdapter<String>(context, resource) {
 
-    private val data = mutableListOf<Suggestion>()
+    private val data = mutableListOf<Result>()
 
-    fun setData(suggestions: List<Suggestion>) {
+    fun setData(suggestions: AutocompleteResponse) {
         data.clear()
-        data.addAll(suggestions)
+        suggestions.sections?.get("Search Suggestions")?.let { data.addAll(it) }
         notifyDataSetChanged()
     }
 
@@ -18,7 +19,7 @@ class AutoSuggestAdapter(context: Context, resource: Int) : ArrayAdapter<String>
         return data[position].value
     }
 
-    fun getSuggestion(position: Int): Suggestion {
+    fun getSuggestion(position: Int): Result {
         return data[position]
     }
 

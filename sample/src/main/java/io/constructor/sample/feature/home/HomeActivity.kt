@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import io.constructor.data.model.Suggestion
+import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.feature.cart.CartActivity
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
 
-    override fun renderAutcompleteData(it: List<Suggestion>) {
+    override fun renderAutocompleteData(it: AutocompleteResponse) {
         autocompleteAdapter.setData(it)
         autocompleteAdapter.notifyDataSetChanged()
     }
@@ -65,7 +65,7 @@ class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
     private fun setupSearch() {
         autocompleteAdapter = AutoSuggestAdapter(this, android.R.layout.simple_dropdown_item_1line)
         searchInput.setAdapter(autocompleteAdapter)
-        searchInput.setOnItemClickListener { parent, view, position, id ->
+        searchInput.setOnItemClickListener { _, _, position, _ ->
             val item = autocompleteAdapter.getSuggestion(position)
             SearchResultActivity.start(this, item.value)
         }

@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import io.constructor.data.model.search.SearchResult
-import io.constructor.data.model.search.SearchData
+import io.constructor.data.model.common.Result
+import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.feature.productdetail.ProductDetailActivity
@@ -22,7 +22,7 @@ class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
         intent.getStringExtra(EXTRA_SEARCH_QUERY)
     }
 
-    override fun renderData(it: SearchData, totalCount: Int) {
+    override fun renderData(it: SearchResponseInner, totalCount: Int) {
         adapter.setData(it)
         toolbar.title = "$query, found: $totalCount"
     }
@@ -65,8 +65,8 @@ class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
                     true
                 }
                 R.id.filter -> {
-                    presenter.availableSortOptions?.let {
-                        val dialog = SortDialog.newInstance(ArrayList(it), presenter.selectedSortOption)
+                    presenter.availableFilterSortOptions?.let {
+                        val dialog = SortDialog.newInstance(ArrayList(it), presenter.selectedFilterSortOption)
                         dialog.dismissListener = {
                             presenter.sortOptionSelected(it)
                         }
@@ -94,7 +94,7 @@ class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
         })
     }
 
-    override fun navigateToDetails(it: SearchResult) {
+    override fun navigateToDetails(it: Result) {
         ProductDetailActivity.start(this, it)
     }
 

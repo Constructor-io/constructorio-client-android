@@ -1,14 +1,13 @@
 package io.constructor.core
 
-import io.constructor.data.model.Suggestion
-
+import io.constructor.data.model.common.Result
 
 interface SuggestionListener {
     /**
      * triggered after getting suggestions
      * @param suggestions list of suggestions
      */
-    fun onSuggestionsResult(suggestions: List<Suggestion>)
+    fun onSuggestionsResult(suggestions: List<Result>)
 
     /**
      * triggered on error

@@ -7,7 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
-import io.constructor.data.model.search.SearchFacet
+import io.constructor.data.model.common.FilterFacet
 import io.constructor.sample.R
 import kotlinx.android.synthetic.main.dialog_filter.view.*
 
@@ -28,13 +28,11 @@ class FilterDialog : DialogFragment() {
 
 
     private fun setDialogInteractions(view: View) {
-        val list = arguments?.getSerializable(EXTRA_FACETS) as ArrayList<SearchFacet>
+        val list = arguments?.getSerializable(EXTRA_FACETS) as ArrayList<FilterFacet>
         val selectedFacets = arguments?.getSerializable(EXTRA_SELECTED_FACETS) as? HashMap<String, MutableList<String>>
         view.filterList.layoutManager = LinearLayoutManager(view.context)
         adapter = FilterListAdapter().apply {
-            list?.let {
-                setData(it, selectedFacets)
-            }
+            setData(list, selectedFacets)
         }
         view.title.text = "Filters"
         view.cancel.setOnClickListener {
@@ -52,7 +50,7 @@ class FilterDialog : DialogFragment() {
         const val EXTRA_FACETS = "facets"
         const val EXTRA_SELECTED_FACETS = "selected-facets"
 
-        fun newInstance(facets: ArrayList<SearchFacet>, selectedFacets: HashMap<String, MutableList<String>>? = null): FilterDialog {
+        fun newInstance(facets: ArrayList<FilterFacet>, selectedFacets: HashMap<String, MutableList<String>>? = null): FilterDialog {
             return FilterDialog().apply {
                 arguments = Bundle().apply {
                     putSerializable(EXTRA_FACETS, facets)
