@@ -55,7 +55,7 @@ ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
-    it.searchData?.let {
+    it.response?.let {
       view.renderData(it)
     }
   }
@@ -76,7 +76,7 @@ ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
-    it.browseData?.let {
+    it.response?.let {
       view.renderData(it)
     }
   }
