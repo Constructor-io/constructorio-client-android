@@ -16,7 +16,7 @@ class HomePresenter(view: HomeView) : BasePresenter<HomeView>(view) {
             ConstructorIo.getAutocompleteResults(it)
         }.io2ui().subscribe {
             it.onValue {
-                it?.let {
+                it.let {
                     view.renderAutocompleteData(it)
                 }
             }

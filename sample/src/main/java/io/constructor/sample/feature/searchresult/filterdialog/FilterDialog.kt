@@ -32,9 +32,7 @@ class FilterDialog : DialogFragment() {
         val selectedFacets = arguments?.getSerializable(EXTRA_SELECTED_FACETS) as? HashMap<String, MutableList<String>>
         view.filterList.layoutManager = LinearLayoutManager(view.context)
         adapter = FilterListAdapter().apply {
-            list?.let {
-                setData(it, selectedFacets)
-            }
+            setData(list, selectedFacets)
         }
         view.title.text = "Filters"
         view.cancel.setOnClickListener {

@@ -5,7 +5,7 @@ import io.constructor.data.model.common.ResultData
 fun ResultData.price(): Double {
     val price = metadata?.get("price")
     if (price is String) {
-        return (price as String).trim('$').toDouble()
+        return price.trim('$').toDouble()
     } else if (price is Double) {
         return price
     }

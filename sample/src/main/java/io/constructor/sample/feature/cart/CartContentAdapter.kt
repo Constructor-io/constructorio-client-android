@@ -34,8 +34,7 @@ class CartContentAdapter(var clickListener: (Pair<Result, Int>) -> Unit, val dec
         with(p0 as CartContentViewHolder) {
             Glide.with(image).load(item.first.data.imageUrl).diskCacheStrategy(DiskCacheStrategy.ALL).into(image)
             title.text = item.first.value
-            price.text = price.context.getString(R.string.price, (item.first.data.price()
-                    ?: 0.0) * item.second)
+            price.text = price.context.getString(R.string.price, (item.first.data.price()) * item.second)
             increment.setOnClickListener {
                 incrementAction.invoke(item.first)
             }

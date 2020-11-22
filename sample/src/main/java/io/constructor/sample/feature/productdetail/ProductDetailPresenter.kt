@@ -9,7 +9,7 @@ import io.constructor.sample.extensions.price
 class ProductDetailPresenter(view: ProductDetailView, private val cartDataStorage: CartDataStorage) : BasePresenter<ProductDetailView>(view) {
 
     fun addToCart(item: Result) {
-        ConstructorIo.trackConversion(item.value, item.data?.id!!, item.data?.price())
+        ConstructorIo.trackConversion(item.value, item.data.id!!, item.data.price())
         cartDataStorage.addToCart(item)
     }
 
