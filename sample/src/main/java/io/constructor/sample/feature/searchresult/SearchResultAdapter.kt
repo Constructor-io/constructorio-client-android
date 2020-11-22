@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import io.constructor.data.model.search.SearchData
-import io.constructor.data.model.search.SearchResult
+import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R
 import io.constructor.sample.extensions.priceFormatted
 import kotlinx.android.synthetic.main.item_search_result.view.*
 
-class SearchResultAdapter(var clickListener: (SearchResult) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchResultAdapter(var clickListener: (SearchResponseInner) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val data = mutableListOf<SearchResult>()
+    private val data = mutableListOf<SearchResponseInner>()
 
     fun setData(it: SearchData) {
         it.searchResults?.let {

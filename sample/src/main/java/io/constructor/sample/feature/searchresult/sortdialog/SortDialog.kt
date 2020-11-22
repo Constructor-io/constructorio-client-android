@@ -7,13 +7,13 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RadioButton
-import io.constructor.data.model.search.SortOption
+import io.constructor.data.model.common.FilterSortOption
 import io.constructor.sample.R
 import kotlinx.android.synthetic.main.dialog_sort.view.*
 
 class SortDialog : DialogFragment() {
 
-    var dismissListener: ((SortOption?) -> Unit)? = null
+    var dismissListener: ((FilterSortOption?) -> Unit)? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = LayoutInflater.from(activity).inflate(R.layout.dialog_sort, null)
@@ -26,8 +26,8 @@ class SortDialog : DialogFragment() {
 
 
     private fun setDialogInteractions(view: View) {
-        val list = arguments?.getSerializable(EXTRA_OPTIONS) as ArrayList<SortOption>
-        val selectedSortOption = arguments?.getSerializable(EXTRA_SELECTED_OPTION) as? SortOption
+        val list = arguments?.getSerializable(EXTRA_OPTIONS) as ArrayList<FilterSortOption>
+        val selectedSortOption = arguments?.getSerializable(EXTRA_SELECTED_OPTION) as? FilterSortOption
         list.forEachIndexed { index, sortOption ->
             val radioButton = LayoutInflater.from(view.context).inflate(R.layout.item_sort_option, view.filterRadioGroup, false) as RadioButton
             radioButton.id = index + 1
@@ -59,12 +59,12 @@ class SortDialog : DialogFragment() {
         const val EXTRA_OPTIONS = "options"
         const val EXTRA_SELECTED_OPTION = "selected-option"
 
-        fun newInstance(sortOptions: ArrayList<SortOption>, selectedSortOption: SortOption? = null): SortDialog {
+        fun newInstance(filterSortOptions: ArrayList<FilterSortOption>, selectedFilterSortOption: FilterSortOption? = null): SortDialog {
             return SortDialog().apply {
                 arguments = Bundle().apply {
-                    putSerializable(EXTRA_OPTIONS, sortOptions)
-                    selectedSortOption?.let {
-                        putSerializable(EXTRA_SELECTED_OPTION, selectedSortOption)
+                    putSerializable(EXTRA_OPTIONS, filterSortOptions)
+                    selectedFilterSortOption?.let {
+                        putSerializable(EXTRA_SELECTED_OPTION, selectedFilterSortOption)
                     }
                 }
             }

@@ -1,7 +1,7 @@
 package io.constructor.sample.data
 
 import android.content.Context
-import io.constructor.data.model.search.SearchResult
+import io.constructor.data.model.search.SearchResponseInner
 import java.io.*
 
 class CartDataStorage(private val context: Context) {
@@ -14,7 +14,7 @@ class CartDataStorage(private val context: Context) {
         }
     }
 
-    fun addToCart(item: SearchResult, quantity: Int = 1) {
+    fun addToCart(item: SearchResponseInner, quantity: Int = 1) {
         readAndWrite {
             if (it.containsKey(item.result.id)) {
                 it[item.result.id] = it[item.result.id]!!.first to (it[item.result.id]!!.second + quantity)
@@ -24,7 +24,7 @@ class CartDataStorage(private val context: Context) {
         }
     }
 
-    fun removeFromCart(item: SearchResult) {
+    fun removeFromCart(item: SearchResponseInner) {
         readAndWrite {
             if (it.containsKey(item.result.id)) {
                 if (it.get(item.result.id)!!.second == 1) {
@@ -42,19 +42,19 @@ class CartDataStorage(private val context: Context) {
         }
     }
 
-    fun getCartContent(): LinkedHashMap<String, Pair<SearchResult, Int>> {
-        var searchResult: LinkedHashMap<String, Pair<SearchResult, Int>> = linkedMapOf()
+    fun getCartContent(): LinkedHashMap<String, Pair<SearchResponseInner, Int>> {
+        var searchResult: LinkedHashMap<String, Pair<SearchResponseInner, Int>> = linkedMapOf()
         readAndWrite {
             searchResult = it
         }
         return searchResult
     }
 
-    fun readAndWrite(action: (LinkedHashMap<String, Pair<SearchResult, Int>>) -> Unit) {
-        var cartItems: LinkedHashMap<String, Pair<SearchResult, Int>> = linkedMapOf()
+    fun readAndWrite(action: (LinkedHashMap<String, Pair<SearchResponseInner, Int>>) -> Unit) {
+        var cartItems: LinkedHashMap<String, Pair<SearchResponseInner, Int>> = linkedMapOf()
         try {
             val input = ObjectInputStream(FileInputStream(cartFile))
-            cartItems = input.readObject() as LinkedHashMap<String, Pair<SearchResult, Int>>
+            cartItems = input.readObject() as LinkedHashMap<String, Pair<SearchResponseInner, Int>>
             input.close()
         } catch (e: Exception) {
             e.printStackTrace()

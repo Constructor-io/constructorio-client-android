@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import com.bumptech.glide.Glide
-import io.constructor.data.model.search.SearchResult
+import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.di.DependencyProvider
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_product_detail.*
 class ProductDetailActivity : BaseActivity<ProductDetailPresenter>(), ProductDetailView {
 
     private val item by lazy {
-        intent.getSerializableExtra(EXTRA_ITEM) as SearchResult
+        intent.getSerializableExtra(EXTRA_ITEM) as SearchResponseInner
     }
 
     override fun initPresenter(): ProductDetailPresenter {
@@ -50,7 +50,7 @@ class ProductDetailActivity : BaseActivity<ProductDetailPresenter>(), ProductDet
 
         const val EXTRA_ITEM = "item"
 
-        fun start(context: Context, item: SearchResult) {
+        fun start(context: Context, item: SearchResponseInner) {
             context.startActivity(Intent(context, ProductDetailActivity::class.java).apply {
                 putExtra(EXTRA_ITEM, item)
             })

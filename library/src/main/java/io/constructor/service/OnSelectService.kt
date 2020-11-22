@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import io.constructor.core.Constants
 import io.constructor.core.ConstructorIo
-import io.constructor.data.model.SuggestionViewModel
+import io.constructor.data.model.common.Result;
 
 /**
  * Service which triggers each time user select suggestion
@@ -13,7 +13,7 @@ import io.constructor.data.model.SuggestionViewModel
 class OnSelectService : IntentService("OnSelectService") {
 
     companion object {
-        fun startService(context: Context, query: String, suggestion: SuggestionViewModel) {
+        fun startService(context: Context, query: String, suggestion: Result) {
             val intent = Intent(context, OnSelectService::class.java)
             intent.putExtra(Constants.EXTRA_QUERY, query)
             intent.putExtra(Constants.EXTRA_SUGGESTION, suggestion)
@@ -24,9 +24,9 @@ class OnSelectService : IntentService("OnSelectService") {
 
     override fun onHandleIntent(intent: Intent) {
         val query: String = intent.getStringExtra(Constants.EXTRA_QUERY)
-        val suggestion: SuggestionViewModel = intent.getSerializableExtra(Constants.EXTRA_SUGGESTION) as SuggestionViewModel
-        if (!suggestion.term.isBlank()) {
-            ConstructorIo.trackAutocompleteSelect(suggestion.term, query, suggestion.section!!, suggestion.group)
+        val suggestion: Result = intent.getSerializableExtra(Constants.EXTRA_SUGGESTION) as Result
+        if (!suggestion.value.isBlank()) {
+            ConstructorIo.trackAutocompleteSelect(suggestion.value, query, "Search Suggestions", suggestion.data?.groups?.get(0))
         }
     }
 }

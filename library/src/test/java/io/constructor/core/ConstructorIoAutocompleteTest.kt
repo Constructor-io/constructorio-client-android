@@ -58,7 +58,8 @@ class ConstructorIoAutocompleteTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
-            it.get()!!.isNotEmpty() && it.get()!!.size == 5
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isNotEmpty()!! && suggestions?.size == 5
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.1.1&_dt="
@@ -98,7 +99,8 @@ class ConstructorIoAutocompleteTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
-            it.isEmpty
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isEmpty()!!
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.1.1&_dt="

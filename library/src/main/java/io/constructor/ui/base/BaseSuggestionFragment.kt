@@ -18,8 +18,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import io.constructor.core.Constants
 import io.constructor.core.ConstructorListener
-import io.constructor.data.model.Suggestion
-import io.constructor.data.model.SuggestionViewModel
+import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.common.Result
 import io.constructor.features.base.BaseFragment
 import io.constructor.mapper.Mapper
 import io.constructor.service.OnSearchService
@@ -52,7 +52,7 @@ abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {
             p1?.let {
                 when (it.action) {
                     Constants.EVENT_QUERY_SENT -> listener?.onQuerySentToServer(it.getStringExtra(Constants.EXTRA_TERM))
-                    Constants.EVENT_SUGGESTIONS_RETRIEVED -> listener?.onSuggestionsRetrieved(it.getSerializableExtra(Constants.EXTRA_SUGGESTIONS) as List<Suggestion>)
+                    Constants.EVENT_SUGGESTIONS_RETRIEVED -> listener?.onSuggestionsRetrieved(it.getSerializableExtra(Constants.EXTRA_SUGGESTIONS) as List<Result>)
                     else -> {
                     }
                 }
@@ -141,17 +141,17 @@ abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {
 
     abstract fun getProgressId(): Int
 
-    override fun showSuggestions(suggestionsResult: List<Suggestion>, groupsShownForFirstTerm: Int) {
+    override fun showSuggestions(response: AutocompleteResponse, groupsShownForFirstTerm: Int) {
         progressIndicator?.visibility = View.GONE
         activity?.let {
-            it.broadcastIntent(Constants.EVENT_SUGGESTIONS_RETRIEVED, Constants.EXTRA_SUGGESTIONS to suggestionsResult)
+            it.broadcastIntent(Constants.EVENT_SUGGESTIONS_RETRIEVED, Constants.EXTRA_SUGGESTIONS to response)
         }
-        val suggestionViews = Mapper.toSuggestionsViewModel(suggestionsResult, groupsShownForFirstTerm)
+        val suggestionViews = Mapper.toSuggestionsViewModel(response, groupsShownForFirstTerm)
         val adapter = getSuggestionAdapter()
         adapter.setData(suggestionViews)
         adapter.setListener(object : BaseSuggestionsAdapter.ClickListener {
-            override fun onSuggestionClick(suggestion: SuggestionViewModel) {
-                listener?.onSuggestionSelected(suggestion.term, suggestion.group, suggestion.section)
+            override fun onSuggestionClick(suggestion: Result) {
+                listener?.onSuggestionSelected(suggestion.value, null, null)
                 val query = suggestionBox?.text.toString()
                 OnSelectService.startService(context!!, query, suggestion)
                 OnSearchService.startService(context!!, query, suggestion)

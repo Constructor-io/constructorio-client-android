@@ -3,9 +3,9 @@ package io.constructor.data.model.dataadapter
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
-import io.constructor.data.model.Group
-import io.constructor.data.model.search.ResultData
-import io.constructor.data.model.search.ResultFacet
+import io.constructor.data.model.common.ResultGroup
+import io.constructor.data.model.common.ResultData
+import io.constructor.data.model.common.ResultFacet
 
 class ResultDataAdapter {
 
@@ -13,7 +13,7 @@ class ResultDataAdapter {
         val NAMES = JsonReader.Options.of("id", "description", "image_url", "url", "facets", "groups")
     }
 
-    @FromJson fun fromJson(jsonReader: JsonReader, facetDelegate: JsonAdapter<List<ResultFacet>>, groupDelegate: JsonAdapter<List<Group>>): ResultData {
+    @FromJson fun fromJson(jsonReader: JsonReader, facetDelegate: JsonAdapter<List<ResultFacet>>, resultGroupDelegate: JsonAdapter<List<ResultGroup>>): ResultData {
         jsonReader.beginObject()
         var metadata: HashMap<String, Any?> = hashMapOf()
         var id = ""
@@ -21,7 +21,7 @@ class ResultDataAdapter {
         var imageUrl: String? = null
         var url: String? = null
         var facets: List<ResultFacet>? = null
-        var groups: List<Group>? = null
+        var resultGroups: List<ResultGroup>? = null
         while (jsonReader.hasNext()) {
             when (jsonReader.selectName(NAMES)) {
                 0 -> {
@@ -41,7 +41,7 @@ class ResultDataAdapter {
                     facets = facetDelegate.fromJsonValue(jsonReader.readJsonValue())
                 }
                 5 -> {
-                    groups = groupDelegate.fromJsonValue(jsonReader.readJsonValue())
+                    resultGroups = resultGroupDelegate.fromJsonValue(jsonReader.readJsonValue())
                 }
                 else -> {
                     metadata[jsonReader.nextName()] = jsonReader.readJsonValue()
@@ -49,7 +49,7 @@ class ResultDataAdapter {
             }
         }
         jsonReader.endObject()
-        return ResultData(description, id, imageUrl, url, facets, groups, metadata)
+        return ResultData(description, id, imageUrl, url, resultGroups, facets, metadata)
 
     }
 

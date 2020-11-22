@@ -1,6 +1,6 @@
 package io.constructor.sample.extensions
 
-import io.constructor.data.model.search.ResultData
+import io.constructor.data.model.common.ResultData
 
 fun ResultData.price(): Double? {
     val price = metadata["price"]

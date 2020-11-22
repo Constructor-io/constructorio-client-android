@@ -2,7 +2,6 @@ package io.constructor.sample.feature.home
 
 import android.content.Context
 import android.widget.ArrayAdapter
-import io.constructor.data.model.Suggestion
 
 class AutoSuggestAdapter(context: Context, resource: Int) : ArrayAdapter<String>(context, resource) {
 

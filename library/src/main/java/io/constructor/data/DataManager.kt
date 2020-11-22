@@ -1,7 +1,7 @@
 package io.constructor.data
 
 import com.squareup.moshi.Moshi
-import io.constructor.data.model.Suggestion
+import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.remote.ApiPaths
@@ -15,19 +15,25 @@ import javax.inject.Singleton
 class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
 
-    fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<List<Suggestion>?>> = constructorApi.getAutocompleteResults(text, params.toMap()).map {
-        if (!it.isError) {
-            it.response()?.let {
-                if (it.isSuccessful) {
-                    ConstructorData.of(it.body()?.sections?.suggestions)
-                } else {
-                    ConstructorData.networkError(it.errorBody()?.string())
-                }
-            } ?: ConstructorData.error(it.error())
-        } else {
-            ConstructorData.error(it.error())
-        }
-    }.toObservable()
+    fun getAutocompleteResults(text: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<AutocompleteResponse>> {
+        return constructorApi.getAutocompleteResults(text, params.toMap()).map {
+            if (!it.isError) {
+                it.response()?.let {
+                    if (it.isSuccessful) {
+                        val adapter = moshi.adapter(AutocompleteResponse::class.java)
+                        val response = it.body()?.string()
+                        val result = response?.let { adapter.fromJson(it) }
+                        result?.rawData = response
+                        ConstructorData.of(result!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(it.error())
+            } else {
+                ConstructorData.error(it.error())
+            }
+        }.toObservable()
+    }
 
     fun getSearchResults(text: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {
         var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(text)}"

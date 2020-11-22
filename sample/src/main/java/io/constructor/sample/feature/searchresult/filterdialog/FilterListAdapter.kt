@@ -4,8 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.constructor.data.model.search.FacetOption
-import io.constructor.data.model.search.SearchFacet
+import io.constructor.data.model.common.FilterFacetOption
+import io.constructor.data.model.common.FilterFacet
 import io.constructor.sample.R
 import kotlinx.android.synthetic.main.item_facet.view.*
 import kotlinx.android.synthetic.main.item_header.view.*
@@ -17,7 +17,7 @@ class FilterListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val data = mutableListOf<DataWrapper<*>>()
 
-    fun setData(facets: ArrayList<SearchFacet>, selected: HashMap<String, MutableList<String>>? = null) {
+    fun setData(facets: ArrayList<FilterFacet>, selected: HashMap<String, MutableList<String>>? = null) {
         facets.forEach { facet ->
             val selectedFacets = selected?.get(facet.displayName!!)
             data.add(HeaderWrapper(facet))
@@ -86,9 +86,9 @@ class FilterListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    internal class HeaderWrapper(data: SearchFacet) : DataWrapper<SearchFacet>(data)
+    internal class HeaderWrapper(data: FilterFacet) : DataWrapper<FilterFacet>(data)
 
-    internal class ItemWrapper(data: Pair<String, FacetOption>) : DataWrapper<Pair<String, FacetOption>>(data)
+    internal class ItemWrapper(data: Pair<String, FilterFacetOption>) : DataWrapper<Pair<String, FilterFacetOption>>(data)
 
     internal abstract class DataWrapper<T>(var data: T) {
         var checked = false

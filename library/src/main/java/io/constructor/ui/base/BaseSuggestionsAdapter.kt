@@ -12,14 +12,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import io.constructor.data.model.SuggestionViewModel
 import io.constructor.util.ViewUtil
-import java.util.*
+import io.constructor.data.model.common.Result
 
+import java.util.*
 
 abstract class BaseSuggestionsAdapter : RecyclerView.Adapter<BaseSuggestionsAdapter.ViewHolder>() {
 
-    private var suggestions: List<SuggestionViewModel> = ArrayList()
+    private var suggestions: List<Result> = ArrayList()
     private var listener: BaseSuggestionsAdapter.ClickListener? = null
 
     @get:LayoutRes
@@ -34,10 +34,10 @@ abstract class BaseSuggestionsAdapter : RecyclerView.Adapter<BaseSuggestionsAdap
     abstract val styleHighlightedSpans: ((spannable: Spannable, spanStart: Int, spanEnd: Int) -> Unit)?
 
     interface ClickListener {
-        fun onSuggestionClick(suggestion: SuggestionViewModel)
+        fun onSuggestionClick(suggestion: Result)
     }
 
-    fun setData(suggestions: List<SuggestionViewModel>) {
+    fun setData(suggestions: List<Result>) {
         this.suggestions = suggestions
     }
 
@@ -57,11 +57,11 @@ abstract class BaseSuggestionsAdapter : RecyclerView.Adapter<BaseSuggestionsAdap
     override fun onBindViewHolder(holder: BaseSuggestionsAdapter.ViewHolder, position: Int) {
         val suggestionViewModel = suggestions[position]
         val text: String
-        text = suggestionViewModel.term
+        text = suggestionViewModel.value
         onViewTypeSuggestion(holder, text, ViewUtil.reverseHighlight(text, suggestionViewModel.matchedTerms) { spannable, start, end ->
             styleHighlightedSpans?.invoke(spannable, start, end) ?: styleSpans(spannable, start, end)
 
-        }, suggestionViewModel.group?.displayName)
+        }, suggestionViewModel.data?.groups?.get(0)?.displayName)
         holder.itemView.setOnClickListener { listener!!.onSuggestionClick(suggestionViewModel) }
     }
 

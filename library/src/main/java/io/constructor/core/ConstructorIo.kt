@@ -6,8 +6,9 @@ import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
-import io.constructor.data.model.Group
-import io.constructor.data.model.Suggestion
+import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.common.Result
+import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.injection.component.AppComponent
@@ -96,7 +97,7 @@ object ConstructorIo {
     /**
      * Returns a list of autocomplete suggestions
      */
-    fun getAutocompleteResults(query: String): Observable<ConstructorData<List<Suggestion>?>> {
+    fun getAutocompleteResults(query: String): Observable<ConstructorData<AutocompleteResponse>> {
         val params = mutableListOf<Pair<String, String>>()
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
             params.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
@@ -156,19 +157,19 @@ object ConstructorIo {
     /**
      * Tracks autocomplete select events
      */
-    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, resultID: String? = null) {
-        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, group, resultID);
+    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null) {
+        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID);
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
             context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
         }, {
             t -> e("Autocomplete Select error: ${t.message}")
         }))
     }
-    internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, group: Group? = null, resultID: String? = null): Completable {
+    internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
-        group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
+        resultGroup?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
+        resultGroup?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         return dataManager.trackAutocompleteSelect(searchTerm, arrayOf(
             Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionName,
@@ -180,19 +181,19 @@ object ConstructorIo {
     /**
      * Tracks search submit events
      */
-    fun trackSearchSubmit(searchTerm: String, originalQuery: String, group: Group?) {
-        var completable = trackSearchSubmitInternal(searchTerm, originalQuery, group)
+    fun trackSearchSubmit(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?) {
+        var completable = trackSearchSubmitInternal(searchTerm, originalQuery, resultGroup)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
             context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
         }, {
             t -> e("Search Submit error: ${t.message}")
         }))
     }
-    internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, group: Group?): Completable {
+    internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        group?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
-        group?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
+        resultGroup?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
+        resultGroup?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
         return dataManager.trackSearchSubmit(searchTerm, arrayOf(
                 Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
                 Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH

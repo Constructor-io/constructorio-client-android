@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import io.constructor.data.model.search.SearchResult
+import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R
 import io.constructor.sample.extensions.price
 import kotlinx.android.synthetic.main.item_cart_content.view.*
 
-class CartContentAdapter(var clickListener: (Pair<SearchResult, Int>) -> Unit, val decrementAction: (SearchResult) -> Unit, val incrementAction: (SearchResult) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CartContentAdapter(var clickListener: (Pair<SearchResponseInner, Int>) -> Unit, val decrementAction: (SearchResponseInner) -> Unit, val incrementAction: (SearchResponseInner) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val data = mutableListOf<Pair<SearchResult, Int>>()
+    private val data = mutableListOf<Pair<SearchResponseInner, Int>>()
 
-    fun setData(data: LinkedHashMap<String, Pair<SearchResult, Int>>) {
+    fun setData(data: LinkedHashMap<String, Pair<SearchResponseInner, Int>>) {
         this.data.clear()
         this.data.addAll(data.map { it.value })
         notifyDataSetChanged()
