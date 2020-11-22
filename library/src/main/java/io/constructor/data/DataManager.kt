@@ -46,9 +46,9 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
                     if (it.isSuccessful){
                         val adapter = moshi.adapter(SearchResponse::class.java)
                         val response = it.body()?.string()
-                        val result = response?.let { adapter.fromJson(it) }
-                        result?.rawData = response
-                        ConstructorData.of(result!!)
+                        val res = response?.let { adapter.fromJson(it) }
+                        res?.rawData = response
+                        ConstructorData.of(res!!)
                     } else {
                         ConstructorData.networkError(it.errorBody()?.string())
                     }
@@ -102,9 +102,9 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
                     if (it.isSuccessful){
                         val adapter = moshi.adapter(BrowseResponse::class.java)
                         val response = it.body()?.string()
-                        val result = response?.let { adapter.fromJson(it) }
-                        result?.rawData = response
-                        ConstructorData.of(result!!)
+                        val res = response?.let { adapter.fromJson(it) }
+                        res?.rawData = response
+                        ConstructorData.of(res!!)
                     } else {
                         ConstructorData.networkError(it.errorBody()?.string())
                     }

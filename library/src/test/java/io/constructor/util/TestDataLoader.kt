@@ -1,6 +1,6 @@
 package io.constructor.util
 
-import com.squareup.moshi.KotlinJsonAdapterFactory
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.search.SearchResponse
