@@ -5,17 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import io.constructor.data.model.common.Result
 import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R
 import io.constructor.sample.extensions.priceFormatted
 import kotlinx.android.synthetic.main.item_search_result.view.*
 
-class SearchResultAdapter(var clickListener: (SearchResponseInner) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchResultAdapter(var clickListener: (Result) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val data = mutableListOf<SearchResponseInner>()
+    private val data = mutableListOf<Result>()
 
-    fun setData(it: SearchData) {
-        it.searchResults?.let {
+    fun setData(it: SearchResponseInner) {
+        it.results?.let {
             data.addAll(it)
             notifyDataSetChanged()
         }
@@ -32,10 +33,10 @@ class SearchResultAdapter(var clickListener: (SearchResponseInner) -> Unit) : Re
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
         val item = data[p1]
         with(p0 as SearchItemViewHolder) {
-            Glide.with(image).load(item.result.imageUrl).into(image)
+            Glide.with(image).load(item.data.imageUrl).into(image)
             title.text = item.value
-            description.text = item.result.description
-            val priceFormatted = item.result.priceFormatted()
+            description.text = item.data.description
+            val priceFormatted = item.data.priceFormatted()
             price.text = priceFormatted
             rootView.setOnClickListener {
                 clickListener.invoke(item)

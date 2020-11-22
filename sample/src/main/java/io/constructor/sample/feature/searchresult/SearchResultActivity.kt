@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import io.constructor.data.model.common.Result
 import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
@@ -21,7 +22,7 @@ class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
         intent.getStringExtra(EXTRA_SEARCH_QUERY)
     }
 
-    override fun renderData(it: SearchData, totalCount: Int) {
+    override fun renderData(it: SearchResponseInner, totalCount: Int) {
         adapter.setData(it)
         toolbar.title = "$query, found: $totalCount"
     }
@@ -93,7 +94,7 @@ class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
         })
     }
 
-    override fun navigateToDetails(it: SearchResponseInner) {
+    override fun navigateToDetails(it: Result) {
         ProductDetailActivity.start(this, it)
     }
 

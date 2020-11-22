@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.feature.cart.CartActivity
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
 
-    override fun renderAutcompleteData(it: List<Suggestion>) {
+    override fun renderAutocompleteData(it: AutocompleteResponse) {
         autocompleteAdapter.setData(it)
         autocompleteAdapter.notifyDataSetChanged()
     }

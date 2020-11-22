@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import io.constructor.data.model.search.SearchResponseInner
+import io.constructor.data.model.common.Result
 import io.constructor.sample.R
 import io.constructor.sample.extensions.price
 import kotlinx.android.synthetic.main.item_cart_content.view.*
 
-class CartContentAdapter(var clickListener: (Pair<SearchResponseInner, Int>) -> Unit, val decrementAction: (SearchResponseInner) -> Unit, val incrementAction: (SearchResponseInner) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CartContentAdapter(var clickListener: (Pair<Result, Int>) -> Unit, val decrementAction: (Result) -> Unit, val incrementAction: (Result) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val data = mutableListOf<Pair<SearchResponseInner, Int>>()
+    private val data = mutableListOf<Pair<Result, Int>>()
 
-    fun setData(data: LinkedHashMap<String, Pair<SearchResponseInner, Int>>) {
+    fun setData(data: LinkedHashMap<String, Pair<Result, Int>>) {
         this.data.clear()
         this.data.addAll(data.map { it.value })
         notifyDataSetChanged()
@@ -32,9 +32,10 @@ class CartContentAdapter(var clickListener: (Pair<SearchResponseInner, Int>) -> 
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
         val item = data[p1]
         with(p0 as CartContentViewHolder) {
-            Glide.with(image).load(item.first.result.imageUrl).diskCacheStrategy(DiskCacheStrategy.ALL).into(image)
+            Glide.with(image).load(item.first.data.imageUrl).diskCacheStrategy(DiskCacheStrategy.ALL).into(image)
             title.text = item.first.value
-            price.text = price.context.getString(R.string.price, (item.first.result.price() ?: 0.0) * item.second)
+            price.text = price.context.getString(R.string.price, (item.first.data.price()
+                    ?: 0.0) * item.second)
             increment.setOnClickListener {
                 incrementAction.invoke(item.first)
             }

@@ -1,7 +1,7 @@
 package io.constructor.sample.feature.searchresult
 
 import io.constructor.core.ConstructorIo
-import io.constructor.data.model.search.SearchResponseInner
+import io.constructor.data.model.common.Result
 import io.constructor.data.model.common.FilterFacet
 import io.constructor.data.model.common.FilterSortOption
 import io.constructor.sample.common.BasePresenter
@@ -41,11 +41,11 @@ class SearchResultPresenter(view: SearchView) : BasePresenter<SearchView>(view) 
         compositeDisposable += ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedFilterSortOption?.sortBy, sortOrder = selectedFilterSortOption?.sortOrder).io2ui().subscribe {
             it.onValue {
                 if (firstRun) {
-                    availableFacets = it.searchData.facets
-                    availableFilterSortOptions = it.searchData.filterSortOptions
-                    ConstructorIo.trackSearchResultsLoaded(query, it.searchData.resultCount)
+                    availableFacets = it.response?.facets
+                    availableFilterSortOptions = it.response?.filterSortOptions
+                    it.response?.resultCount?.let { it1 -> ConstructorIo.trackSearchResultsLoaded(query, it1) }
                 }
-                it.searchData?.let {
+                it.response?.let {
                     page += 1
                     totalCount = it.resultCount
                     view.renderData(it, totalCount!!)
@@ -54,8 +54,8 @@ class SearchResultPresenter(view: SearchView) : BasePresenter<SearchView>(view) 
         }
     }
 
-    fun handleClick(it: SearchResponseInner, query: String) {
-        ConstructorIo.trackSearchResultClick(it.value, it.result.id, query)
+    fun handleClick(it: Result, query: String) {
+        it.data.id?.let { it1 -> ConstructorIo.trackSearchResultClick(it.value, it1, query) }
         view.navigateToDetails(it)
     }
 

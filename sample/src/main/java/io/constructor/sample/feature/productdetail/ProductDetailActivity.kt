@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import com.bumptech.glide.Glide
-import io.constructor.data.model.search.SearchResponseInner
+import io.constructor.data.model.common.Result
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.di.DependencyProvider
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_product_detail.*
 class ProductDetailActivity : BaseActivity<ProductDetailPresenter>(), ProductDetailView {
 
     private val item by lazy {
-        intent.getSerializableExtra(EXTRA_ITEM) as SearchResponseInner
+        intent.getSerializableExtra(EXTRA_ITEM) as Result
     }
 
     override fun initPresenter(): ProductDetailPresenter {
@@ -41,16 +41,16 @@ class ProductDetailActivity : BaseActivity<ProductDetailPresenter>(), ProductDet
                 }
             }
         }
-        Glide.with(image).load(item.result.imageUrl).into(image)
-        price.text = item.result.priceFormatted()
-        descriptionTV.text = item.result.description
+        Glide.with(image).load(item.data.imageUrl).into(image)
+        price.text = item.data.priceFormatted()
+        descriptionTV.text = item.data.description
     }
 
     companion object {
 
         const val EXTRA_ITEM = "item"
 
-        fun start(context: Context, item: SearchResponseInner) {
+        fun start(context: Context, item: Result) {
             context.startActivity(Intent(context, ProductDetailActivity::class.java).apply {
                 putExtra(EXTRA_ITEM, item)
             })

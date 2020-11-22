@@ -1,7 +1,7 @@
 package io.constructor.sample.feature.checkout
 
 import android.os.Bundle
-import io.constructor.data.model.search.SearchResponseInner
+import io.constructor.data.model.common.Result
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.di.DependencyProvider
@@ -22,7 +22,7 @@ class CheckoutActivity : BaseActivity<CheckoutPresenter>(), CheckoutView {
         presenter.checkout()
     }
 
-    override fun renderContent(content: LinkedHashMap<String, Pair<SearchResponseInner, Int>>) {
+    override fun renderContent(content: LinkedHashMap<String, Pair<Result, Int>>) {
     }
 
 }

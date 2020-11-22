@@ -2,22 +2,22 @@ package io.constructor.sample.extensions
 
 import io.constructor.data.model.common.ResultData
 
-fun ResultData.price(): Double? {
-    val price = metadata["price"]
+fun ResultData.price(): Double {
+    val price = metadata?.get("price")
     if (price is String) {
-        return (metadata["price"] as String).trim('$').toDouble()
+        return (price as String).trim('$').toDouble()
     } else if (price is Double) {
         return price
     }
-    return null
+    return 0.00
 }
 
-fun ResultData.priceFormatted(): String? {
-    val price = metadata["price"]
+fun ResultData.priceFormatted(): String {
+    val price = metadata?.get("price")
     if (price is String) {
         return price
     } else if (price is Double) {
         return price.toString()
     }
-    return null
+    return "0.00"
 }

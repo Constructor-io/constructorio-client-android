@@ -10,7 +10,7 @@ object Mapper {
 
     fun toSuggestionsViewModel(response: AutocompleteResponse, groupsShownForFirstTerm : Int = Int.MAX_VALUE): List<Result> {
         val data = ArrayList<Result>()
-        response.sections.get("Search Suggestions")?.mapIndexed { _, suggestion ->
+        response.sections?.get("Search Suggestions")?.mapIndexed { _, suggestion ->
             data.add(suggestion);
         }
         return data;
