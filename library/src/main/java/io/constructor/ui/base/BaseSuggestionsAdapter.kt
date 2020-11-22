@@ -61,7 +61,7 @@ abstract class BaseSuggestionsAdapter : RecyclerView.Adapter<BaseSuggestionsAdap
         onViewTypeSuggestion(holder, text, ViewUtil.reverseHighlight(text, suggestionViewModel.matchedTerms) { spannable, start, end ->
             styleHighlightedSpans?.invoke(spannable, start, end) ?: styleSpans(spannable, start, end)
 
-        }, suggestionViewModel.data?.groups?.get(0)?.displayName)
+        }, suggestionViewModel.data.groups?.get(0)?.displayName)
         holder.itemView.setOnClickListener { listener!!.onSuggestionClick(suggestionViewModel) }
     }
 

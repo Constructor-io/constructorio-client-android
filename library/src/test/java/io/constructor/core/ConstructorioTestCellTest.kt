@@ -58,7 +58,7 @@ class ConstructorioTestCellTest {
         val observer = constructorIo.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
             var suggestions = it.get()!!.sections?.get("Search Suggestions");
-            suggestions?.isNotEmpty()!! && suggestions?.size == 5
+            suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.1.1&_dt="

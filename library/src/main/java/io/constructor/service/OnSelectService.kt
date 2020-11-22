@@ -26,7 +26,7 @@ class OnSelectService : IntentService("OnSelectService") {
         val query: String = intent.getStringExtra(Constants.EXTRA_QUERY)
         val suggestion: Result = intent.getSerializableExtra(Constants.EXTRA_SUGGESTION) as Result
         if (!suggestion.value.isBlank()) {
-            ConstructorIo.trackAutocompleteSelect(suggestion.value, query, "Search Suggestions", suggestion.data?.groups?.get(0))
+            ConstructorIo.trackAutocompleteSelect(suggestion.value, query, "Search Suggestions", suggestion.data.groups?.get(0))
         }
     }
 }

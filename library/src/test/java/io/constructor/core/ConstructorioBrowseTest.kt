@@ -62,7 +62,7 @@ class ConstructorIoBrowseTest {
             it.get()!!.response?.results!![0].value == "Crystal Geyser Natural Alpine Spring Water - 1 Gallon"
             it.get()!!.response?.results!![0].data.id == "108200440"
             it.get()!!.response?.results!![0].data.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108200440.png"
-            it.get()!!.response?.results!![0].data?.metadata?.get("price") == 1.25
+            it.get()!!.response?.results!![0].data.metadata?.get("price") == 1.25
             it.get()!!.response?.facets!!.size == 3
             it.get()!!.response?.facets!![0].displayName == "Brand"
             it.get()!!.response?.facets!![0].type == "multiple"
