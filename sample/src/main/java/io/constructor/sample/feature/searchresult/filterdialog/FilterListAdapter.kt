@@ -78,7 +78,7 @@ class FilterListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is ItemViewHolder -> {
                 item as ItemWrapper
                 p0.checkbox.text = item.data.second.value
-                p0.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                p0.checkbox.setOnCheckedChangeListener { _, isChecked ->
                     item.checked = isChecked
                 }
                 p0.checkbox.isChecked = item.checked

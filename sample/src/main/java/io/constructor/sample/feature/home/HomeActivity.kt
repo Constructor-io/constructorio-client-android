@@ -65,7 +65,7 @@ class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
     private fun setupSearch() {
         autocompleteAdapter = AutoSuggestAdapter(this, android.R.layout.simple_dropdown_item_1line)
         searchInput.setAdapter(autocompleteAdapter)
-        searchInput.setOnItemClickListener { parent, view, position, id ->
+        searchInput.setOnItemClickListener { _, _, position, _ ->
             val item = autocompleteAdapter.getSuggestion(position)
             SearchResultActivity.start(this, item.value)
         }
