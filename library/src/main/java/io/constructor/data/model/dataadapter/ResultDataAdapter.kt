@@ -21,7 +21,7 @@ class ResultDataAdapter {
         var imageUrl: String? = null
         var url: String? = null
         var facets: List<ResultFacet>? = null
-        var resultGroups: List<ResultGroup>? = null
+        var groups: List<ResultGroup>? = null
         while (jsonReader.hasNext()) {
             when (jsonReader.selectName(NAMES)) {
                 0 -> {
@@ -41,7 +41,7 @@ class ResultDataAdapter {
                     facets = facetDelegate.fromJsonValue(jsonReader.readJsonValue())
                 }
                 5 -> {
-                    resultGroups = resultGroupDelegate.fromJsonValue(jsonReader.readJsonValue())
+                    groups = resultGroupDelegate.fromJsonValue(jsonReader.readJsonValue())
                 }
                 else -> {
                     metadata[jsonReader.nextName()] = jsonReader.readJsonValue()
@@ -49,7 +49,7 @@ class ResultDataAdapter {
             }
         }
         jsonReader.endObject()
-        return ResultData(description, id, imageUrl, url, resultGroups, facets, metadata)
+        return ResultData(description, id, imageUrl, url, groups, facets, metadata)
 
     }
 
