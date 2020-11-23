@@ -1,0 +1,42 @@
+{
+  "request": {
+    "page": 1,
+    "num_results_per_page": 24,
+    "section": "Products",
+    "term": "bbq",
+    "fmt_options": {
+      "groups_start": "current",
+      "groups_max_depth": 1
+    },
+    "sort_by": "relevance",
+    "sort_order": "descending",
+    "features": {
+      "query_items": true,
+      "auto_generated_refined_query_rules": true,
+      "personalization": true,
+      "manual_searchandizing": true,
+      "filter_items": true
+    },
+    "feature_variants": {
+      "query_items": null,
+      "auto_generated_refined_query_rules": null,
+      "personalization": null,
+      "manual_searchandizing": null,
+      "filter_items": null
+    }
+  },
+  "response": {
+    "redirect": {
+      "data": {
+        "url": "/mccormicks_farmstand.html?barbeque-and-grilling=1",
+        "rule_id": 1,
+        "match_id": 10
+      },
+      "matched_terms": [
+        "bbq"
+      ],
+      "matched_user_segments": null
+    }
+  },
+  "result_id": "46ae1cd7-79d9-4f52-92b2-8b7fb5b66752"
+}
