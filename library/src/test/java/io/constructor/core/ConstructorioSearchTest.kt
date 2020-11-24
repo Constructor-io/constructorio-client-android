@@ -117,4 +117,18 @@ class ConstructorIoSearchTest {
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.2.0&_dt="
         assert(request.path.startsWith(path))
     }
+
+    @Test
+    fun getSearchResultsWithRedirect() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response_redirect.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getSearchResults("bbq").test()
+        observer.assertComplete().assertValue {
+            it.get()!!.response?.redirect?.data?.url == "/mccormicks_farmstand.html?barbeque-and-grilling=1"
+            it.get()!!.response?.redirect?.matchedTerms!![0] == "bbq"
+        }
+        val request = mockServer.takeRequest()
+        val path = "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.2.0&_dt="
+        assert(request.path.startsWith(path))
+    }
 }
