@@ -62,7 +62,7 @@ class ConstructorIoAutocompleteTest {
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.2.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -75,7 +75,7 @@ class ConstructorIoAutocompleteTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.2.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -89,7 +89,7 @@ class ConstructorIoAutocompleteTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.2.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -103,7 +103,7 @@ class ConstructorIoAutocompleteTest {
             suggestions?.isEmpty()!!
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.2.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.3.0&_dt="
         assert(request.path.startsWith(path))
     }
 }
