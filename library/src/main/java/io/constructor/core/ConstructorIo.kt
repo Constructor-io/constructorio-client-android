@@ -7,7 +7,6 @@ import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
-import io.constructor.data.model.common.Result
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
@@ -35,6 +34,9 @@ object ConstructorIo {
     private lateinit var context: Context
     private var disposable = CompositeDisposable()
 
+    /**
+     *  Sets the logged in user identifier
+     */
     var userId: String?
         get() = configMemoryHolder.userId
         set(value) {
@@ -52,6 +54,11 @@ object ConstructorIo {
         trackSessionStart()
     }
 
+    /**
+     *  Initializes the client
+     *  @param context the context
+     *  @param constructorIoConfig the client configuration
+     */
     fun init(context: Context?, constructorIoConfig: ConstructorIoConfig) {
         if (context == null) {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
@@ -76,8 +83,14 @@ object ConstructorIo {
         dataManager = component.dataManager()
     }
 
+    /**
+     * Returns the current session ID (an incrementing integer)
+     */
     fun getSessionId() = preferenceHelper.getSessionId()
 
+    /**
+     * Returns the current client ID (a random GUID assigned to the app running on the device)
+     */
     fun getClientId() = preferenceHelper.id
 
     internal fun testInit(context: Context?, constructorIoConfig: ConstructorIoConfig, dataManager: DataManager, preferenceHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder) {
@@ -106,7 +119,7 @@ object ConstructorIo {
     }
 
     /**
-     * Returns search results including filters, categories, sort options, etc.
+     * Returns a list of search results including filters, categories, sort options, etc.
      */
     fun getSearchResults(text: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
@@ -140,6 +153,7 @@ object ConstructorIo {
 
     /**
      * Tracks input focus events
+     * @param term the term currently in the search bar
      */
     fun trackInputFocus(term: String?) {
         var completable = trackInputFocusInternal(term)
@@ -156,6 +170,11 @@ object ConstructorIo {
 
     /**
      * Tracks autocomplete select events
+     * @param searchTerm the term selected, i.e. "Pumpkin"
+     * @param originalQuery the term in the search bar, i.e. "Pum"
+     * @param sectionName the section that the term came from, commonly "Products" or "Suggestions"
+     * @param resultGroup the group to search within if a user elected to search in a group, i.e.  "Pumpkin in Produce" or "Pumpkin in Canned Goods"
+     * @param resultID the result ID of the autocomplete response that the selection came from
      */
     fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null) {
         var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID);
@@ -180,7 +199,10 @@ object ConstructorIo {
 
     /**
      * Tracks search submit events
-     */
+     * @param searchTerm the term selected, i.e. "Pumpkin"
+     * @param originalQuery the term in the search bar, i.e. "Pum"
+     * @param resultGroup the group to search within if a user elected to search in a group, i.e.  "Pumpkin in Produce" or "Pumpkin in Canned Goods"
+    */
     fun trackSearchSubmit(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?) {
         var completable = trackSearchSubmitInternal(searchTerm, originalQuery, resultGroup)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
@@ -202,6 +224,8 @@ object ConstructorIo {
 
     /**
      * Tracks search results loaded (a.k.a. search results viewed) events
+     * @param term the term that results are displayed for, i.e. "Pumpkin"
+     * @param resultCount the number of results for that term
      */
     fun trackSearchResultsLoaded(term: String, resultCount: Int) {
         var completable = trackSearchResultsLoadedInternal(term, resultCount)
@@ -218,7 +242,12 @@ object ConstructorIo {
 
     /**
      * Tracks search result click events
-     */
+     * @param itemName the name of the clicked item i.e. "Kabocha Pumpkin"
+     * @param customerId the identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
+     * @param sectionName the section that the results came from, i.e. "Products"
+     * @param resultID the result ID of the search response that the selection came from
+    */
     fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
         var completable = trackSearchResultClickInternal(itemName, customerId, searchTerm, sectionName, resultID)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
@@ -238,6 +267,10 @@ object ConstructorIo {
 
     /**
      * Tracks conversion (a.k.a add to cart) events
+     * @param itemName the name of the clicked item i.e. "Kabocha Pumpkin"
+     * @param customerId the identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
+     * @param sectionName the section that the results came from, i.e. "Products"
      */
     fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null) {
         var completable = trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName)
@@ -255,19 +288,22 @@ object ConstructorIo {
 
     /**
      * Tracks purchase events
-     */
-    fun trackPurchase(clientIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
-        var completable = trackPurchaseInternal(clientIds, revenue, orderID, sectionName)
+     * @param customerIds the item identifiers of the purchased items
+     * @param revenue the revenue of the purchase event
+     * @param orderID the identifier of the order
+    */
+    fun trackPurchase(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
+        var completable = trackPurchaseInternal(customerIds, revenue, orderID, sectionName)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Purchase error: ${t.message}")
         }))
     }
-    internal fun trackPurchaseInternal(clientIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
+    internal fun trackPurchaseInternal(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val revenueString = revenue?.let { "%.2f".format(revenue) }
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
-        return dataManager.trackPurchase(clientIds.toList(), revenueString, orderID, params.toTypedArray())
+        return dataManager.trackPurchase(customerIds.toList(), revenueString, orderID, params.toTypedArray())
     }
 
     /**
@@ -289,7 +325,10 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks browse results loaded (a.k.a. browse results viewed) events
+     * Tracks browse result loaded events
+     * @param filterName the name of the primary filter, i.e. "Aisle"
+     * @param filterValue the value of the primary filter, i.e. "Produce"
+     * @param resultCount the number of results for that filter name/value pair
      */
     fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int) {
         var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount)
@@ -306,6 +345,11 @@ object ConstructorIo {
 
     /**
      * Tracks browse result click events
+     * @param filterName the name of the primary filter, i.e. "Aisle"
+     * @param filterValue the value of the primary filter, i.e. "Produce"
+     * @param customerId the item identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param sectionName the section that the results came from, i.e. "Products"
+     * @param resultID the result ID of the browse response that the selection came from
      */
     fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null) {
         var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultID)
