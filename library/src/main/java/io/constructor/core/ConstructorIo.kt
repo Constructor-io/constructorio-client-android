@@ -307,7 +307,7 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list browse results including filters, categories, sort options, etc.
+     * Returns a list of browse results including filters, categories, sort options, etc.
      */
     fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
