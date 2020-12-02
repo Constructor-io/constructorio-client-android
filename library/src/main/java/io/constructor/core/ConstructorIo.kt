@@ -84,12 +84,12 @@ object ConstructorIo {
     }
 
     /**
-     * Returns the current session ID (an incrementing integer)
+     * Returns the current session identifier (an incrementing integer)
      */
     fun getSessionId() = preferenceHelper.getSessionId()
 
     /**
-     * Returns the current client ID (a random GUID assigned to the app running on the device)
+     * Returns the current client identifier (a random GUID assigned to the app running on the device)
      */
     fun getClientId() = preferenceHelper.id
 
@@ -172,8 +172,8 @@ object ConstructorIo {
      * Tracks autocomplete select events
      * @param searchTerm the term selected, i.e. "Pumpkin"
      * @param originalQuery the term in the search bar, i.e. "Pum"
-     * @param sectionName the section that the term came from, commonly "Products" or "Suggestions"
-     * @param resultGroup the group to search within if a user elected to search in a group, i.e.  "Pumpkin in Produce" or "Pumpkin in Canned Goods"
+     * @param sectionName the section the selection came from, i.e. "Search Suggestions"
+     * @param resultGroup the group to search within if a user selected to search in a group, i.e. "Pumpkin in Canned Goods"
      * @param resultID the result ID of the autocomplete response that the selection came from
      */
     fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null) {
@@ -201,7 +201,7 @@ object ConstructorIo {
      * Tracks search submit events
      * @param searchTerm the term selected, i.e. "Pumpkin"
      * @param originalQuery the term in the search bar, i.e. "Pum"
-     * @param resultGroup the group to search within if a user elected to search in a group, i.e.  "Pumpkin in Produce" or "Pumpkin in Canned Goods"
+     * @param resultGroup the group to search within if a user elected to search in a group, i.e. "Pumpkin in Canned Goods"
     */
     fun trackSearchSubmit(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?) {
         var completable = trackSearchSubmitInternal(searchTerm, originalQuery, resultGroup)
@@ -246,7 +246,7 @@ object ConstructorIo {
      * @param customerId the identifier of the clicked item i.e "PUMP-KAB-0002"
      * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
      * @param sectionName the section that the results came from, i.e. "Products"
-     * @param resultID the result ID of the search response that the selection came from
+     * @param resultID the result ID of the search response that the click came from
     */
     fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
         var completable = trackSearchResultClickInternal(itemName, customerId, searchTerm, sectionName, resultID)
@@ -267,8 +267,8 @@ object ConstructorIo {
 
     /**
      * Tracks conversion (a.k.a add to cart) events
-     * @param itemName the name of the clicked item i.e. "Kabocha Pumpkin"
-     * @param customerId the identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param itemName the name of the converting item i.e. "Kabocha Pumpkin"
+     * @param customerId the identifier of the converting item i.e "PUMP-KAB-0002"
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
      */
@@ -288,7 +288,7 @@ object ConstructorIo {
 
     /**
      * Tracks purchase events
-     * @param customerIds the item identifiers of the purchased items
+     * @param customerIds the identifiers of the purchased items
      * @param revenue the revenue of the purchase event
      * @param orderID the identifier of the order
     */
@@ -325,7 +325,7 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks browse result loaded events
+     * Tracks browse result loaded (a.k.a. browse results viewed) events
      * @param filterName the name of the primary filter, i.e. "Aisle"
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param resultCount the number of results for that filter name/value pair
