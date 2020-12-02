@@ -61,7 +61,7 @@ interface ConstructorApi {
     @GET
     fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>
 
-    @GET(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
+    @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
     fun trackBrowseResultClick(@Query("filter_name") filterName: String,
                                @Query("filter_value") filterValue: String,
                                @Query("customer_id") customerId: String,
@@ -69,7 +69,7 @@ interface ConstructorApi {
                                @QueryMap params: Map<String, String>,
                                @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_BROWSE_RESULT_LOAD_EVENT)
+    @POST(ApiPaths.URL_BROWSE_RESULT_LOAD_EVENT)
     fun trackBrowseResultsLoaded(@Query("filter_name") filterName: String,
                                  @Query("filter_value") filterValue: String,
                                  @Query("num_results") resultCount: Int,
