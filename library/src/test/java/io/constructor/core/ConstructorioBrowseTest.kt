@@ -71,7 +71,7 @@ class ConstructorIoBrowseTest {
             it.get()!!.response?.resultCount == 367
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.0&_dt"
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.1&_dt"
         assert(request.path.startsWith(path))
     }
 
@@ -84,7 +84,7 @@ class ConstructorIoBrowseTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.0&_dt"
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.1&_dt"
         assert(request.path.startsWith(path))
     }
 
@@ -98,7 +98,7 @@ class ConstructorIoBrowseTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.0&_dt"
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.1&_dt"
         assert(request.path.startsWith(path))
     }
 
@@ -114,7 +114,7 @@ class ConstructorIoBrowseTest {
             it.get()!!.response?.resultCount == 0
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.0&_dt"
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.3.1&_dt"
         assert(request.path.startsWith(path))
     }
 }
