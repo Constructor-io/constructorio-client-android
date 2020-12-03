@@ -45,6 +45,7 @@ class ConstructorIoTest {
         every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-three"
         every { configMemoryHolder.testCellParams } returns emptyList()
+        every { configMemoryHolder.segments } returns emptyList()
 
         val config = ConstructorIoConfig("dummyKey")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)

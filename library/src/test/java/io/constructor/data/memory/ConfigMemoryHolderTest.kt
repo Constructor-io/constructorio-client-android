@@ -22,4 +22,12 @@ class ConfigMemoryHolderTest {
         assert(params[0]!!.first == "ef-1" && params[0]!!.second == "2")
         assert(params[1]!!.first == "ef-3" && params[1]!!.second == "4")
     }
+
+    @Test
+    fun verifySegmentsWrittenAndEncoded() {
+        configMemoryHolder.segments = listOf("mobile", "COUNTRY_US")
+        val params = configMemoryHolder.segments
+        assert(params[0] == "mobile")
+        assert(params[1] == "COUNTRY_US")
+    }
 }

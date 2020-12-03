@@ -32,6 +32,8 @@ class ConfigMemoryHolder @Inject constructor() {
             backingString = combined
         }
 
+    var segments: List<String?> = emptyList()
+
     var autocompleteResultCount: Map<String, Int>? = null
 
     var userId: String? = null
