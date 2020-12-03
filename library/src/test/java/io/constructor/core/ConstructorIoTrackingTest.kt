@@ -16,7 +16,6 @@ import org.junit.Test
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class ConstructorIoTest {
 
@@ -357,7 +356,6 @@ class ConstructorIoTest {
         val request = mockServer.takeRequest()
         val path = "/autocomplete/TERM_UNKNOWN/purchase?customer_ids=TIT-REP-1997&customer_ids=QE2-REP-1969&revenue=12.99&order_id=ORD-1312343&autocomplete_section=Recommendations&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
         assert(request.path.startsWith(path))
-        print(request.body)
     }
 
     @Test
@@ -368,8 +366,8 @@ class ConstructorIoTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
-        assertEquals(68, request.bodySize)
         assert(request.path.startsWith(path))
+        assertEquals(68, request.bodySize)
         assertEquals("POST", request.method)
     }
 
@@ -381,8 +379,8 @@ class ConstructorIoTest {
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
-        assertEquals(68, request.bodySize)
         assert(request.path.startsWith(path))
+        assertEquals(68, request.bodySize)
         assertEquals("POST", request.method)
     }
 
