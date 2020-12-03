@@ -111,18 +111,25 @@ object ConstructorIo {
     /**
      * Returns a list of autocomplete suggestions
      */
-    fun getAutocompleteResults(query: String): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String): Observable<ConstructorData<AutocompleteResponse>> {
         val params = mutableListOf<Pair<String, String>>()
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
             params.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
         }
-        return dataManager.getAutocompleteResults(query, params.toTypedArray())
+        return dataManager.getAutocompleteResults(term, params.toTypedArray())
     }
 
     /**
      * Returns a list of search results including filters, categories, sort options, etc.
+     * @param term the term to search for
+     * @param facets  additional facets used to refine results
+     * @param page the page number of the results
+     * @param perPage The number of results per page to return
+     * @param groupId category facet used to refine results
+     * @param sortBy the sort method for results
+     * @param sortOrder the sort order for results
      */
-    fun getSearchResults(text: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<SearchResponse>> {
+    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
@@ -134,11 +141,19 @@ object ConstructorIo {
                 encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
             }
         }
-        return dataManager.getSearchResults(text, encodedParams = encodedParams.toTypedArray())
+        return dataManager.getSearchResults(term, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
      * Returns a list of browse results including filters, categories, sort options, etc.
+     * @param filterName filter name to display results from
+     * @param filterValue filter value to display results from
+     * @param facets  additional facets used to refine results
+     * @param page the page number of the results
+     * @param perPage The number of results per page to return
+     * @param groupId category facet used to refine results
+     * @param sortBy the sort method for results
+     * @param sortOrder the sort order for results
      */
     fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
