@@ -366,7 +366,7 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
+        val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt="
         assert(request.path.startsWith(path))
         assertEquals(68, request.bodySize)
         assertEquals("POST", request.method)
@@ -379,7 +379,7 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
+        val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt="
         assert(request.path.startsWith(path))
         assertEquals(68, request.bodySize)
         assertEquals("POST", request.method)
@@ -403,7 +403,7 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
         assert(request.path.startsWith(path))
         assertEquals(107, request.bodySize)
         assertEquals("POST", request.method)
@@ -416,7 +416,7 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4, "Products", "3467632").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
         assert(request.path.startsWith(path))
         assertEquals(107, request.bodySize)
         assertEquals("POST", request.method)
@@ -429,7 +429,7 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
         assert(request.path.startsWith(path))
         assertEquals(107, request.bodySize)
         assertEquals("POST", request.method)
