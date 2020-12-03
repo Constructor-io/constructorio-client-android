@@ -68,6 +68,7 @@ object ConstructorIo {
         configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
+        configMemoryHolder.segments = constructorIoConfig.segments
 
         preferenceHelper = component.preferenceHelper()
         preferenceHelper.apiKey = constructorIoConfig.apiKey

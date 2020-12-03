@@ -33,6 +33,12 @@ class RequestInterceptor(val context: Context, private val preferencesHelper: Pr
             }
         }
 
+        configMemoryHolder.segments.forEach {
+            it?.let {
+                builder.addQueryParameter(Constants.QueryConstants.SEGMENTS, it)
+            }
+        }
+
         builder.addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
         builder.addQueryParameter(Constants.QueryConstants.TIMESTAMP, System.currentTimeMillis().toString())
 
