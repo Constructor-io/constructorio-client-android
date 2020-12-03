@@ -393,11 +393,8 @@ class ConstructorIoTest {
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError(SocketTimeoutException::class.java)
-        val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
-        assertEquals(68, request.bodySize)
-        assert(request.path.startsWith(path))
-        assertEquals("POST", request.method)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
     }
 
     @Test
@@ -446,11 +443,8 @@ class ConstructorIoTest {
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertError(SocketTimeoutException::class.java)
-        val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.0&_dt=";
-        assert(request.path.startsWith(path))
-        assertEquals(107, request.bodySize)
-        assertEquals("POST", request.method)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
     }
 
 }
