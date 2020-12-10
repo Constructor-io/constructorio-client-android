@@ -2,7 +2,8 @@ package io.constructor.data.remote
 
 import io.constructor.core.Constants
 import io.constructor.data.model.autocomplete.AutocompleteResponse
-import io.constructor.data.model.browse.BrowseRequestBody
+import io.constructor.data.model.browse.BrowseResultClickRequestBody
+import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -63,12 +64,12 @@ interface ConstructorApi {
     fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>
 
     @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
-    fun trackBrowseResultClick(@Body browseRequestBody: BrowseRequestBody,
+    fun trackBrowseResultClick(@Body browseResultClickRequestBody: BrowseResultClickRequestBody,
                                @QueryMap params: Map<String, String>,
                                @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_BROWSE_RESULT_LOAD_EVENT)
-    fun trackBrowseResultsLoaded(@Body browseRequestBody: BrowseRequestBody,
+    fun trackBrowseResultsLoaded(@Body browseRequestBody: BrowseResultLoadRequestBody,
                                  @QueryMap params: Map<String, String>): Completable
 
 }

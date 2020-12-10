@@ -4,7 +4,8 @@ import com.squareup.moshi.Moshi
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
-import io.constructor.data.model.browse.BrowseRequestBody
+import io.constructor.data.model.browse.BrowseResultClickRequestBody
+import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.reactivex.Completable
@@ -117,12 +118,12 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
     }
 
     fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
-        val browseRequestBody = BrowseRequestBody(filterName, filterValue, null, customerId, resultPositionOnPage)
+        val browseRequestBody = BrowseResultClickRequestBody(filterName, filterValue, customerId, resultPositionOnPage)
         return constructorApi.trackBrowseResultClick(browseRequestBody, params.toMap(), encodedParams.toMap())
     }
 
     fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, params: Array<Pair<String, String>>): Completable {
-        val browseRequestBody = BrowseRequestBody(filterName, filterValue, resultCount, null, null)
+        val browseRequestBody = BrowseResultLoadRequestBody(filterName, filterValue, resultCount)
         return constructorApi.trackBrowseResultsLoaded(browseRequestBody, params.toMap())
     }
 
