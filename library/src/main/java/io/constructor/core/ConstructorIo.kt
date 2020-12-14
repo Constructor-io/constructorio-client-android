@@ -2,6 +2,7 @@ package io.constructor.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
@@ -352,11 +353,26 @@ object ConstructorIo {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String?, filterValue: String?, resultCount: Int?): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        return dataManager.trackBrowseResultsLoaded(filterName, filterValue, resultCount, arrayOf(
-                Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS
-        ))
+        return dataManager.trackBrowseResultsLoaded(
+                arrayOf(
+                        Constants.QueryConstants.FILTER_NAME to filterName,
+                        Constants.QueryConstants.FILTER_VALUE to filterValue,
+                        Constants.QueryConstants.CLIENT to BuildConfig.CLIENT_VERSION,
+                        Constants.QueryConstants.IDENTITY to preferenceHelper.id,
+                        Constants.QueryConstants.USER_ID to configMemoryHolder.userId,
+                        Constants.QueryConstants.API_KEY to preferenceHelper.apiKey
+                ),
+                arrayOf(
+                        Constants.QueryConstants.SESSION to preferenceHelper.getSessionId(),
+                        Constants.QueryConstants.RESULT_COUNT to resultCount
+                ),
+                configMemoryHolder.segments,
+                arrayOf(
+                        Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS
+                )
+        )
     }
 
     /**
@@ -378,7 +394,22 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         val sName = sectionName ?: preferenceHelper.defaultItemSection
-        return dataManager.trackBrowseResultClick(filterName, filterValue, customerId, resultPositionOnPage, arrayOf(
+        return dataManager.trackBrowseResultClick(
+                arrayOf(
+                        Constants.QueryConstants.FILTER_NAME to filterName,
+                        Constants.QueryConstants.FILTER_VALUE to filterValue,
+                        Constants.QueryConstants.CUSTOMER_ID to customerId,
+                        Constants.QueryConstants.CLIENT to BuildConfig.CLIENT_VERSION,
+                        Constants.QueryConstants.IDENTITY to preferenceHelper.id,
+                        Constants.QueryConstants.USER_ID to configMemoryHolder.userId,
+                        Constants.QueryConstants.API_KEY to preferenceHelper.apiKey
+                ),
+                arrayOf(
+                        Constants.QueryConstants.SESSION to preferenceHelper.getSessionId(),
+                        Constants.QueryConstants.RESULT_POSITION_ON_PAGE to resultPositionOnPage
+                ),
+                configMemoryHolder.segments,
+                arrayOf(
                 Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
         ), encodedParams.toTypedArray())
 

@@ -65,7 +65,7 @@ interface ConstructorApi {
 
     @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
     fun trackBrowseResultClick(@Body browseResultClickRequestBody: BrowseResultClickRequestBody,
-                               @QueryMap params: Map<String, String>,
+                               @QueryMap params: Map<String, String?>,
                                @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_BROWSE_RESULT_LOAD_EVENT)
