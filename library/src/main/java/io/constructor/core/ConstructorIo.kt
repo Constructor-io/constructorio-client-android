@@ -410,8 +410,8 @@ object ConstructorIo {
                 ),
                 configMemoryHolder.segments,
                 arrayOf(
-                Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
-        ), encodedParams.toTypedArray())
+                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
+                ), encodedParams.toTypedArray())
 
     }
 
