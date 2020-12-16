@@ -117,49 +117,12 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
-    fun trackBrowseResultsLoaded(requestBodyStringParams: Array<Pair<String, String?>>, requestBodyIntParams: Array<Pair<String, Int?>>, segments: List<String?>, params: Array<Pair<String, String>>): Completable {
-        val requestBodyStringParamsMap = requestBodyStringParams.toMap()
-        val requestBodyIntParamsMap = requestBodyIntParams.toMap()
-        val urlParamsMap = params.toMap()
-
-        val browseRequestBody = BrowseResultLoadRequestBody(
-                requestBodyStringParamsMap["filter_name"],
-                requestBodyStringParamsMap["filter_value"],
-                requestBodyIntParamsMap["result_count"],
-                requestBodyStringParamsMap["c"],
-                requestBodyStringParamsMap["i"],
-                requestBodyIntParamsMap["s"],
-                requestBodyStringParamsMap["ui"],
-                segments,
-                requestBodyStringParamsMap["key"],
-                true,
-                urlParamsMap["autocomplete_section"],
-                System.currentTimeMillis().toInt()
-        )
-        return constructorApi.trackBrowseResultsLoaded(browseRequestBody, urlParamsMap)
+    fun trackBrowseResultsLoaded(browseResultLoadRequestBody: BrowseResultLoadRequestBody, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackBrowseResultsLoaded(browseResultLoadRequestBody, params.toMap())
     }
 
-    fun trackBrowseResultClick(requestBodyStringParams: Array<Pair<String, String?>>, requestBodyIntParams: Array<Pair<String, Int?>>, segments: List<String?>, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
-        val requestBodyStringParamsMap = requestBodyStringParams.toMap()
-        val requestBodyIntParamsMap = requestBodyIntParams.toMap()
-        val urlParamsMap = params.toMap()
-
-        val browseRequestBody = BrowseResultClickRequestBody(
-                requestBodyStringParamsMap["filter_name"],
-                requestBodyStringParamsMap["filter_value"],
-                requestBodyStringParamsMap["customer_id"],
-                requestBodyIntParamsMap["result_position_on_page"],
-                requestBodyStringParamsMap["c"],
-                requestBodyStringParamsMap["i"],
-                requestBodyIntParamsMap["s"],
-                requestBodyStringParamsMap["ui"],
-                segments,
-                requestBodyStringParamsMap["key"],
-                true,
-                urlParamsMap["autocomplete_section"],
-                System.currentTimeMillis().toInt()
-        )
-        return constructorApi.trackBrowseResultClick(browseRequestBody, urlParamsMap, encodedParams.toMap())
+    fun trackBrowseResultClick(browseResultClickRequestBody: BrowseResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
+        return constructorApi.trackBrowseResultClick(browseResultClickRequestBody, params.toMap(), encodedParams.toMap())
     }
 
 }
