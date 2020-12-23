@@ -370,7 +370,6 @@ class ConstructorIoTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt="
-
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 220)
         assertEquals("POST", request.method)
@@ -384,7 +383,6 @@ class ConstructorIoTest {
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt="
-
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 220)
         assertEquals("POST", request.method)
@@ -409,7 +407,6 @@ class ConstructorIoTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt=";
-
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 250)
         assertEquals("POST", request.method)
@@ -423,7 +420,6 @@ class ConstructorIoTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt=";
-
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 250)
         assertEquals("POST", request.method)
@@ -437,7 +433,6 @@ class ConstructorIoTest {
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt=";
-
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 250)
         assertEquals("POST", request.method)

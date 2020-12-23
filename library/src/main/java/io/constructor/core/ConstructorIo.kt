@@ -393,9 +393,7 @@ object ConstructorIo {
 
         return dataManager.trackBrowseResultsLoaded(
                 browseResultLoadRequestBody,
-                arrayOf(
-                        Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS
-                )
+                arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS)
         )
     }
 
