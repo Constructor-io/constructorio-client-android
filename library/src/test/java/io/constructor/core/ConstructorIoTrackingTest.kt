@@ -15,6 +15,8 @@ import org.junit.Rule
 import org.junit.Test
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ConstructorIoTest {
 
@@ -365,8 +367,11 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?filter_name=group_id&filter_value=Movies&num_results=10&action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt="
+        print(request.body.readUtf8())
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 220)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -376,8 +381,10 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?filter_name=group_id&filter_value=Movies&num_results=10&action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt="
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 220)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -387,9 +394,8 @@ class ConstructorIoTest {
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError(SocketTimeoutException::class.java)
-        val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?filter_name=group_id&filter_value=Movies&num_results=10&action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
-        assert(request.path.startsWith(path))
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
     }
 
     @Test
@@ -399,8 +405,11 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
+        print(request.body.readUtf8())
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 250)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -410,8 +419,10 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4, "Products", "3467632").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 250)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -421,8 +432,10 @@ class ConstructorIoTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
+        val path = "/v2/behavioral_action/browse_result_click?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 250)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -432,9 +445,8 @@ class ConstructorIoTest {
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertError(SocketTimeoutException::class.java)
-        val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_click?filter_name=group_id&filter_value=Movies&customer_id=TIT-REP-1997&result_position_on_page=4&autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.1&_dt=";
-        assert(request.path.startsWith(path))
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
     }
 
 }

@@ -35,6 +35,10 @@ class Constants {
         const val FILTER_GROUP_ID = "filters[group_id]"
         const val FILTER_FACET = "filters[%s]"
         const val RESULT_ID = "result_id"
+        const val FILTER_NAME = "filter_name"
+        const val FILTER_VALUE = "filter_value"
+        const val RESULT_POSITION_ON_PAGE = "result_position_on_page"
+        const val RESULT_COUNT = "result_count"
     }
 
     object QueryValues {

@@ -2,6 +2,8 @@ package io.constructor.data.remote
 
 import io.constructor.core.Constants
 import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.browse.BrowseResultClickRequestBody
+import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -61,18 +63,13 @@ interface ConstructorApi {
     @GET
     fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>
 
-    @GET(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
-    fun trackBrowseResultClick(@Query("filter_name") filterName: String,
-                               @Query("filter_value") filterValue: String,
-                               @Query("customer_id") customerId: String,
-                               @Query("result_position_on_page") resultPositionOnPage: Int,
-                               @QueryMap params: Map<String, String>,
+    @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
+    fun trackBrowseResultClick(@Body browseResultClickRequestBody: BrowseResultClickRequestBody,
+                               @QueryMap params: Map<String, String?>,
                                @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_BROWSE_RESULT_LOAD_EVENT)
-    fun trackBrowseResultsLoaded(@Query("filter_name") filterName: String,
-                                 @Query("filter_value") filterValue: String,
-                                 @Query("num_results") resultCount: Int,
+    @POST(ApiPaths.URL_BROWSE_RESULT_LOAD_EVENT)
+    fun trackBrowseResultsLoaded(@Body browseRequestBody: BrowseResultLoadRequestBody,
                                  @QueryMap params: Map<String, String>): Completable
 
 }
