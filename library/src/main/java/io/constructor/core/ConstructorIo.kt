@@ -383,12 +383,12 @@ object ConstructorIo {
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
-                preferenceHelper.apiKey,
                 true,
                 preferenceHelper.defaultItemSection,
-                System.currentTimeMillis().toInt()
+                System.currentTimeMillis().toString()
         )
 
         return dataManager.trackBrowseResultsLoaded(
@@ -417,7 +417,7 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
-        val sName = sectionName ?: preferenceHelper.defaultItemSection
+        val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultClickRequestBody = BrowseResultClickRequestBody(
                 filterName,
                 filterValue,
@@ -426,19 +426,18 @@ object ConstructorIo {
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
-                preferenceHelper.apiKey,
                 true,
-                sName,
-                System.currentTimeMillis().toInt()
+                section,
+                System.currentTimeMillis().toString()
         )
 
         return dataManager.trackBrowseResultClick(
                 browseResultClickRequestBody,
-                arrayOf(
-                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
-                ), encodedParams.toTypedArray()
+                arrayOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to section),
+                encodedParams.toTypedArray()
         )
 
     }
