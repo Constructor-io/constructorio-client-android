@@ -13,6 +13,8 @@ import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.purchase.PurchaseItem
+import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -25,6 +27,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import kotlin.collections.HashMap
 
 typealias ConstructorError = ((Throwable) -> Unit)?
 
@@ -329,18 +332,34 @@ object ConstructorIo {
      * @param revenue the revenue of the purchase event
      * @param orderID the identifier of the order
     */
-    fun trackPurchase(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
+    fun trackPurchase(customerIds: Array<HashMap<String, String>>, revenue: Double?, orderID: String, sectionName: String? = null) {
         var completable = trackPurchaseInternal(customerIds, revenue, orderID, sectionName)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Purchase error: ${t.message}")
         }))
     }
-    internal fun trackPurchaseInternal(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
+    internal fun trackPurchaseInternal(customerIds: Array<HashMap<String, String>>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
+
+        val items = customerIds.map { item -> PurchaseItem(item["itemId"], item["variationId"]) }
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
-        val revenueString = revenue?.let { "%.2f".format(revenue) }
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
-        return dataManager.trackPurchase(customerIds.toList(), revenueString, orderID, params.toTypedArray())
+        val purchaseRequestBody = PurchaseRequestBody(
+                items.toList(),
+                revenue,
+                orderID,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                preferenceHelper.apiKey,
+                true,
+                preferenceHelper.defaultItemSection,
+                System.currentTimeMillis().toInt()
+        )
+
+        return dataManager.trackPurchase(purchaseRequestBody, params.toTypedArray())
     }
 
     /**
