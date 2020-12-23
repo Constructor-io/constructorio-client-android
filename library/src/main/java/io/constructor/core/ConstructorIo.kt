@@ -355,7 +355,7 @@ object ConstructorIo {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultsLoadedInternal(filterName: String?, filterValue: String?, resultCount: Int?): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val browseResultLoadRequestBody = BrowseResultLoadRequestBody(
                 filterName,
@@ -364,12 +364,12 @@ object ConstructorIo {
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
-                preferenceHelper.apiKey,
                 true,
                 preferenceHelper.defaultItemSection,
-                System.currentTimeMillis().toInt()
+                System.currentTimeMillis().toString()
         )
 
         return dataManager.trackBrowseResultsLoaded(
@@ -398,7 +398,7 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
-        val sName = sectionName ?: preferenceHelper.defaultItemSection
+        val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultClickRequestBody = BrowseResultClickRequestBody(
                 filterName,
                 filterValue,
@@ -407,18 +407,18 @@ object ConstructorIo {
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
-                preferenceHelper.apiKey,
                 true,
-                sName,
-                System.currentTimeMillis().toInt()
+                section,
+                System.currentTimeMillis().toString()
         )
 
         return dataManager.trackBrowseResultClick(
                 browseResultClickRequestBody,
                 arrayOf(
-                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
+                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to section
                 ), encodedParams.toTypedArray()
         )
 
