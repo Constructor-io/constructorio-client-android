@@ -374,7 +374,7 @@ object ConstructorIo {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultsLoadedInternal(filterName: String?, filterValue: String?, resultCount: Int?): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val browseResultLoadRequestBody = BrowseResultLoadRequestBody(
                 filterName,
