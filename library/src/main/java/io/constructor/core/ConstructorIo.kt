@@ -346,8 +346,8 @@ object ConstructorIo {
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
         val purchaseRequestBody = PurchaseRequestBody(
                 items.toList(),
-                revenue,
                 orderID,
+                revenue,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),

@@ -6,8 +6,8 @@ import java.io.Serializable
 
 data class PurchaseRequestBody(
         @Json(name = "items") val items: List<PurchaseItem>?,
+        @Json(name = "order_id") val orderId: String,
         @Json(name = "revenue") val revenue: Double?,
-        @Json(name = "order_id") val orderId: String?,
         @Json(name = "c") val c: String?,
         @Json(name = "i") val i: String?,
         @Json(name = "s") val s: Int?,

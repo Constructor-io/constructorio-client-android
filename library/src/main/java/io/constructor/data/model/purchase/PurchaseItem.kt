@@ -6,5 +6,5 @@ import java.io.Serializable
 
 data class PurchaseItem(
         @Json(name = "item_id") val itemId: String?,
-        @Json(name = "variation_id") val variation_id: String? = null
+        @Json(name = "variation_id") val variationId: String? = null
 ) : Serializable
