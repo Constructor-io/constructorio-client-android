@@ -119,7 +119,7 @@ ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "to
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
 
 // Track when products are purchased (customerIds, revenue, orderId)
-ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
+ConstructorIo.trackPurchase(arrayOf(hashMapOf("itemId" to "1234567-AB"), hashMapOf("itemId" to "1234567-AB")), 25.98, "ORD-1312343")
 ```
 
 ### Browse Events

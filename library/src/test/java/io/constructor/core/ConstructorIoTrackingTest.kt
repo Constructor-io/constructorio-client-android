@@ -319,7 +319,7 @@ class ConstructorIoTest {
     fun trackPurchase() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997", "itemId" to "QE2-REP-1969")), 12.99, "ORD-1312343").test()
+        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997"), hashMapOf("itemId" to "QE2-REP-1969")), 12.99, "ORD-1312343").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/purchase?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt=";
@@ -331,7 +331,7 @@ class ConstructorIoTest {
     fun trackPurchase500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997", "itemId" to "QE2-REP-1969")), 12.99, "ORD-1312343").test()
+        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997"), hashMapOf("itemId" to "QE2-REP-1969")), 12.99, "ORD-1312343").test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/purchase?autocomplete_section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt=";
@@ -344,7 +344,7 @@ class ConstructorIoTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997", "itemId" to "QE2-REP-1969")), 12.99,"ORD-1312343").test()
+        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997"), hashMapOf("itemId" to "QE2-REP-1969")), 12.99,"ORD-1312343").test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)
@@ -354,7 +354,7 @@ class ConstructorIoTest {
     fun trackPurchaseWithSection() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997", "itemId" to "QE2-REP-1969")), 12.99, "ORD-1312343", "Recommendations").test()
+        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(hashMapOf("itemId" to "TIT-REP-1997"), hashMapOf("itemId" to "QE2-REP-1969")), 12.99, "ORD-1312343", "Recommendations").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/purchase?autocomplete_section=Recommendations&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.2&_dt=";
