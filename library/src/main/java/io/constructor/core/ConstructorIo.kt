@@ -332,16 +332,15 @@ object ConstructorIo {
      * @param revenue the revenue of the purchase event
      * @param orderID the identifier of the order
     */
-    fun trackPurchase(customerIds: Array<HashMap<String, String>>, revenue: Double?, orderID: String, sectionName: String? = null) {
+    fun trackPurchase(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
         var completable = trackPurchaseInternal(customerIds, revenue, orderID, sectionName)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Purchase error: ${t.message}")
         }))
     }
-    internal fun trackPurchaseInternal(customerIds: Array<HashMap<String, String>>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
+    internal fun trackPurchaseInternal(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-
-        val items = customerIds.map { item -> PurchaseItem(item["itemId"], item["variationId"]) }
+        val items = customerIds.map { item -> PurchaseItem(item) }
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
         val purchaseRequestBody = PurchaseRequestBody(
