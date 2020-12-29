@@ -16,5 +16,5 @@ data class PurchaseRequestBody(
         @Json(name = "key") val key: String?,
         @Json(name= "beacon") val beacon: Boolean?,
         @Json(name= "autocomplete_section") val autocomplete_section: String?,
-        @Json(name= "_dt") val _dt: Int?
+        @Json(name= "_dt") val _dt: Long?
 ) : Serializable
