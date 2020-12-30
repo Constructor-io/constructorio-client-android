@@ -28,7 +28,7 @@ android {
         targetSdkVersion 28
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
-        versionName '2.3.2'
+        versionName '2.3.3'
         buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
         buildConfigField("String", "DEFAULT_ITEM_SECTION", "\"Products\"")
         buildConfigField("String", "SERVICE_URL", "\"ac.cnstrc.com\"")
