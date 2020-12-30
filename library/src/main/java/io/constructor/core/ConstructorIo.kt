@@ -369,7 +369,7 @@ object ConstructorIo {
                 configMemoryHolder.segments,
                 true,
                 preferenceHelper.defaultItemSection,
-                System.currentTimeMillis().toString()
+                System.currentTimeMillis()
         )
 
         return dataManager.trackBrowseResultsLoaded(
@@ -412,7 +412,7 @@ object ConstructorIo {
                 configMemoryHolder.segments,
                 true,
                 section,
-                System.currentTimeMillis().toString()
+                System.currentTimeMillis()
         )
 
         return dataManager.trackBrowseResultClick(
