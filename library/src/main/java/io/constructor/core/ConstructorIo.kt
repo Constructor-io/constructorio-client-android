@@ -13,6 +13,8 @@ import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.purchase.PurchaseItem
+import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -25,6 +27,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import kotlin.collections.HashMap
 
 typealias ConstructorError = ((Throwable) -> Unit)?
 
@@ -337,10 +340,25 @@ object ConstructorIo {
     }
     internal fun trackPurchaseInternal(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
+        val items = customerIds.map { item -> PurchaseItem(item) }
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
-        val revenueString = revenue?.let { "%.2f".format(revenue) }
         val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
-        return dataManager.trackPurchase(customerIds.toList(), revenueString, orderID, params.toTypedArray())
+        val purchaseRequestBody = PurchaseRequestBody(
+                items.toList(),
+                orderID,
+                revenue,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                preferenceHelper.apiKey,
+                true,
+                preferenceHelper.defaultItemSection,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackPurchase(purchaseRequestBody, params.toTypedArray())
     }
 
     /**
@@ -374,9 +392,7 @@ object ConstructorIo {
 
         return dataManager.trackBrowseResultsLoaded(
                 browseResultLoadRequestBody,
-                arrayOf(
-                        Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS
-                )
+                arrayOf(Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_BROWSE_RESULTS)
         )
     }
 
@@ -417,9 +433,8 @@ object ConstructorIo {
 
         return dataManager.trackBrowseResultClick(
                 browseResultClickRequestBody,
-                arrayOf(
-                        Constants.QueryConstants.AUTOCOMPLETE_SECTION to section
-                ), encodedParams.toTypedArray()
+                arrayOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to section),
+                encodedParams.toTypedArray()
         )
 
     }

@@ -6,6 +6,7 @@ import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.reactivex.Completable
@@ -89,8 +90,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         return constructorApi.trackInputFocus(term, params.toMap())
     }
 
-    fun trackPurchase(customerIds: List<String>, revenue: String? = null, orderID: String, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackPurchase(customerIds, revenue, orderID, params.toMap())
+    fun trackPurchase(purchaseRequestBody: PurchaseRequestBody, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackPurchase(purchaseRequestBody, params.toMap())
     }
 
     fun getBrowseResults(filterName: String, filterValue: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseResponse>> {

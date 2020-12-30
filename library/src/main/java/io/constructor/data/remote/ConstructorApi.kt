@@ -1,9 +1,8 @@
 package io.constructor.data.remote
 
-import io.constructor.core.Constants
-import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -51,10 +50,8 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_BEHAVIOR)
     fun trackInputFocus(@Query("term") term: String?, @QueryMap params: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_PURCHASE)
-    fun trackPurchase(@Query(Constants.QueryConstants.CUSTOMER_ID) customerIds: List<String>,
-                      @Query("revenue") revenue: String?,
-                      @Query("order_id") orderID: String,
+    @POST(ApiPaths.URL_PURCHASE)
+    fun trackPurchase(@Body purchaseRequestBody: PurchaseRequestBody,
                       @QueryMap params: Map<String, String>): Completable
 
     @GET
