@@ -366,7 +366,7 @@ class ConstructorIoTest {
     fun trackBrowseResultLoaded() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10, "http://constructor.io").test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.3&_dt="
@@ -379,7 +379,7 @@ class ConstructorIoTest {
     fun trackBrowseResultLoaded500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10, "http://constructor.io").test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/browse_result_load?action=browse-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.3.3&_dt="
@@ -393,7 +393,7 @@ class ConstructorIoTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10, "http://constructor.io").test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)

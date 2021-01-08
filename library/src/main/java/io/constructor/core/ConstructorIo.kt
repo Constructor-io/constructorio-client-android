@@ -366,13 +366,13 @@ object ConstructorIo {
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param resultCount the number of results for that filter name/value pair
      */
-    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, url: String) {
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, url: String = "Not Available") {
         var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount, url)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int, url: String): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int, url: String = "Not Available"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val browseResultLoadRequestBody = BrowseResultLoadRequestBody(
                 filterName,

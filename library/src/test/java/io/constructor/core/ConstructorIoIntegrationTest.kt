@@ -106,7 +106,7 @@ class ConstructorIoTestIntegration {
 
     @Test
     fun trackBrowseResultsLoadedAgainstRealResponse() {
-        val observer = constructorIo.trackBrowseResultsLoadedInternal("group_ids", "544", 46, "http://constructor.io").test()
+        val observer = constructorIo.trackBrowseResultsLoadedInternal("group_ids", "544", 46).test()
         observer.assertComplete();
     }
 
