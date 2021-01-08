@@ -35,7 +35,6 @@ class ResultDataAdapter {
                 }
                 3 -> {
                     url = jsonReader.nextString()
-
                 }
                 4 -> {
                     facets = facetDelegate.fromJsonValue(jsonReader.readJsonValue())
@@ -49,7 +48,7 @@ class ResultDataAdapter {
             }
         }
         jsonReader.endObject()
-        return ResultData(description, id, imageUrl, url, groups, facets, metadata)
+        return ResultData(description, id, url, imageUrl, groups, facets, metadata)
 
     }
 
