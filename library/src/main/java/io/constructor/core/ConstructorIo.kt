@@ -231,7 +231,7 @@ object ConstructorIo {
         resultGroup?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         return dataManager.trackAutocompleteSelect(searchTerm, arrayOf(
-            Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionName,
+            Constants.QueryConstants.SECTION to sectionName,
             Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
             Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_CLICK
         ), encodedParams.toTypedArray())
@@ -300,7 +300,7 @@ object ConstructorIo {
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         val sName = sectionName ?: preferenceHelper.defaultItemSection
         return dataManager.trackSearchResultClick(itemName, customerId, searchTerm, arrayOf(
-                Constants.QueryConstants.AUTOCOMPLETE_SECTION to sName
+                Constants.QueryConstants.SECTION to sName
         ), encodedParams.toTypedArray())
 
     }
@@ -322,7 +322,7 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val revenueString = revenue?.let { "%.2f".format(revenue) }
         return dataManager.trackConversion(searchTerm, itemName, customerId, revenueString, arrayOf(
-                Constants.QueryConstants.AUTOCOMPLETE_SECTION to (sectionName ?: preferenceHelper.defaultItemSection)
+                Constants.QueryConstants.SECTION to (sectionName ?: preferenceHelper.defaultItemSection)
         ))
     }
 
@@ -342,7 +342,7 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val items = customerIds.map { item -> PurchaseItem(item) }
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
-        val params = mutableListOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to sectionNameParam)
+        val params = mutableListOf(Constants.QueryConstants.SECTION to sectionNameParam)
         val purchaseRequestBody = PurchaseRequestBody(
                 items.toList(),
                 orderID,
@@ -354,7 +354,6 @@ object ConstructorIo {
                 configMemoryHolder.segments,
                 preferenceHelper.apiKey,
                 true,
-                preferenceHelper.defaultItemSection,
                 System.currentTimeMillis()
         )
 
@@ -367,18 +366,19 @@ object ConstructorIo {
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param resultCount the number of results for that filter name/value pair
      */
-    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int) {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount)
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, url: String = "Not Available") {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount, url)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int, url: String = "Not Available"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val browseResultLoadRequestBody = BrowseResultLoadRequestBody(
                 filterName,
                 filterValue,
                 resultCount,
+                url,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),
@@ -433,7 +433,7 @@ object ConstructorIo {
 
         return dataManager.trackBrowseResultClick(
                 browseResultClickRequestBody,
-                arrayOf(Constants.QueryConstants.AUTOCOMPLETE_SECTION to section),
+                arrayOf(Constants.QueryConstants.SECTION to section),
                 encodedParams.toTypedArray()
         )
 

@@ -17,7 +17,7 @@ class Constants {
         const val IDENTITY = "i"
         const val SEGMENTS = "us"
         const val ACTION = "action"
-        const val AUTOCOMPLETE_SECTION = "autocomplete_section"
+        const val SECTION = "section"
         const val ORIGINAL_QUERY = "original_query"
         const val CLIENT = "c"
         const val EVENT = "tr"
