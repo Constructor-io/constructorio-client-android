@@ -25,7 +25,7 @@ class ConstructorIoTestIntegration {
     fun setup() {
         every { ctx.applicationContext } returns ctx
 
-        every { preferencesHelper.apiKey } returns "copper-key"
+        every { preferencesHelper.apiKey } returns "key_K2hlXt5aVSwoI1Uw"
         every { preferencesHelper.id } returns "wacko-the-guid"
         every { preferencesHelper.scheme } returns "https"
         every { preferencesHelper.serviceUrl } returns "ac.cnstrc.com"
@@ -42,6 +42,72 @@ class ConstructorIoTestIntegration {
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
+    }
+
+    @Test
+    fun getAutocompleteResultsAgainstRealResponse() {
+        val observer = constructorIo.getAutocompleteResults("pork").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackSessionStartAgainstRealResponse() {
+        val observer = constructorIo.trackSessionStartInternal().test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackInputFocusAgainstRealResponse() {
+        val observer = constructorIo.trackInputFocusInternal("pork").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun getSearchResultsAgainstRealResponse() {
+        val observer = constructorIo.getSearchResults("pork").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun getBrowseResultsAgainstRealResponse() {
+        val observer = constructorIo.getBrowseResults("group_ids", "544").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackAutocompleteSelectAgainstRealResponse() {
+        val observer = constructorIo.trackAutocompleteSelectInternal("pork", "pork", "Search Suggestions").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackSearchSubmitAgainstRealResponse() {
+        val observer = constructorIo.trackSearchSubmitInternal("pork", "pork", null).test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackSearchResultClickAgainstRealResponse() {
+        val observer = constructorIo.trackSearchResultClickInternal("Boneless Pork Shoulder Roast", "prrst_shldr_bls", "pork").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackConversionAgainstRealResponse() {
+        val observer = constructorIo.trackConversionInternal("Boneless Pork Shoulder Roast", "prrst_shldr_bls", 1.99).test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackPurchaseAgainstRealResponse() {
+        val observer = constructorIo.trackPurchaseInternal(arrayOf("prrst_shldr_bls", "prrst_crwn"), 9.98, "45273", "Products").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackBrowseResultsLoadedAgainstRealResponse() {
+        val observer = constructorIo.trackBrowseResultsLoadedInternal("group_ids", "544", 46, "http://constructor.io").test()
+        observer.assertComplete();
     }
 
     @Test

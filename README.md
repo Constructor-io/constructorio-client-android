@@ -125,8 +125,8 @@ ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-131
 ### Browse Events
 
 ```kotlin
-// Track when browse results are loaded into view (filterName, filterValue, resultCount)
-ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
+// Track when browse results are loaded into view (filterName, filterValue, resultCount, url)
+ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674, "localfoodstore.com/snacks")
 
 // Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage)
 ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4")
