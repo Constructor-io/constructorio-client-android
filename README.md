@@ -112,8 +112,8 @@ ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 // Track when search results are loaded into view (searchTerm, resultCount)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789)
 
-// Track when a search result is clicked (itemName, customerId, searchTerm)
-ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth")
+// Track when a search result is clicked (itemName, customerId, searchTerm, sectionName, resultId)
+ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 
 // Track when a search result converts (itemName, customerId, revenue, searchTerm)
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
@@ -128,6 +128,6 @@ ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-131
 // Track when browse results are loaded into view (filterName, filterValue, resultCount)
 ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
 
-// Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage)
-ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4")
+// Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultId)
+ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 ```

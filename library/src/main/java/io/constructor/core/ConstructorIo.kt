@@ -401,6 +401,7 @@ object ConstructorIo {
      * @param filterName the name of the primary filter, i.e. "Aisle"
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param customerId the item identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param resultPositionOnPage the position of the clicked item on the page i.e. 4
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the browse response that the selection came from
      */
