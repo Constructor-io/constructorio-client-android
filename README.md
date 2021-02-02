@@ -109,8 +109,8 @@ ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 ### Search Events
 
 ```kotlin
-// Track when search results are loaded into view (searchTerm, resultCount)
-ConstructorIo.trackSearchResultsLoaded("tooth", 789)
+// Track when search results are loaded into view (searchTerm, resultCount, customerIds of shown items)
+ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"))
 
 // Track when a search result is clicked (itemName, customerId, searchTerm, sectionName, resultId)
 ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
