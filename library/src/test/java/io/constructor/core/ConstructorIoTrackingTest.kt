@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ConstructorIoTest {
+class ConstructorIoTrackingTest {
 
     @Rule
     @JvmField val overrideSchedulersRule = RxSchedulersOverrideRule()
@@ -210,6 +210,17 @@ class ConstructorIoTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/behavior?term=titanic&num_results=10&action=search-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.4.0&_dt=";
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithCustomerIDs() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, arrayOf("TIT-REP-1997", "QE2-REP-1969")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/behavior?term=titanic&num_results=10&customer_ids=TIT-REP-1997%2CQE2-REP-1969&action=search-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.4.0&_dt=";
         assert(request.path.startsWith(path))
     }
 
