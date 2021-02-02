@@ -45,6 +45,7 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_BEHAVIOR)
     fun trackSearchResultsLoaded(@Query("term") term: String,
                                  @Query("num_results") resultCount: Int,
+                                 @Query("customer_ids") customerIds: String?,
                                  @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_BEHAVIOR)

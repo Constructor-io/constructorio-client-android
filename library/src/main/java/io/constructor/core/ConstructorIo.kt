@@ -266,16 +266,17 @@ object ConstructorIo {
      * Tracks search results loaded (a.k.a. search results viewed) events
      * @param term the term that results are displayed for, i.e. "Pumpkin"
      * @param resultCount the number of results for that term
+     * @param customerIds the customerIds of shown items
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int) {
-        var completable = trackSearchResultsLoadedInternal(term, resultCount)
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null) {
+        var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int): Completable {
+    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        return dataManager.trackSearchResultsLoaded(term, resultCount, arrayOf(
+        return dataManager.trackSearchResultsLoaded(term, resultCount, customerIds, arrayOf(
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS
         ))
     }
