@@ -83,7 +83,7 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
     }
 
     fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackSearchResultsLoaded(term, resultCount, customerIds?.take(20)?.joinToString(","), params.toMap())
+        return constructorApi.trackSearchResultsLoaded(term, resultCount, customerIds?.take(60)?.joinToString(","), params.toMap())
     }
 
     fun trackInputFocus(term: String?, params: Array<Pair<String, String>>): Completable {
