@@ -134,6 +134,6 @@ ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "P
 // // Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, revenue, searchTerm)
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
 
-// Track when products are purchased (customerIds, revenue, orderId)
+// Track when items are purchased (customerIds, revenue, orderId)
 ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
 ```
