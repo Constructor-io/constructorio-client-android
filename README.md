@@ -62,7 +62,7 @@ ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }
 }
 ```
 
-## 6. Request Browse Events
+## 6. Request Browse Results
 
 ```kotlin
 var page = 1
@@ -92,6 +92,8 @@ Three types of these events exist:
 1. **General Events** are sent as needed when an instance of the Client is created or initialized
 1. **Autocomplete Events** measure user interaction with autocomplete results
 1. **Search Events** measure user interaction with search results
+1. **Browse Events** measure user interaction with browse results
+1. **Conversion Events** measure user events like `add to cart` or `purchase`
 
 ### Autocomplete Events
 
@@ -114,12 +116,6 @@ ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234
 
 // Track when a search result is clicked (itemName, customerId, searchTerm, sectionName, resultId)
 ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
-
-// Track when a search result converts (itemName, customerId, revenue, searchTerm)
-ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
-
-// Track when products are purchased (customerIds, revenue, orderId)
-ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
 ```
 
 ### Browse Events
@@ -130,4 +126,14 @@ ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
 
 // Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultId)
 ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+```
+
+### Conversion Events
+
+```kotlin
+// // Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, revenue, searchTerm)
+ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth")
+
+// Track when products are purchased (customerIds, revenue, orderId)
+ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
 ```
