@@ -388,7 +388,7 @@ object ConstructorIo {
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
                 true,
-                preferenceHelper.defaultItemSection,
+                section,
                 System.currentTimeMillis()
         )
 
