@@ -383,14 +383,15 @@ object ConstructorIo {
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param resultCount the number of results for that filter name/value pair
      */
-    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, url: String = "Not Available") {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount, url)
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, sectionName: String? = null, url: String = "Not Available") {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount, sectionName, url)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int, url: String = "Not Available"): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int, sectionName: String? = null, url: String = "Not Available"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultLoadRequestBody = BrowseResultLoadRequestBody(
                 filterName,
                 filterValue,
@@ -403,7 +404,7 @@ object ConstructorIo {
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
                 true,
-                preferenceHelper.defaultItemSection,
+                section,
                 System.currentTimeMillis()
         )
 
