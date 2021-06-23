@@ -311,7 +311,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.0&_dt=";
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 220)
         assertEquals("POST", request.method)
@@ -325,7 +325,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.0&_dt=";
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
         assertEquals(requestBody["conversion_type"], "Like")
         assertEquals(requestBody["revenue"], "89.00")
         assertEquals(requestBody["search_term"], "titanic")
@@ -341,7 +341,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.0&_dt=";
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 220)
         assertEquals("POST", request.method)
@@ -412,7 +412,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.0&_dt="
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt="
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 215)
         assertEquals("POST", request.method)
@@ -425,7 +425,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.0&_dt="
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt="
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 220)
         assertEquals("POST", request.method)
