@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'jacoco'
+apply plugin: 'org.jetbrains.dokka'
 
 group='com.github.Constructor-io'
 
@@ -94,6 +95,11 @@ android {
             def lintTask = tasks["lint${variant.name.capitalize()}"]
             output.assemble.dependsOn lintTask
         }
+    }
+
+    dokka {
+        outputFormat = 'html'
+        outputDirectory = "$buildDir/javadoc"
     }
 
 }
