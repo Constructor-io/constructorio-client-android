@@ -11,8 +11,6 @@ import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import okio.BufferedSource
-import okio.Okio
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
