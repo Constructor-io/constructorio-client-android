@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.RecordedRequest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -17,6 +18,15 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+
+internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
+    val requestBodyString = request.body.readUtf8().drop(1).dropLast(1).replace("\"", "")
+    val requestBodyList = ArrayList(requestBodyString.split(","))
+    return requestBodyList.associate {
+        val (key, value) = it.split(":")
+        key to value
+    }
+}
 
 class ConstructorIoTrackingTest {
 
@@ -299,7 +309,26 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/conversion?name=titanic%20replica&customer_id=TIT-REP-1997&revenue=89.00&section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
+        assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 220)
+        assertEquals("POST", request.method)
+    }
+
+    @Test
+    fun trackConversionWithConversionType() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00, "titanic", "Products", "Like").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
+        assertEquals(requestBody["conversion_type"], "Like")
+        assertEquals(requestBody["revenue"], "89.00")
+        assertEquals(requestBody["search_term"], "titanic")
+        assertEquals(requestBody["section"], "Products")
+        assertEquals(request.method,"POST")
         assert(request.path.startsWith(path))
     }
 
@@ -310,8 +339,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/conversion?name=titanic%20replica&customer_id=TIT-REP-1997&revenue=89.00&section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 220)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -321,9 +352,8 @@ class ConstructorIoTrackingTest {
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertError(SocketTimeoutException::class.java)
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/TERM_UNKNOWN/conversion?name=titanic%20replica&customer_id=TIT-REP-1997&revenue=89.00&section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt=";
-        assert(request.path.startsWith(path))
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
     }
 
     @Test
@@ -380,7 +410,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt="
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt="
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 215)
         assertEquals("POST", request.method)
@@ -393,7 +423,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/browse_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt="
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.5.2&_dt="
         assert(request.path.startsWith(path))
         assertTrue(request.bodySize > 220)
         assertEquals("POST", request.method)

@@ -6,6 +6,7 @@ import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
@@ -74,8 +75,8 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         return constructorApi.trackSessionStart(params.toMap())
     }
 
-    fun trackConversion(term: String, itemName: String, customerId: String, revenue: String? = null, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackConversion(term, itemName, customerId, revenue, params.toMap())
+    fun trackConversion(conversionRequestBody: ConversionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackConversion(conversionRequestBody, params.toMap())
     }
 
     fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {

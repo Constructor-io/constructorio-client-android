@@ -3,6 +3,7 @@ package io.constructor.data.remote
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
+import io.constructor.data.model.conversion.ConversionRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -28,11 +29,8 @@ interface ConstructorApi {
     @GET(ApiPaths.URL_SESSION_START_EVENT)
     fun trackSessionStart(@QueryMap params: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_CONVERSION_EVENT)
-    fun trackConversion(@Path("term") term: String,
-                        @Query("name") itemName: String,
-                        @Query("customer_id") customerId: String,
-                        @Query("revenue") revenue: String?,
+    @POST(ApiPaths.URL_CONVERSION_EVENT)
+    fun trackConversion(@Body conversionRequestBody: ConversionRequestBody,
                         @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_SEARCH_RESULT_CLICK_EVENT)

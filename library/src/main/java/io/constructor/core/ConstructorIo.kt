@@ -15,6 +15,7 @@ import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
+import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -313,18 +314,33 @@ object ConstructorIo {
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
      */
-    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null) {
-        var completable = trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName)
+    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null) {
+        var completable = trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName, conversionType)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Conversion error: ${t.message}")
         }))
     }
-    internal fun trackConversionInternal(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null): Completable {
+    internal fun trackConversionInternal(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val revenueString = revenue?.let { "%.2f".format(revenue) }
-        return dataManager.trackConversion(searchTerm, itemName, customerId, revenueString, arrayOf(
-                Constants.QueryConstants.SECTION to (sectionName ?: preferenceHelper.defaultItemSection)
-        ))
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val conversionRequestBody = ConversionRequestBody(
+                searchTerm,
+                customerId,
+                itemName,
+                String.format("%.2f", revenue),
+                conversionType,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                true,
+                section,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackConversion(conversionRequestBody, arrayOf())
     }
 
     /**
@@ -394,7 +410,7 @@ object ConstructorIo {
 
         return dataManager.trackBrowseResultsLoaded(
                 browseResultLoadRequestBody,
-                arrayOf(Constants.QueryConstants.SECTION to section)
+                arrayOf()
         )
     }
 
