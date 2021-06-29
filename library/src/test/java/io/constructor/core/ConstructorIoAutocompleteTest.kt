@@ -68,6 +68,21 @@ class ConstructorIoAutocompleteTest {
     }
 
     @Test
+    fun getAutocompleteResultsWithFilter() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getAutocompleteResults("titanic", facet?.map { it.key to it.value }).test()
+        observer.assertComplete().assertValue {
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isNotEmpty()!! && suggestions.size == 5
+        }
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.6.0&_dt="
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
     fun getAutocompleteResultsWithServerError() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)

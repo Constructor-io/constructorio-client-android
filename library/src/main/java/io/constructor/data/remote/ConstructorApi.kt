@@ -12,9 +12,8 @@ import retrofit2.http.*
 
 interface ConstructorApi {
 
-    @GET(ApiPaths.URL_AUTOCOMPLETE)
-    fun getAutocompleteResults(@Path("value") value: String,
-                               @QueryMap data: Map<String, String>): Single<Result<ResponseBody>>
+    @GET
+    fun getAutocompleteResults(@Url autocompleteUrl: String): Single<Result<ResponseBody>>
 
     @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String,
