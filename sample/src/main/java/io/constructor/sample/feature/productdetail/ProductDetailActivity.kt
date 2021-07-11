@@ -3,7 +3,7 @@ package io.constructor.sample.feature.productdetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.Snackbar
 import com.bumptech.glide.Glide
 import io.constructor.data.model.common.Result
 import io.constructor.sample.R

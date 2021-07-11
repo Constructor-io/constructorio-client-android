@@ -2,7 +2,7 @@ package io.constructor.sample.feature.cart
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.constructor.data.model.common.Result
 import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
