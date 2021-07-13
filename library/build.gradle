@@ -101,7 +101,6 @@ android {
         outputFormat = 'html'
         outputDirectory = "$buildDir/javadoc"
     }
-
 }
 
 task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
