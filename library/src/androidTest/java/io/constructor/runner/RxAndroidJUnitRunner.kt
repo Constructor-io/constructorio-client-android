@@ -4,7 +4,7 @@ import io.constructor.util.RxIdlingExecutionHook
 import io.constructor.util.RxIdlingResource
 import android.os.Bundle
 import android.support.test.espresso.IdlingRegistry
-import rx.plugins.RxJavaPlugins
+import io.reactivex.plugins.RxJavaPlugins
 
 /**
  * Runner that registers a Espresso Indling resource that handles waiting for
@@ -23,7 +23,6 @@ class RxAndroidJUnitRunner : UnlockDeviceAndroidJUnitRunner() {
 //
 //
 //        }
-
 
         RxJavaPlugins.getInstance()
                 .registerObservableExecutionHook(RxIdlingExecutionHook(rxIdlingResource))
