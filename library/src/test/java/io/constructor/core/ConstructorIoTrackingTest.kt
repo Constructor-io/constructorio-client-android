@@ -428,7 +428,6 @@ class ConstructorIoTrackingTest {
         assertEquals("[{item_id:TIT-REP-1997},{item_id:QE2-REP-1969}]", requestBody["items"])
         assertEquals("12.99", requestBody["revenue"])
         assertEquals("ORD-1312343", requestBody["order_id"])
-        assertEquals("Recommendations", requestBody["section"])
         assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
     }
@@ -442,9 +441,9 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt="
-        assertEquals("group_id", requestBody["filterName"])
-        assertEquals("Movies", requestBody["filterValue"])
-        assertEquals("10", requestBody["resultCount"])
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("10", requestBody["result_count"])
         assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
     }
@@ -458,9 +457,9 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt="
-        assertEquals("group_id", requestBody["filterName"])
-        assertEquals("Movies", requestBody["filterValue"])
-        assertEquals("10", requestBody["resultCount"])
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("10", requestBody["result_count"])
         assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
     }
@@ -485,10 +484,10 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("group_id", requestBody["filterName"])
-        assertEquals("Movies", requestBody["filterValue"])
-        assertEquals("TIT-REP-1997", requestBody["customerId"])
-        assertEquals("4", requestBody["resultPositionOnPage"])
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("4", requestBody["result_position_on_page"])
         assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
     }
@@ -502,12 +501,11 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_click?section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("group_id", requestBody["filterName"])
-        assertEquals("Movies", requestBody["filterValue"])
-        assertEquals("TIT-REP-1997", requestBody["customerId"])
-        assertEquals("4", requestBody["resultPositionOnPage"])
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("4", requestBody["result_position_on_page"])
         assertEquals("Products", requestBody["section"])
-        assertEquals("3467632", requestBody["resultID"])
         assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
     }
@@ -521,10 +519,10 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("group_id", requestBody["filterName"])
-        assertEquals("Movies", requestBody["filterValue"])
-        assertEquals("TIT-REP-1997", requestBody["customerId"])
-        assertEquals("4", requestBody["resultPositionOnPage"])
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("4", requestBody["result_position_on_page"])
         assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
     }
