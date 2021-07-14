@@ -9,6 +9,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 /**
+ * @suppress
  * Adds common request query parameters to all API requests
  */
 class RequestInterceptor(val context: Context, private val preferencesHelper: PreferencesHelper, private val configMemoryHolder: ConfigMemoryHolder) : Interceptor {

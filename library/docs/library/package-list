@@ -1,34 +1,10 @@
 $dokka.format:html
 $dokka.linkExtension:html
-$dokka.location:io.constructor.util$base64Decode(kotlin.String)io.constructor.util/kotlin.-string/base64-decode.html
-$dokka.location:io.constructor.util$base64Encode(kotlin.String)io.constructor.util/kotlin.-string/base64-encode.html
-$dokka.location:io.constructor.util$broadcastIntent(android.content.Context, kotlin.String, kotlin.Array((kotlin.Pair((kotlin.String, kotlin.Any)))))io.constructor.util/android.content.-context/broadcast-intent.html
-$dokka.location:io.constructor.util$d(kotlin.Any, kotlin.String)io.constructor.util/kotlin.-any/d.html
-$dokka.location:io.constructor.util$e(kotlin.Any, kotlin.String)io.constructor.util/kotlin.-any/e.html
-$dokka.location:io.constructor.util$io2ui(io.reactivex.Observable((io.constructor.util.io2ui.T)))io.constructor.util/io.reactivex.-observable/io2ui.html
-$dokka.location:io.constructor.util$setExtra(android.content.Intent, kotlin.String, kotlin.Any)io.constructor.util/android.content.-intent/set-extra.html
-$dokka.location:io.constructor.util$urlEncode(kotlin.String)io.constructor.util/kotlin.-string/url-encode.html
+
 io.constructor.core
-io.constructor.data
-io.constructor.data.interceptor
-io.constructor.data.local
-io.constructor.data.memory
 io.constructor.data.model.autocomplete
 io.constructor.data.model.browse
 io.constructor.data.model.common
 io.constructor.data.model.conversion
-io.constructor.data.model.dataadapter
 io.constructor.data.model.purchase
 io.constructor.data.model.search
-io.constructor.data.remote
-io.constructor.features.base
-io.constructor.injection
-io.constructor.injection.component
-io.constructor.injection.module
-io.constructor.mapper
-io.constructor.sample
-io.constructor.service
-io.constructor.ui.base
-io.constructor.ui.suggestion
-io.constructor.util
-io.constructor.util.rx.scheduler

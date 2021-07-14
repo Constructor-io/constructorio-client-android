@@ -16,6 +16,7 @@ import io.constructor.util.d
 import java.util.concurrent.atomic.AtomicLong
 
 /**
+ * @suppress
  * Abstract Fragment that every other Fragment in this application must implement. It handles
  * creation of Dagger components and makes sure that instances of ConfigPersistentComponent are kept
  * across configuration changes.

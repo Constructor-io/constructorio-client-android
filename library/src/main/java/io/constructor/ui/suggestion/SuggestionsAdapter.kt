@@ -6,7 +6,9 @@ import android.view.View
 import io.constructor.R
 import io.constructor.ui.base.BaseSuggestionsAdapter
 
-
+/**
+ * @suppress
+ */
 class SuggestionsAdapter : BaseSuggestionsAdapter() {
 
     override val styleHighlightedSpans = null

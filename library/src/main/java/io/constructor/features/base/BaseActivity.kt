@@ -13,6 +13,9 @@ import io.constructor.injection.module.ActivityModule
 import io.constructor.util.d
 import java.util.concurrent.atomic.AtomicLong
 
+/**
+ * @suppress
+ */
 abstract class BaseActivity : AppCompatActivity() {
 
     private var activityComponent: ActivityComponent? = null

@@ -7,6 +7,9 @@ import io.constructor.core.Constants
 import io.constructor.core.ConstructorIo
 import io.constructor.data.model.common.Result;
 
+/**
+ * @suppress
+ */
 class OnSearchService : IntentService("OnSearchService") {
 
     companion object {
