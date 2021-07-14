@@ -10,6 +10,9 @@ import okhttp3.ResponseBody
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
 
+/**
+ * @suppress
+ */
 interface ConstructorApi {
 
     @GET(ApiPaths.URL_AUTOCOMPLETE)

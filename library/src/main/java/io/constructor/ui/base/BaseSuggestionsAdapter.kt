@@ -17,6 +17,9 @@ import io.constructor.data.model.common.Result
 
 import java.util.*
 
+/**
+ * @suppress
+ */
 abstract class BaseSuggestionsAdapter : RecyclerView.Adapter<BaseSuggestionsAdapter.ViewHolder>() {
 
     private var suggestions: List<Result> = ArrayList()

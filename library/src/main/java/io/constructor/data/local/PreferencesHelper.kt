@@ -5,6 +5,9 @@ import android.content.SharedPreferences
 import io.constructor.injection.ApplicationContext
 import javax.inject.Inject
 
+/**
+ * @suppress
+ */
 class PreferencesHelper @Inject
 constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FILE_NAME) {
 

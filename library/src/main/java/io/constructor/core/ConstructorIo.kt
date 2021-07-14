@@ -313,6 +313,7 @@ object ConstructorIo {
      * @param customerId the identifier of the converting item i.e "PUMP-KAB-0002"
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
+     * @param conversionType the type of conversion, i.e. "add_to_cart"
      */
     fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null) {
         var completable = trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName, conversionType)

@@ -1,0 +1,128 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ConstructorApi - library</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">library</a>&nbsp;/&nbsp;<a href="../index.html">io.constructor.data.remote</a>&nbsp;/&nbsp;<a href="./index.html">ConstructorApi</a><br/>
+<br/>
+<h1>ConstructorApi</h1>
+<code><span class="keyword">interface </span><span class="identifier">ConstructorApi</span></code>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="get-autocomplete-results.html">getAutocompleteResults</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getAutocompleteResults</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$getAutocompleteResults(kotlin.String, kotlin.collections.Map((kotlin.String, )))/value">value</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$getAutocompleteResults(kotlin.String, kotlin.collections.Map((kotlin.String, )))/data">data</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Single</span><span class="symbol">&lt;</span><span class="identifier">Result</span><span class="symbol">&lt;</span><span class="identifier">ResponseBody</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-browse-results.html">getBrowseResults</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getBrowseResults</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$getBrowseResults(kotlin.String)/browseUrl">browseUrl</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Single</span><span class="symbol">&lt;</span><span class="identifier">Result</span><span class="symbol">&lt;</span><span class="identifier">ResponseBody</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-search-results.html">getSearchResults</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getSearchResults</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$getSearchResults(kotlin.String)/searchUrl">searchUrl</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Single</span><span class="symbol">&lt;</span><span class="identifier">Result</span><span class="symbol">&lt;</span><span class="identifier">ResponseBody</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-autocomplete-select.html">trackAutocompleteSelect</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackAutocompleteSelect</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackAutocompleteSelect(kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/term">term</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackAutocompleteSelect(kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/data">data</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackAutocompleteSelect(kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/encodedData">encodedData</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-browse-result-click.html">trackBrowseResultClick</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackBrowseResultClick</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackBrowseResultClick(io.constructor.data.model.browse.BrowseResultClickRequestBody, kotlin.collections.Map((kotlin.String, kotlin.String)), kotlin.collections.Map((kotlin.String, )))/browseResultClickRequestBody">browseResultClickRequestBody</span><span class="symbol">:</span>&nbsp;<a href="../../io.constructor.data.model.browse/-browse-result-click-request-body/index.html"><span class="identifier">BrowseResultClickRequestBody</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackBrowseResultClick(io.constructor.data.model.browse.BrowseResultClickRequestBody, kotlin.collections.Map((kotlin.String, kotlin.String)), kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackBrowseResultClick(io.constructor.data.model.browse.BrowseResultClickRequestBody, kotlin.collections.Map((kotlin.String, kotlin.String)), kotlin.collections.Map((kotlin.String, )))/encodedData">encodedData</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-browse-results-loaded.html">trackBrowseResultsLoaded</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackBrowseResultsLoaded</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackBrowseResultsLoaded(io.constructor.data.model.browse.BrowseResultLoadRequestBody, kotlin.collections.Map((kotlin.String, )))/browseRequestBody">browseRequestBody</span><span class="symbol">:</span>&nbsp;<a href="../../io.constructor.data.model.browse/-browse-result-load-request-body/index.html"><span class="identifier">BrowseResultLoadRequestBody</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackBrowseResultsLoaded(io.constructor.data.model.browse.BrowseResultLoadRequestBody, kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-conversion.html">trackConversion</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackConversion</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackConversion(io.constructor.data.model.conversion.ConversionRequestBody, kotlin.collections.Map((kotlin.String, )))/conversionRequestBody">conversionRequestBody</span><span class="symbol">:</span>&nbsp;<a href="../../io.constructor.data.model.conversion/-conversion-request-body/index.html"><span class="identifier">ConversionRequestBody</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackConversion(io.constructor.data.model.conversion.ConversionRequestBody, kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-input-focus.html">trackInputFocus</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackInputFocus</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackInputFocus(kotlin.String, kotlin.collections.Map((kotlin.String, )))/term">term</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackInputFocus(kotlin.String, kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-purchase.html">trackPurchase</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackPurchase</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackPurchase(io.constructor.data.model.purchase.PurchaseRequestBody, kotlin.collections.Map((kotlin.String, )))/purchaseRequestBody">purchaseRequestBody</span><span class="symbol">:</span>&nbsp;<a href="../../io.constructor.data.model.purchase/-purchase-request-body/index.html"><span class="identifier">PurchaseRequestBody</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackPurchase(io.constructor.data.model.purchase.PurchaseRequestBody, kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-search-result-click.html">trackSearchResultClick</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackSearchResultClick</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultClick(kotlin.String, kotlin.String, kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/term">term</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultClick(kotlin.String, kotlin.String, kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/itemName">itemName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultClick(kotlin.String, kotlin.String, kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/customerId">customerId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultClick(kotlin.String, kotlin.String, kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultClick(kotlin.String, kotlin.String, kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/encodedData">encodedData</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-search-results-loaded.html">trackSearchResultsLoaded</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackSearchResultsLoaded</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultsLoaded(kotlin.String, kotlin.Int, kotlin.String, kotlin.collections.Map((kotlin.String, )))/term">term</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultsLoaded(kotlin.String, kotlin.Int, kotlin.String, kotlin.collections.Map((kotlin.String, )))/resultCount">resultCount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultsLoaded(kotlin.String, kotlin.Int, kotlin.String, kotlin.collections.Map((kotlin.String, )))/customerIds">customerIds</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchResultsLoaded(kotlin.String, kotlin.Int, kotlin.String, kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-search-submit.html">trackSearchSubmit</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackSearchSubmit</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchSubmit(kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/term">term</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchSubmit(kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/data">data</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSearchSubmit(kotlin.String, kotlin.collections.Map((kotlin.String, )), kotlin.collections.Map((kotlin.String, )))/encodedData">encodedData</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="track-session-start.html">trackSessionStart</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">trackSessionStart</span><span class="symbol">(</span><span class="identifier" id="io.constructor.data.remote.ConstructorApi$trackSessionStart(kotlin.collections.Map((kotlin.String, )))/params">params</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Completable</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../io.constructor.util/kotlin.-any/d.html">d</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">.</span><span class="identifier">d</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util$d(kotlin.Any, kotlin.String)/msg">msg</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.util/kotlin.-any/e.html">e</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">.</span><span class="identifier">e</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util$e(kotlin.Any, kotlin.String)/msg">msg</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

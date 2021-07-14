@@ -7,6 +7,9 @@ import dagger.Module
 import dagger.Provides
 import io.constructor.injection.ActivityContext
 
+/**
+ * @suppress
+ */
 @Module
 class ActivityModule(private val activity: Activity) {
 

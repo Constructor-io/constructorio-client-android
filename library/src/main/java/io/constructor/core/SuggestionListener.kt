@@ -2,6 +2,9 @@ package io.constructor.core
 
 import io.constructor.data.model.common.Result
 
+/**
+ * @suppress
+ */
 interface SuggestionListener {
     /**
      * triggered after getting suggestions

@@ -1,5 +1,8 @@
 package io.constructor.core
 
+/**
+ * @suppress
+ */
 class Constants {
 
     companion object {

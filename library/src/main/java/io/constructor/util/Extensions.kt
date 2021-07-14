@@ -12,6 +12,9 @@ import io.reactivex.schedulers.Schedulers
 import java.io.Serializable
 import java.net.URLEncoder
 
+/**
+ * @suppress
+ */
 fun Context.broadcastIntent(action: String, vararg data: Pair<String, Any>) {
     Intent(action).apply {
         data.forEach { (key, value) -> setExtra(key, value) }
@@ -20,6 +23,9 @@ fun Context.broadcastIntent(action: String, vararg data: Pair<String, Any>) {
     }
 }
 
+/**
+ * @suppress
+ */
 fun Intent.setExtra(key: String, value: Any) {
     when (value) {
         is Int -> putExtra(key, value)
@@ -33,20 +39,38 @@ fun Intent.setExtra(key: String, value: Any) {
     }
 }
 
+/**
+ * @suppress
+ */
 fun String.urlEncode() = URLEncoder.encode(this, "UTF-8").replace("+", "%20")
 
+/**
+ * @suppress
+ */
 fun Any.d(msg: String) = Log.d(this::class.qualifiedName, msg)
 
+/**
+ * @suppress
+ */
 fun Any.e(msg: String) = Log.e(this::class.qualifiedName, msg)
 
+/**
+ * @suppress
+ */
 fun String.base64Encode(): String? {
     return String(Base64.encode(toByteArray(), Base64.NO_WRAP or Base64.NO_PADDING))
 }
 
+/**
+ * @suppress
+ */
 fun String.base64Decode(): String {
     return String(Base64.decode(this, Base64.NO_WRAP or Base64.NO_PADDING))
 }
 
+/**
+ * @suppress
+ */
 fun <T : Any> Observable<T>.io2ui(): Observable<T> {
     return compose {
         it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())

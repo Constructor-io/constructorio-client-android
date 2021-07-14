@@ -6,6 +6,9 @@ import io.constructor.data.model.common.Result
 
 import java.util.*
 
+/**
+ * @suppress
+ */
 object Mapper {
 
     fun toSuggestionsViewModel(response: AutocompleteResponse, groupsShownForFirstTerm : Int = Int.MAX_VALUE): List<Result> {

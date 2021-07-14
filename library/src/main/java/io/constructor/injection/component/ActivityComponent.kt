@@ -6,6 +6,9 @@ import io.constructor.injection.module.ActivityModule
 import io.constructor.ui.base.BaseSuggestionFragment
 import dagger.Subcomponent
 
+/**
+ * @suppress
+ */
 @PerActivity
 @Subcomponent(modules = [ActivityModule::class])
 interface ActivityComponent {

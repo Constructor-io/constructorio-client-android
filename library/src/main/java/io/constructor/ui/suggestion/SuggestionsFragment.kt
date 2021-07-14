@@ -5,7 +5,9 @@ import io.constructor.ui.base.BaseSuggestionFragment
 import io.constructor.ui.base.BaseSuggestionsAdapter
 import io.constructor.ui.suggestion.SuggestionsAdapter
 
-
+/**
+ * @suppress
+ */
 class SuggestionsFragment : BaseSuggestionFragment() {
 
     override fun getProgressId(): Int {

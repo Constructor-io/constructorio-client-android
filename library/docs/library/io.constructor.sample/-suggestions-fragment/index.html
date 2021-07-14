@@ -1,0 +1,178 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SuggestionsFragment - library</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">library</a>&nbsp;/&nbsp;<a href="../index.html">io.constructor.sample</a>&nbsp;/&nbsp;<a href="./index.html">SuggestionsFragment</a><br/>
+<br/>
+<h1>SuggestionsFragment</h1>
+<code><span class="keyword">class </span><span class="identifier">SuggestionsFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../io.constructor.ui.base/-base-suggestion-fragment/index.html"><span class="identifier">BaseSuggestionFragment</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">SuggestionsFragment</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/presenter.html">presenter</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">presenter</span><span class="symbol">: </span><a href="../../io.constructor.ui.suggestion/-suggestions-presenter/index.html"><span class="identifier">SuggestionsPresenter</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="get-progress-id.html">getProgressId</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getProgressId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-suggestion-adapter.html">getSuggestionAdapter</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getSuggestionAdapter</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../io.constructor.ui.base/-base-suggestions-adapter/index.html"><span class="identifier">BaseSuggestionsAdapter</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-suggestion-list-id.html">getSuggestionListId</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getSuggestionListId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-suggestions-input-id.html">getSuggestionsInputId</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getSuggestionsInputId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="layout-id.html">layoutId</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">layoutId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/clear-suggestions.html">clearSuggestions</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">clearSuggestions</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/input-focus-changed.html">inputFocusChanged</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">inputFocusChanged</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Observable</span><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html"><span class="identifier">Pair</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/loading.html">loading</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">loading</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/on-activity-created.html">onActivityCreated</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">onActivityCreated</span><span class="symbol">(</span><span class="identifier" id="io.constructor.ui.base.BaseSuggestionFragment$onActivityCreated(android.os.Bundle)/savedInstanceState">savedInstanceState</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/os/Bundle.html"><span class="identifier">Bundle</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/on-create.html">onCreate</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">onCreate</span><span class="symbol">(</span><span class="identifier" id="io.constructor.ui.base.BaseSuggestionFragment$onCreate(android.os.Bundle)/savedInstanceState">savedInstanceState</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/os/Bundle.html"><span class="identifier">Bundle</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/on-destroy.html">onDestroy</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">onDestroy</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/on-error.html">onError</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">onError</span><span class="symbol">(</span><span class="identifier" id="io.constructor.ui.base.BaseSuggestionFragment$onError(kotlin.Throwable)/error">error</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html"><span class="identifier">Throwable</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/query-changed.html">queryChanged</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">queryChanged</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Observable</span><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/set-constructor-listener.html">setConstructorListener</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setConstructorListener</span><span class="symbol">(</span><span class="identifier" id="io.constructor.ui.base.BaseSuggestionFragment$setConstructorListener(io.constructor.core.ConstructorListener)/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../../io.constructor.core/-constructor-listener/index.html"><span class="identifier">ConstructorListener</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/show-suggestions.html">showSuggestions</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">showSuggestions</span><span class="symbol">(</span><span class="identifier" id="io.constructor.ui.base.BaseSuggestionFragment$showSuggestions(io.constructor.data.model.autocomplete.AutocompleteResponse, kotlin.Int)/response">response</span><span class="symbol">:</span>&nbsp;<a href="../../io.constructor.data.model.autocomplete/-autocomplete-response/index.html"><span class="identifier">AutocompleteResponse</span></a><span class="symbol">, </span><span class="identifier" id="io.constructor.ui.base.BaseSuggestionFragment$showSuggestions(io.constructor.data.model.autocomplete.AutocompleteResponse, kotlin.Int)/groupsShownForFirstTerm">groupsShownForFirstTerm</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.ui.base/-base-suggestion-fragment/trigger-search.html">triggerSearch</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">triggerSearch</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../io.constructor.util/kotlin.-any/d.html">d</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">.</span><span class="identifier">d</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util$d(kotlin.Any, kotlin.String)/msg">msg</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.util/kotlin.-any/e.html">e</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">.</span><span class="identifier">e</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util$e(kotlin.Any, kotlin.String)/msg">msg</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

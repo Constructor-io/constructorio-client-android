@@ -4,6 +4,7 @@ import io.reactivex.*
 import org.reactivestreams.Publisher
 
 /**
+ * @suppress
  * Created by lam on 2/6/17.
  */
 

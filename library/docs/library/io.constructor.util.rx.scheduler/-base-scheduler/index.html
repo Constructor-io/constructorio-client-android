@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>BaseScheduler - library</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">library</a>&nbsp;/&nbsp;<a href="../index.html">io.constructor.util.rx.scheduler</a>&nbsp;/&nbsp;<a href="./index.html">BaseScheduler</a><br/>
+<br/>
+<h1>BaseScheduler</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">BaseScheduler</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ObservableTransformer</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">,</span>&nbsp;<a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier">SingleTransformer</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">,</span>&nbsp;<a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier">MaybeTransformer</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">,</span>&nbsp;<a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier">CompletableTransformer</span><span class="symbol">, </span><span class="identifier">FlowableTransformer</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">,</span>&nbsp;<a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code>
+<p>Created by lam on 2/6/17.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">BaseScheduler</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util.rx.scheduler.BaseScheduler$<init>(io.reactivex.Scheduler, io.reactivex.Scheduler)/subscribeOnScheduler">subscribeOnScheduler</span><span class="symbol">:</span>&nbsp;<span class="identifier">Scheduler</span><span class="symbol">, </span><span class="identifier" id="io.constructor.util.rx.scheduler.BaseScheduler$<init>(io.reactivex.Scheduler, io.reactivex.Scheduler)/observeOnScheduler">observeOnScheduler</span><span class="symbol">:</span>&nbsp;<span class="identifier">Scheduler</span><span class="symbol">)</span></code>
+<p>Created by lam on 2/6/17.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="apply.html">apply</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">apply</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util.rx.scheduler.BaseScheduler$apply(io.reactivex.Completable)/upstream">upstream</span><span class="symbol">:</span>&nbsp;<span class="identifier">Completable</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">CompletableSource</span></code><br/>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">apply</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util.rx.scheduler.BaseScheduler$apply(io.reactivex.Flowable((io.constructor.util.rx.scheduler.BaseScheduler.T)))/upstream">upstream</span><span class="symbol">:</span>&nbsp;<span class="identifier">Flowable</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Publisher</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code><br/>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">apply</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util.rx.scheduler.BaseScheduler$apply(io.reactivex.Maybe((io.constructor.util.rx.scheduler.BaseScheduler.T)))/upstream">upstream</span><span class="symbol">:</span>&nbsp;<span class="identifier">Maybe</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MaybeSource</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code><br/>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">apply</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util.rx.scheduler.BaseScheduler$apply(io.reactivex.Observable((io.constructor.util.rx.scheduler.BaseScheduler.T)))/upstream">upstream</span><span class="symbol">:</span>&nbsp;<span class="identifier">Observable</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ObservableSource</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code><br/>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">apply</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util.rx.scheduler.BaseScheduler$apply(io.reactivex.Single((io.constructor.util.rx.scheduler.BaseScheduler.T)))/upstream">upstream</span><span class="symbol">:</span>&nbsp;<span class="identifier">Single</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">SingleSource</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../io.constructor.util/kotlin.-any/d.html">d</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">.</span><span class="identifier">d</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util$d(kotlin.Any, kotlin.String)/msg">msg</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../io.constructor.util/kotlin.-any/e.html">e</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">.</span><span class="identifier">e</span><span class="symbol">(</span><span class="identifier" id="io.constructor.util$e(kotlin.Any, kotlin.String)/msg">msg</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-io-main-scheduler/index.html">IoMainScheduler</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">IoMainScheduler</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">BaseScheduler</span></a><span class="symbol">&lt;</span><a href="../-io-main-scheduler/index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code>
+<p>Created by lam on 2/6/17.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

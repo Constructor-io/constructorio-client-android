@@ -7,6 +7,9 @@ import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.common.ResultData
 import io.constructor.data.model.common.ResultFacet
 
+/**
+ * @suppress
+ */
 class ResultDataAdapter {
 
     companion object {

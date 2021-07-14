@@ -6,7 +6,9 @@ import io.constructor.data.remote.ConstructorApi
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-
+/**
+ * @suppress
+ */
 @Module(includes = [(NetworkModule::class)])
 class ApiModule {
 

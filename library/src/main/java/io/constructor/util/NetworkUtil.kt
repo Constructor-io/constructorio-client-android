@@ -4,7 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import retrofit2.HttpException
 
-
+/**
+ * @suppress
+ */
 object NetworkUtil {
 
     /**

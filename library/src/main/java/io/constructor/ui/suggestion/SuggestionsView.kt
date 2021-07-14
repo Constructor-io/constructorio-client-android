@@ -4,7 +4,9 @@ import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.features.base.MvpView
 import io.reactivex.Observable
 
-
+/**
+ * @suppress
+ */
 interface SuggestionsView : MvpView {
 
     fun showSuggestions(response: AutocompleteResponse, groupsShownForFirstTerm: Int = Int.MAX_VALUE)

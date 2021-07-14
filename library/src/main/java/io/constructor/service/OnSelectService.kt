@@ -8,6 +8,7 @@ import io.constructor.core.ConstructorIo
 import io.constructor.data.model.common.Result;
 
 /**
+ * @suppress
  * Service which triggers each time user select suggestion
  */
 class OnSelectService : IntentService("OnSelectService") {

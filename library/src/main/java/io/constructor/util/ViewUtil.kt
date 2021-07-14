@@ -3,6 +3,9 @@ package io.constructor.util
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 
+/**
+ * @suppress
+ */
 object ViewUtil {
 
     fun reverseHighlight(text: String, matchedTerms: List<String>?, style: ((span: Spannable, spanStart: Int, spanEnd: Int) -> Unit)? = null): Spannable {

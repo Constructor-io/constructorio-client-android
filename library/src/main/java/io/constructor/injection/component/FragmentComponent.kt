@@ -7,6 +7,7 @@ import io.constructor.ui.base.BaseSuggestionFragment
 import dagger.Subcomponent
 
 /**
+ * @suppress
  * This component inject dependencies to all Fragments across the application
  */
 @PerFragment
