@@ -118,11 +118,12 @@ object ConstructorIo {
     /**
      * Returns a list of autocomplete suggestions
      * @param term the term to search for
-     * @param facet  single facet used to refine results
+     * @param facets additional facets used to refine results
      */
-    fun getAutocompleteResults(term: String, facet: List<Pair<String, List<String>>>? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        facet?.forEach { facet ->
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        facets?.forEach { facet ->
             facet.second.forEach {
                 encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
             }
