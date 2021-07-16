@@ -51,6 +51,13 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
+        observer.assertComplete();
+    }
+
+    @Test
     fun trackSessionStartAgainstRealResponse() {
         val observer = constructorIo.trackSessionStartInternal().test()
         observer.assertComplete();
@@ -69,8 +76,22 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getSearchResultsWithFiltersAgainstRealResponse() {
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
+        observer.assertComplete();
+    }
+
+    @Test
     fun getBrowseResultsAgainstRealResponse() {
         val observer = constructorIo.getBrowseResults("group_ids", "544").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun getBrowseResultsWithFiltersAgainstRealResponse() {
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getBrowseResults("group_ids", "544", facet?.map { it.key to it.value }).test()
         observer.assertComplete();
     }
 

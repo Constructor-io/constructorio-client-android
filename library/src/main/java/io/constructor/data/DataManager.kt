@@ -19,10 +19,14 @@ import javax.inject.Singleton
 class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
 
-    fun getAutocompleteResults(term: String, params: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<AutocompleteResponse>> {
-        return constructorApi.getAutocompleteResults(term, params.toMap()).map {
-            if (!it.isError) {
-                it.response()?.let {
+    fun getAutocompleteResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<AutocompleteResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getAutocompleteResults(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
                     if (it.isSuccessful) {
                         val adapter = moshi.adapter(AutocompleteResponse::class.java)
                         val response = it.body()?.string()
@@ -32,9 +36,9 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
                     } else {
                         ConstructorData.networkError(it.errorBody()?.string())
                     }
-                } ?: ConstructorData.error(it.error())
+                } ?: ConstructorData.error(result.error())
             } else {
-                ConstructorData.error(it.error())
+                ConstructorData.error(result.error())
             }
         }.toObservable()
     }

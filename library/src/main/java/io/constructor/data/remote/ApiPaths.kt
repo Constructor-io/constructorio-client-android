@@ -1,7 +1,7 @@
 package io.constructor.data.remote
 
 object ApiPaths {
-    const val URL_AUTOCOMPLETE = "autocomplete/{value}"
+    const val URL_AUTOCOMPLETE = "autocomplete/%s"
     const val URL_AUTOCOMPLETE_SELECT_EVENT = "autocomplete/{term}/select"
     const val URL_SEARCH_SUBMIT_EVENT = "autocomplete/{term}/search"
     const val URL_SESSION_START_EVENT = "behavior"

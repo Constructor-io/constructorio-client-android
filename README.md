@@ -31,7 +31,10 @@ ConstructorIo.userId = "uid"
 ## 4. Request Autocomplete Results
 
 ```kotlin
-ConstructorIo.getAutocompleteResults("Dav")
+var query = "Dav"
+var selectedFacet: HashMap<String, MutableList<String>>? = null
+
+ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.value })
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
