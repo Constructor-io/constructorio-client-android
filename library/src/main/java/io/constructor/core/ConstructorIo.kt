@@ -119,6 +119,7 @@ object ConstructorIo {
      * Returns a list of autocomplete suggestions
      * @param term the term to search for
      * @param facets additional facets used to refine results
+     * @param groupId category facet used to refine results
      */
     fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()

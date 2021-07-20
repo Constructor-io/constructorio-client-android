@@ -43,9 +43,9 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
-    fun getSearchResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {
+    fun getSearchResults(term: String, encodedParams: Array<Pair<String, String>>? = arrayOf()): Observable<ConstructorData<SearchResponse>> {
         var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(term)}"
-        encodedParams.forEachIndexed { index, pair ->
+        encodedParams?.forEachIndexed { index, pair ->
             dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
         }
         return constructorApi.getSearchResults(dynamicUrl).map { result ->
