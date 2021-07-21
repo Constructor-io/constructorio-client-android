@@ -12,8 +12,9 @@ import retrofit2.http.*
 
 interface ConstructorApi {
 
-    @GET
-    fun getAutocompleteResults(@Url autocompleteUrl: String): Single<Result<ResponseBody>>
+    @GET(ApiPaths.URL_AUTOCOMPLETE)
+    fun getAutocompleteResults(@Path("term") term: String,
+                               @QueryMap(encoded = true) encodedData: Map<String, String>): Single<Result<ResponseBody>>
 
     @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String,
@@ -52,11 +53,14 @@ interface ConstructorApi {
     fun trackPurchase(@Body purchaseRequestBody: PurchaseRequestBody,
                       @QueryMap params: Map<String, String>): Completable
 
-    @GET
-    fun getSearchResults(@Url searchUrl: String): Single<Result<ResponseBody>>
+    @GET(ApiPaths.URL_SEARCH)
+    fun getSearchResults(@Path("term") term: String,
+                         @QueryMap(encoded = true) encodedData: Map<String, String>?): Single<Result<ResponseBody>>
 
-    @GET
-    fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>
+    @GET(ApiPaths.URL_BROWSE)
+    fun getBrowseResults(@Path("filter_name") filterName: String,
+                         @Path("filter_value") filterValue: String,
+                         @QueryMap(encoded = true) encodedData: Map<String, String>): Single<Result<ResponseBody>>
 
     @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
     fun trackBrowseResultClick(@Body browseResultClickRequestBody: BrowseResultClickRequestBody,
