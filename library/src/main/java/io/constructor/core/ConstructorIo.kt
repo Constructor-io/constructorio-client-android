@@ -111,6 +111,9 @@ object ConstructorIo {
         this.configMemoryHolder = configMemoryHolder
     }
 
+    /**
+     * @suppress
+     */
     fun appMovedToForeground() {
         preferenceHelper.getSessionId(sessionIncrementHandler)
     }
