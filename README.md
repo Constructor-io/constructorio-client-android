@@ -4,6 +4,8 @@
 
 An Android Client for [Constructor.io](http://constructor.io/).  [Constructor.io](http://constructor.io/) provides search as a service that optimizes results using artificial intelligence (including natural language processing, re-ranking to optimize for conversions, and user personalization).
 
+Full API documentation is available on [Github Pages](https://constructor-io.github.io/constructorio-client-android/)
+
 ## 1. Install
 
 Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.6.0) to add the client to your project.
