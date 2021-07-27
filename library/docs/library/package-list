@@ -1,0 +1,8 @@
+$dokka.format:html
+$dokka.linkExtension:html
+
+io.constructor.core
+io.constructor.data.model.autocomplete
+io.constructor.data.model.browse
+io.constructor.data.model.common
+io.constructor.data.model.search

@@ -11,6 +11,9 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+/**
+ * @suppress
+ */
 @ConfigPersistent
 class SuggestionsPresenter @Inject
 constructor(private val preferencesHelper: PreferencesHelper) : BasePresenter<SuggestionsView>() {

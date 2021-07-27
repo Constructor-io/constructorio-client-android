@@ -15,6 +15,9 @@ import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * @suppress
+ */
 @Singleton
 class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {

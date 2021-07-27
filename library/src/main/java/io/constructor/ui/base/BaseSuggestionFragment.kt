@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_suggestions.*
 import javax.inject.Inject
 
 /**
+ * @suppress
  * abstract class you can extend to use your own custom ui
  */
 abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {

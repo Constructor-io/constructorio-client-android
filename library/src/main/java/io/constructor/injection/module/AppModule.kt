@@ -8,6 +8,9 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.injection.ApplicationContext
 import javax.inject.Singleton
 
+/**
+ * @suppress
+ */
 @Module(includes = [(ApiModule::class)])
 class AppModule(private val application: Context) {
 

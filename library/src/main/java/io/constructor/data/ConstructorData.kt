@@ -2,6 +2,9 @@ package io.constructor.data
 
 import io.reactivex.annotations.Nullable
 
+/**
+ * @suppress
+ */
 class ConstructorData<V> private constructor(@param:Nullable @field:Nullable
                                              private val value: V?, @param:Nullable @field:Nullable
                                              private val error: Throwable?, var networkError: Boolean = false) {

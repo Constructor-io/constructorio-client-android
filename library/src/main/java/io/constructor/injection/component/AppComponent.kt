@@ -10,6 +10,9 @@ import io.constructor.injection.ApplicationContext
 import io.constructor.injection.module.AppModule
 import javax.inject.Singleton
 
+/**
+ * @suppress
+ */
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
