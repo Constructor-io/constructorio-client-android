@@ -3,6 +3,9 @@ package io.constructor.data.model.common
 import com.squareup.moshi.Json
 import java.io.Serializable
 
+/**
+ * Models facet filters available for a response
+ */
 data class FilterFacet(
        @Json(name = "display_name") val displayName: String?,
        @Json(name = "name") val name: String,
