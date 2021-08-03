@@ -3,7 +3,7 @@ package io.constructor.core
 import io.constructor.BuildConfig
 
 /**
- *  Used to configure the Constructor SDK client
+ *  Encapsulates configuration options for the Constructor SDK client
  *  @property apiKey Constructor.io API key
  *  @property serviceUrl Constructor.io service URL (defaults to "ac.cnstrc.com")
  *  @property autocompleteResultCount The number of results to return per section when requesting autocomplete results

@@ -32,6 +32,9 @@ import kotlin.collections.HashMap
 
 typealias ConstructorError = ((Throwable) -> Unit)?
 
+/**
+ * The Constructor SDK client used for getting results and tracking behavioural data.
+ */
 @SuppressLint("StaticFieldLeak")
 object ConstructorIo {
 
