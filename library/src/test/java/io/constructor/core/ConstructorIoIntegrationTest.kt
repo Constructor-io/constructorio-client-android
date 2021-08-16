@@ -115,4 +115,10 @@ class ConstructorIoIntegrationTest {
         val observer = constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls", 5).test()
         observer.assertComplete();
     }
+
+    @Test
+    fun getRecommendationResultsAgainstRealResponse() {
+        val observer = constructorIo.getRecommendationResults("pork").test()
+        observer.assertComplete();
+    }
 }
