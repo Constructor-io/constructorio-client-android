@@ -21,14 +21,9 @@ import kotlin.test.assertTrue
 
 internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
     val requestBodyString = request.body.readUtf8().drop(1).dropLast(1).replace("\"", "")
-    // Split on "," not within an object array
-    val requestBodyList = ArrayList(requestBodyString.split("(?<=\\d|]|\\w),".toRegex()))
-
+    val requestBodyList = ArrayList(requestBodyString.split(","))
     return requestBodyList.associate {
-        // Split on ":" and rejoin for potential values with key/value fields
-        val list = it.split(":")
-        val key = list.elementAt(0)
-        val value = list.slice(1 until list.size).joinToString(":")
+        val (key, value) = it.split(":")
         key to value
     }
 }
@@ -314,15 +309,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("titanic replica", requestBody["item_name"])
-        assertEquals("TIT-REP-1997", requestBody["item_id"])
-        assertEquals("89.00", requestBody["revenue"])
-        assertEquals("TERM_UNKNOWN", requestBody["search_term"])
-        assertEquals("Products", requestBody["section"])
-        assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 220)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -334,13 +324,11 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("titanic replica", requestBody["item_name"])
-        assertEquals("TIT-REP-1997", requestBody["item_id"])
-        assertEquals("89.00", requestBody["revenue"])
-        assertEquals("titanic", requestBody["search_term"])
-        assertEquals("Products", requestBody["section"])
-        assertEquals("Like", requestBody["conversion_type"])
-        assertEquals("POST", request.method)
+        assertEquals(requestBody["conversion_type"], "Like")
+        assertEquals(requestBody["revenue"], "89.00")
+        assertEquals(requestBody["search_term"], "titanic")
+        assertEquals(requestBody["section"], "Products")
+        assertEquals(request.method,"POST")
         assert(request.path.startsWith(path))
     }
 
@@ -351,15 +339,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("titanic replica", requestBody["item_name"])
-        assertEquals("TIT-REP-1997", requestBody["item_id"])
-        assertEquals("89.00", requestBody["revenue"])
-        assertEquals("TERM_UNKNOWN", requestBody["search_term"])
-        assertEquals("Products", requestBody["section"])
-        assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 220)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -380,12 +363,8 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackPurchaseInternal(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "ORD-1312343").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/purchase?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("[{item_id:TIT-REP-1997},{item_id:QE2-REP-1969}]", requestBody["items"])
-        assertEquals("12.99", requestBody["revenue"])
-        assertEquals("ORD-1312343", requestBody["order_id"])
-        assertEquals("POST", request.method)
+        assertTrue(request.bodySize > 230)
         assert(request.path.startsWith(path))
     }
 
@@ -396,12 +375,8 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackPurchaseInternal(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "ORD-1312343").test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/purchase?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("[{item_id:TIT-REP-1997},{item_id:QE2-REP-1969}]", requestBody["items"])
-        assertEquals("12.99", requestBody["revenue"])
-        assertEquals("ORD-1312343", requestBody["order_id"])
-        assertEquals("POST", request.method)
+        assertTrue(request.bodySize > 230)
         assert(request.path.startsWith(path))
     }
 
@@ -423,12 +398,8 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackPurchaseInternal(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "ORD-1312343", "Recommendations").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/purchase?section=Recommendations&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("[{item_id:TIT-REP-1997},{item_id:QE2-REP-1969}]", requestBody["items"])
-        assertEquals("12.99", requestBody["revenue"])
-        assertEquals("ORD-1312343", requestBody["order_id"])
-        assertEquals("POST", request.method)
+        assertTrue(request.bodySize > 230)
         assert(request.path.startsWith(path))
     }
 
@@ -439,13 +410,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt="
-        assertEquals("group_id", requestBody["filter_name"])
-        assertEquals("Movies", requestBody["filter_value"])
-        assertEquals("10", requestBody["result_count"])
-        assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 215)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -455,13 +423,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", 10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt="
-        assertEquals("group_id", requestBody["filter_name"])
-        assertEquals("Movies", requestBody["filter_value"])
-        assertEquals("10", requestBody["result_count"])
-        assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 220)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -482,14 +447,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("group_id", requestBody["filter_name"])
-        assertEquals("Movies", requestBody["filter_value"])
-        assertEquals("TIT-REP-1997", requestBody["item_id"])
-        assertEquals("4", requestBody["result_position_on_page"])
-        assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 250)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -499,15 +460,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4, "Products", "3467632").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_click?section=Products&result_id=3467632&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("group_id", requestBody["filter_name"])
-        assertEquals("Movies", requestBody["filter_value"])
-        assertEquals("TIT-REP-1997", requestBody["item_id"])
-        assertEquals("4", requestBody["result_position_on_page"])
-        assertEquals("Products", requestBody["section"])
-        assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 250)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -517,14 +473,10 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", 4).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
         val path = "/v2/behavioral_action/browse_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.6.0&_dt=";
-        assertEquals("group_id", requestBody["filter_name"])
-        assertEquals("Movies", requestBody["filter_value"])
-        assertEquals("TIT-REP-1997", requestBody["item_id"])
-        assertEquals("4", requestBody["result_position_on_page"])
-        assertEquals("POST", request.method)
         assert(request.path.startsWith(path))
+        assertTrue(request.bodySize > 250)
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -537,4 +489,5 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)
     }
+
 }
