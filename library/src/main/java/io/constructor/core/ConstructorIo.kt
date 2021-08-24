@@ -123,13 +123,22 @@ object ConstructorIo {
 
     /**
      * Returns a list of autocomplete suggestions
+     * @param term the term to search for
+     * @param facets additional facets used to refine results
+     * @param groupId category facet used to refine results
      */
-    fun getAutocompleteResults(term: String): Observable<ConstructorData<AutocompleteResponse>> {
-        val params = mutableListOf<Pair<String, String>>()
-        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
-            params.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null): Observable<ConstructorData<AutocompleteResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
         }
-        return dataManager.getAutocompleteResults(term, params.toTypedArray())
+        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
+            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+        }
+        return dataManager.getAutocompleteResults(term, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
