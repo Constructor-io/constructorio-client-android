@@ -137,7 +137,7 @@ class ConstructorIoSearchTest {
     fun getSearchResultsWithHiddenFields() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
-        constructorIo.getSearchResults("bbq", null, null, null , null, null, null, arrayOf("hiddenField1", "hiddenField2")).test()
+        constructorIo.getSearchResults("bbq", null, null, null , null, null, null, listOf("hiddenField1", "hiddenField2")).test()
         val request = mockServer.takeRequest()
         val path = "/search/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.6.0&_dt="
         assert(request.path.startsWith(path))
