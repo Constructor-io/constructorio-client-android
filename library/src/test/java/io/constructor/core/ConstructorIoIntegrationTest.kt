@@ -47,7 +47,10 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getAutocompleteResultsAgainstRealResponse() {
         val observer = constructorIo.getAutocompleteResults("pork").test()
-        observer.assertComplete();
+        observer.assertComplete().assertValue {
+            it.get()?.sections!!.isNotEmpty()
+            it.get()?.resultId!!.isNotEmpty()
+        }
     }
 
     @Test
@@ -65,13 +68,27 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsAgainstRealResponse() {
         val observer = constructorIo.getSearchResults("pork").test()
-        observer.assertComplete();
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
     }
 
     @Test
     fun getBrowseResultsAgainstRealResponse() {
-        val observer = constructorIo.getBrowseResults("group_ids", "544").test()
-        observer.assertComplete();
+        val observer = constructorIo.getBrowseResults("group_id", "744").test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
     }
 
     @Test
@@ -118,7 +135,12 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getRecommendationResultsAgainstRealResponse() {
-        val observer = constructorIo.getRecommendationResults("pork").test()
-        observer.assertComplete();
+        val observer = constructorIo.getRecommendationResults("best_sellers").test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.pod !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
     }
 }

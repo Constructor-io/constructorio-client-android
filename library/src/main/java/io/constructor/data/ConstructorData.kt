@@ -2,7 +2,7 @@ package io.constructor.data
 
 import io.reactivex.annotations.Nullable
 
-class ConstructorData<V> private constructor(@param:Nullable @field:Nullable
+class ConstructorData<V> constructor(@param:Nullable @field:Nullable
                                              private val value: V?, @param:Nullable @field:Nullable
                                              private val error: Throwable?, var networkError: Boolean = false) {
 
