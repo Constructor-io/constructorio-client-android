@@ -6,7 +6,6 @@ import java.io.Serializable
 
 data class RecommendationsResponseInner(
         @Json(name = "pod") val pod: Pod?,
-        @Json(name = "facets") val facets: List<FilterFacet>?,
         @Json(name = "results") val results: List<Result>?,
         @Json(name = "total_num_results") val resultCount: Int
 ) : Serializable
