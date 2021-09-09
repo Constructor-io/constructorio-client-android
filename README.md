@@ -83,7 +83,26 @@ ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it
 }
 ```
 
-## 7. Instrument Behavioral Events
+## 7. Request Recommendation Results
+
+```kotlin
+var numResults = 6
+var perPage = 10
+var podId = "best_sellers"
+var selectedFacets: HashMap<String, MutableList<String>>? = null
+
+ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
+.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+.subscribe {
+  it.onValue {
+    it.response?.let {
+      view.renderData(it)
+    }
+  }
+}
+```
+
+## 8. Instrument Behavioral Events
 
 The Android Client sends behavioral events to [Constructor.io](http://constructor.io/) in order to continuously learn and improve results for future Autosuggest and Search requests.  The Client only sends events in response to being called by the consuming app or in response to user interaction . For example, if the consuming app never calls the SDK code, no events will be sent.  Besides the explicitly passed in event parameters, all user events contain a GUID based user ID that the client sets to identify the user as well as a session ID.
 
