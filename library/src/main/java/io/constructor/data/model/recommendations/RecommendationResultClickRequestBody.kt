@@ -6,7 +6,7 @@ import java.io.Serializable
 
 data class RecommendationResultClickRequestBody(
         @Json(name = "pod_id") val podId: String,
-        @Json(name = "strategy_id") val strategyId: String?,
+        @Json(name = "strategy_id") val strategyId: String,
         @Json(name = "item_id") val itemId: String,
         @Json(name = "variation_id") val variationId: String?,
         @Json(name = "result_id") val resultId: String?,

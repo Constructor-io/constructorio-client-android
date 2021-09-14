@@ -496,13 +496,13 @@ object ConstructorIo {
      * @param resultCount The total number of recommendation results
      * @param resultPositionOnPage The position of the recommendation result that was clicked on
      */
-    fun trackRecommendationResultClick(podId: String, strategyId: String?, customerId: String, variationId: String, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int?, resultPage: Int?, resultCount: Int?, resultPositionOnPage: Int?) {
+    fun trackRecommendationResultClick(podId: String, strategyId: String, customerId: String, variationId: String?, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null) {
         var completable = trackRecommendationResultClickInternal(podId, strategyId, customerId, variationId, sectionName, resultId, numResultsPerPage, resultPage, resultCount, resultPositionOnPage)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Recommendation Result Click error: ${t.message}")
         }))
     }
-    internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String?, customerId: String, variationId: String, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int?, resultPage: Int?, resultCount: Int?, resultPositionOnPage: Int?): Completable {
+    internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String, customerId: String, variationId: String?, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val recommendationsResultClickRequestBody = RecommendationResultClickRequestBody(
@@ -541,13 +541,13 @@ object ConstructorIo {
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param sectionName The section that the results came from, i.e. "Products"
      */
-    fun trackRecommendationResultsView(podId: String, numResultsViewed: Int, resultPage: Int?, resultCount: Int?, resultId: String? = null, sectionName: String? = null, url: String = "Not Available") {
+    fun trackRecommendationResultsView(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available") {
         var completable = trackRecommendationResultsViewInternal(podId, numResultsViewed, resultPage, resultCount, resultId, sectionName, url)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Recommendation Results View error: ${t.message}")
         }))
     }
-    internal fun trackRecommendationResultsViewInternal(podId: String, numResultsViewed: Int, resultPage: Int?, resultCount: Int?, resultId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
+    internal fun trackRecommendationResultsViewInternal(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val recommendationResultViewRequestBody = RecommendationResultViewRequestBody(

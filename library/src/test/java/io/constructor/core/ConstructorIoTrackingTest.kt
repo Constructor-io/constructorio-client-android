@@ -489,5 +489,4 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)
     }
-
 }
