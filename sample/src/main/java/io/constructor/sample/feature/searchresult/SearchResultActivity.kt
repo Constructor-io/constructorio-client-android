@@ -3,8 +3,8 @@ package io.constructor.sample.feature.searchresult
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.constructor.data.model.common.Result
 import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R

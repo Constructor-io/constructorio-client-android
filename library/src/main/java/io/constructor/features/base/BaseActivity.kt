@@ -1,9 +1,9 @@
 package io.constructor.features.base
 
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.util.LongSparseArray
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.LayoutRes
+import androidx.collection.LongSparseArray
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import io.constructor.core.ConstructorIo
 import io.constructor.injection.component.ActivityComponent
