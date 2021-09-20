@@ -16,4 +16,5 @@ object ApiPaths {
     const val URL_BROWSE = "browse/{filter_name}/{filter_value}"
     const val URL_BROWSE_RESULT_CLICK_EVENT = "v2/behavioral_action/browse_result_click"
     const val URL_BROWSE_RESULT_LOAD_EVENT = "v2/behavioral_action/browse_result_load"
+    const val URL_RECOMMENDATIONS = "recommendations/v1/pods/{podId}"
 }

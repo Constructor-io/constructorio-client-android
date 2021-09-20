@@ -74,4 +74,7 @@ interface ConstructorApi {
     fun trackBrowseResultsLoaded(@Body browseRequestBody: BrowseResultLoadRequestBody,
                                  @QueryMap params: Map<String, String>): Completable
 
+    @GET(ApiPaths.URL_RECOMMENDATIONS)
+    fun getRecommendationResults(@Path("podId") value: String,
+                                 @QueryMap data: Map<String, String>): Single<Result<ResponseBody>>
 }
