@@ -156,7 +156,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getRecommendationResultsAgainstRealResponse() {
-        val observer = constructorIo.getRecommendationResults("best_sellers").test()
+        val observer = constructorIo.getRecommendationResults("pdp5").test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.pod !== null
