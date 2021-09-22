@@ -11,6 +11,7 @@ import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
+import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
@@ -123,13 +124,22 @@ object ConstructorIo {
 
     /**
      * Returns a list of autocomplete suggestions
+     * @param term the term to search for
+     * @param facets additional facets used to refine results
+     * @param groupId category facet used to refine results
      */
-    fun getAutocompleteResults(term: String): Observable<ConstructorData<AutocompleteResponse>> {
-        val params = mutableListOf<Pair<String, String>>()
-        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
-            params.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null): Observable<ConstructorData<AutocompleteResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
         }
-        return dataManager.getAutocompleteResults(term, params.toTypedArray())
+        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
+            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+        }
+        return dataManager.getAutocompleteResults(term, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
@@ -473,4 +483,26 @@ object ConstructorIo {
 
     }
 
+    /**
+     * Returns a list of search results including filters, categories, sort options, etc.
+     * @param podId the pod id
+     * @param facets  additional facets used to refine results
+     * @param numResults the number of results to return
+     * @param sectionName the section the selection will come from, i.e. "Products"
+     * @param itemId: The item id to retrieve recommendations (strategy specific)
+     * @param term: The term to use to refine results (strategy specific)
+     */
+    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null): Observable<ConstructorData<RecommendationsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to numResults.toString().urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
+        itemId?.let { encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.toString().urlEncode()) }
+        term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to term.toString().urlEncode()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
+        }
+        return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
+    }
 }

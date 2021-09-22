@@ -47,6 +47,16 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getAutocompleteResultsAgainstRealResponse() {
         val observer = constructorIo.getAutocompleteResults("pork").test()
+        observer.assertComplete().assertValue {
+            it.get()?.sections!!.isNotEmpty()
+            it.get()?.resultId!!.isNotEmpty()
+        }
+    }
+
+    @Test
+    fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
         observer.assertComplete();
     }
 
@@ -65,12 +75,40 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsAgainstRealResponse() {
         val observer = constructorIo.getSearchResults("pork").test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
+    }
+
+    @Test
+    fun getSearchResultsWithFiltersAgainstRealResponse() {
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
         observer.assertComplete();
     }
 
     @Test
     fun getBrowseResultsAgainstRealResponse() {
-        val observer = constructorIo.getBrowseResults("group_ids", "544").test()
+        val observer = constructorIo.getBrowseResults("group_id", "744").test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
+    }
+
+    @Test
+    fun getBrowseResultsWithFiltersAgainstRealResponse() {
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getBrowseResults("group_ids", "544", facet?.map { it.key to it.value }).test()
         observer.assertComplete();
     }
 
@@ -114,5 +152,16 @@ class ConstructorIoIntegrationTest {
     fun trackBrowseResultClickAgainstRealResponse() {
         val observer = constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls", 5).test()
         observer.assertComplete();
+    }
+
+    @Test
+    fun getRecommendationResultsAgainstRealResponse() {
+        val observer = constructorIo.getRecommendationResults("pdp5").test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.pod !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
     }
 }

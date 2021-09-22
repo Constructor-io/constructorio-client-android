@@ -1,0 +1,798 @@
+{
+  "request": {
+    "pod_id": "titanic",
+    "num_results": 10
+  },
+  "response": {
+    "results": [{
+      "data": {
+        "description": "Pure sparkling water. 0-calorie 0-sweetener 0-sodium = innocent! 12 sparkling cans. Sodium free. 100% recyclable. Lacroixwater.com. Consumer information call 1-888-241-7360. Non-GMO. Gluten free. Product of USA.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["LaCroix"]
+        }, {
+          "name": "Price",
+          "values": [1.11]
+        }],
+        "groups": [
+          {
+            "group_id": "Beverages",
+            "display_name": "Beverages",
+            "path": "/all",
+            "path_list": [
+              {
+                "id": "all",
+                "display_name": "All"
+              }
+            ]
+          }
+        ],
+        "id": "960189161",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960189161.png",
+        "keywords": [
+          "water",
+          "sparkling"
+        ],
+        "price": 1.11,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": [],
+      "value": "LaCroix Sparkling Water Pure Cans - 12-12 Fl. Oz."
+    }, {
+      "data": {
+        "description": "Per 1/2 cup: 80 calories; 0 g sat fat (0% DV); 300 mg sodium (13% DV); 7 g total sugars. Quality guaranteed. Non BPA lining (can lining produced without the intentional additional of BPA). Our Signature is Our Promise: Signature Select is your assurance of great quality products at the best value everyday. We source freshly picked fruits and vegetables at the peak of each season. We wouldn't put our Signature on anything else. Quality and satisfaction guaranteed or your money back. Our Promise: Quality & satisfaction 100% guaranteed or your money back. www.betterlivingbrandsLLC.com. Smartlabel.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Kitchens"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher", "Low Fat"]
+        }, {
+          "name": "Price",
+          "values": [1.3]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150012",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150012.png",
+        "keywords": ["corn"],
+        "price": 1.3,
+        "url": "/",
+        "weighted_keywords": {
+          "sweet": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Kitchens Corn Whole Kernel Golden Sweet Can - 15.25 Oz"
+    }, {
+      "data": {
+        "description": "Made with Fresh Cut Golden Sweet Whole Kernel Corn. Non GMO (Corn used in this product is not genetically modified or bioengineered). NO preservatives. Quality. USDA Process Verified: USDA Process Verified Non-GE/GMO http://processverified.usda.gov. Visit Us at: www.delmonte.com. Questions or comments? Call 1-800-543-3090 (Mon-Fri). Please provide code information from the end of can when calling or writing. Please recycle. Not a sodium-free food. Grown in the USA. Product of USA.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Del Monte"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [2.29]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150013",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150013.png",
+        "keywords": ["corn"],
+        "price": 2.29,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Del Monte Fresh Cut Corn Whole Kernel Golden Sweet No Salt Added - 15.25 Oz"
+    }, {
+      "data": {
+        "description": "No salt added. Quality guaranteed. Our Signature is our Promise: Signature Select is your assurance of great quality products at the best value everyday. We source freshly picked Scores and vegetables at the peak of each season. We wouldn't put our Signature on anything else Quality and satisfaction guaranteed or your money back. Our Promise: Quality & satisfaction 100% guaranteed or your money back. Non BPA lining (can lining produced without the intentional addition of BPA). Not a sodium free food. Per 1/2 Cup: 60 calories; 0 g sat fat (0% DV); 10 mg sodium (0% DV); 2 g total sugars. Not a sodium free food. www.betterlivingbrandsLLC.com. SmartLabel: can for more food information.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Kitchens"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher", "Low Fat"]
+        }, {
+          "name": "Price",
+          "values": [1.3]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150048",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150048.png",
+        "keywords": ["corn"],
+        "price": 1.3,
+        "url": "/",
+        "weighted_keywords": {
+          "add": 2,
+          "sweet": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Kitchens Corn Whole Kernel Golden Sweet Not Salt Added Can - 15.25 Oz"
+    }, {
+      "data": {
+        "description": "Quality guaranteed. Delicious Quality from Farm to Table: Welcome to the extraordinary flavors, textures, and colors of Signature Farms. You can find all the produce you want under the sun - crispy greens, perfectly ripened fruit, and all the colors of the vegetable rainbow. www.betterlivingbrandsLLC.com. SmartLabel. Scan for more food information. Product of Mexico.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Farms"]
+        }, {
+          "name": "Price",
+          "values": [5.9]
+        }],
+        "groups": [{
+          "display_name": "Fruits & Vegetables",
+          "group_id": "Fruits%20%26%20Vegetables",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960111073",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960111073.png",
+        "keywords": ["vegetables", "packaged"],
+        "price": 5.9,
+        "url": "/",
+        "weighted_keywords": {
+          "sweet": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Farms Corn Super Sweet - 4 Count"
+    }, {
+      "data": {
+        "description": "Per 1/2 Cup: 60 calories; 0 g sat fat (0% DV); 130 mg sodium (6% DV); 2 g total sugars. USDA Organic. Organic from the Source: Doesn't it feel good to know where your food comes from? At O Organics, we carefully select ingredients which meet organic farming standards and share our commitment to organic agriculture. That's our promise. Quality & satisfaction 100% guaranteed or your money back. SmartLabel: Scan for more food information. Non BPA lining (Can lining produced without the intentional addition of BPA).",
+        "facets": [{
+          "name": "Brand",
+          "values": ["O Organics"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher", "Organic"]
+        }, {
+          "name": "Price",
+          "values": [2.09]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150017",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150017.png",
+        "keywords": ["corn"],
+        "price": 2.09,
+        "url": "/",
+        "weighted_keywords": {
+          "organic": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "O Organics Organic Corn Whole Kernel - 15.25 Oz"
+    }, {
+      "data": {
+        "description": "Made with fresh cut golden sweet corn cream style. With natural sea salt. Quality. No preservatives. Non GMO (Ingredients of the types used in this product are not genetically modified). Non-BPA (Packaging produced without the intentional addition of BPA). Questions or comments? Call 1-800-543-3090 (Mon.-Fri.). Please provide code information from the end of can when calling or writing. Please recycle.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Del Monte"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [2.29]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150085",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150085.png",
+        "keywords": ["corn"],
+        "price": 2.29,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Del Monte Fresh Cut Corn Cream Style Golden Sweet - 14.75 Oz"
+    }, {
+      "data": {
+        "description": "Quality guaranteed. Our Promise: Quality & satisfaction 100% guaranteed or your money back. Non BPA lining (can lining produced without the intentional addition of BPA). Per 1/2 Cup: 70 calories; 0 g sat fat (0% DV); 300 mg sodium (13% DV); 8 g total sugars. Our Signature is Our Promise: Signature Select is your assurance of great quality products at the best value everyday. We wouldn't put our signature on anything else. Quality and satisfaction guaranteed or your money back. www.betterlivingbrandsLLC.com. SmartLabel: Scan for more food information.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Select"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher", "Low Fat"]
+        }, {
+          "name": "Price",
+          "values": [1.3]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150010",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150010.png",
+        "keywords": ["corn"],
+        "price": 1.3,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Select Corn Golden Sweet Cream Style - 14.75 Oz"
+    }, {
+      "data": {
+        "description": "Quality guaranteed. Picked & packed at the peak of freshness. Per 1/2 Cup: 80 calories. At Signature Kitchens we're passionate about quality ingredients - like our corn. We source freshly picked fruits and vegetables at the peak of each season. www.betterlivingbrandsLLC.com. Our promise, quality & satisfaction 100% guaranteed or your money back. See end of can for country of orgin.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Kitchens"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher", "Low Fat"]
+        }, {
+          "name": "Price",
+          "values": [0.98]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121050023",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121050023.png",
+        "keywords": ["corn"],
+        "price": 0.98,
+        "url": "/",
+        "weighted_keywords": {
+          "sweet": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Kitchens Corn Whole Kernel Golden Sweet Can - 8.5 Oz"
+    }, {
+      "data": {
+        "description": "Made with farm fresh goodness! Visit our website at www.senecafoods.com. Please recycle.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Seneca Foods"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [1.11]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960096944",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960096944.png",
+        "keywords": ["corn"],
+        "price": 1.11,
+        "url": "/",
+        "weighted_keywords": {
+          "sweet": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Libbys Corn Whole Kernel Sweet - 15 Oz"
+    }, {
+      "data": {
+        "description": "Naturally flavored frosted corn puffs. Cuckoo for chocolatey milk! Per 3/4 Cup Serving: 100 calories; 0 g sat fat (0% DV); 100 mg sodium (4% DV); 9 g sugars. See nutrition facts for As Prepared information. 10 g whole grain per serving. At least 48 g recommended daily. Whole grain 1st ingredient in every General Mills Big G cereal. First ingredient whole grain. A whole grain food is made by using all three parts of grain. All General Mills big g cereals contain more whole grain than any other single ingredient. Produced with genetic engineering. Box Tops for Education. We serve the world by making food people love. We welcome your questions and comments generallmills.com. Exchange: 1-1/2 starch. Based on Academy of Nutrition and Diabetics and American Diabetes Association criteria. This package is sold by weight, not volume. You can be assured of proper weight even though some settling of contents normally occurs during shipment and handling. Learn more at ask.generalmills.com. how2rec",
+        "facets": [{
+          "name": "Brand",
+          "values": ["General Mills"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [4.99]
+        }],
+        "groups": [{
+          "display_name": "Breakfast & Cereal",
+          "group_id": "Breakfast%20%26%20Cereal",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960161250",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960161250.png",
+        "keywords": ["sweet", "cereal"],
+        "price": 4.99,
+        "url": "/",
+        "weighted_keywords": {
+          "size": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Cocoa Puffs Frosted Corn Puffs Family Size - 20.9 Oz"
+    }, {
+      "data": {
+        "description": "Box Tops For Education. Endorsed by Weight Watchers. 2 PointsPlus value per serving. 100 calories per serving. Steam Crisp corn is vacuum packed and perfectly steam-cooked in the can. It contains the same amount of product as our standard can of corn, but uses less water and packaging, so it's friendlier on the environment too. Please recycle. Better if used by date on end of can. Weight Watchers PointsPlus Program! Check out the Weight Watchers PointsPlus Program. To learn more visit WeightWatchers.com or call 1(800)410-1199 today. A gluten free food. See how we lock in freshness at www.GreenGiant.com.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["General Mills"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Gluten Free", "Kosher"]
+        }, {
+          "name": "Price",
+          "values": [1.67]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150003",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150003.png",
+        "keywords": ["corn"],
+        "price": 1.67,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Green Giant SteamCrisp Corn Whole Kernel White Shoepeg - 11 Oz"
+    }, {
+      "data": {
+        "description": "Picked at the peak of perfection. Endorsed by Weight Watchers. 1 PointsPlus value per serving. 60 calories per serving. Box Tops for Education. Our love for vegetables began over 100 years ago in Le Sueur, Minnesota. Today, we still have fourth generation farmers who pick each crop at the peak of perfection. That's how we make our vegetables unforgettable. That's Green Giant. Please recycle. Weight Watchers PointsPlus Program! Check out the Weight Watchers PointsPlus Program. To learn more visit WeightWatchers.com or call 1 (800) 410-1199 today. See how we lock in freshness at www.GreenGiant.com.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["General Mills"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [1.25]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "121150011",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150011.png",
+        "keywords": ["corn"],
+        "price": 1.25,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Green Giant Corn Whole Kernel Sweet - 15.25 Oz"
+    }, {
+      "data": {
+        "description": "Sweet crispy crunch! Per 1 Cup Serving: 120 calories; 0 g sat fat (0% DV); 105 mg sodium (4% DV); 9 g sugars. Kellogg's Family Rewards. Learn more at kfr.com. Collect points. Earn rewards. Two easy ways to collect points! Go to kfr.com to learn more. USA Olympic proud sponsor. Kellogg's Open for Breakfast. Let's talk. At Kellogg, we're working harder to earn a seat at your table. What can we do to make your mornings better? Questions or comments? Visit: kelloggs.com. Call: 1-800-962-1413. Provide production code on package. BCTGM: Bakery Confectionery Tobacco Workers & Grain Millers union made. AFL CIO CLC. Certified 100% recycled paperboard. kelloggs.com. how2recycle.info.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Kelloggs"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [5.69]
+        }],
+        "groups": [{
+          "display_name": "Breakfast & Cereal",
+          "group_id": "Breakfast%20%26%20Cereal",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960015388",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960015388.png",
+        "keywords": ["sweet", "cereal"],
+        "price": 5.69,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Kelloggs Corn Pops Cereal Sweetened - 12.5 Oz"
+    }, {
+      "data": {
+        "description": "Quality guaranteed. Our Promise: Quality & satisfaction 100% guaranteed or your money back. Non BPA lining (can lining produced without the intentional addition of BPA). Per 1/3 Cup: 60 calories; 0 g sat fat (0% DV); 230 mg sodium (10% DV); 5 g total sugars. www.betterlivingbrandsLLC.com. SmartLabel: Scan for more food information.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Kitchens"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [1.09]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960009115",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960009115.png",
+        "keywords": ["corn"],
+        "price": 1.09,
+        "url": "/",
+        "weighted_keywords": {
+          "sweet": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Kitchens Corn Golden Sweet with Red & Green Peppers Can - 11 Oz"
+    }, {
+      "data": {
+        "description": "Rich & creamy. Chicken raised without antibiotics. Per 1 Cup: 220 calories; 6 g sat fat (30% DV); 710 mg sodium (30% DV); 6 g sugars. Inspected for wholesomeness by US Department of Agriculture. Smartlabel. Scan for more food information. Quality & satisfaction guaranteed or your money back.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Cafe"]
+        }, {
+          "name": "Price",
+          "values": [5.69]
+        }],
+        "groups": [{
+          "display_name": "Deli",
+          "group_id": "Deli",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960071695",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960071695.png",
+        "keywords": ["deli", "soups"],
+        "price": 5.69,
+        "url": "/",
+        "weighted_keywords": {
+          "chicken": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Cafe Soup Chicken & Sweet Corn Chowder - 24 Oz"
+    }, {
+      "data": {
+        "description": "Per 1 Cup Serving: 190 calories; 2 g sat fat (9% DV); 870 mg sodium (36% DV); 5 g sugars. Inspected for wholesomeness by US Department of Agriculture. All white meat chicken with no added antibiotics. Questions, comments? Save can and call 1-800-200-9377 weekdays 7:30 AM to 5:30 PM CT. Box Tops for Education. Gluten free. Visit our website at www.Progresso.com. how2recycle.info. For 100 years, our kitchens have crafted honest, soul-satisfying recipes with real ingredients you're proud to serve. Visit progresso.com for even more coziness. No artificial flavors. No MSG added (except that which occurs naturally in yeast extract hydrolyzed vegetable proteins, and tomato extract.). Exchanges: 1-1/2 starch, 1 lean meat, 1 fat. Based on Academy of Nutrition and Dietetics and American Diabetes Association criteria. Made in the USA.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["General Mills"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Gluten Free"]
+        }, {
+          "name": "Price",
+          "values": [3.39]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "125300232",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-125300232.png",
+        "keywords": ["ready", "to", "serve", "soup"],
+        "price": 3.39,
+        "url": "/",
+        "weighted_keywords": {
+          "rich": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Progresso Rich & Hearty Soup Chicken Corn Chowder Flavored with Bacon - 18.5 Oz"
+    }, {
+      "data": {
+        "description": "Selects. Fresh frozen vegetables. No preservatives. Perfectly cooks in the bag! Questions or comments? 800-563-1786 M-F 9:00am - 5:00pm EST. www.birdseye.com. Product of USA.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Birds Eye"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [2.89]
+        }],
+        "groups": [{
+          "display_name": "Frozen Foods",
+          "group_id": "Frozen%20Foods",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960143197",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960143197.png",
+        "keywords": ["frozen", "vegetables"],
+        "price": 2.89,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Birds Eye Steamfresh Selects Super Sweet Corn Bag - 10 Oz"
+    }, {
+      "data": {
+        "description": "Per 1 Cup Serving: 100 calories; 0 g sat fat (0% DV); 200 mg sodium (8% DV); 3 g sugar. Kellogg's Family Rewards. Learn more at kfr.com. Collect points. Earn rewards. Two easy ways to collect points! Go to kfr.com to learn more. USA Olympic Proud Sponsor. The original & best. A Tradition of Simple Goodness: More than 100 years ago, Kellogg recognized the possibilities in a single grain. And with the simple goodness of our toasted corn flakes, breakfast cereal was born. We've been baking Kellogg's Corn Flakes with the same simple recipe ever since. Kellogg's Open for breakfast. OpenForBreakfast.com/Cornflakes. Made using a simple recipe for more than 100 years. The corn used to make Kellogg's Corn Flakes is US grown. Split kernels of corn are cooked & partially dried. Rolled thin into flakes, they're ready for toasting. From seed to spoon, you get our best in every bite. Learn more at OpenForBreakfast.com/Cornflakes. Cornelius. Fat free. Produced with genetic engineering. Questions or c",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Kelloggs"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Fat Free", "Kosher"]
+        }, {
+          "name": "Price",
+          "values": [6.89]
+        }],
+        "groups": [{
+          "display_name": "Breakfast & Cereal",
+          "group_id": "Breakfast%20%26%20Cereal",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "111010115",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-111010115.png",
+        "keywords": ["all", "family", "cereal"],
+        "price": 6.89,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Kelloggs Corn Flakes Cereal - 18 Oz"
+    }, {
+      "data": {
+        "description": "Natural fruit flavored sweetened corn puffs with other natural flavors. No high fructose corn syrup. No colors from artificial sources. No artificial flavors. Per 1 Cup Serving: 130 calories; 0 g sat fat (0% DV); 160 mg sodium (7% DV); 10 g sugars. See nutrition facts for as prepared information. First ingredient whole grain. A whole grain food is made by using all three parts of the grain. All general mills big g cereals contain more whole grain than any other single ingredient. Box Tops for Education. We are on a journey to make cereal better. We welcome your questions and comments. Generalmills.com. 1-800-328-114. Welcome to Satur-Yay-Aaah!! There's a bit of Saturday in every box of Trix, Cocoa Puffs, Golden Grahams, Cookie Crisp and REese's Puffs cereals. Pour a bowl of your favorite to make any weekday feel like Saturday! To add even more Satur-Yay-Aaah fun to your day. Try out one of these crazy hairstyles: Get up early and take golden opportunity to read your favorite comics. Ma",
+        "facets": [{
+          "name": "Brand",
+          "values": ["General Mills"]
+        }, {
+          "name": "Price",
+          "values": [2.5]
+        }],
+        "groups": [{
+          "display_name": "Breakfast & Cereal",
+          "group_id": "Breakfast%20%26%20Cereal",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "111011133",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-111011133.png",
+        "keywords": ["sweet", "cereal"],
+        "price": 2.5,
+        "url": "/",
+        "weighted_keywords": {
+          "sweeten": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Trix Cereal Sweetened Corn Puffs - 10.7 Oz"
+    }, {
+      "data": {
+        "description": "Naturally flavored. Made with real honey. Sweetened corn cereal with a touch of real honey and natural almond flavor. Gluten free. No high fructose corn syrup. No artificial flavors, colors or preservatives. Per 3/4 Cup Serving: 120 calories; 0 g sat fat (0% DV); 200 mg sodium (8% DV); 9 g sugars. See nutrition facts for as prepared information. Whole grain is the 1st ingredient. First ingredient whole grain. A whole grain food is made by using all three parts of the grain. All General Mills Big G cereals contain more whole grain than any other single ingredient. 10 g whole grain per serving. At least 48 g recommended daily. Produced with genetic engineering. Learn more at Ask.GeneralMills.com. Taste the possibilities in every square. Chex Vanilla; Chex Corn; Chex Rice; Chex Chocolate; Chex Blueberry; Chex Cinnamon; Chex Wheat. Make a splash with the great taste of honey in your bowl! Proud sponsor of Celiac Disease Foundation. Celiac.org. Exchange: 1-1/2 starch. Based on Academy of Nu",
+        "facets": [{
+          "name": "Brand",
+          "values": ["General Mills"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Gluten Free", "Kosher"]
+        }, {
+          "name": "Price",
+          "values": [2.5]
+        }],
+        "groups": [{
+          "display_name": "Breakfast & Cereal",
+          "group_id": "Breakfast%20%26%20Cereal",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960111322",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960111322.png",
+        "keywords": ["all", "family", "cereal"],
+        "price": 2.5,
+        "url": "/",
+        "weighted_keywords": {
+          "nut": 2,
+          "sweetend": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Chex Cereal Corn Gluten Free Sweetend Honey Nut - 12.5 Oz"
+    }, {
+      "data": {
+        "description": "Premium quality. California & Washington. Visit our website at www.birdseye.com. At Birds Eye, we believe passionately in quality and that quality of life, family and friendships are the only reasons for our existence. We also believe that our mission is to bring our customers only the very best quality of product, of package, and of service. That is our heritage and that is our future. Our pledge is to offer our customers the very best grown and instantly quick frozen vegetables and fruit, and to continuously improve the choice of products that we offer you. Thank you for choosing Birds Eye products. You will always get our very best since quality is our business. Product of USA.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Birds Eye Foods"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher"]
+        }, {
+          "name": "Price",
+          "values": [3.6]
+        }],
+        "groups": [{
+          "display_name": "Frozen Foods",
+          "group_id": "Frozen%20Foods",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "147010091",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-147010091.png",
+        "keywords": ["frozen", "vegetables"],
+        "price": 3.6,
+        "url": "/"
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "C&W Petite Sweet Corn - 16 Oz"
+    }, {
+      "data": {
+        "description": "Quality guaranteed. A low fat food. Per 1 Ear: 90 calories; 0 g sat fat (0% DV); 0 mg sodium (0% DV); 5 g sugars. Package contains 12 mini ears. www.betterlivingbrandsLLC.com. Our Promise: Quality & satisfaction 100% guaranteed or your money back. Product of USA.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Kitchens"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Kosher", "Low Fat"]
+        }, {
+          "name": "Price",
+          "values": [5.19]
+        }],
+        "groups": [{
+          "display_name": "Frozen Foods",
+          "group_id": "Frozen%20Foods",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "147010663",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-147010663.png",
+        "keywords": ["frozen", "vegetables"],
+        "price": 5.19,
+        "url": "/",
+        "weighted_keywords": {
+          "corn": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Kitchens Corn On The Cob Mini - 12 Count"
+    }, {
+      "data": {
+        "description": "Quality guaranteed. Our Promise: Quality & satisfaction 100% guaranteed or your money back. Non BPA lining (can lining produced without the intentional addition of BPA). Per 1/2 Cup: 60 calories; 0 g sat fat (0% DV); 200 mg sodium (9% DV); 2 g total sugars. www.betterlivingbrandsLLC.com. SmartLabel: Scan for more food information.",
+        "facets": [{
+          "name": "Brand",
+          "values": ["Signature Kitchens"]
+        }, {
+          "name": "Nutrition",
+          "values": ["Gluten Free", "Kosher"]
+        }, {
+          "name": "Price",
+          "values": [1.11]
+        }],
+        "groups": [{
+          "display_name": "Canned Goods & Soups",
+          "group_id": "Canned%20Goods%20%26%20Soups",
+          "path": "/all",
+          "path_list": [{
+            "display_name": "All",
+            "id": "all"
+          }]
+        }],
+        "id": "960197607",
+        "image_url": "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960197607.png",
+        "keywords": ["corn"],
+        "price": 1.11,
+        "url": "/",
+        "weighted_keywords": {
+          "sweet": 2
+        }
+      },
+      "is_slotted": false,
+      "matched_terms": ["corn"],
+      "value": "Signature Kitchens Corn Whole Kernel Super Sweet - 15.25 Oz"
+    }],
+    "total_num_results": 225,
+    "pod": {
+      "id": "titanic",
+      "display_name": "Top picks for you"
+    }
+  },
+  "result_id": "49eb05c2-a3a3-4080-b238-82c5a44f8cf5"
+}

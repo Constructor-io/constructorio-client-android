@@ -1,0 +1,14 @@
+{
+  "request": {
+    "pod_id": "titanic",
+    "num_results": 10
+  },
+  "response": {
+    "facets": [],
+    "groups": [],
+    "results": [],
+    "sort_options": [],
+    "total_num_results": 0
+  },
+  "result_id": "49eb05c2-a3a3-4080-b238-82c5a44f8cf5"
+}

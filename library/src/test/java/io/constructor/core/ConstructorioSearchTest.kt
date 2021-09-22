@@ -72,7 +72,7 @@ class ConstructorIoSearchTest {
             it.get()!!.response?.resultCount == 225
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.6.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -85,7 +85,7 @@ class ConstructorIoSearchTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.6.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -99,7 +99,7 @@ class ConstructorIoSearchTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.6.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -115,7 +115,7 @@ class ConstructorIoSearchTest {
             it.get()!!.response?.resultCount == 0
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.6.0&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -129,7 +129,7 @@ class ConstructorIoSearchTest {
             it.get()!!.response?.redirect?.matchedTerms!![0] == "bbq"
         }
         val request = mockServer.takeRequest()
-        val path = "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.6.0&_dt="
+        val path = "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
