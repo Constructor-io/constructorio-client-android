@@ -4,6 +4,9 @@ import com.squareup.moshi.Json
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
+/**
+ * @suppress
+ */
 data class PurchaseItem(
         @Json(name = "item_id") val itemId: String?,
         @Json(name = "variation_id") val variationId: String? = null

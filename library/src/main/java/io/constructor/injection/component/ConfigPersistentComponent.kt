@@ -8,6 +8,7 @@ import io.constructor.injection.module.ActivityModule
 import io.constructor.injection.module.FragmentModule
 
 /**
+ * @suppress
  * A dagger component that will live during the lifecycle of an Activity or Fragment but it won't
  * be destroy during configuration changes. Check [BaseActivity] and [BaseFragment] to
  * see how this components survives configuration changes.

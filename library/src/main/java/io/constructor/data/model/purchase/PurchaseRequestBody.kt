@@ -4,6 +4,9 @@ import com.squareup.moshi.Json
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
+/**
+ * @suppress
+ */
 data class PurchaseRequestBody(
         @Json(name = "items") val items: List<PurchaseItem>?,
         @Json(name = "order_id") val orderId: String,

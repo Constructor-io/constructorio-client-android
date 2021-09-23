@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_suggestions.*
 import javax.inject.Inject
 
 /**
+ * @suppress
  * abstract class you can extend to use your own custom ui
  */
 abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {

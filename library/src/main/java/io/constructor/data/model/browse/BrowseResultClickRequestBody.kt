@@ -4,6 +4,9 @@ import com.squareup.moshi.Json
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
+/**
+ * @suppress
+ */
 data class BrowseResultClickRequestBody(
         @Json(name = "filter_name") val filterName: String,
         @Json(name = "filter_value") val filterValue: String,

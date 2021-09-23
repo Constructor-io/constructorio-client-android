@@ -2,9 +2,9 @@ package io.constructor.ui.base
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
@@ -17,6 +17,9 @@ import io.constructor.data.model.common.Result
 
 import java.util.*
 
+/**
+ * @suppress
+ */
 abstract class BaseSuggestionsAdapter : RecyclerView.Adapter<BaseSuggestionsAdapter.ViewHolder>() {
 
     private var suggestions: List<Result> = ArrayList()

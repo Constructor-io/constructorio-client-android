@@ -1,8 +1,8 @@
 package io.constructor.features.base
 
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
 import android.util.LongSparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +16,7 @@ import io.constructor.util.d
 import java.util.concurrent.atomic.AtomicLong
 
 /**
+ * @suppress
  * Abstract Fragment that every other Fragment in this application must implement. It handles
  * creation of Dagger components and makes sure that instances of ConfigPersistentComponent are kept
  * across configuration changes.

@@ -4,6 +4,9 @@ import com.squareup.moshi.Json
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
+/**
+ * Models browse response details
+ */
 data class BrowseResponseInner(
         @Json(name = "facets") val facets: List<FilterFacet>?,
         @Json(name = "groups") val groups: List<FilterGroup>?,

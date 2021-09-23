@@ -63,7 +63,36 @@ class ConstructorIoAutocompleteTest {
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.6.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun getAutocompleteResultsWithFacetFilter() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getAutocompleteResults("titanic", facet?.map { it.key to it.value }).test()
+        observer.assertComplete().assertValue {
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isNotEmpty()!! && suggestions.size == 5
+        }
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+    }
+
+    @Test
+    fun getAutocompleteResultsWithGroupIdFilter() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getAutocompleteResults("titanic", null, 101).test()
+        observer.assertComplete().assertValue {
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isNotEmpty()!! && suggestions.size == 5
+        }
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/titanic?filters%5Bgroup_id%5D=101&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -76,7 +105,7 @@ class ConstructorIoAutocompleteTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.6.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -90,7 +119,7 @@ class ConstructorIoAutocompleteTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.6.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 
@@ -104,7 +133,7 @@ class ConstructorIoAutocompleteTest {
             suggestions?.isEmpty()!!
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.6.0&_dt="
+        val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
 }

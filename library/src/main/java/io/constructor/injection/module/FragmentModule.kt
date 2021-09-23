@@ -1,12 +1,15 @@
 package io.constructor.injection.module
 
 import android.content.Context
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import dagger.Module
 import dagger.Provides
 import io.constructor.injection.ActivityContext
 
+/**
+ * @suppress
+ */
 @Module
 class FragmentModule(private val fragment: Fragment) {
 

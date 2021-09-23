@@ -4,6 +4,9 @@ import io.constructor.util.base64Decode
 import io.constructor.util.base64Encode
 import javax.inject.Inject
 
+/**
+ * @suppress
+ */
 class ConfigMemoryHolder @Inject constructor() {
 
     private var backingString = ""

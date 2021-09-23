@@ -3,6 +3,9 @@ package io.constructor.core
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.common.Result
 
+/**
+ * @suppress
+ */
 interface ConstructorListener {
     fun onSuggestionSelected(term: String, resultGroup: ResultGroup?, autocompleteSection: String?)
     fun onQuerySentToServer(query: String)

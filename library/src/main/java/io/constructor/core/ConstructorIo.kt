@@ -34,6 +34,9 @@ import java.util.*
 
 typealias ConstructorError = ((Throwable) -> Unit)?
 
+/**
+ * The Constructor SDK client used for getting results and tracking behavioural data.
+ */
 @SuppressLint("StaticFieldLeak")
 object ConstructorIo {
 
@@ -113,19 +116,31 @@ object ConstructorIo {
         this.configMemoryHolder = configMemoryHolder
     }
 
+    /**
+     * @suppress
+     */
     fun appMovedToForeground() {
         preferenceHelper.getSessionId(sessionIncrementHandler)
     }
 
     /**
      * Returns a list of autocomplete suggestions
+     * @param term the term to search for
+     * @param facets additional facets used to refine results
+     * @param groupId category facet used to refine results
      */
-    fun getAutocompleteResults(term: String): Observable<ConstructorData<AutocompleteResponse>> {
-        val params = mutableListOf<Pair<String, String>>()
-        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
-            params.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null): Observable<ConstructorData<AutocompleteResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
         }
-        return dataManager.getAutocompleteResults(term, params.toTypedArray())
+        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
+            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+        }
+        return dataManager.getAutocompleteResults(term, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
@@ -315,6 +330,7 @@ object ConstructorIo {
      * @param customerId the identifier of the converting item i.e "PUMP-KAB-0002"
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
+     * @param conversionType the type of conversion, i.e. "add_to_cart"
      */
     fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null) {
         var completable = trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName, conversionType)
