@@ -127,8 +127,9 @@ object ConstructorIo {
      * @param term the term to search for
      * @param facets additional facets used to refine results
      * @param groupId category facet used to refine results
+     * @param hiddenFields show fields that are hidden by default
      */
-    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         facets?.forEach { facet ->
@@ -138,6 +139,9 @@ object ConstructorIo {
         }
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+        }
+        hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
         }
         return dataManager.getAutocompleteResults(term, encodedParams = encodedParams.toTypedArray())
     }

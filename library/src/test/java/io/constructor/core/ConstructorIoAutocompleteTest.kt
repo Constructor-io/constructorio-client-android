@@ -136,4 +136,14 @@ class ConstructorIoAutocompleteTest {
         val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
+
+    @Test
+    fun getAutocompleteResultsWithHiddenFields() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getAutocompleteResults("bbq", null, null, listOf("hiddenField1", "hiddenField2")).test()
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+    }
 }

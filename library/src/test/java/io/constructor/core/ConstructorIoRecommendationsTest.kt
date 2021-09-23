@@ -67,7 +67,6 @@ class ConstructorIoRecommendationsTest {
             it.get()!!.response?.resultCount == 225
         }
         val request = mockServer.takeRequest()
-        println(request.path)
         val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
         assert(request.path.startsWith(path))
     }
