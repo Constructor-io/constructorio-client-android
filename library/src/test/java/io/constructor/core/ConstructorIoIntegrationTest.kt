@@ -51,7 +51,6 @@ class ConstructorIoIntegrationTest {
             it.get()?.sections!!.isNotEmpty()
             it.get()?.resultId!!.isNotEmpty()
         }
-
     }
 
     @Test

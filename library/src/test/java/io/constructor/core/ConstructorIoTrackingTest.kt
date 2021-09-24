@@ -489,4 +489,98 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)
     }
+
+    @Test
+    fun trackRecommendationResultClick() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
+    fun trackRecommendationResultClickWithSectionAndResultID() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", null, "Search Suggestions", "3467632").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
+    fun trackRecommendationResultClick500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997").test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
+    fun trackRecommendationResultClickTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997").test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
+    }
+
+    @Test
+    fun trackRecommendationResultsView() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithSectionAndResultID() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4, 1, 4, "3467632", "Search Suggestions").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
+    fun trackRecommendationResultsView500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.9.0&_dt="
+        assert(request.path.startsWith(path))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
+    fun trackRecommendationResultsViewTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
+    }
 }
