@@ -17,7 +17,7 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     dexOptions {
         maxProcessCount 4
@@ -25,11 +25,12 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion 21
+        targetSdkVersion 30
+        multiDexEnabled true
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
-        versionName '2.9.0'
+        versionName '2.9.1'
         buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
         buildConfigField("String", "DEFAULT_ITEM_SECTION", "\"Products\"")
         buildConfigField("String", "SERVICE_URL", "\"ac.cnstrc.com\"")
@@ -181,4 +182,5 @@ dependencies {
     kaptAndroidTest daggerCompiler
     testImplementation unitTestLibs
     androidTestImplementation androidTestsLibs
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
