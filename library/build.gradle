@@ -17,7 +17,7 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     dexOptions {
         maxProcessCount 4
@@ -25,8 +25,9 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion 21
+        targetSdkVersion 30
+        multiDexEnabled true
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
         versionName '2.9.0'
@@ -181,4 +182,5 @@ dependencies {
     kaptAndroidTest daggerCompiler
     testImplementation unitTestLibs
     androidTestImplementation androidTestsLibs
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
