@@ -164,4 +164,16 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.resultCount!! > 0
         }
     }
+
+    @Test
+    fun trackRecommendationResultClickAgainstRealResponse() {
+        val observer = constructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured", "prrst_shldr_bls").test()
+        observer.assertComplete();
+    }
+
+    @Test
+    fun trackRecommendationResultsViewAgainstRealResponse() {
+        val observer = constructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        observer.assertComplete();
+    }
 }
