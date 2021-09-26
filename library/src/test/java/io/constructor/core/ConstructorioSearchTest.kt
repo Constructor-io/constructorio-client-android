@@ -139,7 +139,7 @@ class ConstructorIoSearchTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("bbq", null, null, null , null, null, null, listOf("hiddenField1", "hiddenField2")).test()
         val request = mockServer.takeRequest()
-        val path = "/search/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt="
+        val path = "/search/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.1&_dt="
         assert(request.path.startsWith(path))
     }
 }

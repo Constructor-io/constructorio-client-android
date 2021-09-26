@@ -143,7 +143,7 @@ class ConstructorIoAutocompleteTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getAutocompleteResults("bbq", null, null, listOf("hiddenField1", "hiddenField2")).test()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.0&_dt="
+        val path = "/autocomplete/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.9.1&_dt="
         assert(request.path.startsWith(path))
     }
 }
