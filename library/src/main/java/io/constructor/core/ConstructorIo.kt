@@ -87,7 +87,7 @@ object ConstructorIo {
         preferenceHelper.port = constructorIoConfig.servicePort
         preferenceHelper.scheme = constructorIoConfig.serviceScheme
         preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
-        if (preferenceHelper.id.isBlank()) {
+        if (preferenceHelper.id!!.isBlank()) {
             preferenceHelper.id = UUID.randomUUID().toString()
         }
 

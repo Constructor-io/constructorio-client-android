@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'jacoco'
 apply plugin: 'org.jetbrains.dokka-android'
 
@@ -17,7 +15,7 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     dexOptions {
         maxProcessCount 4
@@ -26,7 +24,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         multiDexEnabled true
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
@@ -87,10 +85,6 @@ android {
         }
     }
 
-    androidExtensions {
-        experimental = true
-    }
-
     libraryVariants.all { variant ->
         variant.outputs.each { output ->
             def lintTask = tasks["lint${variant.name.capitalize()}"]
@@ -142,10 +136,10 @@ task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) 
             excludes: excludedClasses
     )
 
-    classDirectories = files([ javaClasses ], [ kotlinClasses ])
-    additionalSourceDirs = files(coverageSourceDirs)
-    sourceDirectories = files(coverageSourceDirs)
-    executionData = fileTree(dir: "$buildDir/jacoco", includes: [
+    classDirectories.from([ javaClasses ], [ kotlinClasses ])
+    additionalSourceDirs.from(coverageSourceDirs)
+    sourceDirectories.from(coverageSourceDirs)
+    executionData.from(dir: "$buildDir/jacoco", includes: [
             "testDebugUnitTest.exec"
     ])
 

@@ -1,5 +1,6 @@
 package io.constructor.data.local
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import io.constructor.injection.ApplicationContext
@@ -8,21 +9,22 @@ import javax.inject.Inject
 /**
  * @suppress
  */
+@SuppressLint("CommitPrefEdits")
 class PreferencesHelper @Inject
 constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FILE_NAME) {
 
     private val preferences: SharedPreferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
 
     var id: String
-        get() = preferences.getString(PREF_ID, "")
+        get() = preferences.getString(PREF_ID, "")!!
         set(value) = preferences.edit().putString(PREF_ID, value).apply()
 
     var apiKey: String
-        get() = preferences.getString(PREF_API_KEY, "")
+        get() = preferences.getString(PREF_API_KEY, "")!!
         set(value) = preferences.edit().putString(PREF_API_KEY, value).apply()
 
     var defaultItemSection: String
-        get() = preferences.getString(PREF_DEFAULT_ITEM_SECTION, "")
+        get() = preferences.getString(PREF_DEFAULT_ITEM_SECTION, "")!!
         set(value) = preferences.edit().putString(PREF_DEFAULT_ITEM_SECTION, value).apply()
 
     var groupsShownForFirstTerm: Int
