@@ -96,6 +96,10 @@ android {
         outputFormat = 'html'
         outputDirectory = "./docs"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
@@ -144,8 +148,8 @@ task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) 
     ])
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 }
 
@@ -154,6 +158,12 @@ task getCoverage(type: Exec, dependsOn: 'jacocoUnitTestReport') {
     commandLine "open", "$buildDir/reports/jacoco/jacocoUnitTestReport/html/index.html"
 }
 
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 
 apply from: 'dependencies.gradle'
 

@@ -29,7 +29,7 @@ import io.constructor.ui.suggestion.SuggestionsView
 import io.constructor.util.broadcastIntent
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_suggestions.*
+//import kotlinx.android.synthetic.main.fragment_suggestions.*
 import javax.inject.Inject
 
 /**
@@ -51,8 +51,12 @@ abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             p1?.let {
+                var extraTerm = it.getStringExtra(Constants.EXTRA_TERM)
+                if (extraTerm === null) {
+                    extraTerm = "Term"
+                }
                 when (it.action) {
-                    Constants.EVENT_QUERY_SENT -> listener?.onQuerySentToServer(it.getStringExtra(Constants.EXTRA_TERM))
+                    Constants.EVENT_QUERY_SENT -> listener?.onQuerySentToServer(extraTerm)
                     Constants.EVENT_SUGGESTIONS_RETRIEVED -> listener?.onSuggestionsRetrieved(it.getSerializableExtra(Constants.EXTRA_SUGGESTIONS) as List<Result>)
                     else -> {
                     }
@@ -109,11 +113,11 @@ abstract class BaseSuggestionFragment : BaseFragment(), SuggestionsView {
 
             return@OnEditorActionListener false
         })
-        backIcon?.setOnClickListener { activity?.finish() }
-        closeIcon?.setOnClickListener {
-            suggestionBox?.text?.clear()
-            clearSuggestions()
-        }
+//        backIcon?.setOnClickListener { activity?.finish() }
+//        closeIcon?.setOnClickListener {
+//            suggestionBox?.text?.clear()
+//            clearSuggestions()
+//        }
     }
 
     fun triggerSearch() {
