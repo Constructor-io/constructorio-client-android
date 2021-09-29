@@ -24,13 +24,9 @@ class OnSelectService : IntentService("OnSelectService") {
 
 
     override fun onHandleIntent(intent: Intent?) {
-        var query: String? = intent?.getStringExtra(Constants.EXTRA_QUERY)
-        if (query === null) {
-            query = this::class.qualifiedName + "query"
-        }
         val suggestion: Result = intent?.getSerializableExtra(Constants.EXTRA_SUGGESTION) as Result
         if (!suggestion.value.isBlank()) {
-            ConstructorIo.trackAutocompleteSelect(suggestion.value, query, "Search Suggestions", suggestion.data.groups?.get(0))
+            intent?.getStringExtra(Constants.EXTRA_QUERY)?.let { ConstructorIo.trackAutocompleteSelect(suggestion.value, it, "Search Suggestions", suggestion.data.groups?.get(0)) }
         }
     }
 }

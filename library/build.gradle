@@ -17,11 +17,6 @@ tasks.withType(Test) {
 android {
     compileSdkVersion 31
 
-    dexOptions {
-        maxProcessCount 4
-        preDexLibraries false
-    }
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 31
@@ -82,13 +77,6 @@ android {
     testOptions {
         unitTests {
             returnDefaultValues = true
-        }
-    }
-
-    libraryVariants.all { variant ->
-        variant.outputs.each { output ->
-            def lintTask = tasks["lint${variant.name.capitalize()}"]
-            output.assemble.dependsOn lintTask
         }
     }
 

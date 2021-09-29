@@ -22,13 +22,9 @@ class OnSearchService : IntentService("OnSearchService") {
     }
 
     override fun onHandleIntent(intent: Intent?) {
-        var query = intent?.getStringExtra(Constants.EXTRA_QUERY)
-        if (query === null) {
-            query = this::class.qualifiedName + "query"
-        }
         val suggestion: Result = intent?.getSerializableExtra(Constants.EXTRA_SUGGESTION) as Result
             if (!suggestion.value.isBlank()) {
-                ConstructorIo.trackSearchSubmit(suggestion.value, query, suggestion.data.groups?.get(0))
+                intent?.getStringExtra(Constants.EXTRA_QUERY)?.let { ConstructorIo.trackSearchSubmit(suggestion.value, it, suggestion.data.groups?.get(0)) }
             }
     }
 }
