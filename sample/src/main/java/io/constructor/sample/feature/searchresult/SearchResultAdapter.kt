@@ -9,7 +9,7 @@ import io.constructor.data.model.common.Result
 import io.constructor.data.model.search.SearchResponseInner
 import io.constructor.sample.R
 import io.constructor.sample.extensions.priceFormatted
-import kotlinx.android.synthetic.main.item_search_result.view.*
+//import kotlinx.android.synthetic.main.item_search_result.view.*
 
 class SearchResultAdapter(var clickListener: (Result) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -33,11 +33,11 @@ class SearchResultAdapter(var clickListener: (Result) -> Unit) : RecyclerView.Ad
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
         val item = data[p1]
         with(p0 as SearchItemViewHolder) {
-            Glide.with(image).load(item.data.imageUrl).into(image)
-            title.text = item.value
-            description.text = item.data.description
+//            Glide.with(image).load(item.data.imageUrl).into(image)
+//            title.text = item.value
+//            description.text = item.data.description
             val priceFormatted = item.data.priceFormatted()
-            price.text = priceFormatted
+//            price.text = priceFormatted
             rootView.setOnClickListener {
                 clickListener.invoke(item)
             }
@@ -52,10 +52,10 @@ class SearchResultAdapter(var clickListener: (Result) -> Unit) : RecyclerView.Ad
 
     internal class SearchItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val rootView = itemView.rootView
-        val image = itemView.image
-        val price = itemView.price
-        val title = itemView.title
-        val description = itemView.description
+//        val image = itemView.image
+//        val price = itemView.price
+//        val title = itemView.title
+//        val description = itemView.description
     }
 
 }

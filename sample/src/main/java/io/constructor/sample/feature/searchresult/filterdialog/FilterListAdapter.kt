@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import io.constructor.data.model.common.FilterFacetOption
 import io.constructor.data.model.common.FilterFacet
 import io.constructor.sample.R
-import kotlinx.android.synthetic.main.item_facet.view.*
-import kotlinx.android.synthetic.main.item_header.view.*
+//import kotlinx.android.synthetic.main.item_facet.view.*
+//import kotlinx.android.synthetic.main.item_header.view.*
 
 class FilterListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -73,15 +73,15 @@ class FilterListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val item = data[p1]
         when (p0) {
             is HeaderViewHolder -> {
-                p0.title.text = (item as HeaderWrapper).data.displayName
+//                p0.title.text = (item as HeaderWrapper).data.displayName
             }
             is ItemViewHolder -> {
                 item as ItemWrapper
-                p0.checkbox.text = item.data.second.value
-                p0.checkbox.setOnCheckedChangeListener { _, isChecked ->
-                    item.checked = isChecked
-                }
-                p0.checkbox.isChecked = item.checked
+//                p0.checkbox.text = item.data.second.value
+//                p0.checkbox.setOnCheckedChangeListener { _, isChecked ->
+//                    item.checked = isChecked
+//                }
+//                p0.checkbox.isChecked = item.checked
             }
         }
     }
@@ -95,11 +95,11 @@ class FilterListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     internal class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title = itemView.title
+//        val title = itemView.title
     }
 
     internal class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val checkbox = itemView.checkBox
+//        val checkbox = itemView.checkBox
     }
 
 }
