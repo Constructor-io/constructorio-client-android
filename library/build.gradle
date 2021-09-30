@@ -7,11 +7,12 @@ apply plugin: 'org.jetbrains.dokka-android'
 group='com.github.Constructor-io'
 
 jacoco {
-    toolVersion = '0.8.1'
+    toolVersion = '0.8.6'
 }
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
 }
 
 android {
@@ -83,10 +84,6 @@ android {
     dokka {
         outputFormat = 'html'
         outputDirectory = "./docs"
-    }
-
-    buildFeatures {
-        viewBinding = true
     }
 }
 
