@@ -143,13 +143,6 @@ task getCoverage(type: Exec, dependsOn: 'jacocoUnitTestReport') {
     commandLine "open", "$buildDir/reports/jacoco/jacocoUnitTestReport/html/index.html"
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 apply from: 'dependencies.gradle'
 
 dependencies {
