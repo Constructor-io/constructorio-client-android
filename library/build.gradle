@@ -7,7 +7,7 @@ apply plugin: 'org.jetbrains.dokka-android'
 group='com.github.Constructor-io'
 
 jacoco {
-    toolVersion = '0.8.6'
+    toolVersion = '0.8.4'
 }
 
 tasks.withType(Test) {
