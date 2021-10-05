@@ -7,13 +7,11 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.jacoco:org.jacoco.core:0.8.4'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$dokkaVersion"
     }
 }
@@ -22,7 +20,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-
     }
 }
 
