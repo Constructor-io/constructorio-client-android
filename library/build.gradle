@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'maven-publish'
 
 group='com.github.Constructor-io'
 
@@ -75,9 +76,14 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    kotlinOptions {
+      jvmTarget = "11"
+    }
+
     testOptions {
         unitTests {
             returnDefaultValues = true
+            includeAndroidResources = true
         }
     }
 
@@ -165,4 +171,14 @@ dependencies {
     testImplementation unitTestLibs
     androidTestImplementation androidTestsLibs
     implementation 'androidx.multidex:multidex:2.0.1'
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
 }
