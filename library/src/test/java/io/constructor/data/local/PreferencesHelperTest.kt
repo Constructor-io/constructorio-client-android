@@ -7,9 +7,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [30])
 class PreferencesHelperTest {
 
     private val partyLikeIts1999 = 946684800000
