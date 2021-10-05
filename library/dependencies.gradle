@@ -3,7 +3,7 @@ ext {
             moshi   : "1.8.0",
             okHttp  : "3.14.1",
             retrofit: '2.5.0',
-            dagger  : '2.14.1',
+            dagger  : '2.35.1',
             junit   : '4.12',
     ]
 

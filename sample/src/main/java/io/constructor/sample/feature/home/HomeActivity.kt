@@ -10,7 +10,7 @@ import io.constructor.sample.R
 import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.feature.cart.CartActivity
 import io.constructor.sample.feature.searchresult.SearchResultActivity
-import kotlinx.android.synthetic.main.activity_home.*
+//import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
 
@@ -34,53 +34,53 @@ class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
     }
 
     private fun setupToolbar() {
-        toolbar.inflateMenu(R.menu.home)
-        toolbar.setTitle(R.string.app_name)
-        toolbar.navigationIcon = null
-        toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.search -> {
-                    if (searchInput.visibility == View.GONE) {
-                        searchInput.visibility = View.VISIBLE
-                        searchInput.requestFocus()
-                    } else {
-                        if (searchInput.text.toString().isNotEmpty()) {
-                            SearchResultActivity.start(this, searchInput.text.toString())
-                        }
-                    }
-
-                    true
-                }
-                R.id.cart -> {
-                    startActivity(Intent(this, CartActivity::class.java))
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
-        }
+//        toolbar.inflateMenu(R.menu.home)
+//        toolbar.setTitle(R.string.app_name)
+//        toolbar.navigationIcon = null
+//        toolbar.setOnMenuItemClickListener {
+//            when (it.itemId) {
+//                R.id.search -> {
+//                    if (searchInput.visibility == View.GONE) {
+//                        searchInput.visibility = View.VISIBLE
+//                        searchInput.requestFocus()
+//                    } else {
+//                        if (searchInput.text.toString().isNotEmpty()) {
+//                            SearchResultActivity.start(this, searchInput.text.toString())
+//                        }
+//                    }
+//
+//                    true
+//                }
+//                R.id.cart -> {
+//                    startActivity(Intent(this, CartActivity::class.java))
+//                    true
+//                }
+//                else -> {
+//                    false
+//                }
+//            }
+//        }
     }
 
     private fun setupSearch() {
         autocompleteAdapter = AutoSuggestAdapter(this, android.R.layout.simple_dropdown_item_1line)
-        searchInput.setAdapter(autocompleteAdapter)
-        searchInput.setOnItemClickListener { _, _, position, _ ->
-            val item = autocompleteAdapter.getSuggestion(position)
-            SearchResultActivity.start(this, item.value)
-        }
-        searchInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                presenter.onQuery(s.toString())
-            }
-
-        })
+//        searchInput.setAdapter(autocompleteAdapter)
+//        searchInput.setOnItemClickListener { _, _, position, _ ->
+//            val item = autocompleteAdapter.getSuggestion(position)
+//            SearchResultActivity.start(this, item.value)
+//        }
+//        searchInput.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                presenter.onQuery(s.toString())
+//            }
+//
+//        })
     }
 
 }

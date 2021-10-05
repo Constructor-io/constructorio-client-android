@@ -12,7 +12,7 @@ import io.constructor.sample.common.BaseActivity
 import io.constructor.sample.feature.productdetail.ProductDetailActivity
 import io.constructor.sample.feature.searchresult.filterdialog.FilterDialog
 import io.constructor.sample.feature.searchresult.sortdialog.SortDialog
-import kotlinx.android.synthetic.main.activity_home.*
+//import kotlinx.android.synthetic.main.activity_home.*
 
 class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
 
@@ -24,7 +24,7 @@ class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
 
     override fun renderData(it: SearchResponseInner, totalCount: Int) {
         adapter.setData(it)
-        toolbar.title = "$query, found: $totalCount"
+//        toolbar.title = "$query, found: $totalCount"
     }
 
     override fun clearData() {
@@ -39,63 +39,63 @@ class SearchResultActivity : BaseActivity<SearchResultPresenter>(), SearchView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_result)
         adapter = SearchResultAdapter {
-            presenter.handleClick(it, query)
+//            presenter.handleClick(it, query)
         }
-        searchResult.adapter = adapter
-        searchResult.layoutManager = GridLayoutManager(this, 2)
+//        searchResult.adapter = adapter
+//        searchResult.layoutManager = GridLayoutManager(this, 2)
         addIniniteScrollToRecycler()
         setupToolbar()
-        presenter.onCreate(query)
+//        presenter.onCreate(query)
     }
 
     private fun setupToolbar() {
-        toolbar.inflateMenu(R.menu.search_result)
-        toolbar.title = query
-        toolbar.navigationIcon = null
-        toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.sort -> {
-                    presenter.availableFacets?.let {
-                        val dialog = FilterDialog.newInstance(ArrayList(it), presenter.selectedFacets)
-                        dialog.dismissListener = {
-                            presenter.facetsSelected(it)
-                        }
-                        dialog.show(supportFragmentManager, DIALOG_TAG)
-                    }
-                    true
-                }
-                R.id.filter -> {
-                    presenter.availableFilterSortOptions?.let {
-                        val dialog = SortDialog.newInstance(ArrayList(it), presenter.selectedFilterSortOption)
-                        dialog.dismissListener = {
-                            presenter.sortOptionSelected(it)
-                        }
-                        dialog.show(supportFragmentManager, DIALOG_TAG)
-                    }
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
-        }
+//        toolbar.inflateMenu(R.menu.search_result)
+//        toolbar.title = query
+//        toolbar.navigationIcon = null
+//        toolbar.setOnMenuItemClickListener {
+//            when (it.itemId) {
+//                R.id.sort -> {
+//                    presenter.availableFacets?.let {
+//                        val dialog = FilterDialog.newInstance(ArrayList(it), presenter.selectedFacets)
+//                        dialog.dismissListener = {
+//                            presenter.facetsSelected(it)
+//                        }
+//                        dialog.show(supportFragmentManager, DIALOG_TAG)
+//                    }
+//                    true
+//                }
+//                R.id.filter -> {
+//                    presenter.availableFilterSortOptions?.let {
+//                        val dialog = SortDialog.newInstance(ArrayList(it), presenter.selectedFilterSortOption)
+//                        dialog.dismissListener = {
+//                            presenter.sortOptionSelected(it)
+//                        }
+//                        dialog.show(supportFragmentManager, DIALOG_TAG)
+//                    }
+//                    true
+//                }
+//                else -> {
+//                    false
+//                }
+//            }
+//        }
     }
 
     private fun addIniniteScrollToRecycler() {
-        searchResult.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
-                    presenter.loadNextDataBatch(false)
-                }
-            }
-
-        })
+//        searchResult.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                if (!recyclerView.canScrollVertically(1)) {
+//                    presenter.loadNextDataBatch(false)
+//                }
+//            }
+//
+//        })
     }
 
     override fun navigateToDetails(it: Result) {
-        ProductDetailActivity.start(this, it)
+//        ProductDetailActivity.start(this, it)
     }
 
     companion object {

@@ -9,49 +9,49 @@ import android.view.View
 import android.widget.RadioButton
 import io.constructor.data.model.common.FilterSortOption
 import io.constructor.sample.R
-import kotlinx.android.synthetic.main.dialog_sort.view.*
+//import kotlinx.android.synthetic.main.dialog_sort.view.*
 
 class SortDialog : DialogFragment() {
 
     var dismissListener: ((FilterSortOption?) -> Unit)? = null
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = LayoutInflater.from(activity).inflate(R.layout.dialog_sort, null)
-        val dialog = AlertDialog.Builder(context!!)
-                .setView(view)
-                .create()
-        setDialogInteractions(view)
-        return dialog
-    }
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val view = LayoutInflater.from(activity).inflate(R.layout.dialog_sort, null)
+//        val dialog = AlertDialog.Builder(context!!)
+//                .setView(view)
+//                .create()
+//        setDialogInteractions(view)
+//        return dialog
+//    }
 
 
     private fun setDialogInteractions(view: View) {
         val list = arguments?.getSerializable(EXTRA_OPTIONS) as ArrayList<FilterSortOption>
         val selectedSortOption = arguments?.getSerializable(EXTRA_SELECTED_OPTION) as? FilterSortOption
         list.forEachIndexed { index, sortOption ->
-            val radioButton = LayoutInflater.from(view.context).inflate(R.layout.item_sort_option, view.filterRadioGroup, false) as RadioButton
-            radioButton.id = index + 1
-            radioButton.text = sortOption.displayName
-            if (sortOption.displayName == selectedSortOption?.displayName) {
-                radioButton.isChecked = true
-            }
-            view.filterRadioGroup.addView(radioButton)
+//            val radioButton = LayoutInflater.from(view.context).inflate(R.layout.item_sort_option, view.filterRadioGroup, false) as RadioButton
+//            radioButton.id = index + 1
+//            radioButton.text = sortOption.displayName
+//            if (sortOption.displayName == selectedSortOption?.displayName) {
+//                radioButton.isChecked = true
+//            }
+//            view.filterRadioGroup.addView(radioButton)
         }
-        view.title.text = "Sort options"
-        view.clear.setOnClickListener {
-            dismissListener?.invoke(null)
-            dismiss()
-        }
-        view.apply.setOnClickListener {
-            for (i in 0 until view.filterRadioGroup.childCount) {
-                val child = view.filterRadioGroup.getChildAt(i) as RadioButton
-                if (child.isChecked) {
-                    dismissListener?.invoke(list[i])
-                    break
-                }
-            }
-            dismiss()
-        }
+//        view.title.text = "Sort options"
+//        view.clear.setOnClickListener {
+//            dismissListener?.invoke(null)
+//            dismiss()
+//        }
+//        view.apply.setOnClickListener {
+//            for (i in 0 until view.filterRadioGroup.childCount) {
+//                val child = view.filterRadioGroup.getChildAt(i) as RadioButton
+//                if (child.isChecked) {
+//                    dismissListener?.invoke(list[i])
+//                    break
+//                }
+//            }
+//            dismiss()
+//        }
     }
 
     companion object {
