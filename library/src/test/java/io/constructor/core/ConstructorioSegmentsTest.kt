@@ -64,7 +64,7 @@ class ConstructorioSegmentsTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -75,7 +75,7 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/behavior?action=session_start&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt=";
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -86,7 +86,7 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/behavior?term=tita&action=focus&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt=";
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -97,7 +97,7 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic/select?section=Search%20Suggestions&original_query=tit&tr=click&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -108,7 +108,7 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt=";
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -119,7 +119,7 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt=";
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -130,7 +130,7 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt=";
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -141,7 +141,7 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/conversion?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt=";
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -153,6 +153,6 @@ class ConstructorioSegmentsTest {
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/purchase?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.0&_dt=";
         assertTrue(request.bodySize > 250)
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 }

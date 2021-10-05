@@ -64,7 +64,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -79,7 +79,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -93,7 +93,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?filters%5Bgroup_id%5D=101&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -106,7 +106,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -120,7 +120,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -134,7 +134,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -144,6 +144,6 @@ class ConstructorIoAutocompleteTest {
         val observer = constructorIo.getAutocompleteResults("bbq", null, null, listOf("hiddenField1", "hiddenField2")).test()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 }

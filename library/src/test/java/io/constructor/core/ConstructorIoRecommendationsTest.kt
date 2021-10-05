@@ -68,7 +68,7 @@ class ConstructorIoRecommendationsTest {
         }
         val request = mockServer.takeRequest()
         val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -81,7 +81,7 @@ class ConstructorIoRecommendationsTest {
         }
         val request = mockServer.takeRequest()
         val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -95,7 +95,7 @@ class ConstructorIoRecommendationsTest {
         }
         val request = mockServer.takeRequest()
         val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -109,6 +109,6 @@ class ConstructorIoRecommendationsTest {
         }
         val request = mockServer.takeRequest()
         val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 }
