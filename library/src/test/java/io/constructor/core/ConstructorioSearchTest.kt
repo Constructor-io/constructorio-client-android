@@ -73,7 +73,7 @@ class ConstructorIoSearchTest {
         }
         val request = mockServer.takeRequest()
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -86,7 +86,7 @@ class ConstructorIoSearchTest {
         }
         val request = mockServer.takeRequest()
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -100,7 +100,7 @@ class ConstructorIoSearchTest {
         }
         val request = mockServer.takeRequest()
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -116,7 +116,7 @@ class ConstructorIoSearchTest {
         }
         val request = mockServer.takeRequest()
         val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -130,7 +130,7 @@ class ConstructorIoSearchTest {
         }
         val request = mockServer.takeRequest()
         val path = "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -140,6 +140,6 @@ class ConstructorIoSearchTest {
         val observer = constructorIo.getSearchResults("bbq", null, null, null , null, null, null, listOf("hiddenField1", "hiddenField2")).test()
         val request = mockServer.takeRequest()
         val path = "/search/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.0&_dt="
-        assert(request.path.startsWith(path))
+        assert(request.path!!.startsWith(path))
     }
 }
