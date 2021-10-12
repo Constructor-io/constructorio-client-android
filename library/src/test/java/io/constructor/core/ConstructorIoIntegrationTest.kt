@@ -20,6 +20,7 @@ class ConstructorIoIntegrationTest {
     private val ctx = mockk<Context>()
     private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
+    private val timeBetweenTests = 2000.toLong()
 
     @Before
     fun setup() {
@@ -51,25 +52,29 @@ class ConstructorIoIntegrationTest {
             it.get()?.sections!!.isNotEmpty()
             it.get()?.resultId!!.isNotEmpty()
         }
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackSessionStartAgainstRealResponse() {
         val observer = constructorIo.trackSessionStartInternal().test()
         observer.assertComplete();
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackInputFocusAgainstRealResponse() {
         val observer = constructorIo.trackInputFocusInternal("pork").test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
@@ -89,7 +94,8 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
@@ -103,55 +109,64 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
         }
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun getBrowseResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer = constructorIo.getBrowseResults("group_ids", "544", facet?.map { it.key to it.value }).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackAutocompleteSelectAgainstRealResponse() {
         val observer = constructorIo.trackAutocompleteSelectInternal("pork", "pork", "Search Suggestions").test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackSearchSubmitAgainstRealResponse() {
         val observer = constructorIo.trackSearchSubmitInternal("pork", "pork", null).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackSearchResultClickAgainstRealResponse() {
         val observer = constructorIo.trackSearchResultClickInternal("Boneless Pork Shoulder Roast", "prrst_shldr_bls", "pork").test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackConversionAgainstRealResponse() {
         val observer = constructorIo.trackConversionInternal("Boneless Pork Shoulder Roast", "prrst_shldr_bls", 1.99).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackPurchaseAgainstRealResponse() {
         val observer = constructorIo.trackPurchaseInternal(arrayOf("prrst_shldr_bls", "prrst_crwn"), 9.98, "45273", "Products").test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackBrowseResultsLoadedAgainstRealResponse() {
         val observer = constructorIo.trackBrowseResultsLoadedInternal("group_ids", "544", 46).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackBrowseResultClickAgainstRealResponse() {
         val observer = constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls", 5).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
@@ -163,17 +178,20 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.results!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
         }
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackRecommendationResultClickAgainstRealResponse() {
         val observer = constructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured", "prrst_shldr_bls").test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackRecommendationResultsViewAgainstRealResponse() {
         val observer = constructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
-        observer.assertComplete();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
     }
 }
