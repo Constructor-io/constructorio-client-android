@@ -490,10 +490,10 @@ object ConstructorIo {
 
     /**
      * Returns a list of search results including filters, categories, sort options, etc.
-     * @param podId The pod id
-     * @param facets  Additional facets used to refine results
-     * @param numResults The number of results to return
-     * @param sectionName The section the selection will come from, i.e. "Products"
+     * @param podId the pod id
+     * @param facets  additional facets used to refine results
+     * @param numResults the number of results to return
+     * @param sectionName the section the selection will come from, i.e. "Products"
      * @param itemId: The item id to retrieve recommendations (strategy specific)
      * @param term: The term to use to refine results (strategy specific)
      */
