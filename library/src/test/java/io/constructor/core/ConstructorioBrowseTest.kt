@@ -71,8 +71,8 @@ class ConstructorIoBrowseTest {
             it.get()!!.response?.resultCount == 367
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt"
-        assert(request.path.startsWith(path))
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.1&_dt"
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -84,8 +84,8 @@ class ConstructorIoBrowseTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt"
-        assert(request.path.startsWith(path))
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.1&_dt"
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -98,8 +98,8 @@ class ConstructorIoBrowseTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt"
-        assert(request.path.startsWith(path))
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.1&_dt"
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -114,7 +114,17 @@ class ConstructorIoBrowseTest {
             it.get()!!.response?.resultCount == 0
         }
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.9.0&_dt"
-        assert(request.path.startsWith(path))
+        val path = "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.1&_dt"
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getBrowseResultsWithHiddenFields() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getBrowseResults("group_id", "Beverages", null, null, null, null, null, null, listOf("hiddenField1", "hiddenField2")).test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.11.1&_dt"
+        assert(request.path!!.startsWith(path))
     }
 }

@@ -15,7 +15,7 @@ import okhttp3.Response
 class RequestInterceptor(val context: Context, private val preferencesHelper: PreferencesHelper, private val configMemoryHolder: ConfigMemoryHolder) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val builder = request.url().newBuilder()
+        val builder = request.url.newBuilder()
             .port(preferencesHelper.port)
             .addQueryParameter(Constants.QueryConstants.API_KEY, preferencesHelper.apiKey)
             .addQueryParameter(Constants.QueryConstants.IDENTITY, preferencesHelper.id)

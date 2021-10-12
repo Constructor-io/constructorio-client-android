@@ -26,7 +26,11 @@ class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
 
     fun getAutocompleteResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<AutocompleteResponse>> {
-        return constructorApi.getAutocompleteResults(term, encodedParams.toMap()).map { result ->
+        var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getAutocompleteResults(dynamicUrl).map { result ->
             if (!result.isError) {
                 result.response()?.let {
                     if (it.isSuccessful) {
@@ -45,8 +49,12 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
-    fun getSearchResults(term: String, encodedParams: Array<Pair<String, String>>? = arrayOf()): Observable<ConstructorData<SearchResponse>> {
-        return constructorApi.getSearchResults(term, encodedParams?.toMap()).map { result ->
+    fun getSearchResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(term)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getSearchResults(dynamicUrl).map { result ->
             if (!result.isError) {
                 result.response()?.let {
                     if (it.isSuccessful){
@@ -98,7 +106,11 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
     }
 
     fun getBrowseResults(filterName: String, filterValue: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseResponse>> {
-        return constructorApi.getBrowseResults(filterName, filterValue, encodedParams.toMap()).map { result ->
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE.format(filterName, filterValue)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getBrowseResults(dynamicUrl).map { result ->
             if (!result.isError) {
                 result.response()?.let {
                     if (it.isSuccessful){
@@ -126,7 +138,11 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
     }
 
     fun getRecommendationResults(podId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<RecommendationsResponse>> {
-        return constructorApi.getRecommendationResults(podId, encodedParams?.toMap()).map {
+        var dynamicUrl = "/${ApiPaths.URL_RECOMMENDATIONS.format(podId)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getRecommendationResults(dynamicUrl).map {
             if (!it.isError) {
                 it.response()?.let {
                     if (it.isSuccessful) {

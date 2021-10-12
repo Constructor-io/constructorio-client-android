@@ -1,35 +1,31 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'jacoco'
 apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'maven-publish'
 
 group='com.github.Constructor-io'
 
 jacoco {
-    toolVersion = '0.8.1'
+    toolVersion = '0.8.4'
 }
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
 }
 
 android {
-    compileSdkVersion 28
-
-    dexOptions {
-        maxProcessCount 4
-        preDexLibraries false
-    }
+    compileSdkVersion 31
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion 21
+        targetSdkVersion 31
+        multiDexEnabled true
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
-        versionName '2.9.0'
+        versionName '2.11.1'
         buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
         buildConfigField("String", "DEFAULT_ITEM_SECTION", "\"Products\"")
         buildConfigField("String", "SERVICE_URL", "\"ac.cnstrc.com\"")
@@ -76,24 +72,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+      jvmTarget = "11"
     }
 
     testOptions {
         unitTests {
             returnDefaultValues = true
-        }
-    }
-
-    androidExtensions {
-        experimental = true
-    }
-
-    libraryVariants.all { variant ->
-        variant.outputs.each { output ->
-            def lintTask = tasks["lint${variant.name.capitalize()}"]
-            output.assemble.dependsOn lintTask
+            includeAndroidResources = true
         }
     }
 
@@ -141,16 +131,16 @@ task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) 
             excludes: excludedClasses
     )
 
-    classDirectories = files([ javaClasses ], [ kotlinClasses ])
-    additionalSourceDirs = files(coverageSourceDirs)
-    sourceDirectories = files(coverageSourceDirs)
-    executionData = fileTree(dir: "$buildDir/jacoco", includes: [
+    classDirectories.from([ javaClasses ], [ kotlinClasses ])
+    additionalSourceDirs.from(coverageSourceDirs)
+    sourceDirectories.from(coverageSourceDirs)
+    executionData.from(dir: "$buildDir/jacoco", includes: [
             "testDebugUnitTest.exec"
     ])
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 }
 
@@ -158,7 +148,6 @@ task getCoverage(type: Exec, dependsOn: 'jacocoUnitTestReport') {
     group = "Reporting"
     commandLine "open", "$buildDir/reports/jacoco/jacocoUnitTestReport/html/index.html"
 }
-
 
 apply from: 'dependencies.gradle'
 
@@ -168,9 +157,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-    testImplementation 'io.mockk:mockk:1.9.kotlin12'
-    testImplementation 'org.robolectric:robolectric:3.6.1'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:3.14.1'
+    testImplementation 'io.mockk:mockk:1.12.0'
+    testImplementation 'org.robolectric:robolectric:4.6.1'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.2'
     implementation supportLibs
     implementation networkLibs
     implementation otherLibs
@@ -181,4 +170,15 @@ dependencies {
     kaptAndroidTest daggerCompiler
     testImplementation unitTestLibs
     androidTestImplementation androidTestsLibs
+    implementation 'androidx.multidex:multidex:2.0.1'
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
 }
