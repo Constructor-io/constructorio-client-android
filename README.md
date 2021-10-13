@@ -156,10 +156,10 @@ ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "P
 
 ```kotlin
 // Track when a recommendation result is clicked (podId, strategyId, customerId, variationId, sectionName, resultId, numResultsPerPage, resultPage, resultCount, resultPositionOnPage)
-ConstructorIo.trackRecommendationResultClick("Best  Sellers", "User Featured", "7654321-BA", null, "Products", "179b8a0e-3799-4a31-be87-127b06871de2", 4, 1, 4, 2)
+ConstructorIo.trackRecommendationResultClick("Best_Sellers", "User Featured", "7654321-BA", null, "Products", "179b8a0e-3799-4a31-be87-127b06871de2", 4, 1, 4, 2)
 
 // Track when recommendation results are loaded into view (podId, numResultsViewed, resultPage, resultCount, resultId, sectionName)
-ConstructorIo.trackRecommendationResultsView("Best  Sellers", "User Featured", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
+ConstructorIo.trackRecommendationResultsView("Best_Sellers", "User Featured", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
 ```
 
 ### Conversion Events
