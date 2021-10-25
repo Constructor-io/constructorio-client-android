@@ -9,6 +9,8 @@ import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
+import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
+import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.reactivex.Completable
@@ -157,5 +159,13 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
                 ConstructorData.error(it.error())
             }
         }.toObservable()
+    }
+
+    fun trackRecommendationResultClick(recommendationResultClickRequestBody: RecommendationResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackRecommendationResultClick(recommendationResultClickRequestBody, params.toMap())
+    }
+
+    fun trackRecommendationResultsView(recommendationResultViewRequestBody: RecommendationResultViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackRecommendationResultsView(recommendationResultViewRequestBody, params.toMap())
     }
 }

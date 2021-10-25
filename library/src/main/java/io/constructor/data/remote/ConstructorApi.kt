@@ -4,6 +4,8 @@ import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
+import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
+import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -72,4 +74,12 @@ interface ConstructorApi {
 
     @GET
     fun getRecommendationResults(@Url recommendationUrl: String): Single<Result<ResponseBody>>
+
+    @POST(ApiPaths.URL_RECOMMENDATION_RESULT_CLICK_EVENT)
+    fun trackRecommendationResultClick(@Body recommendationResultClickRequestBody: RecommendationResultClickRequestBody,
+                                       @QueryMap params: Map<String, String?>): Completable
+
+    @POST(ApiPaths.URL_RECOMMENDATION_RESULT_VIEW_EVENT)
+    fun trackRecommendationResultsView(@Body recommendationResultViewRequestBody: RecommendationResultViewRequestBody,
+                                       @QueryMap params: Map<String, String>): Completable
 }

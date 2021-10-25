@@ -17,6 +17,8 @@ import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
+import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
+import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -29,7 +31,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
-import kotlin.collections.HashMap
 
 typealias ConstructorError = ((Throwable) -> Unit)?
 
@@ -508,5 +509,96 @@ object ConstructorIo {
             }
         }
         return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Tracks recommendation result click events
+     * @param podId The pod id
+     * @param strategyId The strategy id
+     * @param customerId The item identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param variationId The variation item identifier of the clicked item
+     * @param sectionName The section that the results came from, i.e. "Products"
+     * @param resultId The result ID of the recommendation response that the selection came from
+     * @param numResultsPerPage The count of recommendation results on each page
+     * @param resultPage The current page that recommedantion result is on
+     * @param resultCount The total number of recommendation results
+     * @param resultPositionOnPage The position of the recommendation result that was clicked on
+     */
+    fun trackRecommendationResultClick(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null) {
+        var completable = trackRecommendationResultClickInternal(podId, strategyId, customerId, variationId, sectionName, resultId, numResultsPerPage, resultPage, resultCount, resultPositionOnPage)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Recommendation Result Click error: ${t.message}")
+        }))
+    }
+    internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val recommendationsResultClickRequestBody = RecommendationResultClickRequestBody(
+                podId,
+                strategyId,
+                customerId,
+                variationId,
+                resultId,
+                numResultsPerPage,
+                resultPage,
+                resultCount,
+                resultPositionOnPage,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                true,
+                section,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackRecommendationResultClick(
+                recommendationsResultClickRequestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks recommendation result view events
+     * @param podId The pod id
+     * @param numResultsViewed The count of recommendation results being viewed
+     * @param resultPage The current page that recommedantion result is on
+     * @param resultCount The total number of recommendation results
+     * @param resultId The result ID of the recommendation response that the selection came from
+     * @param sectionName The section that the results came from, i.e. "Products"
+     */
+    fun trackRecommendationResultsView(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available") {
+        var completable = trackRecommendationResultsViewInternal(podId, numResultsViewed, resultPage, resultCount, resultId, sectionName, url)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Recommendation Results View error: ${t.message}")
+        }))
+    }
+    internal fun trackRecommendationResultsViewInternal(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val recommendationResultViewRequestBody = RecommendationResultViewRequestBody(
+                podId,
+                numResultsViewed,
+                resultPage,
+                resultCount,
+                resultId,
+                url,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                true,
+                section,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackRecommendationResultsView(
+                recommendationResultViewRequestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
     }
 }

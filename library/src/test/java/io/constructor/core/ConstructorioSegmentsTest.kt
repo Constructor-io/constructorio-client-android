@@ -155,4 +155,28 @@ class ConstructorioSegmentsTest {
         assertTrue(request.bodySize > 250)
         assert(request.path!!.startsWith(path))
     }
+
+    @Test
+    fun trackRecommendationResultClick() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured", "prrst_shldr_bls").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.1&_dt="
+        println(request.path)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsView() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.1&_dt="
+        println(request.path)
+        assert(request.path!!.startsWith(path))
+    }
 }
