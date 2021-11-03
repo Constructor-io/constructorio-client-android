@@ -164,7 +164,6 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.1&_dt="
-        println(request.path)
         assert(request.path!!.startsWith(path))
     }
 
@@ -176,7 +175,6 @@ class ConstructorioSegmentsTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.11.1&_dt="
-        println(request.path)
         assert(request.path!!.startsWith(path))
     }
 }
