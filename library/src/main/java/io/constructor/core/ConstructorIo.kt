@@ -125,19 +125,23 @@ object ConstructorIo {
 
     /**
      * Returns a list of autocomplete suggestions
+     * ##Example
+     * ```
+     * ConstructorIo.getAutocompleteResults("Dav", selectedFacet?.map { it.key to it.value })
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
      * @param term the term to search for
      * @param facets additional facets used to refine results
      * @param groupId category facet used to refine results
      * @param hiddenFields show fields that are hidden by default
-     * @sample
-     * Example usage:
-     *
-     * ```
-     * @JavaAnnotation
-     * public void foo() {
-     *     // Code
-     * }
-     * ```
      */
     fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
@@ -158,6 +162,18 @@ object ConstructorIo {
 
     /**
      * Returns a list of search results including filters, categories, sort options, etc.
+     * ##Example
+     * ```
+     * ConstructorIo.getSearchResults("Dave's bread", selectedFacets?.map { it.key to it.value }, 1, 24)
+     *      .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it.response?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
      * @param term the term to search for
      * @param facets  additional facets used to refine results
      * @param page the page number of the results
@@ -187,6 +203,19 @@ object ConstructorIo {
 
     /**
      * Returns a list of browse results including filters, categories, sort options, etc.
+     * ##Example
+     * ```
+     * ConstructorIo.getBrowseResults("group_id", "Beverages", selectedFacets?.map { it.key to it.value }, 1, perPage = 24)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it.response?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
      * @param filterName filter name to display results from
      * @param filterValue filter value to display results from
      * @param facets  additional facets used to refine results
@@ -217,6 +246,10 @@ object ConstructorIo {
 
     /**
      * Tracks session start events
+     * ##Example
+     * ```
+     * ConstructorIo.trackSessionStart()
+     * ```
      */
     private fun trackSessionStart() {
         var completable = trackSessionStartInternal()
@@ -232,6 +265,10 @@ object ConstructorIo {
 
     /**
      * Tracks input focus events
+     * ##Example
+     * ```
+     * ConstructorIo.trackInputFocus("food")
+     * ```
      * @param term the term currently in the search bar
      */
     fun trackInputFocus(term: String?) {
@@ -249,6 +286,10 @@ object ConstructorIo {
 
     /**
      * Tracks autocomplete select events
+     * ##Example
+     * ```
+     * ConstructorIo.trackAutocompleteSelect("toothpicks", "tooth", "Search Suggestions")
+     * ```
      * @param searchTerm the term selected, i.e. "Pumpkin"
      * @param originalQuery the term in the search bar, i.e. "Pum"
      * @param sectionName the section the selection came from, i.e. "Search Suggestions"
@@ -278,6 +319,10 @@ object ConstructorIo {
 
     /**
      * Tracks search submit events
+     * ##Example
+     * ```
+     * ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
+     * ```
      * @param searchTerm the term selected, i.e. "Pumpkin"
      * @param originalQuery the term in the search bar, i.e. "Pum"
      * @param resultGroup the group to search within if a user elected to search in a group, i.e. "Pumpkin in Canned Goods"
@@ -303,6 +348,10 @@ object ConstructorIo {
 
     /**
      * Tracks search results loaded (a.k.a. search results viewed) events
+     * ##Example
+     * ```
+     * ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"))
+     * ```
      * @param term the term that results are displayed for, i.e. "Pumpkin"
      * @param resultCount the number of results for that term
      * @param customerIds the customerIds of shown items
@@ -322,6 +371,10 @@ object ConstructorIo {
 
     /**
      * Tracks search result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+     * ```
      * @param itemName the name of the clicked item i.e. "Kabocha Pumpkin"
      * @param customerId the identifier of the clicked item i.e "PUMP-KAB-0002"
      * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
@@ -347,6 +400,10 @@ object ConstructorIo {
 
     /**
      * Tracks conversion (a.k.a add to cart) events
+     * ##Example
+     * ```
+     * ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth", "Products", "add_to_cart")
+     * ```
      * @param itemName the name of the converting item i.e. "Kabocha Pumpkin"
      * @param customerId the identifier of the converting item i.e "PUMP-KAB-0002"
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
@@ -384,6 +441,10 @@ object ConstructorIo {
 
     /**
      * Tracks purchase events
+     * ##Example
+     * ```
+     * ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
+     * ```
      * @param customerIds the identifiers of the purchased items
      * @param revenue the revenue of the purchase event
      * @param orderID the identifier of the order
@@ -418,6 +479,10 @@ object ConstructorIo {
 
     /**
      * Tracks browse result loaded (a.k.a. browse results viewed) events
+     * ##Example
+     * ```
+     * ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
+     * ```
      * @param filterName the name of the primary filter, i.e. "Aisle"
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param resultCount the number of results for that filter name/value pair
@@ -455,6 +520,10 @@ object ConstructorIo {
 
     /**
      * Tracks browse result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+     * ```
      * @param filterName the name of the primary filter, i.e. "Aisle"
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param customerId the item identifier of the clicked item i.e "PUMP-KAB-0002"
@@ -499,6 +568,19 @@ object ConstructorIo {
 
     /**
      * Returns a list of search results including filters, categories, sort options, etc.
+     * ##Example
+     * ```
+     * ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it.response?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
      * @param podId the pod id
      * @param facets  additional facets used to refine results
      * @param numResults the number of results to return
@@ -522,6 +604,10 @@ object ConstructorIo {
 
     /**
      * Tracks recommendation result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackRecommendationResultClick("Best_Sellers", "User Featured", "7654321-BA", null, "Products", "179b8a0e-3799-4a31-be87-127b06871de2", 4, 1, 4, 2)
+     * ```
      * @param podId The pod id
      * @param strategyId The strategy id
      * @param customerId The item identifier of the clicked item i.e "PUMP-KAB-0002"
@@ -571,6 +657,10 @@ object ConstructorIo {
 
     /**
      * Tracks recommendation result view events
+     * ##Example
+     * ```
+     * ConstructorIo.trackRecommendationResultsView("Best_Sellers", "User Featured", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
+     * ```
      * @param podId The pod id
      * @param numResultsViewed The count of recommendation results being viewed
      * @param resultPage The current page that recommedantion result is on
