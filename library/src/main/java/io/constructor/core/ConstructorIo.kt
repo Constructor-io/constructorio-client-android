@@ -129,6 +129,15 @@ object ConstructorIo {
      * @param facets additional facets used to refine results
      * @param groupId category facet used to refine results
      * @param hiddenFields show fields that are hidden by default
+     * @sample
+     * Example usage:
+     *
+     * ```
+     * @JavaAnnotation
+     * public void foo() {
+     *     // Code
+     * }
+     * ```
      */
     fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
