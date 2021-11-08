@@ -400,6 +400,7 @@ object ConstructorIo {
 
     /**
      * Tracks conversion (a.k.a add to cart) events
+     *
      * ##Example
      * ```
      * ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth", "Products", "add_to_cart")

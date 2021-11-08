@@ -73,7 +73,6 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/behavior?action=session_start&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.12.0&_dt="
-        println(request.path)
         assert(request.path!!.startsWith(path))
     }
 
