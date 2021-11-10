@@ -26,7 +26,7 @@ internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
     val splitArr = arrayListOf<String>()
     var stringSum = ""
 
-    // Stack implementation for parsing "," within objects
+    // Stack implementation for parsing "," within stringified objects
     requestBodyString.forEach {
         val str = it.toString()
 
