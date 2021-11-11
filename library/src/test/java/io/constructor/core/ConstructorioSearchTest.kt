@@ -72,7 +72,7 @@ class ConstructorIoSearchTest {
             it.get()!!.response?.resultCount == 225
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.12.1&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -85,7 +85,7 @@ class ConstructorIoSearchTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.12.1&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -99,7 +99,7 @@ class ConstructorIoSearchTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.12.1&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -115,7 +115,7 @@ class ConstructorIoSearchTest {
             it.get()!!.response?.resultCount == 0
         }
         val request = mockServer.takeRequest()
-        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.12.1&_dt="
+        val path = "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -129,7 +129,7 @@ class ConstructorIoSearchTest {
             it.get()!!.response?.redirect?.matchedTerms!![0] == "bbq"
         }
         val request = mockServer.takeRequest()
-        val path = "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.12.1&_dt="
+        val path = "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -149,7 +149,7 @@ class ConstructorIoSearchTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("bbq", null, null, null , null, null, null, null, listOf("hiddenField1", "hiddenField2")).test()
         val request = mockServer.takeRequest()
-        val path = "/search/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.12.1&_dt="
+        val path = "/search/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
