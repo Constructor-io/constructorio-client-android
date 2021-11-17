@@ -59,7 +59,7 @@ class ConstructorioSegmentsTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
-            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            val suggestions = it.get()!!.sections?.get("Search Suggestions")
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()

@@ -124,7 +124,7 @@ class ConstructorIoBrowseTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getBrowseResults("group_id", "Beverages", null, null, null, null, null, null, "Sold Out").test()
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?section=Sold%20Out&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.12.0&_dt"
+        val path = "/browse/group_id/Beverages?section=Sold%20Out&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt"
         assert(request.path!!.startsWith(path))
     }
 
