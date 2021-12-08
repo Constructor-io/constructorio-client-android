@@ -202,9 +202,7 @@ object ConstructorIo {
                 }
             }
             facetsConfig?.fmtOptions?.forEach { option ->
-                option.second.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(option.first).urlEncode() to it.urlEncode())
-                }
+                    encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(option.first).urlEncode() to option.second.urlEncode())
             }
             facetsConfig?.hiddenFields?.forEach { hiddenField ->
                 encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())

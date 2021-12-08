@@ -8,6 +8,6 @@ package io.constructor.core
  */
 data class FacetsConfig (
         val facets: List<Pair<String, List<String>>>? = null,
-        val fmtOptions: List<Pair<String, List<String>>>? = null,
+        val fmtOptions: List<Pair<String, String>>? = null,
         val hiddenFields: List<String>? = null,
 )

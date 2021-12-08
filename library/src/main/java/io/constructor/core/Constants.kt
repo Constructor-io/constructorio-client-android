@@ -36,6 +36,7 @@ class Constants {
         const val SORT_ORDER = "sort_order"
         const val FILTER_GROUP_ID = "filters[group_id]"
         const val FILTER_FACET = "filters[%s]"
+        const val FMT_OPTIONS = "fmt_options[%s]"
         const val HIDDEN_FIELD = "hidden_fields"
         const val RESULT_ID = "result_id"
         const val NUM_RESULT = "num_result"

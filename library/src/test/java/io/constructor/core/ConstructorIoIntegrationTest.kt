@@ -90,13 +90,13 @@ class ConstructorIoIntegrationTest {
         }
     }
 
-    @Test
-    fun getSearchResultsWithFiltersAgainstRealResponse() {
-        val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
-        observer.assertComplete()
-        Thread.sleep(timeBetweenTests)
-    }
+//    @Test
+//    fun getSearchResultsWithFiltersAgainstRealResponse() {
+//        val facet = hashMapOf("storeLocation" to listOf("CA"))
+//        val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
+//        observer.assertComplete()
+//        Thread.sleep(timeBetweenTests)
+//    }
 
     @Test
     fun getBrowseResultsAgainstRealResponse() {
