@@ -57,7 +57,7 @@ class ConstructorIoSearchTest {
     fun getSearchResults() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getSearchResults("corn").test()
+        val observer = constructorIo.getSearchResults("corn", null, null, null, "CAT01").test()
         observer.assertComplete().assertValue {
             it.get()!!.response?.results!!.size == 24
             it.get()!!.response?.results!![0].value == "Del Monte Fresh Cut Corn Whole Kernel Golden Sweet with Natural Sea Salt - 15.25 Oz"
