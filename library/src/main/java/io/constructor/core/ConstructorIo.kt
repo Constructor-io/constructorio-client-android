@@ -174,15 +174,9 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param term the term to search for
-     * @param facets additional facets used to refine results
-     * @param page the page number of the results
-     * @param perPage The number of results per page to return
-     * @param groupId category facet used to refine results
-     * @param sortBy the sort method for results
-     * @param sortOrder the sort order for results
-     * @param sectionName the section the results will come from defaults to "Products"
-     * @param hiddenFields show fields that are hidden by default
+     * @param term The term to use to perform a search
+     * @param resultsConfig The configuration of options related to displaying results [io.constructor.core.ResultsConfig]
+     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
      */
     fun getSearchResults(term: String, resultsConfig: ResultsConfig? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()

@@ -1,7 +1,7 @@
 package io.constructor.core
 
 /**
- *  Encapsulates configuration for the result display options
+ *  Encapsulates configuration of options related to displaying results
  *  @property page The page number of the results
  *  @property resultsPerPage The number of results per page
  *  @property sortBy The sort method of the results

@@ -6,7 +6,7 @@ $dokka.location:io.constructor.core/ConstructorIo/getAutocompleteResults/#kotlin
 $dokka.location:io.constructor.core/ConstructorIo/getBrowseResults/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.Int?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-browse-results.html
 $dokka.location:io.constructor.core/ConstructorIo/getClientId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-client-id.html
 $dokka.location:io.constructor.core/ConstructorIo/getRecommendationResults/#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-recommendation-results.html
-$dokka.location:io.constructor.core/ConstructorIo/getSearchResults/#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.Int?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-search-results.html
+$dokka.location:io.constructor.core/ConstructorIo/getSearchResults/#kotlin.String#io.constructor.core.ResultsConfig?#io.constructor.core.FacetsConfig?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-search-results.html
 $dokka.location:io.constructor.core/ConstructorIo/getSessionId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-session-id.html
 $dokka.location:io.constructor.core/ConstructorIo/init/#android.content.Context?#io.constructor.core.ConstructorIoConfig/PointingToDeclaration/library/io.constructor.core/-constructor-io/init.html
 $dokka.location:io.constructor.core/ConstructorIo/trackAutocompleteSelect/#kotlin.String#kotlin.String#kotlin.String#io.constructor.data.model.common.ResultGroup?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-autocomplete-select.html
@@ -31,6 +31,18 @@ $dokka.location:io.constructor.core/ConstructorIoConfig/servicePort/#/PointingTo
 $dokka.location:io.constructor.core/ConstructorIoConfig/serviceScheme/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/service-scheme.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/serviceUrl/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/service-url.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/testCells/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/test-cells.html
+$dokka.location:io.constructor.core/FacetsConfig///PointingToDeclaration/library/io.constructor.core/-facets-config/index.html
+$dokka.location:io.constructor.core/FacetsConfig/FacetsConfig/#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-facets-config/-facets-config.html
+$dokka.location:io.constructor.core/FacetsConfig/facets/#/PointingToDeclaration/library/io.constructor.core/-facets-config/facets.html
+$dokka.location:io.constructor.core/FacetsConfig/fmtOptions/#/PointingToDeclaration/library/io.constructor.core/-facets-config/fmt-options.html
+$dokka.location:io.constructor.core/FacetsConfig/hiddenFields/#/PointingToDeclaration/library/io.constructor.core/-facets-config/hidden-fields.html
+$dokka.location:io.constructor.core/ResultsConfig///PointingToDeclaration/library/io.constructor.core/-results-config/index.html
+$dokka.location:io.constructor.core/ResultsConfig/ResultsConfig/#kotlin.Int?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-results-config/-results-config.html
+$dokka.location:io.constructor.core/ResultsConfig/page/#/PointingToDeclaration/library/io.constructor.core/-results-config/page.html
+$dokka.location:io.constructor.core/ResultsConfig/resultsPerPage/#/PointingToDeclaration/library/io.constructor.core/-results-config/results-per-page.html
+$dokka.location:io.constructor.core/ResultsConfig/section/#/PointingToDeclaration/library/io.constructor.core/-results-config/section.html
+$dokka.location:io.constructor.core/ResultsConfig/sortBy/#/PointingToDeclaration/library/io.constructor.core/-results-config/sort-by.html
+$dokka.location:io.constructor.core/ResultsConfig/sortOrder/#/PointingToDeclaration/library/io.constructor.core/-results-config/sort-order.html
 $dokka.location:io.constructor.data.model.autocomplete////PointingToDeclaration/library/io.constructor.data.model.autocomplete/index.html
 $dokka.location:io.constructor.data.model.autocomplete/AutocompleteResponse///PointingToDeclaration/library/io.constructor.data.model.autocomplete/-autocomplete-response/index.html
 $dokka.location:io.constructor.data.model.autocomplete/AutocompleteResponse/AutocompleteResponse/#kotlin.collections.Map[kotlin.String,kotlin.collections.List[io.constructor.data.model.common.Result]]?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.autocomplete/-autocomplete-response/-autocomplete-response.html
