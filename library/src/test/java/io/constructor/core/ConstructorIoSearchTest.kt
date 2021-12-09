@@ -80,7 +80,7 @@ class ConstructorIoSearchTest {
     fun getSearchResultsWithMultipleConfigs() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         val resultsConfig = ResultsConfig(2, 25, "price", "descending", "Canada")
-        val facetsConfig = FacetsConfig(listOf(Pair("Brands", listOf("Best Brand", "Organic Brand"))))
+        val facetsConfig = FacetsConfig(listOf("Brands" to listOf("Best Brand", "Organic Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("corn", resultsConfig, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -148,8 +148,8 @@ class ConstructorIoSearchTest {
     @Test
     fun getSearchResultsWithSection() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        mockServer.enqueue(mockResponse)
         val resultsConfig = ResultsConfig(null, null, null, null, "Sold Out")
+        mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("bbq", resultsConfig).test()
         val request = mockServer.takeRequest()
         val path = "/search/bbq?section=Sold%20Out&key=silver-key&i=pizza-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="

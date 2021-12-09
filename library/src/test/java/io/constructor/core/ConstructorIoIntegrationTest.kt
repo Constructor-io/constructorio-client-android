@@ -90,13 +90,20 @@ class ConstructorIoIntegrationTest {
         }
     }
 
-//    @Test
-//    fun getSearchResultsWithFiltersAgainstRealResponse() {
-//        val facet = hashMapOf("storeLocation" to listOf("CA"))
-//        val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
-//        observer.assertComplete()
-//        Thread.sleep(timeBetweenTests)
-//    }
+    @Test
+    fun getSearchResultsWithFiltersAgainstRealResponse() {
+        val facetsConfig = FacetsConfig(listOf("Brand" to listOf("Smokehouse")))
+        val observer = constructorIo.getSearchResults("pork", null, facetsConfig).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
+        Thread.sleep(timeBetweenTests)
+    }
 
     @Test
     fun getBrowseResultsAgainstRealResponse() {
@@ -114,9 +121,16 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseResultsWithFiltersAgainstRealResponse() {
-        val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getBrowseResults("group_ids", "544", facet?.map { it.key to it.value }).test()
-        observer.assertComplete()
+        val facetsConfig = FacetsConfig(listOf("Brand" to listOf("Meal Mart")))
+        val observer = constructorIo.getBrowseResults("group_id", "544", null, facetsConfig).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
         Thread.sleep(timeBetweenTests)
     }
 

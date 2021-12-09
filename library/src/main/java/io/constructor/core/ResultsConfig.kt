@@ -9,9 +9,9 @@ package io.constructor.core
  *  @property section The section the results will come from
  */
 data class ResultsConfig (
-        val page: Int? = 1,
-        val resultsPerPage: Int? = 24,
-        val sortBy: String? = "relevance",
-        val sortOrder: String? = "descending",
-        val section: String? = "Products",
+        val page: Int? = null,
+        val resultsPerPage: Int? = null,
+        val sortBy: String? = null,
+        val sortOrder: String? = null,
+        val section: String? = null,
 )

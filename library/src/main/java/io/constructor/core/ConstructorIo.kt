@@ -164,7 +164,7 @@ object ConstructorIo {
      * Returns a list of search results including filters, categories, sort options, etc.
      * ##Example
      * ```
-     * ConstructorIo.getSearchResults("Dave's bread", selectedFacets?.map { it.key to it.value }, 1, 24)
+     * ConstructorIo.getSearchResults("Dave's bread", ResultsConfig(2, 30), FacetsConfig(listOf("Brands" to "Best Brand")))
      *      .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
      *          it.onValue {
@@ -174,7 +174,7 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param term The term to use to perform a search
+     * @param term The term to display results from
      * @param resultsConfig The configuration of options related to displaying results [io.constructor.core.ResultsConfig]
      * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
      */
@@ -210,7 +210,7 @@ object ConstructorIo {
      * Returns a list of browse results including filters, categories, sort options, etc.
      * ##Example
      * ```
-     * ConstructorIo.getBrowseResults("group_id", "Beverages", selectedFacets?.map { it.key to it.value }, 1, perPage = 24)
+     * ConstructorIo.getBrowseResults("group_id", "Beverages", ResultsConfig(2, 30), FacetsConfig(listOf("Brands" to "Best Brand")))
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -221,33 +221,36 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param filterName filter name to display results from
-     * @param filterValue filter value to display results from
-     * @param facets  additional facets used to refine results
-     * @param page the page number of the results
-     * @param perPage The number of results per page to return
-     * @param groupId category facet used to refine results
-     * @param sortBy the sort method for results
-     * @param sortOrder the sort order for results
-     * @param sectionName the section the results will come from defaults to "Products"
-     * @param hiddenFields show fields that are hidden by default
+     * @param filterName The filter name to display results from
+     * @param filterValue The filter value to display results from
+     * @param resultsConfig The configuration of options related to displaying results [io.constructor.core.ResultsConfig]
+     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
      */
-    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<BrowseResponse>> {
+    fun getBrowseResults(filterName: String, filterValue: String, resultsConfig: ResultsConfig? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
-        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
-        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+
+        if (resultsConfig !== null) {
+            resultsConfig?.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
+            resultsConfig?.resultsPerPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
+            resultsConfig?.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+            resultsConfig?.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+            resultsConfig?.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        }
+
+        if (facetsConfig !== null) {
+            facetsConfig?.facets?.forEach { facet ->
+                facet.second.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+                }
+            }
+            facetsConfig?.fmtOptions?.forEach { option ->
+                encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(option.first).urlEncode() to option.second.urlEncode())
+            }
+            facetsConfig?.hiddenFields?.forEach { hiddenField ->
+                encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
             }
         }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
-        }
+
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
 
