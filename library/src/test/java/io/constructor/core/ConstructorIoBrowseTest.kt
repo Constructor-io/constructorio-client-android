@@ -42,7 +42,6 @@ class ConstructorIoBrowseTest {
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 92
 
-        every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
@@ -79,7 +78,7 @@ class ConstructorIoBrowseTest {
     fun getBrowseResultsWithMultipleConfigs() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
         val resultsConfig = ResultsConfig(2, 25, "price", "descending", "Canada")
-        val facetsConfig = FacetsConfig(listOf("Brands" to listOf("Best Brand", "Organic Brand")))
+        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Best Brand", "Organic Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", resultsConfig, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -155,7 +154,7 @@ class ConstructorIoBrowseTest {
     @Test
     fun getBrowseResultsWithFmtOptions() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        val facetsConfig = FacetsConfig(null, listOf(Pair("groups_max_depth", "2"), Pair("groups_start", "current")))
+        val facetsConfig = FacetsConfig(null, mapOf("groups_max_depth" to "2", "groups_start" to "current"))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", null, facetsConfig).test()
         val request = mockServer.takeRequest()

@@ -2,7 +2,7 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:io.constructor.core////PointingToDeclaration/library/io.constructor.core/index.html
 $dokka.location:io.constructor.core/ConstructorIo///PointingToDeclaration/library/io.constructor.core/-constructor-io/index.html
-$dokka.location:io.constructor.core/ConstructorIo/getAutocompleteResults/#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-autocomplete-results.html
+$dokka.location:io.constructor.core/ConstructorIo/getAutocompleteResults/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.Int]?#io.constructor.core.FacetsConfig?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-autocomplete-results.html
 $dokka.location:io.constructor.core/ConstructorIo/getBrowseResults/#kotlin.String#kotlin.String#io.constructor.core.ResultsConfig?#io.constructor.core.FacetsConfig?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-browse-results.html
 $dokka.location:io.constructor.core/ConstructorIo/getClientId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-client-id.html
 $dokka.location:io.constructor.core/ConstructorIo/getRecommendationResults/#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-recommendation-results.html
@@ -22,9 +22,8 @@ $dokka.location:io.constructor.core/ConstructorIo/trackSearchResultsLoaded/#kotl
 $dokka.location:io.constructor.core/ConstructorIo/trackSearchSubmit/#kotlin.String#kotlin.String#io.constructor.data.model.common.ResultGroup?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-search-submit.html
 $dokka.location:io.constructor.core/ConstructorIo/userId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/user-id.html
 $dokka.location:io.constructor.core/ConstructorIoConfig///PointingToDeclaration/library/io.constructor.core/-constructor-io-config/index.html
-$dokka.location:io.constructor.core/ConstructorIoConfig/ConstructorIoConfig/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]#kotlin.collections.Map[kotlin.String,kotlin.Int]#kotlin.String#kotlin.Int#kotlin.String/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/-constructor-io-config.html
+$dokka.location:io.constructor.core/ConstructorIoConfig/ConstructorIoConfig/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]#kotlin.String#kotlin.Int#kotlin.String/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/-constructor-io-config.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/apiKey/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/api-key.html
-$dokka.location:io.constructor.core/ConstructorIoConfig/autocompleteResultCount/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/autocomplete-result-count.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/defaultItemSection/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/default-item-section.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/segments/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/segments.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/servicePort/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/service-port.html
@@ -32,7 +31,7 @@ $dokka.location:io.constructor.core/ConstructorIoConfig/serviceScheme/#/Pointing
 $dokka.location:io.constructor.core/ConstructorIoConfig/serviceUrl/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/service-url.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/testCells/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/test-cells.html
 $dokka.location:io.constructor.core/FacetsConfig///PointingToDeclaration/library/io.constructor.core/-facets-config/index.html
-$dokka.location:io.constructor.core/FacetsConfig/FacetsConfig/#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-facets-config/-facets-config.html
+$dokka.location:io.constructor.core/FacetsConfig/FacetsConfig/#kotlin.collections.Map[kotlin.String,kotlin.collections.List[kotlin.String]]?#kotlin.collections.Map[kotlin.String,kotlin.String]?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-facets-config/-facets-config.html
 $dokka.location:io.constructor.core/FacetsConfig/facets/#/PointingToDeclaration/library/io.constructor.core/-facets-config/facets.html
 $dokka.location:io.constructor.core/FacetsConfig/fmtOptions/#/PointingToDeclaration/library/io.constructor.core/-facets-config/fmt-options.html
 $dokka.location:io.constructor.core/FacetsConfig/hiddenFields/#/PointingToDeclaration/library/io.constructor.core/-facets-config/hidden-fields.html

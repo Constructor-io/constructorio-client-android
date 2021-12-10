@@ -42,7 +42,6 @@ class ConstructorIoAutocompleteTest {
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 79
 
-        every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-one"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
@@ -59,7 +58,7 @@ class ConstructorIoAutocompleteTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
-            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            val suggestions = it.get()!!.sections?.get("Search Suggestions")
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
@@ -71,10 +70,10 @@ class ConstructorIoAutocompleteTest {
     fun getAutocompleteResultsWithFacetFilter() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
         mockServer.enqueue(mockResponse)
-        val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getAutocompleteResults("titanic", facet?.map { it.key to it.value }).test()
+        val facetsConfig = FacetsConfig(mapOf("storeLocation" to listOf("CA")))
+        val observer = constructorIo.getAutocompleteResults("titanic", null, facetsConfig).test()
         observer.assertComplete().assertValue {
-            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            val suggestions = it.get()!!.sections?.get("Search Suggestions")
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
@@ -85,10 +84,11 @@ class ConstructorIoAutocompleteTest {
     @Test
     fun getAutocompleteResultsWithGroupIdFilter() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        val facetsConfig = FacetsConfig(mapOf("group_id" to listOf("101")))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getAutocompleteResults("titanic", null, 101).test()
+        val observer = constructorIo.getAutocompleteResults("titanic", null, facetsConfig).test()
         observer.assertComplete().assertValue {
-            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            val suggestions = it.get()!!.sections?.get("Search Suggestions")
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
@@ -129,7 +129,7 @@ class ConstructorIoAutocompleteTest {
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getAutocompleteResults("titanic").test()
         observer.assertComplete().assertValue {
-            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            val suggestions = it.get()!!.sections?.get("Search Suggestions")
             suggestions?.isEmpty()!!
         }
         val request = mockServer.takeRequest()
@@ -140,8 +140,9 @@ class ConstructorIoAutocompleteTest {
     @Test
     fun getAutocompleteResultsWithHiddenFields() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        val facetsConfig = FacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getAutocompleteResults("bbq", null, null, listOf("hiddenField1", "hiddenField2")).test()
+        constructorIo.getAutocompleteResults("bbq", null, facetsConfig).test()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))

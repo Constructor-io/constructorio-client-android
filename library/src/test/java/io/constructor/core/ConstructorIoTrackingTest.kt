@@ -94,7 +94,6 @@ class ConstructorIoTrackingTest {
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
 
-        every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-three"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()

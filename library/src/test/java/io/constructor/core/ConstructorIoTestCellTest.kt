@@ -42,7 +42,6 @@ class ConstructorIoTestCellTest {
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 14
 
-        every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns listOf("cellone" to "vanilla", "celltwo" to "whipped-cream")
         every { configMemoryHolder.segments } returns  emptyList()

@@ -42,7 +42,6 @@ class ConstructorIoRecommendationsTest {
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 79
 
-        every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-one"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()

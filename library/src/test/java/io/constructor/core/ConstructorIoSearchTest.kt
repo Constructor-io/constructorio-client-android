@@ -42,7 +42,6 @@ class ConstructorIoSearchTest {
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 92
 
-        every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
@@ -80,7 +79,7 @@ class ConstructorIoSearchTest {
     fun getSearchResultsWithMultipleConfigs() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         val resultsConfig = ResultsConfig(2, 25, "price", "descending", "Canada")
-        val facetsConfig = FacetsConfig(listOf("Brands" to listOf("Best Brand", "Organic Brand")))
+        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Best Brand", "Organic Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("corn", resultsConfig, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -170,7 +169,7 @@ class ConstructorIoSearchTest {
     @Test
     fun getSearchResultsWithFmtOptions() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        val facetsConfig = FacetsConfig(null, listOf(Pair("groups_max_depth", "2"), Pair("groups_start", "current")))
+        val facetsConfig = FacetsConfig(null, mapOf("groups_max_depth" to "2", "groups_start" to "current"))
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("bbq", null, facetsConfig).test()
         val request = mockServer.takeRequest()

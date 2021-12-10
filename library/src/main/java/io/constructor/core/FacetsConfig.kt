@@ -7,7 +7,7 @@ package io.constructor.core
  *  @property hiddenFields Hidden metadata fields to return
  */
 data class FacetsConfig (
-        val facets: List<Pair<String, List<String>>>? = null,
-        val fmtOptions: List<Pair<String, String>>? = null,
+        val facets: Map<String, List<String>>? = null,
+        val fmtOptions: Map<String, String>? = null,
         val hiddenFields: List<String>? = null,
 )

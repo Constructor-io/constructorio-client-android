@@ -34,7 +34,6 @@ class ConstructorIoIntegrationTest {
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
 
-        every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-three"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
@@ -57,8 +56,8 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
-        val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
+        val facetsConfig = FacetsConfig(mapOf("storeLocation" to listOf("CA")))
+        val observer = constructorIo.getAutocompleteResults("pork", null, facetsConfig).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -92,7 +91,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getSearchResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(listOf("Brand" to listOf("Smokehouse")))
+        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Smokehouse")))
         val observer = constructorIo.getSearchResults("pork", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
@@ -121,7 +120,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(listOf("Brand" to listOf("Meal Mart")))
+        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Meal Mart")))
         val observer = constructorIo.getBrowseResults("group_id", "544", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null

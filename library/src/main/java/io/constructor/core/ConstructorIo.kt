@@ -68,8 +68,8 @@ object ConstructorIo {
 
     /**
      *  Initializes the client
-     *  @param context the context
-     *  @param constructorIoConfig the client configuration
+     *  @param context The context
+     *  @param constructorIoConfig The client configuration
      */
     fun init(context: Context?, constructorIoConfig: ConstructorIoConfig) {
         if (context == null) {
@@ -78,7 +78,6 @@ object ConstructorIo {
         this.context = context.applicationContext
 
         configMemoryHolder = component.configMemoryHolder()
-        configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
         configMemoryHolder.segments = constructorIoConfig.segments
 
@@ -138,25 +137,28 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param term the term to search for
-     * @param facets additional facets used to refine results
-     * @param groupId category facet used to refine results
-     * @param hiddenFields show fields that are hidden by default
+     * @param term The term to display results from
+     * @param numResultsPerSection The number of results per section
+     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
      */
-    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, numResultsPerSection: Map<String, Int>? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+
+        numResultsPerSection?.entries?.forEach {
+            encodedParams.add(Constants.QueryConstants.NUM_RESULTS+it.key to it.value.toString())
+        }
+
+        if (facetsConfig !== null) {
+            facetsConfig.facets?.forEach { facet ->
+                facet.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.key).urlEncode() to it.urlEncode())
+                }
+            }
+            facetsConfig.hiddenFields?.forEach { hiddenField ->
+                encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
             }
         }
-        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
-            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
-        }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
-        }
+
         return dataManager.getAutocompleteResults(term, encodedParams = encodedParams.toTypedArray())
     }
 
@@ -164,7 +166,7 @@ object ConstructorIo {
      * Returns a list of search results including filters, categories, sort options, etc.
      * ##Example
      * ```
-     * ConstructorIo.getSearchResults("Dave's bread", ResultsConfig(2, 30), FacetsConfig(listOf("Brands" to "Best Brand")))
+     * ConstructorIo.getSearchResults("Dave's bread", ResultsConfig(2, 30), FacetsConfig(mapOf("Brands" to "Best Brand")))
      *      .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
      *          it.onValue {
@@ -182,23 +184,23 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         if (resultsConfig !== null) {
-            resultsConfig?.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
-            resultsConfig?.resultsPerPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
-            resultsConfig?.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-            resultsConfig?.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-            resultsConfig?.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+            resultsConfig.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
+            resultsConfig.resultsPerPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
+            resultsConfig.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+            resultsConfig.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+            resultsConfig.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
         }
 
         if (facetsConfig !== null) {
-            facetsConfig?.facets?.forEach { facet ->
-                facet.second.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            facetsConfig.facets?.forEach { facet ->
+                facet.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.key).urlEncode() to it.urlEncode())
                 }
             }
-            facetsConfig?.fmtOptions?.forEach { option ->
-                    encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(option.first).urlEncode() to option.second.urlEncode())
+            facetsConfig.fmtOptions?.forEach { option ->
+                    encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(option.key).urlEncode() to option.value.urlEncode())
             }
-            facetsConfig?.hiddenFields?.forEach { hiddenField ->
+            facetsConfig.hiddenFields?.forEach { hiddenField ->
                 encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
             }
         }
@@ -210,7 +212,7 @@ object ConstructorIo {
      * Returns a list of browse results including filters, categories, sort options, etc.
      * ##Example
      * ```
-     * ConstructorIo.getBrowseResults("group_id", "Beverages", ResultsConfig(2, 30), FacetsConfig(listOf("Brands" to "Best Brand")))
+     * ConstructorIo.getBrowseResults("group_id", "Beverages", ResultsConfig(2, 30), FacetsConfig(mapOf("Brands" to "Best Brand")))
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -230,23 +232,23 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         if (resultsConfig !== null) {
-            resultsConfig?.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
-            resultsConfig?.resultsPerPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
-            resultsConfig?.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-            resultsConfig?.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-            resultsConfig?.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+            resultsConfig.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
+            resultsConfig.resultsPerPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
+            resultsConfig.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+            resultsConfig.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+            resultsConfig.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
         }
 
         if (facetsConfig !== null) {
-            facetsConfig?.facets?.forEach { facet ->
-                facet.second.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            facetsConfig.facets?.forEach { facet ->
+                facet.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.key).urlEncode() to it.urlEncode())
                 }
             }
-            facetsConfig?.fmtOptions?.forEach { option ->
-                encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(option.first).urlEncode() to option.second.urlEncode())
+            facetsConfig.fmtOptions?.forEach { option ->
+                encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(option.key).urlEncode() to option.value.urlEncode())
             }
-            facetsConfig?.hiddenFields?.forEach { hiddenField ->
+            facetsConfig.hiddenFields?.forEach { hiddenField ->
                 encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
             }
         }
@@ -291,7 +293,7 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         return dataManager.trackInputFocus(term, arrayOf(
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS
-        ));
+        ))
     }
 
     /**
@@ -307,7 +309,7 @@ object ConstructorIo {
      * @param resultID the result ID of the autocomplete response that the selection came from
      */
     fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null) {
-        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID);
+        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
             context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
         }, {
@@ -626,7 +628,7 @@ object ConstructorIo {
      * @param sectionName The section that the results came from, i.e. "Products"
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param numResultsPerPage The count of recommendation results on each page
-     * @param resultPage The current page that recommedantion result is on
+     * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
      * @param resultPositionOnPage The position of the recommendation result that was clicked on
      */
@@ -674,7 +676,7 @@ object ConstructorIo {
      * ```
      * @param podId The pod id
      * @param numResultsViewed The count of recommendation results being viewed
-     * @param resultPage The current page that recommedantion result is on
+     * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param sectionName The section that the results came from, i.e. "Products"
