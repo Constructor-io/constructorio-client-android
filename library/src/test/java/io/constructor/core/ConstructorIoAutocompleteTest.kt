@@ -67,7 +67,7 @@ class ConstructorIoAutocompleteTest {
     }
 
     @Test
-    fun getAutocompleteResultsWithFacetFilter() {
+    fun getAutocompleteResultsWithFilters() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
         mockServer.enqueue(mockResponse)
         val facetsConfig = FacetsConfig(mapOf("storeLocation" to listOf("CA")))
@@ -145,6 +145,16 @@ class ConstructorIoAutocompleteTest {
         constructorIo.getAutocompleteResults("bbq", null, facetsConfig).test()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/bbq?hidden_fields=hiddenField1&hidden_fields=hiddenField2&key=golden-key&i=guapo-the-guid&ui=player-one&s=79&c=cioand-2.13.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getAutocompleteResultsWithNumberSections() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        constructorIo.getAutocompleteResults("bbq", mapOf("Search Suggestions" to 8, "Products" to 4)).test()
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/bbq?num_results_Search%20Suggestions=8&num_results_Products=4&key=golden-key&i=guapo-the-guid&ui=player-one&s=79&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

@@ -156,6 +156,17 @@ class ConstructorIoSearchTest {
     }
 
     @Test
+    fun getSearchResultsWithFilters() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Smokehouse", "Best Brand")))
+        mockServer.enqueue(mockResponse)
+        constructorIo.getSearchResults("bbq", null, facetsConfig).test()
+        val request = mockServer.takeRequest()
+        val path = "/search/bbq?filters%5BBrands%5D=Smokehouse&filters%5BBrands%5D=Best%20Brand&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getSearchResultsWithHiddenFields() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         val facetsConfig = FacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))

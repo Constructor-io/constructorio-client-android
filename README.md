@@ -33,10 +33,13 @@ ConstructorIo.userId = "uid"
 ## 4. Request Autocomplete Results
 
 ```kotlin
-var query = "Dav"
-var selectedFacet: HashMap<String, MutableList<String>>? = null
+import io.constructor.core.FacetsConfig
 
-ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.value })
+var query = "Dav"
+var resultsPerSection = mapOf("Products" to 4, "Search Suggestions" to 6)
+var facetsConfig = FacetsConfig("availableStore" to 123)
+
+ConstructorIo.getAutocompleteResults(query, resultsPerSection, facetsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -50,13 +53,17 @@ ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.va
 ## 5. Request Search Results
 
 ```kotlin
+import io.constructor.core.ResultsConfig
+import io.constructor.core.FacetsConfig
+
 var page = 1
 var perPage = 10
+var sortBy = "price"
+var resultsConfig = ResultsConfig(page, resultsPerPage, sortBy)
 var query = "Dave's bread"
-var selectedFacets: HashMap<String, MutableList<String>>? = null
-var selectedSortOption: SortOption? = null
+var facetsConfig = FacetsConfig("Brand" to "Best Brand")
 
-ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+ConstructorIo.getSearchResults(query, resultsConfig, facetsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -70,14 +77,17 @@ ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }
 ## 6. Request Browse Results
 
 ```kotlin
+import io.constructor.core.ResultsConfig
+import io.constructor.core.FacetsConfig
 var page = 1
 var perPage = 10
+var sortBy = "price"
+var resultsConfig = ResultsConfig(page, resultsPerPage, sortBy)
+var facetsConfig = FacetsConfig("Brand" to "Best Brand")
 var filterName = "group_id"
 var filterValue = "Beverages"
-var selectedFacets: HashMap<String, MutableList<String>>? = null
-var selectedSortOption: SortOption? = null
 
-ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+ConstructorIo.getBrowseResults(filterName, filterValue, resultsConfig, facetsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {

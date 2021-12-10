@@ -1,7 +1,7 @@
 package io.constructor.data.model.autocomplete
 
 import com.squareup.moshi.Json
-import io.constructor.data.model.common.*;
+import io.constructor.data.model.common.*
 import java.io.Serializable
 
 /**

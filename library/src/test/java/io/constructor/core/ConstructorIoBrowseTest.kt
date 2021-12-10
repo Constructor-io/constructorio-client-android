@@ -141,6 +141,17 @@ class ConstructorIoBrowseTest {
     }
 
     @Test
+    fun getBrowseResultsWithFilters() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Smokehouse", "Best Brand")))
+        mockServer.enqueue(mockResponse)
+        constructorIo.getBrowseResults("group_id", "Beverages", null, facetsConfig).test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?filters%5BBrands%5D=Smokehouse&filters%5BBrands%5D=Best%20Brand&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getBrowseResultsWithHiddenFields() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
         val facetsConfig = FacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
@@ -153,7 +164,7 @@ class ConstructorIoBrowseTest {
 
     @Test
     fun getBrowseResultsWithFmtOptions() {
-        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
         val facetsConfig = FacetsConfig(null, mapOf("groups_max_depth" to "2", "groups_start" to "current"))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", null, facetsConfig).test()

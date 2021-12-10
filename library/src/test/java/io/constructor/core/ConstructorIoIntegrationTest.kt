@@ -55,17 +55,32 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getAutocompleteResultsWithResultsPerSection() {
+        val observer = constructorIo.getAutocompleteResults("pork", mapOf("Products" to 3, "Search Suggestions" to 2)).test()
+        observer.assertComplete().assertValue {
+            it.get()?.sections?.get("Products")?.size === 3
+            it.get()?.sections?.get("Search Suggestions")?.size === 2
+            it.get()?.resultId!!.isNotEmpty()
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(mapOf("storeLocation" to listOf("CA")))
+        val facetsConfig = FacetsConfig(mapOf("group_id" to listOf("544")))
         val observer = constructorIo.getAutocompleteResults("pork", null, facetsConfig).test()
-        observer.assertComplete()
+        observer.assertComplete().assertValue {
+            it.get()?.sections?.get("Products")!!.isNotEmpty()
+            it.get()?.sections?.get("Search Suggestions")!!.isNotEmpty()
+            it.get()?.resultId!!.isNotEmpty()
+        }
         Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackSessionStartAgainstRealResponse() {
         val observer = constructorIo.trackSessionStartInternal().test()
-        observer.assertComplete();
+        observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
 
@@ -87,11 +102,12 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
         }
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun getSearchResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Smokehouse")))
+        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Smokehouse", "Applegate")))
         val observer = constructorIo.getSearchResults("pork", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
@@ -120,7 +136,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Meal Mart")))
+        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Meal Mart", "Premio")))
         val observer = constructorIo.getBrowseResults("group_id", "544", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
