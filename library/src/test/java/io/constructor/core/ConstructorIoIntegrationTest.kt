@@ -58,8 +58,8 @@ class ConstructorIoIntegrationTest {
     fun getAutocompleteResultsWithResultsPerSection() {
         val observer = constructorIo.getAutocompleteResults("pork", mapOf("Products" to 3, "Search Suggestions" to 2)).test()
         observer.assertComplete().assertValue {
-            it.get()?.sections?.get("Products")?.size === 3
-            it.get()?.sections?.get("Search Suggestions")?.size === 2
+            it.get()?.sections?.get("Products")?.size == 3
+            it.get()?.sections?.get("Search Suggestions")?.size == 2
             it.get()?.resultId!!.isNotEmpty()
         }
         Thread.sleep(timeBetweenTests)
@@ -200,7 +200,8 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getRecommendationResultsAgainstRealResponse() {
-        val observer = constructorIo.getRecommendationResults("pdp5").test()
+        val recommendationConfig = RecommendationConfig("pdp5")
+        val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.pod !== null

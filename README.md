@@ -57,9 +57,9 @@ import io.constructor.core.ResultsConfig
 import io.constructor.core.FacetsConfig
 
 var page = 1
-var perPage = 10
+var resultsPerPage = 10
 var sortBy = "price"
-var resultsConfig = ResultsConfig(page, resultsPerPage, sortBy)
+var resultsConfig = ResultsConfig(resultsPerPage, page, sortBy)
 var query = "Dave's bread"
 var facetsConfig = FacetsConfig("Brand" to "Best Brand")
 
@@ -80,9 +80,9 @@ ConstructorIo.getSearchResults(query, resultsConfig, facetsConfig)
 import io.constructor.core.ResultsConfig
 import io.constructor.core.FacetsConfig
 var page = 1
-var perPage = 10
+var resultsPerPage = 10
 var sortBy = "price"
-var resultsConfig = ResultsConfig(page, resultsPerPage, sortBy)
+var resultsConfig = ResultsConfig(resultsPerPage, page, sortBy)
 var facetsConfig = FacetsConfig("Brand" to "Best Brand")
 var filterName = "group_id"
 var filterValue = "Beverages"
@@ -102,11 +102,11 @@ ConstructorIo.getBrowseResults(filterName, filterValue, resultsConfig, facetsCon
 
 ```kotlin
 var numResults = 6
-var perPage = 10
 var podId = "best_sellers"
-var selectedFacets: HashMap<String, MutableList<String>>? = null
+var resultsConfig = ResultsConfig(numResults)
+var recommendationConfig = RecommendationConfig(podId)
 
-ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
+ConstructorIo.getRecommendationResults(recommendationConfig, resultsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {

@@ -55,8 +55,9 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResults() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        val recommendationConfig = RecommendationConfig("titanic")
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getRecommendationResults("titanic").test()
+        val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
             it.get()!!.response?.results!!.size == 24
             it.get()!!.response?.results!![0].value == "LaCroix Sparkling Water Pure Cans - 12-12 Fl. Oz."
@@ -73,8 +74,9 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithServerError() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        val recommendationConfig = RecommendationConfig("titanic")
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getRecommendationResults("titanic").test()
+        val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
             it.networkError
         }
@@ -86,9 +88,10 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithTimeout() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        val recommendationConfig = RecommendationConfig("titanic")
         mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getRecommendationResults("titanic").test()
+        val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
             it.isError
         }
@@ -100,14 +103,37 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithEmptyResponse() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response_empty.json"))
+        val recommendationConfig = RecommendationConfig("titanic")
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getRecommendationResults("titanic").test()
+        val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
             it.get()!!.response?.results!!.isEmpty()
             it.get()!!.response?.resultCount == 0
         }
         val request = mockServer.takeRequest()
         val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guapo-the-guid&ui=player-one&s=79&c=cioand-2.13.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getRecommendationResultsWithItemIds() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        val recommendationConfig = RecommendationConfig("titanic", listOf("item01", "item02"))
+        mockServer.enqueue(mockResponse)
+        constructorIo.getRecommendationResults(recommendationConfig).test()
+        val request = mockServer.takeRequest()
+        val path = "/recommendations/v1/pods/titanic?item_id=item01&item_id=item02&key=golden-key&i=guapo-the-guid&ui=player-one&s=79&c=cioand-2.13.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getRecommendationResultsWithTerm() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        val recommendationConfig = RecommendationConfig("titanic", null, "titanic")
+        mockServer.enqueue(mockResponse)
+        constructorIo.getRecommendationResults(recommendationConfig).test()
+        val request = mockServer.takeRequest()
+        val path = "/recommendations/v1/pods/titanic?term=titanic&key=golden-key&i=guapo-the-guid&ui=player-one&s=79&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

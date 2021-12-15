@@ -77,7 +77,7 @@ class ConstructorIoBrowseTest {
     @Test
     fun getBrowseResultsWithMultipleConfigs() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
-        val resultsConfig = ResultsConfig(2, 25, "price", "descending", "Canada")
+        val resultsConfig = ResultsConfig(25, 2, "price", "descending", "Canada")
         val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Best Brand", "Organic Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", resultsConfig, facetsConfig).test()

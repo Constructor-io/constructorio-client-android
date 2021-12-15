@@ -594,25 +594,31 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param podId the pod id
-     * @param facets  additional facets used to refine results
-     * @param numResults the number of results to return
-     * @param sectionName the section the selection will come from, i.e. "Products"
-     * @param itemId: The item id to retrieve recommendations (strategy specific)
-     * @param term: The term to use to refine results (strategy specific)
+     * @param recommendationConfig The configuration of the primary recommendation inputs [io.constructor.core.RecommendationConfig]
+     * @param resultsConfig The configuration of options related to displaying results [io.constructor.core.ResultsConfig]
+     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
      */
-    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null): Observable<ConstructorData<RecommendationsResponse>> {
+    fun getRecommendationResults(recommendationConfig: RecommendationConfig, resultsConfig: ResultsConfig? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<RecommendationsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to numResults.toString().urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        itemId?.let { encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.toString().urlEncode()) }
-        term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to term.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+
+        recommendationConfig.itemId?.forEach { item ->
+            encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to item.urlEncode())
+        }
+        recommendationConfig.term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to it.urlEncode()) }
+
+        if (resultsConfig !== null) {
+            resultsConfig.resultsPerPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
+            resultsConfig.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        }
+
+        if (facetsConfig !== null) {
+            facetsConfig.facets?.forEach { facet ->
+                facet.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.key).urlEncode() to it.urlEncode())
+                }
             }
         }
-        return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
+        return dataManager.getRecommendationResults(recommendationConfig.podId, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
