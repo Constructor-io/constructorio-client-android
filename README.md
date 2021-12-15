@@ -79,6 +79,7 @@ ConstructorIo.getSearchResults(query, resultsConfig, facetsConfig)
 ```kotlin
 import io.constructor.core.ResultsConfig
 import io.constructor.core.FacetsConfig
+
 var page = 1
 var resultsPerPage = 10
 var sortBy = "price"
@@ -101,6 +102,9 @@ ConstructorIo.getBrowseResults(filterName, filterValue, resultsConfig, facetsCon
 ## 7. Request Recommendation Results
 
 ```kotlin
+import io.constructor.core.ResultsConfig
+import io.constructor.core.FacetsConfig
+
 var numResults = 6
 var podId = "best_sellers"
 var resultsConfig = ResultsConfig(numResults)
