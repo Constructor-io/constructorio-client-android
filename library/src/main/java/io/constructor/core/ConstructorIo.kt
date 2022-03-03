@@ -579,7 +579,7 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of recommendation results based on pod
+     * Returns a list of recommendation results
      * ##Example
      * ```
      * ConstructorIo.getRecommendationResults(RecommendationsRequestsConfig(podId), RecommendationsResultsConfig(4))
