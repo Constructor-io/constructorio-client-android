@@ -7,18 +7,17 @@ import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
 import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.browse.*
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.search.SearchResponse
-import io.constructor.data.model.browse.BrowseResponse
-import io.constructor.data.model.recommendations.RecommendationsResponse
-import io.constructor.data.model.browse.BrowseResultClickRequestBody
-import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
-import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
-import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.*
+import io.constructor.data.model.search.SearchFacetsConfig
+import io.constructor.data.model.search.SearchResultsConfig
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -139,9 +138,9 @@ object ConstructorIo {
      * ```
      * @param term The term to display results from
      * @param numResultsPerSection The number of results per section
-     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
+     * @param facetsConfig The configuration of options related to facets [io.constructor.data.model.autocomplete.AutocompleteFacetsConfig]
      */
-    fun getAutocompleteResults(term: String, numResultsPerSection: Map<String, Int>? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, numResultsPerSection: Map<String, Int>? = null, facetsConfig: AutocompleteFacetsConfig? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         numResultsPerSection?.entries?.forEach {
@@ -166,7 +165,7 @@ object ConstructorIo {
      * Returns a list of search results including filters, categories, sort options, etc.
      * ##Example
      * ```
-     * ConstructorIo.getSearchResults("Dave's bread", ResultsConfig(2, 30), FacetsConfig(mapOf("Brands" to "Best Brand")))
+     * ConstructorIo.getSearchResults("Dave's bread", SearchResultsConfig(2, 30), SearchFacetsConfig(mapOf("Brands" to "Best Brand")))
      *      .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
      *          it.onValue {
@@ -177,10 +176,10 @@ object ConstructorIo {
      *      }
      * ```
      * @param term The term to display results from
-     * @param resultsConfig The configuration of options related to displaying results [io.constructor.core.ResultsConfig]
-     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
+     * @param resultsConfig The configuration of options related to displaying results [io.constructor.data.model.search.SearchResultsConfig]
+     * @param facetsConfig The configuration of options related to facets [io.constructor.data.model.search.SearchFacetsConfig]
      */
-    fun getSearchResults(term: String, resultsConfig: ResultsConfig? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<SearchResponse>> {
+    fun getSearchResults(term: String, resultsConfig: SearchResultsConfig? = null, facetsConfig: SearchFacetsConfig? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         if (resultsConfig !== null) {
@@ -212,7 +211,7 @@ object ConstructorIo {
      * Returns a list of browse results including filters, categories, sort options, etc.
      * ##Example
      * ```
-     * ConstructorIo.getBrowseResults("group_id", "Beverages", ResultsConfig(2, 30), FacetsConfig(mapOf("Brands" to "Best Brand")))
+     * ConstructorIo.getBrowseResults("group_id", "Beverages", BrowseResultsConfig(2, 30), BrowseFacetsConfig(mapOf("Brands" to "Best Brand")))
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -225,10 +224,10 @@ object ConstructorIo {
      * ```
      * @param filterName The filter name to display results from
      * @param filterValue The filter value to display results from
-     * @param resultsConfig The configuration of options related to displaying results [io.constructor.core.ResultsConfig]
-     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
+     * @param resultsConfig The configuration of options related to displaying results [io.constructor.data.model.browse.BrowseResultsConfig]
+     * @param facetsConfig The configuration of options related to facets [io.constructor.data.model.browse.BrowseFacetsConfig]
      */
-    fun getBrowseResults(filterName: String, filterValue: String, resultsConfig: ResultsConfig? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<BrowseResponse>> {
+    fun getBrowseResults(filterName: String, filterValue: String, resultsConfig: BrowseResultsConfig? = null, facetsConfig: BrowseFacetsConfig? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         if (resultsConfig !== null) {
@@ -580,10 +579,10 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of search results including filters, categories, sort options, etc.
+     * Returns a list of recommendation results based on pod
      * ##Example
      * ```
-     * ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
+     * ConstructorIo.getRecommendationResults(RecommendationConfig(podId), RecommendationsResultsConfig(4))
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -594,11 +593,11 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param recommendationConfig The configuration of the primary recommendation inputs [io.constructor.core.RecommendationConfig]
-     * @param resultsConfig The configuration of options related to displaying results [io.constructor.core.ResultsConfig]
-     * @param facetsConfig The configuration of options related to facets [io.constructor.core.FacetsConfig]
+     * @param recommendationConfig The configuration of the primary recommendation inputs [io.constructor.data.model.recommendations.RecommendationsConfig]
+     * @param resultsConfig The configuration of options related to displaying results [io.constructor.data.model.recommendations.RecommendationsResultsConfig]
+     * @param facetsConfig The configuration of options related to facets [io.constructor.data.model.recommendations.RecommendationsFacetsConfig]
      */
-    fun getRecommendationResults(recommendationConfig: RecommendationConfig, resultsConfig: ResultsConfig? = null, facetsConfig: FacetsConfig? = null): Observable<ConstructorData<RecommendationsResponse>> {
+    fun getRecommendationResults(recommendationConfig: RecommendationConfig, resultsConfig: RecommendationsResultsConfig? = null, facetsConfig: RecommendationsFacetsConfig? = null): Observable<ConstructorData<RecommendationsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         recommendationConfig.itemId?.forEach { item ->

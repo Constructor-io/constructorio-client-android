@@ -3,6 +3,7 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.recommendations.RecommendationConfig
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader

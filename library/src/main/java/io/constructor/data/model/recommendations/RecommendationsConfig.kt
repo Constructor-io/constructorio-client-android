@@ -1,4 +1,4 @@
-package io.constructor.core
+package io.constructor.data.model.recommendations
 
 /**
  *  Encapsulates configuration of the primary recommendation inputs
@@ -6,7 +6,7 @@ package io.constructor.core
  *  @property itemId The item id to refine results (strategy/podId specific)
  *  @property term The term to use to refine results (strategy/podId specific)
  */
-data class RecommendationConfig (
+data class RecommendationsConfig (
         val podId: String,
         val itemId: List<String>? = null,
         val term: String? = null,
