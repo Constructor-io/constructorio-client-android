@@ -3,7 +3,7 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
-import io.constructor.data.model.recommendations.RecommendationConfig
+import io.constructor.data.model.recommendations.RecommendationsRequestsConfig
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -56,7 +56,7 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResults() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
-        val recommendationConfig = RecommendationConfig("titanic")
+        val recommendationConfig = RecommendationsRequestsConfig("titanic")
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
@@ -75,7 +75,7 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithServerError() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
-        val recommendationConfig = RecommendationConfig("titanic")
+        val recommendationConfig = RecommendationsRequestsConfig("titanic")
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
@@ -89,7 +89,7 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithTimeout() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
-        val recommendationConfig = RecommendationConfig("titanic")
+        val recommendationConfig = RecommendationsRequestsConfig("titanic")
         mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
@@ -104,7 +104,7 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithEmptyResponse() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response_empty.json"))
-        val recommendationConfig = RecommendationConfig("titanic")
+        val recommendationConfig = RecommendationsRequestsConfig("titanic")
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
@@ -119,7 +119,7 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithItemIds() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
-        val recommendationConfig = RecommendationConfig("titanic", listOf("item01", "item02"))
+        val recommendationConfig = RecommendationsRequestsConfig("titanic", listOf("item01", "item02"))
         mockServer.enqueue(mockResponse)
         constructorIo.getRecommendationResults(recommendationConfig).test()
         val request = mockServer.takeRequest()
@@ -130,7 +130,7 @@ class ConstructorIoRecommendationsTest {
     @Test
     fun getRecommendationResultsWithTerm() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
-        val recommendationConfig = RecommendationConfig("titanic", null, "titanic")
+        val recommendationConfig = RecommendationsRequestsConfig("titanic", null, "titanic")
         mockServer.enqueue(mockResponse)
         constructorIo.getRecommendationResults(recommendationConfig).test()
         val request = mockServer.takeRequest()

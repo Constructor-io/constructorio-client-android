@@ -3,6 +3,8 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.browse.BrowseFacetsConfig
+import io.constructor.data.model.browse.BrowseResultsConfig
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -77,8 +79,8 @@ class ConstructorIoBrowseTest {
     @Test
     fun getBrowseResultsWithMultipleConfigs() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
-        val resultsConfig = ResultsConfig(25, 2, "price", "descending", "Canada")
-        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Best Brand", "Organic Brand")))
+        val resultsConfig = BrowseResultsConfig(25, 2, "price", "descending", "Canada")
+        val facetsConfig = BrowseFacetsConfig(mapOf("Brands" to listOf("Best Brand", "Organic Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", resultsConfig, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -132,7 +134,7 @@ class ConstructorIoBrowseTest {
     @Test
     fun getBrowseResultsWithSection() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
-        val resultsConfig = ResultsConfig(null, null, null, null, "Sold Out")
+        val resultsConfig = BrowseResultsConfig(null, null, null, null, "Sold Out")
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", resultsConfig).test()
         val request = mockServer.takeRequest()
@@ -143,7 +145,7 @@ class ConstructorIoBrowseTest {
     @Test
     fun getBrowseResultsWithFilters() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
-        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Smokehouse", "Best Brand")))
+        val facetsConfig = BrowseFacetsConfig(mapOf("Brands" to listOf("Smokehouse", "Best Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", null, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -154,7 +156,7 @@ class ConstructorIoBrowseTest {
     @Test
     fun getBrowseResultsWithHiddenFields() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
-        val facetsConfig = FacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
+        val facetsConfig = BrowseFacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", null, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -165,7 +167,7 @@ class ConstructorIoBrowseTest {
     @Test
     fun getBrowseResultsWithFmtOptions() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
-        val facetsConfig = FacetsConfig(null, mapOf("groups_max_depth" to "2", "groups_start" to "current"))
+        val facetsConfig = BrowseFacetsConfig(null, mapOf("groups_max_depth" to "2", "groups_start" to "current"))
         mockServer.enqueue(mockResponse)
         constructorIo.getBrowseResults("group_id", "Beverages", null, facetsConfig).test()
         val request = mockServer.takeRequest()

@@ -3,6 +3,8 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.search.SearchFacetsConfig
+import io.constructor.data.model.search.SearchResultsConfig
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -78,8 +80,8 @@ class ConstructorIoSearchTest {
     @Test
     fun getSearchResultsWithMultipleConfigs() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        val resultsConfig = ResultsConfig(25, 2, "price", "descending", "Canada")
-        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Best Brand", "Organic Brand")))
+        val resultsConfig = SearchResultsConfig(25, 2, "price", "descending", "Canada")
+        val facetsConfig = SearchFacetsConfig(mapOf("Brands" to listOf("Best Brand", "Organic Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("corn", resultsConfig, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -147,7 +149,7 @@ class ConstructorIoSearchTest {
     @Test
     fun getSearchResultsWithSection() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        val resultsConfig = ResultsConfig(null, null, null, null, "Sold Out")
+        val resultsConfig = SearchResultsConfig(null, null, null, null, "Sold Out")
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("bbq", resultsConfig).test()
         val request = mockServer.takeRequest()
@@ -158,7 +160,7 @@ class ConstructorIoSearchTest {
     @Test
     fun getSearchResultsWithFilters() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        val facetsConfig = FacetsConfig(mapOf("Brands" to listOf("Smokehouse", "Best Brand")))
+        val facetsConfig = SearchFacetsConfig(mapOf("Brands" to listOf("Smokehouse", "Best Brand")))
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("bbq", null, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -169,7 +171,7 @@ class ConstructorIoSearchTest {
     @Test
     fun getSearchResultsWithHiddenFields() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        val facetsConfig = FacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
+        val facetsConfig = SearchFacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("bbq", null, facetsConfig).test()
         val request = mockServer.takeRequest()
@@ -180,7 +182,7 @@ class ConstructorIoSearchTest {
     @Test
     fun getSearchResultsWithFmtOptions() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
-        val facetsConfig = FacetsConfig(null, mapOf("groups_max_depth" to "2", "groups_start" to "current"))
+        val facetsConfig = SearchFacetsConfig(null, mapOf("groups_max_depth" to "2", "groups_start" to "current"))
         mockServer.enqueue(mockResponse)
         constructorIo.getSearchResults("bbq", null, facetsConfig).test()
         val request = mockServer.takeRequest()

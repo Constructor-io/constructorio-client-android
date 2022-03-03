@@ -3,7 +3,10 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
-import io.constructor.data.model.recommendations.RecommendationConfig
+import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
+import io.constructor.data.model.browse.BrowseFacetsConfig
+import io.constructor.data.model.recommendations.RecommendationsRequestsConfig
+import io.constructor.data.model.search.SearchFacetsConfig
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -68,7 +71,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(mapOf("group_id" to listOf("544")))
+        val facetsConfig = AutocompleteFacetsConfig(mapOf("group_id" to listOf("544")))
         val observer = constructorIo.getAutocompleteResults("pork", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.sections?.get("Products")!!.isNotEmpty()
@@ -108,7 +111,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getSearchResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Smokehouse", "Applegate")))
+        val facetsConfig = SearchFacetsConfig(mapOf("Brand" to listOf("Smokehouse", "Applegate")))
         val observer = constructorIo.getSearchResults("pork", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
@@ -137,7 +140,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseResultsWithFiltersAgainstRealResponse() {
-        val facetsConfig = FacetsConfig(mapOf("Brand" to listOf("Meal Mart", "Premio")))
+        val facetsConfig = BrowseFacetsConfig(mapOf("Brand" to listOf("Meal Mart", "Premio")))
         val observer = constructorIo.getBrowseResults("group_id", "544", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
@@ -201,7 +204,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getRecommendationResultsAgainstRealResponse() {
-        val recommendationConfig = RecommendationConfig("pdp5")
+        val recommendationConfig = RecommendationsRequestsConfig("pdp5")
         val observer = constructorIo.getRecommendationResults(recommendationConfig).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null

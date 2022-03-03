@@ -582,7 +582,7 @@ object ConstructorIo {
      * Returns a list of recommendation results based on pod
      * ##Example
      * ```
-     * ConstructorIo.getRecommendationResults(RecommendationConfig(podId), RecommendationsResultsConfig(4))
+     * ConstructorIo.getRecommendationResults(RecommendationsRequestsConfig(podId), RecommendationsResultsConfig(4))
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -593,17 +593,17 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param recommendationConfig The configuration of the primary recommendation inputs [io.constructor.data.model.recommendations.RecommendationsConfig]
+     * @param requestsConfig The configuration of the primary recommendation inputs [io.constructor.data.model.recommendations.RecommendationsRequestsConfig]
      * @param resultsConfig The configuration of options related to displaying results [io.constructor.data.model.recommendations.RecommendationsResultsConfig]
      * @param facetsConfig The configuration of options related to facets [io.constructor.data.model.recommendations.RecommendationsFacetsConfig]
      */
-    fun getRecommendationResults(recommendationConfig: RecommendationConfig, resultsConfig: RecommendationsResultsConfig? = null, facetsConfig: RecommendationsFacetsConfig? = null): Observable<ConstructorData<RecommendationsResponse>> {
+    fun getRecommendationResults(requestsConfig: RecommendationsRequestsConfig, resultsConfig: RecommendationsResultsConfig? = null, facetsConfig: RecommendationsFacetsConfig? = null): Observable<ConstructorData<RecommendationsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
-        recommendationConfig.itemId?.forEach { item ->
+        requestsConfig.itemId?.forEach { item ->
             encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to item.urlEncode())
         }
-        recommendationConfig.term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to it.urlEncode()) }
+        requestsConfig.term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to it.urlEncode()) }
 
         if (resultsConfig !== null) {
             resultsConfig.resultsPerPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
@@ -617,7 +617,7 @@ object ConstructorIo {
                 }
             }
         }
-        return dataManager.getRecommendationResults(recommendationConfig.podId, encodedParams = encodedParams.toTypedArray())
+        return dataManager.getRecommendationResults(requestsConfig.podId, encodedParams = encodedParams.toTypedArray())
     }
 
     /**

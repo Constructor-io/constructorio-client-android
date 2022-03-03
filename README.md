@@ -33,11 +33,11 @@ ConstructorIo.userId = "uid"
 ## 4. Request Autocomplete Results
 
 ```kotlin
-import io.constructor.core.FacetsConfig
+import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
 
 var query = "Dav"
 var resultsPerSection = mapOf("Products" to 4, "Search Suggestions" to 6)
-var facetsConfig = FacetsConfig("availableStore" to 123)
+var facetsConfig = AutocompleteFacetsConfig("availableStore" to 123)
 
 ConstructorIo.getAutocompleteResults(query, resultsPerSection, facetsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -53,15 +53,15 @@ ConstructorIo.getAutocompleteResults(query, resultsPerSection, facetsConfig)
 ## 5. Request Search Results
 
 ```kotlin
-import io.constructor.core.ResultsConfig
-import io.constructor.core.FacetsConfig
+import io.constructor.data.model.search.SearchResultsConfig
+import io.constructor.data.model.search.SearchFacetsConfig
 
 var page = 1
 var resultsPerPage = 10
 var sortBy = "price"
-var resultsConfig = ResultsConfig(resultsPerPage, page, sortBy)
+var resultsConfig = SearchResultsConfig(resultsPerPage, page, sortBy)
 var query = "Dave's bread"
-var facetsConfig = FacetsConfig("Brand" to "Best Brand")
+var facetsConfig = SearchFacetsConfig("Brand" to "Best Brand")
 
 ConstructorIo.getSearchResults(query, resultsConfig, facetsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -77,14 +77,14 @@ ConstructorIo.getSearchResults(query, resultsConfig, facetsConfig)
 ## 6. Request Browse Results
 
 ```kotlin
-import io.constructor.core.ResultsConfig
-import io.constructor.core.FacetsConfig
+import io.constructor.data.model.browse.BrowseResultsConfig
+import io.constructor.data.model.browse.BrowseFacetsConfig
 
 var page = 1
 var resultsPerPage = 10
 var sortBy = "price"
-var resultsConfig = ResultsConfig(resultsPerPage, page, sortBy)
-var facetsConfig = FacetsConfig("Brand" to "Best Brand")
+var resultsConfig = BrowseResultsConfig(resultsPerPage, page, sortBy)
+var facetsConfig = BrowseFacetsConfig("Brand" to "Best Brand")
 var filterName = "group_id"
 var filterValue = "Beverages"
 
@@ -102,15 +102,15 @@ ConstructorIo.getBrowseResults(filterName, filterValue, resultsConfig, facetsCon
 ## 7. Request Recommendation Results
 
 ```kotlin
-import io.constructor.core.ResultsConfig
-import io.constructor.core.FacetsConfig
+import io.constructor.data.model.recommendations.RecommendationsRequestsConfig
+import io.constructor.data.model.recommendations.RecommendationsResultsConfig
 
 var numResults = 6
 var podId = "best_sellers"
-var resultsConfig = ResultsConfig(numResults)
-var recommendationConfig = RecommendationConfig(podId)
+var resultsConfig = RecommendationsResultsConfig(numResults)
+var requestsConfig = RecommendationsRequestsConfig(podId)
 
-ConstructorIo.getRecommendationResults(recommendationConfig, resultsConfig)
+ConstructorIo.getRecommendationResults(requestsConfig, resultsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {

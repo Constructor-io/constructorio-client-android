@@ -6,7 +6,7 @@ package io.constructor.data.model.recommendations
  *  @property itemId The item id to refine results (strategy/podId specific)
  *  @property term The term to use to refine results (strategy/podId specific)
  */
-data class RecommendationsConfig (
+data class RecommendationsRequestsConfig (
         val podId: String,
         val itemId: List<String>? = null,
         val term: String? = null,

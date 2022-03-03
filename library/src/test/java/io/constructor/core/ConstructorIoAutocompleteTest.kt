@@ -3,6 +3,7 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -70,7 +71,7 @@ class ConstructorIoAutocompleteTest {
     fun getAutocompleteResultsWithFilters() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
         mockServer.enqueue(mockResponse)
-        val facetsConfig = FacetsConfig(mapOf("storeLocation" to listOf("CA")))
+        val facetsConfig = AutocompleteFacetsConfig(mapOf("storeLocation" to listOf("CA")))
         val observer = constructorIo.getAutocompleteResults("titanic", null, facetsConfig).test()
         observer.assertComplete().assertValue {
             val suggestions = it.get()!!.sections?.get("Search Suggestions")
@@ -84,7 +85,7 @@ class ConstructorIoAutocompleteTest {
     @Test
     fun getAutocompleteResultsWithGroupIdFilter() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
-        val facetsConfig = FacetsConfig(mapOf("group_id" to listOf("101")))
+        val facetsConfig = AutocompleteFacetsConfig(mapOf("group_id" to listOf("101")))
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getAutocompleteResults("titanic", null, facetsConfig).test()
         observer.assertComplete().assertValue {
@@ -140,7 +141,7 @@ class ConstructorIoAutocompleteTest {
     @Test
     fun getAutocompleteResultsWithHiddenFields() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
-        val facetsConfig = FacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
+        val facetsConfig = AutocompleteFacetsConfig(null, null, listOf("hiddenField1", "hiddenField2"))
         mockServer.enqueue(mockResponse)
         constructorIo.getAutocompleteResults("bbq", null, facetsConfig).test()
         val request = mockServer.takeRequest()
