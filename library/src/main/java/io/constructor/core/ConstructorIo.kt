@@ -9,6 +9,7 @@ import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
 import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.autocomplete.AutocompleteResultsConfig
 import io.constructor.data.model.browse.*
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.search.SearchResponse
@@ -137,13 +138,13 @@ object ConstructorIo {
      *      }
      * ```
      * @param term The term to display results from
-     * @param numResultsPerSection The number of results per section
+     * @param resultsConfig The configuration of options related to displaying results [io.constructor.data.model.autocomplete.AutocompleteResultsConfig]
      * @param facetsConfig The configuration of options related to facets [io.constructor.data.model.autocomplete.AutocompleteFacetsConfig]
      */
-    fun getAutocompleteResults(term: String, numResultsPerSection: Map<String, Int>? = null, facetsConfig: AutocompleteFacetsConfig? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, resultsConfig: AutocompleteResultsConfig? = null, facetsConfig: AutocompleteFacetsConfig? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
-        numResultsPerSection?.entries?.forEach {
+        resultsConfig?.numResultsPerSection?.entries?.forEach {
             encodedParams.add(Constants.QueryConstants.NUM_RESULTS+it.key to it.value.toString())
         }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
+import io.constructor.data.model.autocomplete.AutocompleteResultsConfig
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -153,7 +154,7 @@ class ConstructorIoAutocompleteTest {
     fun getAutocompleteResultsWithNumberSections() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
         mockServer.enqueue(mockResponse)
-        constructorIo.getAutocompleteResults("bbq", mapOf("Search Suggestions" to 8, "Products" to 4)).test()
+        constructorIo.getAutocompleteResults("bbq", AutocompleteResultsConfig( mapOf("Search Suggestions" to 8, "Products" to 4))).test()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/bbq?num_results_Search%20Suggestions=8&num_results_Products=4&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.13.0&_dt="
         assert(request.path!!.startsWith(path))

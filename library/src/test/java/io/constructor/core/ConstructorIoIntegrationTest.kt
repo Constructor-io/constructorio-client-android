@@ -4,6 +4,7 @@ import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
+import io.constructor.data.model.autocomplete.AutocompleteResultsConfig
 import io.constructor.data.model.browse.BrowseFacetsConfig
 import io.constructor.data.model.recommendations.RecommendationsRequestsConfig
 import io.constructor.data.model.search.SearchFacetsConfig
@@ -60,7 +61,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getAutocompleteResultsWithResultsPerSection() {
-        val observer = constructorIo.getAutocompleteResults("pork", mapOf("Products" to 3, "Search Suggestions" to 2)).test()
+        val observer = constructorIo.getAutocompleteResults("pork", AutocompleteResultsConfig(mapOf("Products" to 3, "Search Suggestions" to 2))).test()
         observer.assertComplete().assertValue {
             it.get()?.sections?.get("Products")?.size == 3
             it.get()?.sections?.get("Search Suggestions")?.size == 2

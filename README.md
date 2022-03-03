@@ -34,12 +34,14 @@ ConstructorIo.userId = "uid"
 
 ```kotlin
 import io.constructor.data.model.autocomplete.AutocompleteFacetsConfig
+import io.constructor.data.model.autocomplete.AutocompleteResultsConfig
 
 var query = "Dav"
 var resultsPerSection = mapOf("Products" to 4, "Search Suggestions" to 6)
-var facetsConfig = AutocompleteFacetsConfig("availableStore" to 123)
+var resultsConfig = AutocompleteResultsConfig(resultsPerSection)
+var facetsConfig = AutocompleteFacetsConfig(mapOf("availableStore" to listOf(123)))
 
-ConstructorIo.getAutocompleteResults(query, resultsPerSection, facetsConfig)
+ConstructorIo.getAutocompleteResults(query, resultsConfig, facetsConfig)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
