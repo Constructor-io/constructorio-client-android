@@ -150,7 +150,7 @@ class ConstructorIoSearchTest {
         val facets = listOf(Pair("Brand", listOf("Signature Farms", "Del Monte")), Pair("Nutrition", listOf("Organic")))
         val observer = constructorIo.getSearchResults("bbq", facets, null, null , null, null, null, null).test()
         val request = mockServer.takeRequest()
-        val path = "/search/bbq?section=Sold%20Out&filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0"
+        val path = "/search/bbq?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.13.0"
         assert(request.path!!.startsWith(path))
     }
 
