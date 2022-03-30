@@ -155,7 +155,7 @@ object ConstructorIo {
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
         }
         hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
         }
         return dataManager.getAutocompleteResults(term, encodedParams = encodedParams.toTypedArray())
     }
@@ -183,8 +183,9 @@ object ConstructorIo {
      * @param sortOrder the sort order for results
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
+     * @param hiddenFacets show facets that are hidden by default
      */
-    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<SearchResponse>> {
+    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
@@ -198,7 +199,10 @@ object ConstructorIo {
             }
         }
         hiddenFields?.forEach { hiddenField ->
-                encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        hiddenFacets?.forEach { hiddenFacet ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
         return dataManager.getSearchResults(term, encodedParams = encodedParams.toTypedArray())
     }
@@ -228,8 +232,9 @@ object ConstructorIo {
      * @param sortOrder the sort order for results
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
+     * @param hiddenFacets show facets that are hidden by default
      */
-    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<BrowseResponse>> {
+    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
@@ -243,7 +248,10 @@ object ConstructorIo {
             }
         }
         hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.HIDDEN_FIELD.urlEncode() to hiddenField.urlEncode())
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        hiddenFacets?.forEach { hiddenFacet ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
