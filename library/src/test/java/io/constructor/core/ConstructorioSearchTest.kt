@@ -174,4 +174,14 @@ class ConstructorIoSearchTest {
         val path = "/search/bbq?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.0&_dt="
         assert(request.path!!.startsWith(path))
     }
+
+    @Test
+    fun getSearchResultsWithProperUrlEncoding() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getSearchResults("2% cheese").test()
+        val request = mockServer.takeRequest()
+        val path = "/search/2%25%20cheese?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
 }
