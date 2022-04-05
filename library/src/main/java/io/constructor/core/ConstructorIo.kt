@@ -157,7 +157,7 @@ object ConstructorIo {
         hiddenFields?.forEach { hiddenField ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
         }
-        return dataManager.getAutocompleteResults(term, encodedParams = encodedParams.toTypedArray())
+        return dataManager.getAutocompleteResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
     /**
@@ -204,7 +204,7 @@ object ConstructorIo {
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
-        return dataManager.getSearchResults(term, encodedParams = encodedParams.toTypedArray())
+        return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
     /**

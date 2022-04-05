@@ -146,4 +146,14 @@ class ConstructorIoAutocompleteTest {
         val path = "/autocomplete/bbq?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.0&_dt="
         assert(request.path!!.startsWith(path))
     }
+
+    @Test
+    fun getAutocompleteResultsWithProperUrlEncoding() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getAutocompleteResults("2% cheese").test()
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/2%25%20cheese?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
 }
