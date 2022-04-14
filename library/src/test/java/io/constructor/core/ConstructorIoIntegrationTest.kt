@@ -229,4 +229,69 @@ class ConstructorIoIntegrationTest {
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
+
+    @Test
+    fun getAutocompleteResultsWithHiddenFieldsAgainstRealResponse() {
+        val hiddenFields = listOf("hiddenField1", "hiddenField2")
+        val observer = constructorIo.getAutocompleteResults("pork", null, null, hiddenFields).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.sections!!.isNotEmpty()
+            it.get()?.sections?.get("Products")?.first()?.data?.metadata?.get("hiddenField1") !== null
+            it.get()?.sections?.get("Products")?.first()?.data?.metadata?.get("hiddenField2") !== null
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getSearchResultsWithHiddenFieldsAgainstRealResponse() {
+        val hiddenFields = listOf("hiddenField1", "hiddenField2")
+        val observer = constructorIo.getSearchResults("pork", null, null, null, null, null, null, null, hiddenFields).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField1") !== null
+            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField2") !== null
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getSearchResultsWithHiddenFacetsAgainstRealResponse() {
+        val hiddenFacets = listOf("Brand")
+        val observer = constructorIo.getSearchResults("pork", null, null, null, null, null, null, null, null, hiddenFacets).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.facets!!.isNotEmpty()
+            val brandFacet = it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
+            brandFacet !== null
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsWithHiddenFieldsAgainstRealResponse() {
+        val hiddenFields = listOf("hiddenField1", "hiddenField2")
+        val observer = constructorIo.getBrowseResults("group_id", "431", null, null, null, null, null, null, null, hiddenFields).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField1") !== null
+            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField2") !== null
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsWithHiddenFacetsAgainstRealResponse() {
+        val hiddenFacets = listOf("Brand")
+        val observer = constructorIo.getBrowseResults("group_id", "431", null, null, null, null, null, null, null, null, hiddenFacets).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.facets!!.isNotEmpty()
+            val brandFacet = it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
+            brandFacet !== null
+        }
+        Thread.sleep(timeBetweenTests)
+    }
 }
