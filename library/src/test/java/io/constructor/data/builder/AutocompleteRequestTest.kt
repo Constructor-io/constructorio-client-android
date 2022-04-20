@@ -9,9 +9,7 @@ class AutocompleteRequestTest {
 
     @Test
     fun autocompleteRequestWithTermUsingBuilder() {
-        val request = AutocompleteRequest.Builder()
-            .setTerm(query)
-            .build()
+        val request = AutocompleteRequest.Builder(query).build()
         assertEquals(request.term, query)
     }
 
@@ -21,8 +19,7 @@ class AutocompleteRequestTest {
             "Brand" to listOf("XYZ", "123"),
             "group_id" to listOf("123"),
         )
-        val request = AutocompleteRequest.Builder()
-            .setTerm(query)
+        val request = AutocompleteRequest.Builder(query)
             .setFilters(filters)
             .build()
         assertEquals(request.filters, filters)
@@ -34,8 +31,7 @@ class AutocompleteRequestTest {
             "Products" to 5,
             "Search Suggestions" to 8,
         )
-        val request = AutocompleteRequest.Builder()
-            .setTerm(query)
+        val request = AutocompleteRequest.Builder(query)
             .setNumResultsPerSection(numResultsPerSection)
             .build()
         assertEquals(request.numResultsPerSection, numResultsPerSection)
@@ -44,8 +40,7 @@ class AutocompleteRequestTest {
     @Test
     fun autocompleteRequestWithHiddenFieldsUsingBuilder() {
         val hiddenFields = listOf("hidden_field_1", "hidden_field_2")
-        val request = AutocompleteRequest.Builder()
-            .setTerm(query)
+        val request = AutocompleteRequest.Builder(query)
             .setHiddenFields(hiddenFields)
             .build()
         assertEquals(request.hiddenFields, hiddenFields)
@@ -53,9 +48,7 @@ class AutocompleteRequestTest {
 
     @Test
     fun autocompleteRequestWithTermUsingDSL() {
-        val request = AutocompleteRequest.build {
-            term = query
-        }
+        val request = AutocompleteRequest.build(query)
         assertEquals(request.term, query)
     }
 
@@ -65,8 +58,7 @@ class AutocompleteRequestTest {
                 "Brand" to listOf("XYZ", "123"),
                 "group_id" to listOf("123"),
         )
-        val request = AutocompleteRequest.build {
-            term = query
+        val request = AutocompleteRequest.build(query) {
             filters = filtersToApply
         }
         assertEquals(request.term, query)
@@ -79,8 +71,7 @@ class AutocompleteRequestTest {
                 "Products" to 5,
                 "Search Suggestions" to 8,
         )
-        val request = AutocompleteRequest.build {
-            term = query
+        val request = AutocompleteRequest.build(query) {
             numResultsPerSection = numResultsPerSectionToApply
         }
         assertEquals(request.numResultsPerSection, numResultsPerSectionToApply)
@@ -89,8 +80,7 @@ class AutocompleteRequestTest {
     @Test
     fun autocompleteRequestWithHiddenFieldsUsingDSL() {
         val hiddenFieldsToApply = listOf("hidden_field_1", "hidden_field_2")
-        val request = AutocompleteRequest.build {
-            term = query
+        val request = AutocompleteRequest.build(query) {
             hiddenFields = hiddenFieldsToApply
         }
         assertEquals(request.hiddenFields, hiddenFieldsToApply)

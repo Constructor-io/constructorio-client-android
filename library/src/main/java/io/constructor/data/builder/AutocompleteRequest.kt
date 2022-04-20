@@ -12,16 +12,16 @@ class AutocompleteRequest (
     private constructor(builder: Builder) : this(builder.term, builder.filters, builder.numResultsPerSection, builder.hiddenFields)
 
     companion object {
-        inline fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
+        inline fun build(term: String, block: Builder.() -> Unit = {}) = Builder(term).apply(block).build()
     }
 
-    class Builder {
-        lateinit var term: String
+    class Builder(
+        val term: String
+    ) {
         var filters: Map<String, List<String>>? = null
         var numResultsPerSection: Map<String, Int>? = null
         var hiddenFields: List<String>? = null
 
-        fun setTerm(term: String): Builder = apply { this.term = term }
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
         fun setNumResultsPerSection(numResultsPerSection: Map<String, Int>): Builder = apply { this.numResultsPerSection = numResultsPerSection }
         fun setHiddenFields(hiddenFields: List<String>): Builder = apply { this.hiddenFields = hiddenFields }
