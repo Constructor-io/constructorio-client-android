@@ -9,7 +9,12 @@ class AutocompleteRequest (
     val numResultsPerSection: Map<String, Int>? = null,
     val hiddenFields: List<String>? = null,
 ) {
-    private constructor(builder: Builder) : this(builder.term, builder.filters, builder.numResultsPerSection, builder.hiddenFields)
+    private constructor(builder: Builder) : this(
+        builder.term,
+        builder.filters,
+        builder.numResultsPerSection,
+        builder.hiddenFields
+    )
 
     companion object {
         inline fun build(term: String, block: Builder.() -> Unit = {}) = Builder(term).apply(block).build()
