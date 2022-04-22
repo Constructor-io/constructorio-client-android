@@ -5,6 +5,8 @@ import android.content.Context
 import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
+import io.constructor.data.builder.AutocompleteRequest
+import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
@@ -161,6 +163,57 @@ object ConstructorIo {
     }
 
     /**
+     * Returns a list of autocomplete suggestions
+     * ## Example
+     * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val query = AutocompleteRequest.Builder("Dav")
+     *      .setFilters(filters)
+     *      .setHiddenFields(listOf("hidden_field_1", "hidden_field_2")
+     *      .build()
+     *
+     * ConstructorIo.getAutocompleteResults(query)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the autocomplete request object
+     */
+    fun getAutocompleteResults(request: AutocompleteRequest): Observable<ConstructorData<AutocompleteResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.filters?.forEach { filter ->
+            if (filter.key == "group_id") {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString())
+                }
+            } else {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
+                }
+            }
+        }
+        request.numResultsPerSection?.forEach { section ->
+            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+section.key, section.value.toString()))
+        }
+        request.hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+
+        return dataManager.getAutocompleteResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
      * Returns a list of search results including filters, categories, sort options, etc.
      * ##Example
      * ```
@@ -187,6 +240,7 @@ object ConstructorIo {
      */
     fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
         perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
@@ -204,7 +258,64 @@ object ConstructorIo {
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of search results including filters, categories, sort options, etc.
+     * ## Example
+     * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val query = SearchRequest.Builder("Dav")
+     *      .setFilters(filters)
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2")
+     *      .build()
+     *
+     * ConstructorIo.getSearchResults(query)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the search request object
+     */
+    fun getSearchResults(request: SearchRequest): Observable<ConstructorData<SearchResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
+        request.perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
+        request.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        request.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        request.filters?.forEach { filter ->
+            if (filter.key == "group_id") {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString())
+                }
+            } else {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
+                }
+            }
+        }
+        request.hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        request.hiddenFacets?.forEach { hiddenFacet ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+
+        return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
     /**
