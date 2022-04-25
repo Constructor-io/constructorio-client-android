@@ -2,6 +2,7 @@ package io.constructor.core
 
 import android.content.Context
 import io.constructor.data.builder.AutocompleteRequest
+import io.constructor.data.builder.BrowseRequest
 import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
@@ -288,6 +289,21 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultAgainstRealResponseUsingRequestBuilder() {
         val request = SearchRequest.Builder("pork").build()
         val observer = constructorIo.getSearchResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseRequest.Builder("group_id", "431").build()
+        val observer = constructorIo.getBrowseResults(request).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.results!!.isNotEmpty()
