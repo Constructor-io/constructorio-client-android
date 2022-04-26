@@ -7,6 +7,7 @@ import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
 import io.constructor.data.builder.AutocompleteRequest
 import io.constructor.data.builder.BrowseRequest
+import io.constructor.data.builder.RecommendationsRequest
 import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
@@ -369,7 +370,7 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of search results including filters, categories, sort options, etc.
+     * Returns a list of browse results including filters, categories, sort options, etc.
      * ## Example
      * ```
      * val filters = mapOf(
@@ -748,7 +749,7 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of search results including filters, categories, sort options, etc.
+     * Returns a list of recommendation results for the specified pod
      * ##Example
      * ```
      * ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
@@ -781,6 +782,48 @@ object ConstructorIo {
             }
         }
         return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of recommendation results for the specified pod
+     * ## Example
+     * ```
+     * val query = BrowseRequest.Builder("product_detail_page")
+     *      .setItemIds(listOf("item_id_123"))
+     *      .build()
+     *
+     * ConstructorIo.getRecommendationResults(query)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param podId the pod id
+     * @param filters additional filters used to refine results (strategy specific)
+     * @param itemIds the list of item ids to retrieve recommendations for (strategy specific)
+     * @param term the term to use to refine results (strategy specific)
+     * @param numResults the number of results to return
+     * @param section the section the results will come from, i.e. "Products"
+     */
+    fun getRecommendationResults(request: RecommendationsRequest): Observable<ConstructorData<RecommendationsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        request.filters?.forEach { filter ->
+            filter.value.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
+            }
+        }
+        request.itemIds?.forEach { itemId ->
+            encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.urlEncode())
+        }
+        request.term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to it.urlEncode()) }
+        request.numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to it.toString().urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        return dataManager.getRecommendationResults(request.podId, encodedParams = encodedParams.toTypedArray())
     }
 
     /**

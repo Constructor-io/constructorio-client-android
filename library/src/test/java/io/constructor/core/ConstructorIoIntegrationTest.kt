@@ -3,6 +3,7 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.builder.AutocompleteRequest
 import io.constructor.data.builder.BrowseRequest
+import io.constructor.data.builder.RecommendationsRequest
 import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
@@ -178,8 +179,8 @@ class ConstructorIoIntegrationTest {
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.pod !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.results !== null
+            it.get()?.response?.resultCount!! >= 0
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -311,6 +312,19 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.groups!!.isNotEmpty()
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getRecommendationResultsAgainstRealResponseUsingRequestBuilder() {
+        val request = RecommendationsRequest.Builder("pdp5").build()
+        val observer = constructorIo.getRecommendationResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.pod !== null
+            it.get()?.response?.results !== null
+            it.get()?.response?.resultCount!! >= 0
         }
         Thread.sleep(timeBetweenTests)
     }
