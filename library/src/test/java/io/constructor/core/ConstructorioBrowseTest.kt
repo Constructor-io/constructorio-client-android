@@ -1,6 +1,8 @@
 package io.constructor.core
 
 import android.content.Context
+import io.constructor.data.builder.BrowseRequest
+import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.test.createTestDataManager
@@ -167,6 +169,23 @@ class ConstructorIoBrowseTest {
         val observer = constructorIo.getBrowseResults("collection_id", "test-collection").test()
         val request = mockServer.takeRequest()
         val path = "/browse/collection_id/test-collection?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.2&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getBrowseResultsWithFiltersUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val filters = mapOf(
+            "Brand" to listOf("Signature Farms", "Del Monte"),
+            "Nutrition" to listOf("Organic")
+        )
+        val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
+                .setFilters(filters)
+                .build()
+        val observer = constructorIo.getBrowseResults(browseRequest).test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.1&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
