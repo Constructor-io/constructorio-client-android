@@ -175,8 +175,29 @@ class ConstructorIoAutocompleteTest {
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
-        System.out.println(request.path)
         val path = "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&filters%5Bgroup_id%5D=101&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.1&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+
+    @Test
+    fun getAutocompleteResultsWithNumResultsPerSectionUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val numResultsPerSection = mapOf(
+            "Products" to 5,
+            "Search Suggestions" to 10,
+        )
+        val autocompleteRequest = AutocompleteRequest.Builder("titanic")
+                .setNumResultsPerSection(numResultsPerSection)
+                .build()
+        val observer = constructorIo.getAutocompleteResults(autocompleteRequest).test()
+        observer.assertComplete().assertValue {
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isNotEmpty()!! && suggestions.size == 5
+        }
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/titanic?num_results_Products=5&num_results_Search%20Suggestions=10&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.1&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
