@@ -33,6 +33,11 @@ ConstructorIo.userId = "uid"
 ## 4. Request Autocomplete Results
 
 ```kotlin
+// To specify the number of results you want to have returned from each section, you will need to
+// ... configure this within the ConstructorIoConfig object before instantiating the client
+var config = ConstructorIoConfig(apiKey = "YOUR_API_KEY", autocompleteResultCount = mapOf("Products" to 6, "Search Suggestions" to 10))
+ConstructorIo.init(this, config)
+
 var query = "Dav"
 var selectedFacet: HashMap<String, MutableList<String>>? = null
 
