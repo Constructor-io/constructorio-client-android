@@ -3,6 +3,7 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -10,6 +11,7 @@ import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlinx.coroutines.*
 
 class ConstructorIoIntegrationTest {
 
@@ -39,7 +41,7 @@ class ConstructorIoIntegrationTest {
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
 
-        val config = ConstructorIoConfig("key_K2hlXt5aVSwoI1Uw")
+        val config = ConstructorIoConfig("123") // key_K2hlXt5aVSwoI1Uw
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
@@ -47,11 +49,33 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getAutocompleteResultsAgainstRealResponse() {
-        val observer = constructorIo.getAutocompleteResults("pork").test()
-        observer.assertComplete().assertValue {
-            it.get()?.sections!!.isNotEmpty()
-            it.get()?.resultId!!.isNotEmpty()
+        runBlocking {
+            val x = launch {
+                println("Starting request")
+                val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork")
+                println("Request sent")
+                println(autocompleteResults)
+            }
+            delay(100)
+            println("launch finish")
         }
+        println("test complete")
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getAutocompleteResultsAgainstRealResponse2() {
+        runBlocking {
+            val x = launch {
+                println("Starting request")
+                val autocompleteResponse: Deferred<AutocompleteResponse> = constructorIo.getAutocompleteResultsCRT2("pork")
+                println("Request sent")
+                println(autocompleteResponse.await())
+            }
+            delay(100)
+            println("launch finish")
+        }
+        println("test complete")
         Thread.sleep(timeBetweenTests)
     }
 
@@ -59,7 +83,10 @@ class ConstructorIoIntegrationTest {
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
-        observer.assertComplete()
+        val x = observer.assertComplete().values()
+        println("PRINTING values")
+        println(x)
+        Thread.sleep(5000)
         Thread.sleep(timeBetweenTests)
     }
 
@@ -80,6 +107,8 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsAgainstRealResponse() {
         val observer = constructorIo.getSearchResults("pork").test()
+        println(constructorIo.getClientId())
+        println(constructorIo.getSessionId())
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.results!!.isNotEmpty()

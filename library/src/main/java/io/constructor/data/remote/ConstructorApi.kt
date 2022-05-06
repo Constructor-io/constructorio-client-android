@@ -1,5 +1,7 @@
 package io.constructor.data.remote
 
+import io.constructor.data.ConstructorData
+import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
@@ -9,6 +11,7 @@ import io.constructor.data.model.recommendations.RecommendationResultViewRequest
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
 
@@ -19,6 +22,12 @@ interface ConstructorApi {
 
     @GET
     fun getAutocompleteResults(@Url autocompleteUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getAutocompleteResultsCRT(@Url autocompleteUrl: String): AutocompleteResponse
+
+    @GET
+    suspend fun getAutocompleteResultsCRT2(@Url autocompleteUrl: String): AutocompleteResponse
 
     @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String,

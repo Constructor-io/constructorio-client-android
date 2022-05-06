@@ -170,6 +170,7 @@ dependencies {
     testImplementation unitTestLibs
     androidTestImplementation androidTestsLibs
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
 }
 
 project.afterEvaluate {
