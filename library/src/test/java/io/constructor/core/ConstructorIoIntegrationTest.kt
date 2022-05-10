@@ -3,7 +3,6 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
-import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -11,9 +10,10 @@ import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlinx.coroutines.*
-import retrofit2.HttpException
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class ConstructorIoIntegrationTest {
 
@@ -43,7 +43,7 @@ class ConstructorIoIntegrationTest {
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
 
-        val config = ConstructorIoConfig("123") // key_K2hlXt5aVSwoI1Uw
+        val config = ConstructorIoConfig("key_K2hlXt5aVSwoI1Uw")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
@@ -51,16 +51,24 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getAutocompleteResultsAgainstRealResponse() {
+        val observer = constructorIo.getAutocompleteResults("pork").test()
+        observer.assertComplete().assertValue {
+            it.get()?.sections!!.isNotEmpty()
+            it.get()?.resultId!!.isNotEmpty()
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getAutocompleteResultsCRTAgainstRealResponse() {
         runBlocking {
             launch {
                 try {
                     val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork")
-                    println(autocompleteResults.resultId)
-                    println(autocompleteResults.sections?.get("Products"))
-                    println(autocompleteResults.sections?.get("Search Suggestions"))
+                    assertTrue(autocompleteResults.sections!!.isNotEmpty())
+                    assertTrue(autocompleteResults.resultId!!.isNotEmpty())
                 } catch (e: Exception) {
                     assertNull(e)
-                    println((e as? HttpException)?.response()?.errorBody()?.string())
                 }
             }
         }
@@ -71,10 +79,7 @@ class ConstructorIoIntegrationTest {
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
-        val x = observer.assertComplete().values()
-        println("PRINTING values")
-        println(x)
-        Thread.sleep(5000)
+        observer.assertComplete();
         Thread.sleep(timeBetweenTests)
     }
 
@@ -95,8 +100,6 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsAgainstRealResponse() {
         val observer = constructorIo.getSearchResults("pork").test()
-        println(constructorIo.getClientId())
-        println(constructorIo.getSessionId())
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.results!!.isNotEmpty()

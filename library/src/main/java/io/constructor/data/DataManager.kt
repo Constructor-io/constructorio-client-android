@@ -17,7 +17,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.*
 
 /**
  * @suppress

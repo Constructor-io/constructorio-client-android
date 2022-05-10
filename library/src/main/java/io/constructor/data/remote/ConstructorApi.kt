@@ -1,6 +1,5 @@
 package io.constructor.data.remote
 
-import io.constructor.data.ConstructorData
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody

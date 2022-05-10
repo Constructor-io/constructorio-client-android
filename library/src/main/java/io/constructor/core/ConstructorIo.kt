@@ -30,7 +30,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Deferred
 import java.util.*
 
 typealias ConstructorError = ((Throwable) -> Unit)?
