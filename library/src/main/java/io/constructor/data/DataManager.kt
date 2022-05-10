@@ -51,27 +51,11 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
     }
 
     suspend fun getAutocompleteResultsCRT(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): AutocompleteResponse {
-        return withContext(Dispatchers.IO) {
-            var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"
-            encodedParams.forEachIndexed { index, pair ->
-                dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-            }
-            val response = async {
-                constructorApi.getAutocompleteResultsCRT(dynamicUrl)
-            }
-            return@withContext response.await()
+        var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
         }
-    }
-    suspend fun getAutocompleteResultsCRT2(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Deferred<AutocompleteResponse> {
-        return withContext(Dispatchers.IO) {
-            var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"
-            encodedParams.forEachIndexed { index, pair ->
-                dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-            }
-            return@withContext async {
-                constructorApi.getAutocompleteResultsCRT(dynamicUrl)
-            }
-        }
+        return constructorApi.getAutocompleteResultsCRT(dynamicUrl)
     }
 
     fun getSearchResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {

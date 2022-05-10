@@ -12,6 +12,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlinx.coroutines.*
+import retrofit2.HttpException
+import kotlin.test.assertNull
 
 class ConstructorIoIntegrationTest {
 
@@ -50,32 +52,18 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getAutocompleteResultsAgainstRealResponse() {
         runBlocking {
-            val x = launch {
-                println("Starting request")
-                val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork")
-                println("Request sent")
-                println(autocompleteResults)
+            launch {
+                try {
+                    val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork")
+                    println(autocompleteResults.resultId)
+                    println(autocompleteResults.sections?.get("Products"))
+                    println(autocompleteResults.sections?.get("Search Suggestions"))
+                } catch (e: Exception) {
+                    assertNull(e)
+                    println((e as? HttpException)?.response()?.errorBody()?.string())
+                }
             }
-            delay(100)
-            println("launch finish")
         }
-        println("test complete")
-        Thread.sleep(timeBetweenTests)
-    }
-
-    @Test
-    fun getAutocompleteResultsAgainstRealResponse2() {
-        runBlocking {
-            val x = launch {
-                println("Starting request")
-                val autocompleteResponse: Deferred<AutocompleteResponse> = constructorIo.getAutocompleteResultsCRT2("pork")
-                println("Request sent")
-                println(autocompleteResponse.await())
-            }
-            delay(100)
-            println("launch finish")
-        }
-        println("test complete")
         Thread.sleep(timeBetweenTests)
     }
 

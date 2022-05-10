@@ -178,23 +178,6 @@ object ConstructorIo {
         return dataManager.getAutocompleteResultsCRT(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
-    suspend fun getAutocompleteResultsCRT2(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): Deferred<AutocompleteResponse> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
-        configMemoryHolder.autocompleteResultCount?.entries?.forEach {
-            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
-        }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        return dataManager.getAutocompleteResultsCRT2(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
-    }
-
     /**
      * Returns a list of search results including filters, categories, sort options, etc.
      * ##Example
