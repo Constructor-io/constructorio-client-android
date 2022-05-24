@@ -7,6 +7,7 @@ import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.search.SearchResponse
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -63,6 +64,9 @@ interface ConstructorApi {
 
     @GET
     fun getSearchResults(@Url searchUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getSearchResultsCRT(@Url autocompleteUrl: String): SearchResponse
 
     @GET
     fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>

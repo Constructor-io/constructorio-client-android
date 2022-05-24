@@ -60,6 +60,14 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getAutocompleteResultsCRTAgainstRealResponse() {
         runBlocking {
             launch {
@@ -76,17 +84,26 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
-    fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
-        val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
-        observer.assertComplete();
+    fun getAutocompleteResultsCRTWithFiltersAgainstRealResponse() {
+        runBlocking {
+            launch {
+                try {
+                    val facet = hashMapOf("storeLocation" to listOf("CA"))
+                    val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork", facet?.map { it.key to it.value })
+                    assertTrue(autocompleteResults.sections!!.isNotEmpty())
+                    assertTrue(autocompleteResults.resultId!!.isNotEmpty())
+                } catch (e: Exception) {
+                    assertNull(e)
+                }
+            }
+        }
         Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackSessionStartAgainstRealResponse() {
         val observer = constructorIo.trackSessionStartInternal().test()
-        observer.assertComplete();
+        observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
 
@@ -115,6 +132,47 @@ class ConstructorIoIntegrationTest {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
         observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getSearchResultsCRTAgainstRealResponse() {
+        runBlocking {
+            launch {
+                try {
+                    val searchResults = constructorIo.getSearchResultsCRT("pork")
+                    assertTrue(searchResults.resultId !== null)
+                    assertTrue(searchResults.response!!.facets!!.isNotEmpty())
+                    assertTrue(searchResults.response!!.groups!!.isNotEmpty())
+                    assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
+                    assertTrue(searchResults.response!!.resultCount!! > 0)
+                } catch (e: Exception) {
+                    assertNull(e)
+                }
+            }
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+
+    @Test
+    fun getSearchResultsCRTWithFiltersAgainstRealResponse() {
+        runBlocking {
+            launch {
+                try {
+                    val facet = hashMapOf("Claims" to listOf("Organic"))
+                    val searchResults = constructorIo.getSearchResultsCRT("pork", facet?.map { it.key to it.value })
+                    println(searchResults)
+                    assertTrue(searchResults.resultId !== null)
+                    assertTrue(searchResults.response!!.facets!!.isNotEmpty())
+                    assertTrue(searchResults.response!!.groups!!.isNotEmpty())
+                    assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
+                    assertTrue(searchResults.response!!.resultCount!! > 0)
+                } catch (e: Exception) {
+                    assertNull(e)
+                }
+            }
+        }
         Thread.sleep(timeBetweenTests)
     }
 

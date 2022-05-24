@@ -160,6 +160,26 @@ object ConstructorIo {
         return dataManager.getAutocompleteResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
+    /**
+     * Returns a list of autocomplete suggestions
+     * ##Example
+     * ```
+     *  runBlocking {
+     *      launch {
+     *          try {
+     *              val autocompleteResults = constructorIo.getAutocompleteResultsCRT("Dav")
+     *              // Do something with autocompleteResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     * @param term the term to search for
+     * @param facets additional facets used to refine results
+     * @param groupId category facet used to refine results
+     * @param hiddenFields show fields that are hidden by default
+     */
     suspend fun getAutocompleteResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): AutocompleteResponse {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
@@ -222,6 +242,54 @@ object ConstructorIo {
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of search results including filters, categories, sort options, etc.
+     * ##Example
+     * ```
+     *  runBlocking {
+     *      launch {
+     *          try {
+     *              val searchResults = constructorIo.getSearchResultsCRT("Dav")
+     *              // Do something with searchResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     * @param term the term to search for
+     * @param facets  additional facets used to refine results
+     * @param page the page number of the results
+     * @param perPage The number of results per page to return
+     * @param groupId category facet used to refine results
+     * @param sortBy the sort method for results
+     * @param sortOrder the sort order for results
+     * @param sectionName the section the results will come from defaults to "Products"
+     * @param hiddenFields show fields that are hidden by default
+     * @param hiddenFacets show facets that are hidden by default
+     */
+    suspend fun getSearchResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): SearchResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
+        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
+        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
+        }
+        hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        hiddenFacets?.forEach { hiddenFacet ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+        return dataManager.getSearchResultsCRT(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
     /**

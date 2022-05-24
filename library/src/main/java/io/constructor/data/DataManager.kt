@@ -81,6 +81,14 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
+    suspend fun getSearchResultsCRT(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): SearchResponse {
+        var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(term)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getSearchResultsCRT(dynamicUrl)
+    }
+
     fun trackAutocompleteSelect(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
         return constructorApi.trackAutocompleteSelect(term, params.toMap(), encodedParams.toMap())
     }
