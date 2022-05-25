@@ -145,6 +145,14 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
         }.toObservable()
     }
 
+    suspend fun getBrowseResultsCRT(filterName: String, filterValue: String, encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseResponse {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE.format(filterName, filterValue)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getBrowseResultsCRT(dynamicUrl)
+    }
+
     fun trackBrowseResultsLoaded(browseResultLoadRequestBody: BrowseResultLoadRequestBody, params: Array<Pair<String, String>>): Completable {
         return constructorApi.trackBrowseResultsLoaded(browseResultLoadRequestBody, params.toMap())
     }
@@ -175,6 +183,14 @@ constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi
                 ConstructorData.error(it.error())
             }
         }.toObservable()
+    }
+
+    suspend fun getRecommendationResultsCRT(podId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): RecommendationsResponse {
+        var dynamicUrl = "/${ApiPaths.URL_RECOMMENDATIONS.format(podId)}"
+        encodedParams.forEachIndexed { index, pair ->
+            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+        }
+        return constructorApi.getRecommendationResultsCRT(dynamicUrl)
     }
 
     fun trackRecommendationResultClick(recommendationResultClickRequestBody: RecommendationResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {

@@ -1,12 +1,14 @@
 package io.constructor.data.remote
 
 import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -71,6 +73,9 @@ interface ConstructorApi {
     @GET
     fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>
 
+    @GET
+    suspend fun getBrowseResultsCRT(@Url browseUrl: String): BrowseResponse
+
     @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
     fun trackBrowseResultClick(@Body browseResultClickRequestBody: BrowseResultClickRequestBody,
                                @QueryMap params: Map<String, String?>,
@@ -82,6 +87,9 @@ interface ConstructorApi {
 
     @GET
     fun getRecommendationResults(@Url recommendationUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getRecommendationResultsCRT(@Url recommendationUrl: String): RecommendationsResponse
 
     @POST(ApiPaths.URL_RECOMMENDATION_RESULT_CLICK_EVENT)
     fun trackRecommendationResultClick(@Body recommendationResultClickRequestBody: RecommendationResultClickRequestBody,
