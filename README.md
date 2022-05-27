@@ -107,7 +107,7 @@ ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }
 ### Alternative using Request Builder or DSL
 ```kotlin
 // Creating a request using Request Builder
-val request = SearchRequest.Builder("potato")
+val searchRequest = SearchRequest.Builder("potato")
   .setFilters(mapOf(
     "group_id" to listOf("G123"),
     "Brand" to listOf("Kings Hawaiin")
@@ -116,7 +116,7 @@ val request = SearchRequest.Builder("potato")
   .build()
 
 // Creating a request using DSL
-val request = SearchRequest.build("potato") {
+val searchRequest = SearchRequest.build("potato") {
   filters = mapOf(
     "group_id" to listOf("G123"),
     "Brand" to listOf("Kings Hawaiin")
@@ -124,7 +124,7 @@ val request = SearchRequest.build("potato") {
   hiddenFields = listOf("hidden_field_1", "hidden_field_2")
 }
 
-ConstructorIo.getSearchResults(request)
+ConstructorIo.getSearchResults(searchRequest)
 ```
 
 ## 6. Request Browse Results
