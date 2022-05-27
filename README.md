@@ -55,6 +55,35 @@ ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.va
 }
 ```
 
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val autocompleteRequest = AutocompleteRequest.Builder("potato")
+  .setNumResultsPerSection(mapOf(
+    "Products" to 6,
+    "Search Suggestions" to 8
+  ))
+  .setFilters(mapOf(
+    "group_id" to listOf("G123"),
+    "availability" to listOf("US", "CA")
+  ))
+  .build()
+
+// Creating a request using DSL
+val autocompleteRequest = AutocompleteRequest.build("potato") {
+  numResultsPerSection = mapOf(
+    "Products" to 6,
+    "Search Suggestions" to 8
+  )
+  filters = mapOf(
+    "group_id" to listOf("G123"),
+    "availability" to listOf("US", "CA")
+  )
+}
+
+constructorIo.getAutocompleteResults(autocompleteRequest)
+```
+
 ## 5. Request Search Results
 
 ```kotlin
@@ -73,6 +102,29 @@ ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }
     }
   }
 }
+```
+
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val request = SearchRequest.Builder("potato")
+  .setFilters(mapOf(
+    "group_id" to listOf("G123"),
+    "Brand" to listOf("Kings Hawaiin")
+  ))
+  .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
+  .build()
+
+// Creating a request using DSL
+val request = SearchRequest.build("potato") {
+  filters = mapOf(
+    "group_id" to listOf("G123"),
+    "Brand" to listOf("Kings Hawaiin")
+  )
+  hiddenFields = listOf("hidden_field_1", "hidden_field_2")
+}
+
+ConstructorIo.getSearchResults(request)
 ```
 
 ## 6. Request Browse Results
@@ -96,6 +148,31 @@ ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it
 }
 ```
 
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val browseRequest = BrowseRequest.Builder("group_id", "123")
+  .setFilters(mapOf(
+    "group_id" to listOf("G1234"),
+    "Brand" to listOf("Cnstrc")
+    "Color" to listOf("Red", "Blue")
+  ))
+  .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+  .build()
+
+// Creating a request using DSL
+val browseRequest = BrowseRequest.build("group_id", "123") {
+  filters = mapOf(
+    "group_id" to listOf("G1234"),
+    "Brand" to listOf("Cnstrc")
+    "Color" to listOf("Red", "Blue")
+  )
+  hiddenFacets = listOf("hidden_facet_1", "hidden_facet_2")
+}
+
+ConstructorIo.getBrowseResults(browseRequest)
+```
+
 ## 7. Request Recommendation Results
 
 ```kotlin
@@ -113,6 +190,21 @@ ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it
     }
   }
 }
+```
+
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val recommendationsRequest = RecommendationsRequest.Builder("product_detail_page")
+  .setItemIds(listOf("item_id_123"))
+  .build()
+
+// Creating a request using DSL
+val recommendationsRequest = RecommendationsRequest.build("product_detail_page") {
+  itemIds = listOf("item_id_123")
+}
+
+ConstructorIo.getRecommendationResults(recommendationsRequest)
 ```
 
 ## 8. Instrument Behavioral Events

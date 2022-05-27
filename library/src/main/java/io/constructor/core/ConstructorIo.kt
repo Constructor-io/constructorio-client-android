@@ -173,12 +173,12 @@ object ConstructorIo {
      *      "Brand" to listOf("Cnstrc")
      *      "Color" to listOf("Red", "Blue")
      * )
-     * val query = AutocompleteRequest.Builder("Dav")
+     * val request = AutocompleteRequest.Builder("Dav")
      *      .setFilters(filters)
-     *      .setHiddenFields(listOf("hidden_field_1", "hidden_field_2")
+     *      .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
      *      .build()
      *
-     * ConstructorIo.getAutocompleteResults(query)
+     * ConstructorIo.getAutocompleteResults(request)
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -273,12 +273,12 @@ object ConstructorIo {
      *      "Brand" to listOf("Cnstrc")
      *      "Color" to listOf("Red", "Blue")
      * )
-     * val query = SearchRequest.Builder("Dav")
+     * val request = SearchRequest.Builder("Dav")
      *      .setFilters(filters)
-     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2")
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
      *      .build()
      *
-     * ConstructorIo.getSearchResults(query)
+     * ConstructorIo.getSearchResults(request)
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -378,12 +378,12 @@ object ConstructorIo {
      *      "Brand" to listOf("Cnstrc")
      *      "Color" to listOf("Red", "Blue")
      * )
-     * val query = BrowseRequest.Builder("group_id", "123")
+     * val request = BrowseRequest.Builder("group_id", "123")
      *      .setFilters(filters)
-     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2")
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
      *      .build()
      *
-     * ConstructorIo.getBrowseResults(query)
+     * ConstructorIo.getBrowseResults(request)
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -788,11 +788,11 @@ object ConstructorIo {
      * Returns a list of recommendation results for the specified pod
      * ## Example
      * ```
-     * val query = BrowseRequest.Builder("product_detail_page")
+     * val request = RecommendationsRequest.Builder("product_detail_page")
      *      .setItemIds(listOf("item_id_123"))
      *      .build()
      *
-     * ConstructorIo.getRecommendationResults(query)
+     * ConstructorIo.getRecommendationResults(request)
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
