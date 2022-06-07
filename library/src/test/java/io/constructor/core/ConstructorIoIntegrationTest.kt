@@ -259,4 +259,16 @@ class ConstructorIoIntegrationTest {
         }
         Thread.sleep(timeBetweenTests)
     }
+
+    @Test
+    fun getBrowseResultsWithCollectionAgainstRealResponse() {
+        val observer = constructorIo.getBrowseResults("collection_id", "test-collection").test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.collection?.id == "test-collection"
+            it.get()?.response?.collection?.displayName == "test collection"
+        }
+        Thread.sleep(timeBetweenTests)
+    }
 }
