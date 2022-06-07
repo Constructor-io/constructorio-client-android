@@ -167,7 +167,6 @@ class ConstructorIoBrowseTest {
         val observer = constructorIo.getBrowseResults("collection_id", "test-collection").test()
         val request = mockServer.takeRequest()
         val path = "/browse/collection_id/test-collection?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.1&_dt="
-        print(request.path)
         assert(request.path!!.startsWith(path))
     }
 }
