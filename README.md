@@ -21,7 +21,10 @@ import io.constructor.core.ConstructorIo
 import io.constructor.core.ConstructorIoConfig
 
 // Create the client config
-let config = ConstructorIoConfig("YOUR API KEY")
+let config = ConstructorIoConfig(
+  apiKey = "YOUR API KEY",
+  serviceUrl = "ac.cnstrc.com" // default
+)
 
 // Create the client instance
 ConstructorIo.init(this, config)
