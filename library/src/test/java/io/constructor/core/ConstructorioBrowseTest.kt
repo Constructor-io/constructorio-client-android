@@ -188,4 +188,14 @@ class ConstructorIoBrowseTest {
         val path = "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
         assert(request.path!!.startsWith(path))
     }
+
+    @Test
+    fun getBrowseResultWithGroupsSort() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getBrowseResults(filterName = "group_id", filterValue = "Beverages", groupsSortBy = "value", groupsSortOrder = "ascending").test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.2&_dt="
+        assert(request.path!!.startsWith(path))
+    }
 }
