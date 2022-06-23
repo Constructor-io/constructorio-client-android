@@ -1,6 +1,7 @@
 package io.constructor.core
 
 import android.content.Context
+import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.test.createTestDataManager
@@ -182,6 +183,23 @@ class ConstructorIoSearchTest {
         val observer = constructorIo.getSearchResults("2% cheese").test()
         val request = mockServer.takeRequest()
         val path = "/search/2%25%20cheese?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.2&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getSearchResultsWithFiltersUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val filters = mapOf(
+            "Brand" to listOf("Signature Farms", "Del Monte"),
+            "Nutrition" to listOf("Organic")
+        )
+        val searchRequest = SearchRequest.Builder("bbq")
+                .setFilters(filters)
+                .build()
+        val observer = constructorIo.getSearchResults(searchRequest).test()
+        val request = mockServer.takeRequest()
+        val path = "/search/bbq?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.1"
         assert(request.path!!.startsWith(path))
     }
 }

@@ -5,6 +5,10 @@ import android.content.Context
 import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
+import io.constructor.data.builder.AutocompleteRequest
+import io.constructor.data.builder.BrowseRequest
+import io.constructor.data.builder.RecommendationsRequest
+import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
@@ -161,6 +165,57 @@ object ConstructorIo {
     }
 
     /**
+     * Returns a list of autocomplete suggestions
+     * ## Example
+     * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val request = AutocompleteRequest.Builder("Dav")
+     *      .setFilters(filters)
+     *      .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
+     *      .build()
+     *
+     * ConstructorIo.getAutocompleteResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the autocomplete request object
+     */
+    fun getAutocompleteResults(request: AutocompleteRequest): Observable<ConstructorData<AutocompleteResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.filters?.forEach { filter ->
+            if (filter.key == "group_id") {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.urlEncode())
+                }
+            } else {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
+                }
+            }
+        }
+        request.numResultsPerSection?.forEach { section ->
+            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+section.key, section.value.toString()))
+        }
+        request.hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+
+        return dataManager.getAutocompleteResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
      * Returns a list of search results including filters, categories, sort options, etc.
      * ##Example
      * ```
@@ -187,6 +242,7 @@ object ConstructorIo {
      */
     fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
         perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
@@ -204,7 +260,64 @@ object ConstructorIo {
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of search results including filters, categories, sort options, etc.
+     * ## Example
+     * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val request = SearchRequest.Builder("Dav")
+     *      .setFilters(filters)
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+     *      .build()
+     *
+     * ConstructorIo.getSearchResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the search request object
+     */
+    fun getSearchResults(request: SearchRequest): Observable<ConstructorData<SearchResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
+        request.perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
+        request.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        request.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        request.filters?.forEach { filter ->
+            if (filter.key == "group_id") {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.urlEncode())
+                }
+            } else {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
+                }
+            }
+        }
+        request.hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        request.hiddenFacets?.forEach { hiddenFacet ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+
+        return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
     /**
@@ -254,6 +367,62 @@ object ConstructorIo {
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of browse results including filters, categories, sort options, etc.
+     * ## Example
+     * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val request = BrowseRequest.Builder("group_id", "123")
+     *      .setFilters(filters)
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+     *      .build()
+     *
+     * ConstructorIo.getBrowseResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the search request object
+     */
+    fun getBrowseResults(request: BrowseRequest): Observable<ConstructorData<BrowseResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
+        request.perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
+        request.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        request.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        request.filters?.forEach { filter ->
+            if (filter.key == "group_id") {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.urlEncode())
+                }
+            } else {
+                filter.value.forEach {
+                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
+                }
+            }
+        }
+        request.hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        request.hiddenFacets?.forEach { hiddenFacet ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+
+        return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
@@ -580,7 +749,7 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of search results including filters, categories, sort options, etc.
+     * Returns a list of recommendation results for the specified pod
      * ##Example
      * ```
      * ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
@@ -613,6 +782,48 @@ object ConstructorIo {
             }
         }
         return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of recommendation results for the specified pod
+     * ## Example
+     * ```
+     * val request = RecommendationsRequest.Builder("product_detail_page")
+     *      .setItemIds(listOf("item_id_123"))
+     *      .build()
+     *
+     * ConstructorIo.getRecommendationResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param podId the pod id
+     * @param filters additional filters used to refine results (strategy specific)
+     * @param itemIds the list of item ids to retrieve recommendations for (strategy specific)
+     * @param term the term to use to refine results (strategy specific)
+     * @param numResults the number of results to return
+     * @param section the section the results will come from, i.e. "Products"
+     */
+    fun getRecommendationResults(request: RecommendationsRequest): Observable<ConstructorData<RecommendationsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        request.filters?.forEach { filter ->
+            filter.value.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
+            }
+        }
+        request.itemIds?.forEach { itemId ->
+            encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.urlEncode())
+        }
+        request.term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to it.urlEncode()) }
+        request.numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to it.toString().urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        return dataManager.getRecommendationResults(request.podId, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
