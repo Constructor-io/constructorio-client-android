@@ -187,6 +187,16 @@ class ConstructorIoSearchTest {
     }
 
     @Test
+    fun getSearchResultsWithGroupsSort() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getSearchResults(term = "bbq", groupsSortBy = "value", groupsSortOrder = "descending").test()
+        val request = mockServer.takeRequest()
+        val path = "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=descending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getSearchResultsWithFiltersUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
@@ -204,12 +214,16 @@ class ConstructorIoSearchTest {
     }
 
     @Test
-    fun getSearchResultsWithGroupsSort() {
+    fun getSearchResultsWithGroupsSortUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getSearchResults(term = "bbq", groupsSortBy = "value", groupsSortOrder = "descending").test()
+        val searchRequest = SearchRequest.Builder("bbq")
+                .setGroupsSortBy("value")
+                .setGroupsSortOrder("ascending")
+                .build()
+        val observer = constructorIo.getSearchResults(searchRequest).test()
         val request = mockServer.takeRequest()
-        val path = "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=descending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.14.2&_dt="
+        val path = "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

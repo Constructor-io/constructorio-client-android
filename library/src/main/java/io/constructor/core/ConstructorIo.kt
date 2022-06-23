@@ -319,6 +319,8 @@ object ConstructorIo {
         request.hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+        request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
+        request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
 
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -428,6 +430,8 @@ object ConstructorIo {
         request.hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+        request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
+        request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
 
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
     }

@@ -17,6 +17,8 @@ class BrowseRequestTest {
     private val section = "Search Suggestions"
     private val hiddenFields = listOf("hidden_field_1", "hidden_field_2")
     private val hiddenFacets = listOf("hidden_facet_1", "hidden_facet_2")
+    private val groupsSortBy = "value"
+    private val groupsSortOrder = "ascending"
 
     @Test
     fun browseRequestUsingBuilder() {
@@ -78,6 +80,16 @@ class BrowseRequestTest {
     }
 
     @Test
+    fun browseRequestWithGroupsSortOptionUsingBuilder() {
+        val request = BrowseRequest.Builder(filterName, filterValue)
+                .setGroupsSortBy(groupsSortBy)
+                .setGroupsSortOrder(groupsSortOrder)
+                .build()
+        assertEquals(request.groupsSortBy, groupsSortBy)
+        assertEquals(request.groupsSortOrder, groupsSortOrder)
+    }
+
+    @Test
     fun browseRequestWithParamsUsingDSL() {
         val request = BrowseRequest.build(filterName, filterValue) {
             filters = this@BrowseRequestTest.filtersToApply
@@ -88,6 +100,8 @@ class BrowseRequestTest {
             section = this@BrowseRequestTest.section
             hiddenFields = this@BrowseRequestTest.hiddenFields
             hiddenFacets = this@BrowseRequestTest.hiddenFacets
+            groupsSortBy = this@BrowseRequestTest.groupsSortBy
+            groupsSortOrder = this@BrowseRequestTest.groupsSortOrder
         }
 
         assertEquals(request.filterName, filterName)
@@ -100,5 +114,7 @@ class BrowseRequestTest {
         assertEquals(request.section, section)
         assertEquals(request.hiddenFields, hiddenFields)
         assertEquals(request.hiddenFacets, hiddenFacets)
+        assertEquals(request.groupsSortBy, groupsSortBy)
+        assertEquals(request.groupsSortOrder, groupsSortOrder)
     }
 }
