@@ -317,6 +317,20 @@ object ConstructorIo {
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
 
+        if (request.variationsMap != null) {
+//            request.variationsMap?.groupBy?.forEach { group ->
+//                group.name
+//                group.field
+//            }
+            request.variationsMap.values.forEach { value ->
+                var string = ""
+                println(value)
+//                var aggregation = value.value.aggregation
+//                var field = value.field.urlEncode()
+            }
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to "")
+        }
+
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 

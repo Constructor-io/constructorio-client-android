@@ -1,5 +1,7 @@
 package io.constructor.data.builder
 
+import io.constructor.data.model.common.VariationsMap
+
 /**
  * Create a Search request object utilizing a builder
  */
@@ -13,7 +15,8 @@ class SearchRequest (
     val section: String? = null,
     val hiddenFields: List<String>? = null,
     val hiddenFacets: List<String>? = null,
-) {
+    val variationsMap: VariationsMap? = null,
+    ) {
     private constructor(builder: Builder) : this(
         builder.term,
         builder.filters,
@@ -24,6 +27,7 @@ class SearchRequest (
         builder.section,
         builder.hiddenFields,
         builder.hiddenFacets,
+        builder.variationsMap,
     )
 
     companion object {
@@ -41,6 +45,7 @@ class SearchRequest (
         var section: String? = null
         var hiddenFields: List<String>? = null
         var hiddenFacets: List<String>? = null
+        var variationsMap: VariationsMap? = null
 
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
         fun setPage(page: Int): Builder = apply { this.page = page }
@@ -50,6 +55,7 @@ class SearchRequest (
         fun setSection(section: String): Builder = apply { this.section = section }
         fun setHiddenFields(hiddenFields: List<String>): Builder = apply { this.hiddenFields = hiddenFields }
         fun setHiddenFacets(hiddenFacets: List<String>): Builder = apply { this.hiddenFacets = hiddenFacets }
+        fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
         fun build(): SearchRequest = SearchRequest(this)
     }
 }
