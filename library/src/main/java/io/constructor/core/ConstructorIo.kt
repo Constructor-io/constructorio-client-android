@@ -975,15 +975,4 @@ object ConstructorIo {
                 arrayOf(Constants.QueryConstants.SECTION to section)
         )
     }
-
-    private fun addQuotes(str: String): String {
-        return str.replace("=", ":")
-                .replace("\\{([a-zA-Z])".toRegex(),"{\"$1")
-                .replace("([a-zA-Z])}".toRegex(),"$1\"}")
-                .replace("([a-zA-Z]):".toRegex(),"$1\":")
-                .replace(":([a-zA-Z])".toRegex(),":\"$1")
-                .replace("([a-zA-Z]),".toRegex(),"$1\",")
-                .replace(",([a-zA-Z])".toRegex(),",\"$1")
-                .replace("\\s([a-zA-Z])".toRegex(),"\"$1")
-    }
 }
