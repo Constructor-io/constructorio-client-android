@@ -318,6 +318,18 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getAutocompleteResultsAgainstRealResponseWithVariationsMapUsingRequestBuilder() {
+        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")), listOf(mapOf("name" to "Country", "field" to "data.facets.Country")))
+        val request = AutocompleteRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
+        val observer = constructorIo.getAutocompleteResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.sections!!.isNotEmpty()
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getSearchResultAgainstRealResponseUsingRequestBuilder() {
         val request = SearchRequest.Builder("pork").build()
         val observer = constructorIo.getSearchResults(request).test()

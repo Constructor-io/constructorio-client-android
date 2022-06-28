@@ -51,6 +51,8 @@ object ConstructorIo {
     private lateinit var configMemoryHolder: ConfigMemoryHolder
     private lateinit var context: Context
     private var disposable = CompositeDisposable()
+    private val moshi = Moshi.Builder().build()
+    private val jsonAdapter = moshi.adapter(VariationsMap::class.java)
 
     /**
      *  Sets the logged in user identifier
@@ -148,8 +150,9 @@ object ConstructorIo {
      * @param facets additional facets used to refine results
      * @param groupId category facet used to refine results
      * @param hiddenFields show fields that are hidden by default
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         facets?.forEach { facet ->
@@ -163,6 +166,12 @@ object ConstructorIo {
         hiddenFields?.forEach { hiddenField ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
         }
+        variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
+
         return dataManager.getAutocompleteResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
@@ -212,6 +221,11 @@ object ConstructorIo {
         }
         request.hiddenFields?.forEach { hiddenField ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        request.variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
         }
 
         return dataManager.getAutocompleteResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
@@ -268,17 +282,9 @@ object ConstructorIo {
         groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
         groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
         variationsMap?.let {
-            val dtype = variationsMap.dtype
-            val groupBy = variationsMap.groupBy
-            val values = variationsMap.values
-            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
+            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
 
-            if (groupBy != null) {
-                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
-            }
-
-            urlString = "${addQuotes(urlString)}}"
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
         }
 
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
@@ -338,22 +344,10 @@ object ConstructorIo {
         }
         request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
         request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
+        request.variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
 
-        if (request.variationsMap != null) {
-            val dtype = request.variationsMap.dtype
-            val groupBy = request.variationsMap.groupBy
-            val values = request.variationsMap.values
-            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
-
-            if (groupBy != null) {
-                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
-            }
-
-            val moshi = Moshi.Builder().build();
-            val jsonAdapter = moshi.adapter(VariationsMap::class.java)
-            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", "group_by")
-
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString)
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
         }
 
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
@@ -410,18 +404,10 @@ object ConstructorIo {
         }
         groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
         groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
-        variationsMap?. let {
-            val dtype = variationsMap.dtype
-            val groupBy = variationsMap.groupBy
-            val values = variationsMap.values
-            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
+        variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
 
-            if (groupBy != null) {
-                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
-            }
-
-            urlString = "${addQuotes(urlString)}}"
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
         }
 
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
@@ -481,19 +467,10 @@ object ConstructorIo {
         }
         request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
         request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
+        request.variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
 
-        if (request.variationsMap != null) {
-            val dtype = request.variationsMap.dtype
-            val groupBy = request.variationsMap.groupBy
-            val values = request.variationsMap.values
-            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
-
-            if (groupBy != null) {
-                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
-            }
-
-            urlString = "${addQuotes(urlString)}}"
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
         }
 
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())

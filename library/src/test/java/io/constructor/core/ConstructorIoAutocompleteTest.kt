@@ -4,6 +4,7 @@ import android.content.Context
 import io.constructor.data.builder.AutocompleteRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -179,7 +180,6 @@ class ConstructorIoAutocompleteTest {
         assert(request.path!!.startsWith(path))
     }
 
-
     @Test
     fun getAutocompleteResultsWithNumResultsPerSectionUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
@@ -198,6 +198,24 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic?num_results_Products=5&num_results_Search%20Suggestions=10&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.16.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getAutocompleteResultsWithVariationsMapUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")), listOf(mapOf("name" to "Country", "field" to "data.facets.Country")))
+        val autocompleteRequest = AutocompleteRequest.Builder("titanic")
+                .setVariationsMap(variationsMap)
+                .build()
+        val observer = constructorIo.getAutocompleteResults(autocompleteRequest).test()
+        observer.assertComplete().assertValue {
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isNotEmpty()!! && suggestions.size == 5
+        }
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/titanic?variations_map=%7B%22dtype%22%3A%22array%22%2C%22group_by%22%3A%5B%7B%22name%22%3A%22Country%22%2C%22field%22%3A%22data.facets.Country%22%7D%5D%2C%22values%22%3A%7B%22Price%22%3A%7B%22aggregation%22%3A%22min%22%2C%22field%22%3A%22data.facets.price%22%7D%2C%22Country%22%3A%7B%22aggregation%22%3A%22all%22%2C%22field%22%3A%22data.facets.country%22%7D%7D%7D&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.16.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

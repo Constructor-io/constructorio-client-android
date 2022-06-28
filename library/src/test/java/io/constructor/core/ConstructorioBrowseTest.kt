@@ -223,7 +223,7 @@ class ConstructorIoBrowseTest {
                 .build()
         val observer = constructorIo.getBrowseResults(browseRequest).test()
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?variations_map={%22dtype%22:%22array%22,%22values%22:{%22Price%22:{%22aggregation%22:%22min%22,%22field%22:%22data.facets.price%22},%22Country%22:{%22aggregation%22:%22all%22,%22field%22:%22data.facets.country%22}},%22group_by%22:[{%22name%22:%22Country%22,%22field%22:%22data.facets.Country%22}]}&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
+        val path = "/browse/group_id/Beverages?variations_map=%7B%22dtype%22%3A%22array%22%2C%22group_by%22%3A%5B%7B%22name%22%3A%22Country%22%2C%22field%22%3A%22data.facets.Country%22%7D%5D%2C%22values%22%3A%7B%22Price%22%3A%7B%22aggregation%22%3A%22min%22%2C%22field%22%3A%22data.facets.price%22%7D%2C%22Country%22%3A%7B%22aggregation%22%3A%22all%22%2C%22field%22%3A%22data.facets.country%22%7D%7D%7D&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.16.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
