@@ -49,6 +49,9 @@ class Constants {
         const val ITEM_ID = "item_id"
         const val TERM = "term"
         const val VARIATIONS_MAP = "variations_map"
+        const val DTYPE = "dtype"
+        const val VALUES = "values"
+        const val GROUP_BY = "group_by"
     }
 
     object QueryValues {

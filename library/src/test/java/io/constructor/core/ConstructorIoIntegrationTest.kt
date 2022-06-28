@@ -7,6 +7,7 @@ import io.constructor.data.builder.RecommendationsRequest
 import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -302,8 +303,40 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getSearchResultAgainstRealResponseWithVariationsMapUsingRequestBuilder() {
+        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")), listOf(mapOf("name" to "Country", "field" to "data.facets.Country")))
+        val request = SearchRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
+        val observer = constructorIo.getSearchResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getBrowseResultAgainstRealResponseUsingRequestBuilder() {
         val request = BrowseRequest.Builder("group_id", "431").build()
+        val observer = constructorIo.getBrowseResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultAgainstRealResponseWithVariationsMapUsingRequestBuilder() {
+        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")), listOf(mapOf("name" to "Country", "field" to "data.facets.Country")))
+        val request = BrowseRequest.Builder("group_id", "431").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getBrowseResults(request).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null

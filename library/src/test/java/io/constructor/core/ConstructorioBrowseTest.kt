@@ -5,6 +5,7 @@ import io.constructor.data.builder.BrowseRequest
 import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -186,6 +187,20 @@ class ConstructorIoBrowseTest {
         val observer = constructorIo.getBrowseResults(browseRequest).test()
         val request = mockServer.takeRequest()
         val path = "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getBrowseResultsWithVariationsMapsUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")), listOf(mapOf("name" to "Country", "field" to "data.facets.Country")))
+        val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
+                .setVariationsMap(variationsMap)
+                .build()
+        val observer = constructorIo.getBrowseResults(browseRequest).test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?variations_map={%22dtype%22:%22array%22,%22values%22:{%22Price%22:{%22aggregation%22:%22min%22,%22field%22:%22data.facets.price%22},%22Country%22:{%22aggregation%22:%22all%22,%22field%22:%22data.facets.country%22}},%22group_by%22:[{%22name%22:%22Country%22,%22field%22:%22data.facets.Country%22}]}&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

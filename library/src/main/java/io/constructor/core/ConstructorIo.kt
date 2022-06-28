@@ -318,17 +318,17 @@ object ConstructorIo {
         }
 
         if (request.variationsMap != null) {
-//            request.variationsMap?.groupBy?.forEach { group ->
-//                group.name
-//                group.field
-//            }
-            request.variationsMap.values.forEach { value ->
-                var string = ""
-                println(value)
-//                var aggregation = value.value.aggregation
-//                var field = value.field.urlEncode()
+            val dtype = request.variationsMap.dtype
+            val groupBy = request.variationsMap.groupBy
+            val values = request.variationsMap.values
+            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
+
+            if (groupBy != null) {
+                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
             }
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to "")
+
+            urlString = "${addQuotes(urlString)}}"
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
         }
 
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
@@ -434,6 +434,20 @@ object ConstructorIo {
         }
         request.hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+
+        if (request.variationsMap != null) {
+            val dtype = request.variationsMap.dtype
+            val groupBy = request.variationsMap.groupBy
+            val values = request.variationsMap.values
+            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
+
+            if (groupBy != null) {
+                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
+            }
+
+            urlString = "${addQuotes(urlString)}}"
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
         }
 
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
@@ -853,7 +867,7 @@ object ConstructorIo {
      * @param sectionName The section that the results came from, i.e. "Products"
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param numResultsPerPage The count of recommendation results on each page
-     * @param resultPage The current page that recommedantion result is on
+     * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
      * @param resultPositionOnPage The position of the recommendation result that was clicked on
      */
@@ -901,7 +915,7 @@ object ConstructorIo {
      * ```
      * @param podId The pod id
      * @param numResultsViewed The count of recommendation results being viewed
-     * @param resultPage The current page that recommedantion result is on
+     * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param sectionName The section that the results came from, i.e. "Products"
@@ -937,5 +951,16 @@ object ConstructorIo {
                 recommendationResultViewRequestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section)
         )
+    }
+
+    private fun addQuotes(str: String): String {
+        return str.replace("=", ":")
+                .replace("\\{([a-zA-Z])".toRegex(),"{\"$1")
+                .replace("([a-zA-Z])}".toRegex(),"$1\"}")
+                .replace("([a-zA-Z]):".toRegex(),"$1\":")
+                .replace(":([a-zA-Z])".toRegex(),":\"$1")
+                .replace("([a-zA-Z]),".toRegex(),"$1\",")
+                .replace(",([a-zA-Z])".toRegex(),",\"$1")
+                .replace("\\s([a-zA-Z])".toRegex(),"\"$1")
     }
 }
