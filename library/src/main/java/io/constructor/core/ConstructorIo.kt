@@ -2,6 +2,7 @@ package io.constructor.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.squareup.moshi.Moshi
 import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
@@ -15,8 +16,8 @@ import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
-import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.common.ResultGroup
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
@@ -348,8 +349,11 @@ object ConstructorIo {
                 urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
             }
 
-            urlString = "${addQuotes(urlString)}}"
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
+            val moshi = Moshi.Builder().build();
+            val jsonAdapter = moshi.adapter(VariationsMap::class.java)
+            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", "group_by")
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString)
         }
 
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
