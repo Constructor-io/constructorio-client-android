@@ -240,6 +240,36 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getSearchResultsWithGroupsSortValueAscendingAgainstRealResponse() {
+        val observer = constructorIo.getSearchResults(
+            term = "pork",
+            groupsSortBy = "value",
+            groupsSortOrder = "ascending"
+        ).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.groups?.get(0)?.displayName == "Dairy"
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getSearchResultsWithGroupsSortValueDescendingAgainstRealResponse() {
+        val observer = constructorIo.getSearchResults(
+            term = "pork",
+            groupsSortBy = "value",
+            groupsSortOrder = "descending"
+        ).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.groups?.get(0)?.displayName == "Meat & Poultry"
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getBrowseResultsWithHiddenFieldsAgainstRealResponse() {
         val hiddenFields = listOf("hiddenField1", "hiddenField2")
         val observer = constructorIo.getBrowseResults("group_id", "431", null, null, null, null, null, null, null, hiddenFields).test()
@@ -358,6 +388,40 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.pod !== null
             it.get()?.response?.results !== null
             it.get()?.response?.resultCount!! >= 0
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsWithGroupsSortValueAscendingAgainstRealResponse() {
+        val observer = constructorIo.getBrowseResults(
+            filterName = "group_id",
+            filterValue = "431",
+            groupsSortBy = "value",
+            groupsSortOrder = "ascending",
+        ).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.groups?.get(0)?.displayName == "Grocery"
+            it.get()?.response?.groups?.get(0)?.children?.get(0)?.displayName == "Baby"
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsWithGroupsSortValueDescendingAgainstRealResponse() {
+        val observer = constructorIo.getBrowseResults(
+            filterName = "group_id",
+            filterValue = "431",
+            groupsSortBy = "value",
+            groupsSortOrder = "descending",
+        ).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.groups?.get(0)?.displayName == "Grocery"
+            it.get()?.response?.groups?.get(0)?.children?.get(0)?.displayName == "Pet"
         }
         Thread.sleep(timeBetweenTests)
     }

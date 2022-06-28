@@ -12,18 +12,18 @@ import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
-import io.constructor.data.model.common.ResultGroup
-import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
-import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.common.VariationsMap
+import io.constructor.data.model.common.ResultGroup
+import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
-import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.RecommendationsResponse
+import io.constructor.data.model.search.SearchResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -240,10 +240,11 @@ object ConstructorIo {
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
      * @param hiddenFacets show facets that are hidden by default
+     * @param groupsSortBy the sort method for groups
+     * @param groupsSortOrder the sort order for groups
      * @param variationsMap specify which attributes within variations should be returned
-
      */
-    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<SearchResponse>> {
+    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
@@ -263,7 +264,8 @@ object ConstructorIo {
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
-
+        groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
+        groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
         variationsMap?.let {
             val dtype = variationsMap.dtype
             val groupBy = variationsMap.groupBy
@@ -333,6 +335,8 @@ object ConstructorIo {
         request.hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+        request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
+        request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
 
         if (request.variationsMap != null) {
             val dtype = request.variationsMap.dtype
@@ -377,9 +381,11 @@ object ConstructorIo {
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
      * @param hiddenFacets show facets that are hidden by default
+     * @param groupsSortBy the sort method for groups
+     * @param groupsSortOrder the sort order for groups
      * @param variationsMap specify which attributes within variations should be returned
      */
-    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<BrowseResponse>> {
+    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
@@ -398,7 +404,8 @@ object ConstructorIo {
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
-
+        groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
+        groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
         variationsMap?. let {
             val dtype = variationsMap.dtype
             val groupBy = variationsMap.groupBy
@@ -468,6 +475,8 @@ object ConstructorIo {
         request.hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+        request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
+        request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
 
         if (request.variationsMap != null) {
             val dtype = request.variationsMap.dtype

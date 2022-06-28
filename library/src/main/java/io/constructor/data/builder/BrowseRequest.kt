@@ -16,6 +16,8 @@ class BrowseRequest (
     val section: String? = null,
     val hiddenFields: List<String>? = null,
     val hiddenFacets: List<String>? = null,
+    val groupsSortBy: String? = null,
+    val groupsSortOrder: String? = null,
     val variationsMap: VariationsMap? = null
 ) {
     private constructor(builder: Builder) : this(
@@ -29,6 +31,8 @@ class BrowseRequest (
         builder.section,
         builder.hiddenFields,
         builder.hiddenFacets,
+        builder.groupsSortBy,
+        builder.groupsSortOrder,
         builder.variationsMap,
     )
 
@@ -48,6 +52,8 @@ class BrowseRequest (
         var section: String? = null
         var hiddenFields: List<String>? = null
         var hiddenFacets: List<String>? = null
+        var groupsSortBy: String? = null
+        var groupsSortOrder: String? = null
         var variationsMap: VariationsMap? = null
 
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
@@ -58,6 +64,8 @@ class BrowseRequest (
         fun setSection(section: String): Builder = apply { this.section = section }
         fun setHiddenFields(hiddenFields: List<String>): Builder = apply { this.hiddenFields = hiddenFields }
         fun setHiddenFacets(hiddenFacets: List<String>): Builder = apply { this.hiddenFacets = hiddenFacets }
+        fun setGroupsSortBy(groupsSortBy: String): Builder = apply { this.groupsSortBy = groupsSortBy }
+        fun setGroupsSortOrder(groupsSortOrder: String): Builder = apply { this.groupsSortOrder = groupsSortOrder }
         fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
         fun build(): BrowseRequest = BrowseRequest(this)
     }
