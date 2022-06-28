@@ -4,6 +4,7 @@ import android.content.Context
 import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -201,8 +202,8 @@ class ConstructorIoSearchTest {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
         val filters = mapOf(
-            "Brand" to listOf("Signature Farms", "Del Monte"),
-            "Nutrition" to listOf("Organic")
+                "Brand" to listOf("Signature Farms", "Del Monte"),
+                "Nutrition" to listOf("Organic")
         )
         val searchRequest = SearchRequest.Builder("bbq")
                 .setFilters(filters)
@@ -224,6 +225,20 @@ class ConstructorIoSearchTest {
         val observer = constructorIo.getSearchResults(searchRequest).test()
         val request = mockServer.takeRequest()
         val path = "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.16.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getSearchResultsWithVariationsMapUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")), listOf(mapOf("name" to "Country", "field" to "data.facets.Country")))
+        val searchRequest = SearchRequest.Builder("bbq")
+                .setVariationsMap(variationsMap)
+                .build()
+        val observer = constructorIo.getSearchResults(searchRequest).test()
+        val request = mockServer.takeRequest()
+        val path = "/search/bbq?variations_map=%7B%22dtype%22%3A%22array%22%2C%22group_by%22%3A%5B%7B%22name%22%3A%22Country%22%2C%22field%22%3A%22data.facets.Country%22%7D%5D%2C%22values%22%3A%7B%22Price%22%3A%7B%22aggregation%22%3A%22min%22%2C%22field%22%3A%22data.facets.price%22%7D%2C%22Country%22%3A%7B%22aggregation%22%3A%22all%22%2C%22field%22%3A%22data.facets.country%22%7D%7D%7D&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.16.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

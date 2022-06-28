@@ -1,5 +1,7 @@
 package io.constructor.data.builder
 
+import io.constructor.data.model.common.VariationsMap
+
 /**
  * Create a Search request object utilizing a builder
  */
@@ -15,6 +17,7 @@ class SearchRequest (
     val hiddenFacets: List<String>? = null,
     val groupsSortBy: String? = null,
     val groupsSortOrder: String? = null,
+    val variationsMap: VariationsMap? = null,
 ) {
     private constructor(builder: Builder) : this(
         builder.term,
@@ -28,6 +31,7 @@ class SearchRequest (
         builder.hiddenFacets,
         builder.groupsSortBy,
         builder.groupsSortOrder,
+        builder.variationsMap,
     )
 
     companion object {
@@ -47,6 +51,8 @@ class SearchRequest (
         var hiddenFacets: List<String>? = null
         var groupsSortBy: String? = null
         var groupsSortOrder: String? = null
+        var variationsMap: VariationsMap? = null
+
 
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
         fun setPage(page: Int): Builder = apply { this.page = page }
@@ -58,6 +64,7 @@ class SearchRequest (
         fun setHiddenFacets(hiddenFacets: List<String>): Builder = apply { this.hiddenFacets = hiddenFacets }
         fun setGroupsSortBy(groupsSortBy: String): Builder = apply { this.groupsSortBy = groupsSortBy }
         fun setGroupsSortOrder(groupsSortOrder: String): Builder = apply { this.groupsSortOrder = groupsSortOrder }
+        fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
         fun build(): SearchRequest = SearchRequest(this)
     }
 }

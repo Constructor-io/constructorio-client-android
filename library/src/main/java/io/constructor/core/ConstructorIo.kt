@@ -2,6 +2,7 @@ package io.constructor.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.squareup.moshi.Moshi
 import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
@@ -16,6 +17,7 @@ import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.common.ResultGroup
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
@@ -49,6 +51,8 @@ object ConstructorIo {
     private lateinit var configMemoryHolder: ConfigMemoryHolder
     private lateinit var context: Context
     private var disposable = CompositeDisposable()
+    private val moshi = Moshi.Builder().build()
+    private val jsonAdapter = moshi.adapter(VariationsMap::class.java)
 
     /**
      *  Sets the logged in user identifier
@@ -146,8 +150,9 @@ object ConstructorIo {
      * @param facets additional facets used to refine results
      * @param groupId category facet used to refine results
      * @param hiddenFields show fields that are hidden by default
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         facets?.forEach { facet ->
@@ -161,6 +166,12 @@ object ConstructorIo {
         hiddenFields?.forEach { hiddenField ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
         }
+        variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
+
         return dataManager.getAutocompleteResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
@@ -211,6 +222,11 @@ object ConstructorIo {
         request.hiddenFields?.forEach { hiddenField ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
         }
+        request.variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
 
         return dataManager.getAutocompleteResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -241,8 +257,9 @@ object ConstructorIo {
      * @param hiddenFacets show facets that are hidden by default
      * @param groupsSortBy the sort method for groups
      * @param groupsSortOrder the sort order for groups
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null): Observable<ConstructorData<SearchResponse>> {
+    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
@@ -264,6 +281,12 @@ object ConstructorIo {
         }
         groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
         groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
+        variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
+
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
@@ -321,6 +344,11 @@ object ConstructorIo {
         }
         request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
         request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
+        request.variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
 
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -353,8 +381,9 @@ object ConstructorIo {
      * @param hiddenFacets show facets that are hidden by default
      * @param groupsSortBy the sort method for groups
      * @param groupsSortOrder the sort order for groups
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null): Observable<ConstructorData<BrowseResponse>> {
+    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
@@ -375,6 +404,12 @@ object ConstructorIo {
         }
         groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
         groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
+        variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
+
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
 
@@ -432,6 +467,11 @@ object ConstructorIo {
         }
         request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
         request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
+        request.variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
 
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
     }
@@ -850,7 +890,7 @@ object ConstructorIo {
      * @param sectionName The section that the results came from, i.e. "Products"
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param numResultsPerPage The count of recommendation results on each page
-     * @param resultPage The current page that recommedantion result is on
+     * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
      * @param resultPositionOnPage The position of the recommendation result that was clicked on
      */
@@ -898,7 +938,7 @@ object ConstructorIo {
      * ```
      * @param podId The pod id
      * @param numResultsViewed The count of recommendation results being viewed
-     * @param resultPage The current page that recommedantion result is on
+     * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param sectionName The section that the results came from, i.e. "Products"
