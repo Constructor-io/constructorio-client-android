@@ -10,5 +10,6 @@ data class Result(
         @Json(name = "data") val data: ResultData,
         @Json(name = "matched_terms") val matchedTerms: List<String>?,
         @Json(name = "variations") val variations: List<Result>?,
+        @Json(name = "variations_map") val variationsMap: Any?,
         @Json(name = "value") val value: String
 ) : Serializable
