@@ -16,6 +16,8 @@ class SearchRequestTest {
     private val section = "Search Suggestions"
     private val hiddenFields = listOf("hidden_field_1", "hidden_field_2")
     private val hiddenFacets = listOf("hidden_facet_1", "hidden_facet_2")
+    private val groupsSortBy = "value"
+    private val groupsSortOrder = "ascending"
 
     @Test
     fun searchRequestWithTermUsingBuilder() {
@@ -76,6 +78,16 @@ class SearchRequestTest {
     }
 
     @Test
+    fun searchRequestWithGroupsSortOptionUsingBuilder() {
+        val request = SearchRequest.Builder(query)
+                .setGroupsSortBy(groupsSortBy)
+                .setGroupsSortOrder(groupsSortOrder)
+                .build()
+        assertEquals(request.groupsSortBy, groupsSortBy)
+        assertEquals(request.groupsSortOrder, groupsSortOrder)
+    }
+
+    @Test
     fun searchRequestWithParamsUsingDSL() {
         val request = SearchRequest.build(query) {
             filters = this@SearchRequestTest.filtersToApply
@@ -86,6 +98,8 @@ class SearchRequestTest {
             section = this@SearchRequestTest.section
             hiddenFields = this@SearchRequestTest.hiddenFields
             hiddenFacets = this@SearchRequestTest.hiddenFacets
+            groupsSortBy = this@SearchRequestTest.groupsSortBy
+            groupsSortOrder = this@SearchRequestTest.groupsSortOrder
         }
 
         assertEquals(request.term, query)
@@ -97,5 +111,7 @@ class SearchRequestTest {
         assertEquals(request.section, section)
         assertEquals(request.hiddenFields, hiddenFields)
         assertEquals(request.hiddenFacets, hiddenFacets)
+        assertEquals(request.groupsSortBy, groupsSortBy)
+        assertEquals(request.groupsSortOrder, groupsSortOrder)
     }
 }

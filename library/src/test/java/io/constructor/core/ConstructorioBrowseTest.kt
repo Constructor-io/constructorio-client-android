@@ -2,7 +2,6 @@ package io.constructor.core
 
 import android.content.Context
 import io.constructor.data.builder.BrowseRequest
-import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.test.createTestDataManager
@@ -173,6 +172,16 @@ class ConstructorIoBrowseTest {
     }
 
     @Test
+    fun getBrowseResultWithGroupsSort() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getBrowseResults(filterName = "group_id", filterValue = "Beverages", groupsSortBy = "value", groupsSortOrder = "ascending").test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getBrowseResultsWithFiltersUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
         mockServer.enqueue(mockResponse)
@@ -181,11 +190,25 @@ class ConstructorIoBrowseTest {
             "Nutrition" to listOf("Organic")
         )
         val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
-                .setFilters(filters)
-                .build()
+            .setFilters(filters)
+            .build()
         val observer = constructorIo.getBrowseResults(browseRequest).test()
         val request = mockServer.takeRequest()
         val path = "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getBrowseResultsWithGroupsSortUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
+            .setGroupsSortBy("value")
+            .setGroupsSortOrder("ascending")
+            .build()
+        val observer = constructorIo.getBrowseResults(browseRequest).test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.15.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
