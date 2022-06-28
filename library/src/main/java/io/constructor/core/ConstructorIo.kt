@@ -18,6 +18,7 @@ import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
@@ -239,8 +240,10 @@ object ConstructorIo {
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
      * @param hiddenFacets show facets that are hidden by default
+     * @param variationsMap specify which attributes within variations should be returned
+
      */
-    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): Observable<ConstructorData<SearchResponse>> {
+    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<SearchResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
@@ -259,6 +262,20 @@ object ConstructorIo {
         }
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+
+        variationsMap?.let {
+            val dtype = variationsMap.dtype
+            val groupBy = variationsMap.groupBy
+            val values = variationsMap.values
+            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
+
+            if (groupBy != null) {
+                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
+            }
+
+            urlString = "${addQuotes(urlString)}}"
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
         }
 
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
@@ -360,8 +377,9 @@ object ConstructorIo {
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
      * @param hiddenFacets show facets that are hidden by default
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): Observable<ConstructorData<BrowseResponse>> {
+    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<BrowseResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
@@ -380,6 +398,21 @@ object ConstructorIo {
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+
+        variationsMap?. let {
+            val dtype = variationsMap.dtype
+            val groupBy = variationsMap.groupBy
+            val values = variationsMap.values
+            var urlString = "{${Constants.QueryConstants.DTYPE}:${dtype},${Constants.QueryConstants.VALUES}:${values}"
+
+            if (groupBy != null) {
+                urlString = "${urlString},${Constants.QueryConstants.GROUP_BY}:${groupBy}"
+            }
+
+            urlString = "${addQuotes(urlString)}}"
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to urlString)
+        }
+
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
 
