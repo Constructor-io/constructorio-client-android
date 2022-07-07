@@ -29,7 +29,7 @@ let config = ConstructorIoConfig(
 // Create the client instance
 ConstructorIo.init(this, config)
 
-// Set the user ID (if a logged in and known user) for cross device personalization
+// Set the user ID (for a logged in user) used for cross device personalization
 ConstructorIo.userId = "uid"
 ```
 
