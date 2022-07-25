@@ -397,6 +397,23 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getSearchResultAgainstRealResponseWithResultSources() {
+        val request = SearchRequest.Builder("angus beef").build()
+        val observer = constructorIo.getSearchResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
+            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getBrowseResultAgainstRealResponseUsingRequestBuilder() {
         val request = BrowseRequest.Builder("group_id", "431").build()
         val observer = constructorIo.getBrowseResults(request).test()
@@ -443,6 +460,23 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.resultCount!! > 0
             val returnedVariationsMap = it.get()?.response?.results!![0].variationsMap as? Map<*,*>
             returnedVariationsMap!!.isNotEmpty()
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultAgainstRealResponseWithResultSources() {
+        val request = BrowseRequest.Builder("group_id", "431").build()
+        val observer = constructorIo.getBrowseResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.filterSortOptions!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
+            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
         }
         Thread.sleep(timeBetweenTests)
     }
