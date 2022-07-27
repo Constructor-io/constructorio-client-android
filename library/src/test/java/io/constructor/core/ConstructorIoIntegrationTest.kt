@@ -408,7 +408,7 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
             it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
-            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
+            it.get()?.response?.resultSources!!.tokenMatch!!.count!! >= 0
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -476,7 +476,7 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
             it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
-            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
+            it.get()?.response?.resultSources!!.tokenMatch!!.count!! >= 0
         }
         Thread.sleep(timeBetweenTests)
     }
