@@ -13,5 +13,6 @@ data class SearchResponseInner(
         @Json(name = "results") val results: List<Result>?,
         @Json(name = "sort_options") val filterSortOptions: List<FilterSortOption>? = null,
         @Json(name = "total_num_results") val resultCount: Int?,
-        @Json(name = "redirect") val redirect: Redirect?
+        @Json(name = "redirect") val redirect: Redirect?,
+        @Json(name = "result_sources") val resultSources: ResultSources?
 ) : Serializable
