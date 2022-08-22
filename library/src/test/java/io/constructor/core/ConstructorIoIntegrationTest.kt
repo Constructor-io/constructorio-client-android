@@ -45,7 +45,7 @@ class ConstructorIoIntegrationTest {
         every { configMemoryHolder.segments } returns emptyList()
 
         val config = ConstructorIoConfig("key_K2hlXt5aVSwoI1Uw")
-        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
+        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
     }

@@ -1,9 +1,8 @@
 package io.constructor.data.local
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.SharedPreferences
-import io.constructor.injection.ApplicationContext
+import io.constructor.injection.ConstructorSdk
 import javax.inject.Inject
 
 /**
@@ -11,10 +10,7 @@ import javax.inject.Inject
  */
 @SuppressLint("CommitPrefEdits")
 class PreferencesHelper @Inject
-constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FILE_NAME) {
-
-    private val preferences: SharedPreferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
-
+constructor(@ConstructorSdk val preferences: SharedPreferences) {
     var id: String
         get() = preferences.getString(PREF_ID, "")!!
         set(value) = preferences.edit().putString(PREF_ID, value).apply()
@@ -78,7 +74,6 @@ constructor(@ApplicationContext context: Context, prefFileName: String = PREF_FI
         const val PREF_DEFAULT_ITEM_SECTION = "default_item_section"
         const val PREF_GROUPS_SHOWN_FOR_FIRST_TERM = "groups_shown_for_first_term"
         const val PREF_ID = "id"
-        const val PREF_FILE_NAME = "constructor_pref_file"
         const val SESSION_ID = "session_id"
         const val SESSION_LAST_ACCESS = "session_last_access"
         const val SESSION_TIME_THRESHOLD = 1000 * 60 * 30

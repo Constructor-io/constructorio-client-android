@@ -1,6 +1,5 @@
 package io.constructor.data.interceptor
 
-import android.content.Context
 import io.constructor.BuildConfig
 import io.constructor.core.Constants
 import io.constructor.data.local.PreferencesHelper
@@ -12,7 +11,10 @@ import okhttp3.Response
  * @suppress
  * Adds common request query parameters to all API requests
  */
-class RequestInterceptor(val context: Context, private val preferencesHelper: PreferencesHelper, private val configMemoryHolder: ConfigMemoryHolder) : Interceptor {
+class RequestInterceptor(
+    private val preferencesHelper: PreferencesHelper,
+    private val configMemoryHolder: ConfigMemoryHolder
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val builder = request.url.newBuilder()

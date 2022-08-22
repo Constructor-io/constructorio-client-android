@@ -1,5 +1,7 @@
 package io.constructor.data.local
 
+import android.content.Context
+import android.content.SharedPreferences
 import io.mockk.every
 import io.mockk.spyk
 import org.junit.Assert.assertEquals
@@ -15,7 +17,10 @@ import java.util.concurrent.TimeUnit
 class PreferencesHelperTest {
 
     private val partyLikeIts1999 = 946684800000
-    private val preferencesHelper = spyk(PreferencesHelper(RuntimeEnvironment.application.applicationContext, "test.prefs"))
+    private val context: Context = RuntimeEnvironment.application.applicationContext
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("test.prefs", Context.MODE_PRIVATE)
+    private val preferencesHelper = spyk(PreferencesHelper(sharedPreferences))
 
     @Test
     fun saveAndRetrieveId() {

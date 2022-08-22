@@ -10,7 +10,7 @@ import javax.inject.Singleton
  * @suppress
  */
 @Module(includes = [(NetworkModule::class)])
-class ApiModule {
+object ApiModule {
 
     @Provides
     @Singleton

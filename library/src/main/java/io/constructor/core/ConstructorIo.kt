@@ -29,7 +29,6 @@ import io.constructor.data.model.search.SearchResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
-import io.constructor.injection.module.NetworkModule
 import io.constructor.util.broadcastIntent
 import io.constructor.util.e
 import io.constructor.util.urlEncode
@@ -67,7 +66,6 @@ object ConstructorIo {
     internal val component: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(context))
-                .networkModule(NetworkModule(context))
                 .build()
     }
 
