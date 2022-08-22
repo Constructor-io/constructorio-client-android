@@ -3,6 +3,7 @@ package io.constructor.core
 import android.annotation.SuppressLint
 import android.content.Context
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
@@ -51,7 +52,7 @@ object ConstructorIo {
     private lateinit var configMemoryHolder: ConfigMemoryHolder
     private lateinit var context: Context
     private var disposable = CompositeDisposable()
-    private val moshi = Moshi.Builder().build()
+    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
     private val jsonAdapter = moshi.adapter(VariationsMap::class.java)
 
     /**
