@@ -1,7 +1,6 @@
 package io.constructor.injection.module
 
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import io.constructor.BuildConfig
@@ -72,6 +71,5 @@ object NetworkModule {
     internal fun provideMoshi(): Moshi = Moshi
         .Builder()
         .add(ResultDataAdapter())
-        .add(KotlinJsonAdapterFactory())
         .build()
 }

@@ -1,6 +1,6 @@
 ext {
     versions = [
-            moshi   : "1.8.0",
+            moshi   : "1.13.0",
             okHttp  : "4.9.2",
             retrofit: '2.5.0',
             dagger  : '2.35.1',
@@ -21,8 +21,9 @@ ext {
     ]
 
     moshi = [
-            moshi: "com.squareup.moshi:moshi-kotlin:$versions.moshi"
+            moshi: "com.squareup.moshi:moshi:$versions.moshi",
     ]
+    moshiCodeGen = "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi"
 
     okHttp = [
             logger: "com.squareup.okhttp3:logging-interceptor:$versions.okHttp",
@@ -33,6 +34,7 @@ ext {
             supportAnnotation: "androidx.annotation:annotation:1.2.0",
             kotlinTest       : "org.jetbrains.kotlin:kotlin-test:$kotlin_version",
             kotlinJunit      : "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version",
+            assertJ          : "org.assertj:assertj-core:3.23.1"
 
     ] + junit
 
@@ -42,7 +44,7 @@ ext {
     supportLibs = supportDeps.values()
     networkLibs = retrofit.values() + okHttp.values() + moshi.values()
     otherLibs = [dagger]
-    annotationProcessorLibs = [daggerCompiler]
+    annotationProcessorLibs = [daggerCompiler, moshiCodeGen]
 
     unitTestLibs = unitTest.values()
     androidTestsLibs = supportLibs
