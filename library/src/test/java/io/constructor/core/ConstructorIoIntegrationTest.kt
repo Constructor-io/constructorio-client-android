@@ -19,7 +19,8 @@ import org.junit.Test
 class ConstructorIoIntegrationTest {
 
     @Rule
-    @JvmField val overrideSchedulersRule = RxSchedulersOverrideRule()
+    @JvmField
+    val overrideSchedulersRule = RxSchedulersOverrideRule()
 
     private var constructorIo = ConstructorIo
     private val ctx = mockk<Context>()
@@ -45,7 +46,7 @@ class ConstructorIoIntegrationTest {
         every { configMemoryHolder.segments } returns emptyList()
 
         val config = ConstructorIoConfig("key_K2hlXt5aVSwoI1Uw")
-        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
+        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
     }
@@ -63,7 +64,8 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
+        val observer =
+            constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -98,7 +100,8 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
+        val observer =
+            constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -120,14 +123,18 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer = constructorIo.getBrowseResults("group_ids", "544", facet?.map { it.key to it.value }).test()
+        val observer =
+            constructorIo.getBrowseResults("group_ids", "544", facet?.map { it.key to it.value })
+                .test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackAutocompleteSelectAgainstRealResponse() {
-        val observer = constructorIo.trackAutocompleteSelectInternal("pork", "pork", "Search Suggestions").test()
+        val observer =
+            constructorIo.trackAutocompleteSelectInternal("pork", "pork", "Search Suggestions")
+                .test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -141,21 +148,34 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun trackSearchResultClickAgainstRealResponse() {
-        val observer = constructorIo.trackSearchResultClickInternal("Boneless Pork Shoulder Roast", "prrst_shldr_bls", "pork").test()
+        val observer = constructorIo.trackSearchResultClickInternal(
+            "Boneless Pork Shoulder Roast",
+            "prrst_shldr_bls",
+            "pork"
+        ).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackConversionAgainstRealResponse() {
-        val observer = constructorIo.trackConversionInternal("Boneless Pork Shoulder Roast", "prrst_shldr_bls", 1.99).test()
+        val observer = constructorIo.trackConversionInternal(
+            "Boneless Pork Shoulder Roast",
+            "prrst_shldr_bls",
+            1.99
+        ).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun trackPurchaseAgainstRealResponse() {
-        val observer = constructorIo.trackPurchaseInternal(arrayOf("prrst_shldr_bls", "prrst_crwn"), 9.98, "45273", "Products").test()
+        val observer = constructorIo.trackPurchaseInternal(
+            arrayOf("prrst_shldr_bls", "prrst_crwn"),
+            9.98,
+            "45273",
+            "Products"
+        ).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -169,7 +189,9 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun trackBrowseResultClickAgainstRealResponse() {
-        val observer = constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls", 5).test()
+        val observer =
+            constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls", 5)
+                .test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -188,7 +210,11 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun trackRecommendationResultClickAgainstRealResponse() {
-        val observer = constructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured", "prrst_shldr_bls").test()
+        val observer = constructorIo.trackRecommendationResultClickInternal(
+            "pdp5",
+            "User Featured",
+            "prrst_shldr_bls"
+        ).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -207,8 +233,10 @@ class ConstructorIoIntegrationTest {
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.sections!!.isNotEmpty()
-            it.get()?.sections?.get("Products")?.first()?.data?.metadata?.get("hiddenField1") !== null
-            it.get()?.sections?.get("Products")?.first()?.data?.metadata?.get("hiddenField2") !== null
+            it.get()?.sections?.get("Products")
+                ?.first()?.data?.metadata?.get("hiddenField1") !== null
+            it.get()?.sections?.get("Products")
+                ?.first()?.data?.metadata?.get("hiddenField2") !== null
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -216,7 +244,17 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsWithHiddenFieldsAgainstRealResponse() {
         val hiddenFields = listOf("hiddenField1", "hiddenField2")
-        val observer = constructorIo.getSearchResults("pork", null, null, null, null, null, null, null, hiddenFields).test()
+        val observer = constructorIo.getSearchResults(
+            "pork",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            hiddenFields
+        ).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.results!!.isNotEmpty()
@@ -229,11 +267,23 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsWithHiddenFacetsAgainstRealResponse() {
         val hiddenFacets = listOf("Brand")
-        val observer = constructorIo.getSearchResults("pork", null, null, null, null, null, null, null, null, hiddenFacets).test()
+        val observer = constructorIo.getSearchResults(
+            "pork",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            hiddenFacets
+        ).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.facets!!.isNotEmpty()
-            val brandFacet = it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
+            val brandFacet =
+                it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
             brandFacet !== null
         }
         Thread.sleep(timeBetweenTests)
@@ -272,7 +322,18 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseResultsWithHiddenFieldsAgainstRealResponse() {
         val hiddenFields = listOf("hiddenField1", "hiddenField2")
-        val observer = constructorIo.getBrowseResults("group_id", "431", null, null, null, null, null, null, null, hiddenFields).test()
+        val observer = constructorIo.getBrowseResults(
+            "group_id",
+            "431",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            hiddenFields
+        ).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.results!!.isNotEmpty()
@@ -285,11 +346,24 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseResultsWithHiddenFacetsAgainstRealResponse() {
         val hiddenFacets = listOf("Brand")
-        val observer = constructorIo.getBrowseResults("group_id", "431", null, null, null, null, null, null, null, null, hiddenFacets).test()
+        val observer = constructorIo.getBrowseResults(
+            "group_id",
+            "431",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            hiddenFacets
+        ).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.facets!!.isNotEmpty()
-            val brandFacet = it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
+            val brandFacet =
+                it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
             brandFacet !== null
         }
         Thread.sleep(timeBetweenTests)
@@ -319,13 +393,21 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getAutocompleteResultsAgainstRealResponseWithVariationsMapArrayUsingRequestBuilder() {
-        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")))
-        val request = AutocompleteRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
+        val variationsMap = VariationsMap(
+            dtype = "array",
+            values = mapOf(
+                "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+            )
+        )
+        val request =
+            AutocompleteRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getAutocompleteResults(request).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.sections!!.isNotEmpty()
-            val returnedVariationsMap = it.get()?.sections!!["Products"]?.get(0)?.variationsMap as List<*>
+            val returnedVariationsMap =
+                it.get()?.sections!!["Products"]?.get(0)?.variationsMap as List<*>
             returnedVariationsMap.isNotEmpty()
         }
         Thread.sleep(timeBetweenTests)
@@ -333,13 +415,21 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getAutocompleteResultsAgainstRealResponseWithVariationsMapObjectUsingRequestBuilder() {
-        val variationsMap = VariationsMap("object", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")))
-        val request = AutocompleteRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
+        val variationsMap = VariationsMap(
+            dtype = "object",
+            values = mapOf(
+                "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+            )
+        )
+        val request =
+            AutocompleteRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getAutocompleteResults(request).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.sections!!.isNotEmpty()
-            val returnedVariationsMap = it.get()?.sections!!["Products"]?.get(0)?.variationsMap as Map<*, *>
+            val returnedVariationsMap =
+                it.get()?.sections!!["Products"]?.get(0)?.variationsMap as Map<*, *>
             returnedVariationsMap.isNotEmpty()
         }
         Thread.sleep(timeBetweenTests)
@@ -362,7 +452,13 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getSearchResultAgainstRealResponseWithVariationsMapArrayUsingRequestBuilder() {
-        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")))
+        val variationsMap = VariationsMap(
+            dtype = "array",
+            values = mapOf(
+                "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+            )
+        )
         val request = SearchRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getSearchResults(request).test()
         observer.assertComplete().assertValue {
@@ -380,7 +476,13 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getSearchResultAgainstRealResponseWithVariationsMapObjectUsingRequestBuilder() {
-        val variationsMap = VariationsMap("object", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")))
+        val variationsMap = VariationsMap(
+            dtype = "object",
+            values = mapOf(
+                "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+            )
+        )
         val request = SearchRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getSearchResults(request).test()
         observer.assertComplete().assertValue {
@@ -430,8 +532,15 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseResultAgainstRealResponseWithVariationsArrayMapUsingRequestBuilder() {
-        val variationsMap = VariationsMap("array", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")))
-        val request = BrowseRequest.Builder("group_id", "544").setVariationsMap(variationsMap).build()
+        val variationsMap = VariationsMap(
+            dtype = "array",
+            values = mapOf(
+                "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+            )
+        )
+        val request =
+            BrowseRequest.Builder("group_id", "544").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getBrowseResults(request).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
@@ -448,8 +557,15 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseResultAgainstRealResponseWithVariationsObjectMapUsingRequestBuilder() {
-        val variationsMap = VariationsMap("object", mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"), "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")))
-        val request = BrowseRequest.Builder("group_id", "431").setVariationsMap(variationsMap).build()
+        val variationsMap = VariationsMap(
+            dtype = "object",
+            values = mapOf(
+                "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+            )
+        )
+        val request =
+            BrowseRequest.Builder("group_id", "431").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getBrowseResults(request).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
@@ -458,7 +574,7 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.groups!!.isNotEmpty()
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
-            val returnedVariationsMap = it.get()?.response?.results!![0].variationsMap as? Map<*,*>
+            val returnedVariationsMap = it.get()?.response?.results!![0].variationsMap as? Map<*, *>
             returnedVariationsMap!!.isNotEmpty()
         }
         Thread.sleep(timeBetweenTests)

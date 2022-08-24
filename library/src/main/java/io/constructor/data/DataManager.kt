@@ -13,6 +13,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
+import io.constructor.injection.ConstructorSdk
 import io.reactivex.Completable
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -23,7 +24,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class DataManager @Inject
-constructor(private val constructorApi: ConstructorApi, private val moshi: Moshi) {
+constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private val moshi: Moshi) {
 
     fun getAutocompleteResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<AutocompleteResponse>> {
         var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"

@@ -48,7 +48,7 @@ class ConstructorioSegmentsTest {
         every { configMemoryHolder.segments } returns  listOf("mobile", "COUNTRY_US")
 
         val config = ConstructorIoConfig("dummyKey")
-        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
+        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
     }

@@ -100,7 +100,7 @@ class ConstructorIoTrackingTest {
         every { configMemoryHolder.segments } returns emptyList()
 
         val config = ConstructorIoConfig("dummyKey")
-        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
+        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
     }
