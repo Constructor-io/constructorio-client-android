@@ -1,6 +1,5 @@
 package io.constructor.util
 
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.search.SearchResponse
@@ -19,7 +18,7 @@ object TestDataLoader {
 
     private fun loadResult(fileName: String): AutocompleteResponse? {
         val file = File(TestDataLoader::class.java.classLoader.getResource(fileName).path)
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val moshi = Moshi.Builder().build()
         val jsonAdapter = moshi.adapter(AutocompleteResponse::class.java)
         var response: AutocompleteResponse? = null
         try {
@@ -31,7 +30,7 @@ object TestDataLoader {
     }
 
     private fun convertToSearchResult(stringResponse: String): SearchResponse? {
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val moshi = Moshi.Builder().build()
         val jsonAdapter = moshi.adapter(SearchResponse::class.java)
         var result: SearchResponse? = null
         try {

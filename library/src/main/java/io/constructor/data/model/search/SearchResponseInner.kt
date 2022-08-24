@@ -1,12 +1,14 @@
 package io.constructor.data.model.search;
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
 /**
  * Models search response details
  */
+@JsonClass(generateAdapter = true)
 data class SearchResponseInner(
         @Json(name = "facets") val facets: List<FilterFacet>?,
         @Json(name = "groups") val groups: List<FilterGroup>?,

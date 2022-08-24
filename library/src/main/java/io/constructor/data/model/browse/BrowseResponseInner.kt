@@ -1,12 +1,14 @@
 package io.constructor.data.model.browse
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
 /**
  * Models browse response details
  */
+@JsonClass(generateAdapter = true)
 data class BrowseResponseInner(
         @Json(name = "collection") val collection: Collection?,
         @Json(name = "facets") val facets: List<FilterFacet>?,
