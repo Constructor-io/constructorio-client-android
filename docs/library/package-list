@@ -336,6 +336,9 @@ $dokka.location:io.constructor.data.model.search/SearchResponseInner/redirect/#/
 $dokka.location:io.constructor.data.model.search/SearchResponseInner/resultCount/#/PointingToDeclaration/library/io.constructor.data.model.search/-search-response-inner/result-count.html
 $dokka.location:io.constructor.data.model.search/SearchResponseInner/resultSources/#/PointingToDeclaration/library/io.constructor.data.model.search/-search-response-inner/result-sources.html
 $dokka.location:io.constructor.data.model.search/SearchResponseInner/results/#/PointingToDeclaration/library/io.constructor.data.model.search/-search-response-inner/results.html
+$dokka.location:io.constructor.injection////PointingToDeclaration/library/io.constructor.injection/index.html
+$dokka.location:io.constructor.injection/ConstructorSdk///PointingToDeclaration/library/io.constructor.injection/-constructor-sdk/index.html
+$dokka.location:io.constructor.injection/ConstructorSdk/ConstructorSdk/#/PointingToDeclaration/library/io.constructor.injection/-constructor-sdk/-constructor-sdk.html
 io.constructor.core
 io.constructor.data.builder
 io.constructor.data.model.autocomplete
@@ -343,4 +346,5 @@ io.constructor.data.model.browse
 io.constructor.data.model.common
 io.constructor.data.model.recommendations
 io.constructor.data.model.search
+io.constructor.injection
 
