@@ -1,247 +1,296 @@
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>SearchRequest</title>
-<link href="../../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script>  </head>
-  <body>
-    <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>library</span>
+            </a>
+    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="library::io.constructor.data.builder/SearchRequest///PointingToDeclaration//1954343168">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../../index.html">library</a>/<a href="../index.html">io.constructor.data.builder</a>/<a href="index.html">SearchRequest</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
-          <div class="cover ">
-            <h1 class="cover"><span>Search</span><wbr></wbr><span>Request</span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace">class <a href="index.html">SearchRequest</a>(term: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, filters: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;&gt;?, page: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>?, perPage: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>?, sortBy: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, sortOrder: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, section: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, hiddenFields: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;?, hiddenFacets: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;?, groupsSortBy: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, groupsSortOrder: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, variationsMap: <a href="../../io.constructor.data.model.common/-variations-map/index.html">VariationsMap</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Create a Search request object utilizing a builder</p></div></div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
-            <div class="tabs-section-body">
-              <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FSearchRequest%2F%23kotlin.String%23kotlin.collections.Map%5Bkotlin.String%2Ckotlin.collections.List%5Bkotlin.String%5D%5D%3F%23kotlin.Int%3F%23kotlin.Int%3F%23kotlin.String%3F%23kotlin.String%3F%23kotlin.String%3F%23kotlin.collections.List%5Bkotlin.String%5D%3F%23kotlin.collections.List%5Bkotlin.String%5D%3F%23kotlin.String%3F%23kotlin.String%3F%23io.constructor.data.model.common.VariationsMap%3F%2FPointingToDeclaration%2F%5D%2FConstructors%2F1954343168" anchor-label="SearchRequest" id="%5Bio.constructor.data.builder%2FSearchRequest%2FSearchRequest%2F%23kotlin.String%23kotlin.collections.Map%5Bkotlin.String%2Ckotlin.collections.List%5Bkotlin.String%5D%5D%3F%23kotlin.Int%3F%23kotlin.Int%3F%23kotlin.String%3F%23kotlin.String%3F%23kotlin.String%3F%23kotlin.collections.List%5Bkotlin.String%5D%3F%23kotlin.collections.List%5Bkotlin.String%5D%3F%23kotlin.String%3F%23kotlin.String%3F%23io.constructor.data.model.common.VariationsMap%3F%2FPointingToDeclaration%2F%5D%2FConstructors%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-search-request.html">SearchRequest</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FSearchRequest%2F%23kotlin.String%23kotlin.collections.Map%5Bkotlin.String%2Ckotlin.collections.List%5Bkotlin.String%5D%5D%3F%23kotlin.Int%3F%23kotlin.Int%3F%23kotlin.String%3F%23kotlin.String%3F%23kotlin.String%3F%23kotlin.collections.List%5Bkotlin.String%5D%3F%23kotlin.collections.List%5Bkotlin.String%5D%3F%23kotlin.String%3F%23kotlin.String%3F%23io.constructor.data.model.common.VariationsMap%3F%2FPointingToDeclaration%2F%5D%2FConstructors%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace">fun <a href="-search-request.html">SearchRequest</a>(term: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, filters: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;&gt;? = null, page: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>? = null, perPage: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>? = null, sortBy: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, sortOrder: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, section: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, hiddenFields: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;? = null, hiddenFacets: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;? = null, groupsSortBy: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, groupsSortOrder: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null, variationsMap: <a href="../../io.constructor.data.model.common/-variations-map/index.html">VariationsMap</a>? = null)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest.Builder%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F1954343168" anchor-label="Builder" id="%5Bio.constructor.data.builder%2FSearchRequest.Builder%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-builder/index.html">Builder</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest.Builder%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace">class <a href="-builder/index.html">Builder</a>(term: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="library::io.constructor.data.builder/SearchRequest///PointingToDeclaration//-1887420133">
+  <div class="breadcrumbs"><a href="../../../index.html">library</a><span class="delimiter">/</span><a href="../index.html">io.constructor.data.builder</a><span class="delimiter">/</span><a href="index.html">SearchRequest</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Search</span><wbr></wbr><span><span>Request</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">SearchRequest</a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>term<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>filters<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>page<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>perPage<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>sortBy<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>sortOrder<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>section<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>hiddenFields<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>hiddenFacets<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>groupsSortBy<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>groupsSortOrder<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>variationsMap<span class="token operator">: </span><a href="../../io.constructor.data.model.common/-variations-map/index.html">VariationsMap</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Create a Search request object utilizing a builder</p></div></div>
   </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest.Companion%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F1954343168" anchor-label="Companion" id="%5Bio.constructor.data.builder%2FSearchRequest.Companion%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-companion/index.html">Companion</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest.Companion%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace">object <a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Ffilters%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="filters" id="%5Bio.constructor.data.builder%2FSearchRequest%2Ffilters%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="filters.html">filters</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2Ffilters%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Ffilters%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="filters" id="%5Bio.constructor.data.builder%2FSearchRequest%2Ffilters%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="filters.html">filters</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;&gt;? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="groupsSortBy" id="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="groups-sort-by.html">groupsSortBy</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="groupsSortBy" id="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="groups-sort-by.html">groupsSortBy</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="groupsSortOrder" id="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="groups-sort-order.html">groupsSortOrder</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="groupsSortOrder" id="%5Bio.constructor.data.builder%2FSearchRequest%2FgroupsSortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="groups-sort-order.html">groupsSortOrder</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFacets%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="hiddenFacets" id="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFacets%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="hidden-facets.html">hiddenFacets</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFacets%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFacets%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="hiddenFacets" id="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFacets%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="hidden-facets.html">hiddenFacets</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFields%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="hiddenFields" id="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFields%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="hidden-fields.html">hiddenFields</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFields%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFields%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="hiddenFields" id="%5Bio.constructor.data.builder%2FSearchRequest%2FhiddenFields%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="hidden-fields.html">hiddenFields</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Fpage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="page" id="%5Bio.constructor.data.builder%2FSearchRequest%2Fpage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="page.html">page</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2Fpage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Fpage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="page" id="%5Bio.constructor.data.builder%2FSearchRequest%2Fpage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="page.html">page</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FperPage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="perPage" id="%5Bio.constructor.data.builder%2FSearchRequest%2FperPage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="per-page.html">perPage</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FperPage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FperPage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="perPage" id="%5Bio.constructor.data.builder%2FSearchRequest%2FperPage%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="per-page.html">perPage</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Fsection%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="section" id="%5Bio.constructor.data.builder%2FSearchRequest%2Fsection%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="section.html">section</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2Fsection%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Fsection%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="section" id="%5Bio.constructor.data.builder%2FSearchRequest%2Fsection%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="section.html">section</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FsortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="sortBy" id="%5Bio.constructor.data.builder%2FSearchRequest%2FsortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="sort-by.html">sortBy</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FsortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FsortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="sortBy" id="%5Bio.constructor.data.builder%2FSearchRequest%2FsortBy%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="sort-by.html">sortBy</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FsortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="sortOrder" id="%5Bio.constructor.data.builder%2FSearchRequest%2FsortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="sort-order.html">sortOrder</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FsortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FsortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="sortOrder" id="%5Bio.constructor.data.builder%2FSearchRequest%2FsortOrder%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="sort-order.html">sortOrder</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Fterm%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="term" id="%5Bio.constructor.data.builder%2FSearchRequest%2Fterm%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="term.html">term</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2Fterm%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2Fterm%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="term" id="%5Bio.constructor.data.builder%2FSearchRequest%2Fterm%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="term.html">term</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FvariationsMap%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="variationsMap" id="%5Bio.constructor.data.builder%2FSearchRequest%2FvariationsMap%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="variations-map.html">variationsMap</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bio.constructor.data.builder%2FSearchRequest%2FvariationsMap%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="%5Bio.constructor.data.builder%2FSearchRequest%2FvariationsMap%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" anchor-label="variationsMap" id="%5Bio.constructor.data.builder%2FSearchRequest%2FvariationsMap%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F1954343168" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace">val <a href="variations-map.html">variationsMap</a>: <a href="../../io.constructor.data.model.common/-variations-map/index.html">VariationsMap</a>? = null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+    <div class="tabs-section-body">
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="-242023954%2FConstructors%2F-1887420133" anchor-label="SearchRequest" id="-242023954%2FConstructors%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-search-request.html"><span>Search</span><wbr></wbr><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-242023954%2FConstructors%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-search-request.html"><span class="token function">SearchRequest</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;term<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;filters<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;page<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;perPage<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;sortBy<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;sortOrder<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;section<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;hiddenFields<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;hiddenFacets<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;groupsSortBy<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;groupsSortOrder<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;variationsMap<span class="token operator">: </span><a href="../../io.constructor.data.model.common/-variations-map/index.html">VariationsMap</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <h2 class="">Types</h2>
+      <div class="table" data-togglable="Types"><a data-name="-306099335%2FClasslikes%2F-1887420133" anchor-label="Builder" id="-306099335%2FClasslikes%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="-builder/index.html"><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-306099335%2FClasslikes%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-builder/index.html">Builder</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>term<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1304013720%2FClasslikes%2F-1887420133" anchor-label="Companion" id="-1304013720%2FClasslikes%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1304013720%2FClasslikes%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="-273463162%2FProperties%2F-1887420133" anchor-label="filters" id="-273463162%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="filters.html"><span><span>filters</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-273463162%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="-273463162%2FProperties%2F-1887420133" anchor-label="filters" id="-273463162%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="filters.html">filters</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-615526288%2FProperties%2F-1887420133" anchor-label="groupsSortBy" id="-615526288%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="groups-sort-by.html"><span>groups</span><wbr></wbr><span>Sort</span><wbr></wbr><span><span>By</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-615526288%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="-615526288%2FProperties%2F-1887420133" anchor-label="groupsSortBy" id="-615526288%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="groups-sort-by.html">groupsSortBy</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1387286213%2FProperties%2F-1887420133" anchor-label="groupsSortOrder" id="1387286213%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="groups-sort-order.html"><span>groups</span><wbr></wbr><span>Sort</span><wbr></wbr><span><span>Order</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1387286213%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="1387286213%2FProperties%2F-1887420133" anchor-label="groupsSortOrder" id="1387286213%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="groups-sort-order.html">groupsSortOrder</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-760740685%2FProperties%2F-1887420133" anchor-label="hiddenFacets" id="-760740685%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="hidden-facets.html"><span>hidden</span><wbr></wbr><span><span>Facets</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-760740685%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="-760740685%2FProperties%2F-1887420133" anchor-label="hiddenFacets" id="-760740685%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="hidden-facets.html">hiddenFacets</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="726880822%2FProperties%2F-1887420133" anchor-label="hiddenFields" id="726880822%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="hidden-fields.html"><span>hidden</span><wbr></wbr><span><span>Fields</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="726880822%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="726880822%2FProperties%2F-1887420133" anchor-label="hiddenFields" id="726880822%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="hidden-fields.html">hiddenFields</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-2079587798%2FProperties%2F-1887420133" anchor-label="page" id="-2079587798%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="page.html"><span><span>page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2079587798%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="-2079587798%2FProperties%2F-1887420133" anchor-label="page" id="-2079587798%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="page.html">page</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-819976107%2FProperties%2F-1887420133" anchor-label="perPage" id="-819976107%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="per-page.html"><span>per</span><wbr></wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-819976107%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="-819976107%2FProperties%2F-1887420133" anchor-label="perPage" id="-819976107%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="per-page.html">perPage</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1903974180%2FProperties%2F-1887420133" anchor-label="section" id="-1903974180%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="section.html"><span><span>section</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1903974180%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="-1903974180%2FProperties%2F-1887420133" anchor-label="section" id="-1903974180%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="section.html">section</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1712934428%2FProperties%2F-1887420133" anchor-label="sortBy" id="-1712934428%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="sort-by.html"><span>sort</span><wbr></wbr><span><span>By</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1712934428%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="-1712934428%2FProperties%2F-1887420133" anchor-label="sortBy" id="-1712934428%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="sort-by.html">sortBy</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1792444625%2FProperties%2F-1887420133" anchor-label="sortOrder" id="1792444625%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="sort-order.html"><span>sort</span><wbr></wbr><span><span>Order</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1792444625%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="1792444625%2FProperties%2F-1887420133" anchor-label="sortOrder" id="1792444625%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="sort-order.html">sortOrder</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1909850861%2FProperties%2F-1887420133" anchor-label="term" id="1909850861%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="term.html"><span><span>term</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1909850861%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="1909850861%2FProperties%2F-1887420133" anchor-label="term" id="1909850861%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="term.html">term</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1094721573%2FProperties%2F-1887420133" anchor-label="variationsMap" id="1094721573%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":library:dokkaHtml/release" data-filterable-set=":library:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="variations-map.html"><span>variations</span><wbr></wbr><span><span>Map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1094721573%2FProperties%2F-1887420133"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":library:dokkaHtml/release"><a data-name="1094721573%2FProperties%2F-1887420133" anchor-label="variationsMap" id="1094721573%2FProperties%2F-1887420133" data-filterable-set=":library:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="variations-map.html">variationsMap</a><span class="token operator">: </span><a href="../../io.constructor.data.model.common/-variations-map/index.html">VariationsMap</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
 </html>
-

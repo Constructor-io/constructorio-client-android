@@ -223,8 +223,9 @@ $dokka.location:io.constructor.data.model.common/FilterSortOption/sortBy/#/Point
 $dokka.location:io.constructor.data.model.common/FilterSortOption/sortOrder/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-sort-option/sort-order.html
 $dokka.location:io.constructor.data.model.common/FilterSortOption/status/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-sort-option/status.html
 $dokka.location:io.constructor.data.model.common/Result///PointingToDeclaration/library/io.constructor.data.model.common/-result/index.html
-$dokka.location:io.constructor.data.model.common/Result/Result/#io.constructor.data.model.common.ResultData#kotlin.collections.List[kotlin.String]?#kotlin.collections.List[io.constructor.data.model.common.Result]?#kotlin.Any?#kotlin.String/PointingToDeclaration/library/io.constructor.data.model.common/-result/-result.html
+$dokka.location:io.constructor.data.model.common/Result/Result/#io.constructor.data.model.common.ResultData#kotlin.collections.List[kotlin.String]?#kotlin.collections.List[io.constructor.data.model.common.Result]?#kotlin.Any?#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.Boolean]?/PointingToDeclaration/library/io.constructor.data.model.common/-result/-result.html
 $dokka.location:io.constructor.data.model.common/Result/data/#/PointingToDeclaration/library/io.constructor.data.model.common/-result/data.html
+$dokka.location:io.constructor.data.model.common/Result/labels/#/PointingToDeclaration/library/io.constructor.data.model.common/-result/labels.html
 $dokka.location:io.constructor.data.model.common/Result/matchedTerms/#/PointingToDeclaration/library/io.constructor.data.model.common/-result/matched-terms.html
 $dokka.location:io.constructor.data.model.common/Result/value/#/PointingToDeclaration/library/io.constructor.data.model.common/-result/value.html
 $dokka.location:io.constructor.data.model.common/Result/variations/#/PointingToDeclaration/library/io.constructor.data.model.common/-result/variations.html
