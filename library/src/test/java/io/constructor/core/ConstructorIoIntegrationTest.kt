@@ -643,4 +643,61 @@ class ConstructorIoIntegrationTest {
         }
         Thread.sleep(timeBetweenTests)
     }
+
+
+    @Test
+    fun getAutocompleteResultsWithLabelsAgainstRealResponse() {
+        val request = AutocompleteRequest.Builder("pork").build()
+        val observer = constructorIo.getAutocompleteResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.sections!!.isNotEmpty()
+            it.get()?.sections?.get("Products")?.first()?.labels!!["is_sponsored"] == true
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getSearchResultsWithLabelsAgainstRealResponse() {
+        val request = SearchRequest.Builder("pork").build()
+        val observer = constructorIo.getSearchResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.results?.first()?.labels!!["is_sponsored"] == true
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsWithLabelsAgainstRealResponse() {
+        val request = BrowseRequest.Builder("group_id", "544").build()
+        val observer = constructorIo.getBrowseResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.facets!!.isNotEmpty()
+            it.get()?.response?.groups!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.results?.first()?.labels!!["is_sponsored"] == true
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getRecommendationResultsWithLabelsAgainstRealResponse() {
+        val filters = mapOf("group_id" to listOf("544"))
+        val request = RecommendationsRequest.Builder("pdp3").setFilters(filters).build()
+        val observer = constructorIo.getRecommendationResults(request).test()
+        observer.assertComplete().assertValue {
+            it.get()?.resultId !== null
+            it.get()?.response?.results!!.isNotEmpty()
+            it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.results?.first()?.labels!!.isNullOrEmpty()
+        }
+        Thread.sleep(timeBetweenTests)
+    }
 }

@@ -2,7 +2,7 @@ buildscript {
     ext {
         kotlin_version = '1.5.31'
         dokkaVersion = '0.9.18'
-        gradleVersion = '7.0.2'
+        gradleVersion = '7.2.1'
     }
     repositories {
         google()
