@@ -644,7 +644,6 @@ class ConstructorIoIntegrationTest {
         Thread.sleep(timeBetweenTests)
     }
 
-
     @Test
     fun getAutocompleteResultsWithLabelsAgainstRealResponse() {
         val request = AutocompleteRequest.Builder("pork").build()
