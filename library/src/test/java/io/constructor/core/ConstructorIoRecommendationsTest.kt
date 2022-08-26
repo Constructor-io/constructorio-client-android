@@ -1,6 +1,7 @@
 package io.constructor.core
 
 import android.content.Context
+import io.constructor.data.builder.RecommendationsRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.test.createTestDataManager
@@ -48,7 +49,7 @@ class ConstructorIoRecommendationsTest {
         every { configMemoryHolder.segments } returns emptyList()
 
         val config = ConstructorIoConfig("dummyKey")
-        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder, ctx)
+        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
     }
@@ -67,7 +68,7 @@ class ConstructorIoRecommendationsTest {
             it.get()!!.response?.resultCount == 225
         }
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.1&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -80,7 +81,7 @@ class ConstructorIoRecommendationsTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.1&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -94,7 +95,7 @@ class ConstructorIoRecommendationsTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.1&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -108,7 +109,47 @@ class ConstructorIoRecommendationsTest {
             it.get()!!.response?.resultCount == 0
         }
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.14.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.1&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getRecommendationResultsUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        mockServer.enqueue(mockResponse)
+        val recommendationsRequest = RecommendationsRequest.Builder("titanic").build()
+        val observer = constructorIo.getRecommendationResults(recommendationsRequest).test()
+        observer.assertComplete().assertValue {
+            it.get()!!.response?.results!!.size == 24
+            it.get()!!.response?.results!![0].value == "LaCroix Sparkling Water Pure Cans - 12-12 Fl. Oz."
+            it.get()!!.response?.results!![0].data.id == "960189161"
+            it.get()!!.response?.results!![0].data.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960189161.png"
+            it.get()!!.response?.results!![0].data.metadata?.get("price") == 1.11
+            it.get()!!.response?.resultCount == 225
+        }
+        val request = mockServer.takeRequest()
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.1&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getRecommendationResultsWithMultipleItemIdsUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        mockServer.enqueue(mockResponse)
+        val recommendationsRequest = RecommendationsRequest.Builder("titanic")
+            .setItemIds(listOf("item_id_1", "item_id_2"))
+            .build()
+        val observer = constructorIo.getRecommendationResults(recommendationsRequest).test()
+        observer.assertComplete().assertValue {
+            it.get()!!.response?.results!!.size == 24
+            it.get()!!.response?.results!![0].value == "LaCroix Sparkling Water Pure Cans - 12-12 Fl. Oz."
+            it.get()!!.response?.results!![0].data.id == "960189161"
+            it.get()!!.response?.results!![0].data.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960189161.png"
+            it.get()!!.response?.results!![0].data.metadata?.get("price") == 1.11
+            it.get()!!.response?.resultCount == 225
+        }
+        val request = mockServer.takeRequest()
+        val path = "/recommendations/v1/pods/titanic?item_id=item_id_1&item_id=item_id_2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.1&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

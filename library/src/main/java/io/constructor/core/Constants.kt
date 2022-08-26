@@ -40,6 +40,8 @@ class Constants {
         const val FMT_OPTIONS = "fmt_options[%s]"
         const val HIDDEN_FIELD = "hidden_fields"
         const val HIDDEN_FACET = "hidden_facets"
+        const val GROUPS_SORT_BY = "groups_sort_by"
+        const val GROUPS_SORT_ORDER = "groups_sort_order"
         const val RESULT_ID = "result_id"
         const val FILTER_NAME = "filter_name"
         const val FILTER_VALUE = "filter_value"
@@ -48,6 +50,8 @@ class Constants {
         const val NUM_RESULT = "num_result"
         const val ITEM_ID = "item_id"
         const val TERM = "term"
+        const val VARIATIONS_MAP = "variations_map"
+        const val GROUP_BY = "group_by"
     }
 
     object QueryValues {

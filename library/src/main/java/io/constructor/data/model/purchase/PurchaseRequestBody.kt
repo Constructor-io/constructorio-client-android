@@ -1,12 +1,14 @@
 package io.constructor.data.model.purchase
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
 /**
  * @suppress
  */
+@JsonClass(generateAdapter = true)
 data class PurchaseRequestBody(
         @Json(name = "items") val items: List<PurchaseItem>?,
         @Json(name = "order_id") val orderId: String,

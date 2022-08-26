@@ -4,11 +4,12 @@
 
 An Android Client for [Constructor.io](http://constructor.io/).  [Constructor.io](http://constructor.io/) provides search as a service that optimizes results using artificial intelligence (including natural language processing, re-ranking to optimize for conversions, and user personalization).
 
+## Documentation
 Full API documentation is available on [Github Pages](https://constructor-io.github.io/constructorio-client-android/)
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.14.1) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.18.1) to add the client to your project.
 
 ## 2. Retrieve an API key
 
@@ -21,12 +22,15 @@ import io.constructor.core.ConstructorIo
 import io.constructor.core.ConstructorIoConfig
 
 // Create the client config
-let config = ConstructorIoConfig("YOUR API KEY")
+let config = ConstructorIoConfig(
+  apiKey = "YOUR API KEY",
+  serviceUrl = "ac.cnstrc.com" // default
+)
 
 // Create the client instance
 ConstructorIo.init(this, config)
 
-// Set the user ID (if a logged in and known user) for cross device personalization
+// Set the user ID (for a logged in user) used for cross device personalization
 ConstructorIo.userId = "uid"
 ```
 
@@ -65,6 +69,35 @@ runBlocking {
 }
 ```
 
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val autocompleteRequest = AutocompleteRequest.Builder("potato")
+  .setNumResultsPerSection(mapOf(
+    "Products" to 6,
+    "Search Suggestions" to 8
+  ))
+  .setFilters(mapOf(
+    "group_id" to listOf("G123"),
+    "availability" to listOf("US", "CA")
+  ))
+  .build()
+
+// Creating a request using DSL
+val autocompleteRequest = AutocompleteRequest.build("potato") {
+  numResultsPerSection = mapOf(
+    "Products" to 6,
+    "Search Suggestions" to 8
+  )
+  filters = mapOf(
+    "group_id" to listOf("G123"),
+    "availability" to listOf("US", "CA")
+  )
+}
+
+constructorIo.getAutocompleteResults(autocompleteRequest)
+```
+
 ## 5. Request Search Results
 
 ```kotlin
@@ -96,6 +129,29 @@ runBlocking {
     }
   }
 }
+```
+
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val searchRequest = SearchRequest.Builder("potato")
+  .setFilters(mapOf(
+    "group_id" to listOf("G123"),
+    "Brand" to listOf("Kings Hawaiin")
+  ))
+  .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
+  .build()
+
+// Creating a request using DSL
+val searchRequest = SearchRequest.build("potato") {
+  filters = mapOf(
+    "group_id" to listOf("G123"),
+    "Brand" to listOf("Kings Hawaiin")
+  )
+  hiddenFields = listOf("hidden_field_1", "hidden_field_2")
+}
+
+ConstructorIo.getSearchResults(searchRequest)
 ```
 
 ## 6. Request Browse Results
@@ -132,6 +188,31 @@ runBlocking {
 }
 ```
 
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val browseRequest = BrowseRequest.Builder("group_id", "123")
+  .setFilters(mapOf(
+    "group_id" to listOf("G1234"),
+    "Brand" to listOf("Cnstrc")
+    "Color" to listOf("Red", "Blue")
+  ))
+  .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+  .build()
+
+// Creating a request using DSL
+val browseRequest = BrowseRequest.build("group_id", "123") {
+  filters = mapOf(
+    "group_id" to listOf("G1234"),
+    "Brand" to listOf("Cnstrc")
+    "Color" to listOf("Red", "Blue")
+  )
+  hiddenFacets = listOf("hidden_facet_1", "hidden_facet_2")
+}
+
+ConstructorIo.getBrowseResults(browseRequest)
+```
+
 ## 7. Request Recommendation Results
 
 ```kotlin
@@ -162,6 +243,21 @@ runBlocking {
     }
   }
 }
+```
+
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val recommendationsRequest = RecommendationsRequest.Builder("product_detail_page")
+  .setItemIds(listOf("item_id_123"))
+  .build()
+
+// Creating a request using DSL
+val recommendationsRequest = RecommendationsRequest.build("product_detail_page") {
+  itemIds = listOf("item_id_123")
+}
+
+ConstructorIo.getRecommendationResults(recommendationsRequest)
 ```
 
 ## 8. Instrument Behavioral Events

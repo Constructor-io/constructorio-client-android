@@ -1,11 +1,13 @@
 package io.constructor.data.model.common
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.io.Serializable
 
 /**
  * Models item metadata
  */
+@JsonClass(generateAdapter = true)
 data class ResultData(
         @Json(name = "description") val description: String?,
         @Json(name = "id") val id: String?,

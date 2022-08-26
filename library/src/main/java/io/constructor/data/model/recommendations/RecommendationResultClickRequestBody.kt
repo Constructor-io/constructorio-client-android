@@ -1,9 +1,11 @@
 package io.constructor.data.model.recommendations
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import io.constructor.data.model.common.*;
 import java.io.Serializable
 
+@JsonClass(generateAdapter = true)
 data class RecommendationResultClickRequestBody(
         @Json(name = "pod_id") val podId: String,
         @Json(name = "strategy_id") val strategyId: String,
