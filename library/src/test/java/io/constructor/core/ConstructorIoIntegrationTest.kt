@@ -12,12 +12,10 @@ import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.launch
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ConstructorIoIntegrationTest {
@@ -69,7 +67,7 @@ class ConstructorIoIntegrationTest {
     fun getAutocompleteResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer =
-            constructorIo.getAutocompleteResults("pork", facet?.map { it.key to it.value }).test()
+            constructorIo.getAutocompleteResults("pork", facet.map { it.key to it.value }).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -77,15 +75,9 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getAutocompleteResultsCRTAgainstRealResponse() {
         runBlocking {
-            launch {
-                try {
-                    val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork")
-                    assertTrue(autocompleteResults.sections!!.isNotEmpty())
-                    assertTrue(autocompleteResults.resultId!!.isNotEmpty())
-                } catch (e: Exception) {
-                    assertNull(e)
-                }
-            }
+            val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork")
+            assertTrue(autocompleteResults.sections!!.isNotEmpty())
+            assertTrue(autocompleteResults.resultId!!.isNotEmpty())
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -93,16 +85,10 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getAutocompleteResultsCRTWithFiltersAgainstRealResponse() {
         runBlocking {
-            launch {
-                try {
-                    val facet = hashMapOf("storeLocation" to listOf("CA"))
-                    val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork", facet?.map { it.key to it.value })
-                    assertTrue(autocompleteResults.sections!!.isNotEmpty())
-                    assertTrue(autocompleteResults.resultId!!.isNotEmpty())
-                } catch (e: Exception) {
-                    assertNull(e)
-                }
-            }
+            val facet = hashMapOf("storeLocation" to listOf("CA"))
+            val autocompleteResults = constructorIo.getAutocompleteResultsCRT("pork", facet.map { it.key to it.value })
+            assertTrue(autocompleteResults.sections!!.isNotEmpty())
+            assertTrue(autocompleteResults.resultId!!.isNotEmpty())
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -138,7 +124,7 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer =
-            constructorIo.getSearchResults("pork", facet?.map { it.key to it.value }).test()
+            constructorIo.getSearchResults("pork", facet.map { it.key to it.value }).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -146,18 +132,12 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsCRTAgainstRealResponse() {
         runBlocking {
-            launch {
-                try {
-                    val searchResults = constructorIo.getSearchResultsCRT("pork")
-                    assertTrue(searchResults.resultId !== null)
-                    assertTrue(searchResults.response!!.facets!!.isNotEmpty())
-                    assertTrue(searchResults.response!!.groups!!.isNotEmpty())
-                    assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
-                    assertTrue(searchResults.response!!.resultCount!! > 0)
-                } catch (e: Exception) {
-                    assertNull(e)
-                }
-            }
+            val searchResults = constructorIo.getSearchResultsCRT("pork")
+            assertTrue(searchResults.resultId !== null)
+            assertTrue(searchResults.response!!.facets!!.isNotEmpty())
+            assertTrue(searchResults.response!!.groups!!.isNotEmpty())
+            assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(searchResults.response!!.resultCount!! > 0)
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -166,19 +146,13 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsCRTWithFiltersAgainstRealResponse() {
         runBlocking {
-            launch {
-                try {
-                    val facet = hashMapOf("Claims" to listOf("Organic"))
-                    val searchResults = constructorIo.getSearchResultsCRT("pork", facet?.map { it.key to it.value })
-                    assertTrue(searchResults.resultId !== null)
-                    assertTrue(searchResults.response!!.facets!!.isNotEmpty())
-                    assertTrue(searchResults.response!!.groups!!.isNotEmpty())
-                    assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
-                    assertTrue(searchResults.response!!.resultCount!! > 0)
-                } catch (e: Exception) {
-                    assertNull(e)
-                }
-            }
+            val facet = hashMapOf("Claims" to listOf("Organic"))
+            val searchResults = constructorIo.getSearchResultsCRT("pork", facet.map { it.key to it.value })
+            assertTrue(searchResults.resultId !== null)
+            assertTrue(searchResults.response!!.facets!!.isNotEmpty())
+            assertTrue(searchResults.response!!.groups!!.isNotEmpty())
+            assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(searchResults.response!!.resultCount!! > 0)
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -201,7 +175,7 @@ class ConstructorIoIntegrationTest {
     fun getBrowseResultsWithFiltersAgainstRealResponse() {
         val facet = hashMapOf("storeLocation" to listOf("CA"))
         val observer =
-            constructorIo.getBrowseResults("group_ids", "544", facet?.map { it.key to it.value })
+            constructorIo.getBrowseResults("group_ids", "544", facet.map { it.key to it.value })
                 .test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
@@ -210,18 +184,12 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseResultsCRTAgainstRealResponse() {
         runBlocking {
-            launch {
-                try {
-                    val browseResults = constructorIo.getBrowseResultsCRT("group_id", "744")
-                    assertTrue(browseResults.resultId !== null)
-                    assertTrue(browseResults.response!!.facets!!.isNotEmpty())
-                    assertTrue(browseResults.response!!.groups!!.isNotEmpty())
-                    assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
-                    assertTrue(browseResults.response!!.resultCount!! > 0)
-                } catch (e: Exception) {
-                    assertNull(e)
-                }
-            }
+            val browseResults = constructorIo.getBrowseResultsCRT("group_id", "744")
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.facets!!.isNotEmpty())
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -229,19 +197,13 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseResultsCRTWithFiltersAgainstRealResponse() {
         runBlocking {
-            launch {
-                try {
-                    val facet = hashMapOf("Claims" to listOf("Organic"))
-                    val browseResults = constructorIo.getBrowseResultsCRT("group_id", "744", facet?.map { it.key to it.value })
-                    assertTrue(browseResults.resultId !== null)
-                    assertTrue(browseResults.response!!.facets!!.isNotEmpty())
-                    assertTrue(browseResults.response!!.groups!!.isNotEmpty())
-                    assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
-                    assertTrue(browseResults.response!!.resultCount!! > 0)
-                } catch (e: Exception) {
-                    assertNull(e)
-                }
-            }
+            val facet = hashMapOf("Claims" to listOf("Organic"))
+            val browseResults = constructorIo.getBrowseResultsCRT("group_id", "744", facet.map { it.key to it.value })
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.facets!!.isNotEmpty())
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -315,7 +277,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getRecommendationResultsAgainstRealResponse() {
         val facet = hashMapOf("Claims" to listOf("Organic"))
-        val observer = constructorIo.getRecommendationResults("pdp3", facet?.map { it.key to it.value }).test()
+        val observer = constructorIo.getRecommendationResults("pdp3", facet.map { it.key to it.value }).test()
         observer.assertComplete().assertValue {
             it.get()?.resultId !== null
             it.get()?.response?.pod !== null
@@ -328,18 +290,12 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getRecommendationResultsCRTAgainstRealResponse() {
         runBlocking {
-            launch {
-                try {
-                    val facet = hashMapOf("Claims" to listOf("Organic"))
-                    val recommendationResults = constructorIo.getRecommendationResultsCRT("pdp3", facet?.map { it.key to it.value })
-                    assertTrue(recommendationResults.resultId !== null)
-                    assertTrue(recommendationResults.response?.pod !== null)
-                    assertTrue(recommendationResults.response?.results!!.isNotEmpty())
-                    assertTrue(recommendationResults.response?.resultCount!! > 0)
-                } catch (e: Exception) {
-                    assertNull(e)
-                }
-            }
+            val facet = hashMapOf("Claims" to listOf("Organic"))
+            val recommendationResults = constructorIo.getRecommendationResultsCRT("pdp3", facet.map { it.key to it.value })
+            assertTrue(recommendationResults.resultId !== null)
+            assertTrue(recommendationResults.response?.pod !== null)
+            assertTrue(recommendationResults.response?.results!!.isNotEmpty())
+            assertTrue(recommendationResults.response?.resultCount!! > 0)
         }
         Thread.sleep(timeBetweenTests)
     }
