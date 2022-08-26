@@ -2,15 +2,15 @@ package io.constructor.data
 
 import com.squareup.moshi.Moshi
 import io.constructor.data.model.autocomplete.AutocompleteResponse
-import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.model.browse.BrowseResponse
-import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.RecommendationsResponse
+import io.constructor.data.model.search.SearchResponse
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.injection.ConstructorSdk
@@ -26,11 +26,16 @@ import javax.inject.Singleton
 class DataManager @Inject
 constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private val moshi: Moshi) {
 
-    fun getAutocompleteResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<AutocompleteResponse>> {
-        var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"
+    private fun getAdditionalParamsQueryString(encodedParams: Array<Pair<String, String>>): String {
+        var queryString = ""
         encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
+            queryString += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
         }
+        return queryString
+    }
+
+    fun getAutocompleteResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<AutocompleteResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getAutocompleteResults(dynamicUrl).map { result ->
             if (!result.isError) {
                 result.response()?.let {
@@ -51,18 +56,12 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     suspend fun getAutocompleteResultsCRT(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): AutocompleteResponse {
-        var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}"
-        encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-        }
+        var dynamicUrl = "/${ApiPaths.URL_AUTOCOMPLETE.format(term)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getAutocompleteResultsCRT(dynamicUrl)
     }
 
     fun getSearchResults(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<SearchResponse>> {
-        var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(term)}"
-        encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-        }
+        var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(term)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getSearchResults(dynamicUrl).map { result ->
             if (!result.isError) {
                 result.response()?.let {
@@ -83,10 +82,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     suspend fun getSearchResultsCRT(term: String, encodedParams: Array<Pair<String, String>> = arrayOf()): SearchResponse {
-        var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(term)}"
-        encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-        }
+        var dynamicUrl = "/${ApiPaths.URL_SEARCH.format(term)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getSearchResultsCRT(dynamicUrl)
     }
 
@@ -123,10 +119,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     fun getBrowseResults(filterName: String, filterValue: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseResponse>> {
-        var dynamicUrl = "/${ApiPaths.URL_BROWSE.format(filterName, filterValue)}"
-        encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-        }
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE.format(filterName, filterValue)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseResults(dynamicUrl).map { result ->
             if (!result.isError) {
                 result.response()?.let {
@@ -147,10 +140,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     suspend fun getBrowseResultsCRT(filterName: String, filterValue: String, encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseResponse {
-        var dynamicUrl = "/${ApiPaths.URL_BROWSE.format(filterName, filterValue)}"
-        encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-        }
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE.format(filterName, filterValue)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseResultsCRT(dynamicUrl)
     }
 
@@ -163,10 +153,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     fun getRecommendationResults(podId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<RecommendationsResponse>> {
-        var dynamicUrl = "/${ApiPaths.URL_RECOMMENDATIONS.format(podId)}"
-        encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-        }
+        var dynamicUrl = "/${ApiPaths.URL_RECOMMENDATIONS.format(podId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getRecommendationResults(dynamicUrl).map {
             if (!it.isError) {
                 it.response()?.let {
@@ -187,10 +174,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     suspend fun getRecommendationResultsCRT(podId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): RecommendationsResponse {
-        var dynamicUrl = "/${ApiPaths.URL_RECOMMENDATIONS.format(podId)}"
-        encodedParams.forEachIndexed { index, pair ->
-            dynamicUrl += "${if (index != 0) "&" else "?" }${pair.first}=${pair.second}"
-        }
+        var dynamicUrl = "/${ApiPaths.URL_RECOMMENDATIONS.format(podId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getRecommendationResultsCRT(dynamicUrl)
     }
 
