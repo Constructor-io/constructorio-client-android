@@ -853,7 +853,7 @@ object ConstructorIo {
      *      }
      * ```
      * @param podId the pod id
-     * @param filters additional filters used to refine results (strategy specific)
+     * @param filters additional filters used to refine results
      * @param itemIds the list of item ids to retrieve recommendations for (strategy specific)
      * @param term the term to use to refine results (strategy specific)
      * @param numResults the number of results to return
