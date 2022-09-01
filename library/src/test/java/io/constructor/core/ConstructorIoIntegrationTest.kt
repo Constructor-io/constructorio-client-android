@@ -151,6 +151,7 @@ class ConstructorIoIntegrationTest {
         val observer = constructorIo.trackSearchResultClickInternal(
             "Boneless Pork Shoulder Roast",
             "prrst_shldr_bls",
+            null,
             "pork"
         ).test()
         observer.assertComplete()
@@ -190,7 +191,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun trackBrowseResultClickAgainstRealResponse() {
         val observer =
-            constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls", 5)
+            constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls",null,5)
                 .test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
