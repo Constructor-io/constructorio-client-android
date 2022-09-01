@@ -626,6 +626,7 @@ object ConstructorIo {
      * ```
      * @param itemName the name of the clicked item i.e. "Kabocha Pumpkin"
      * @param customerId the identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param variationId the variation identifier of the clicked item variation i.e "PUMP-KAB-0002-RED"
      * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the search response that the click came from
