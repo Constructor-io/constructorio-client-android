@@ -2,7 +2,7 @@ ext {
     versions = [
             moshi   : "1.13.0",
             okHttp  : "4.9.2",
-            retrofit: '2.5.0',
+            retrofit: '2.7.2',
             dagger  : '2.35.1',
             junit   : '4.12',
     ]

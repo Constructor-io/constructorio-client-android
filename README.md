@@ -45,12 +45,25 @@ ConstructorIo.init(this, config)
 var query = "Dav"
 var selectedFacet: HashMap<String, MutableList<String>>? = null
 
+// Using RxJava
 ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.value })
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
     it?.let {
       view.renderData(it)
+    }
+  }
+}
+
+// Using Coroutines
+runBlocking {
+  launch {
+    try {
+      val autocompleteResults = constructorIo.getAutocompleteResultsCRT(query, selectedFacet?.map { it.key to it.value })
+      // Do something with autocompleteResults
+    } catch (e: Exception) {
+      println(e)
     }
   }
 }
@@ -94,12 +107,25 @@ var query = "Dave's bread"
 var selectedFacets: HashMap<String, MutableList<String>>? = null
 var selectedSortOption: SortOption? = null
 
-ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+// Using RxJava
+ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
     it.response?.let {
       view.renderData(it)
+    }
+  }
+}
+
+// Using Coroutines
+runBlocking {
+  launch {
+    try {
+      val searchResults = constructorIo.getSearchResultsCRT(query)
+      // Do something with searchResults
+    } catch (e: Exception) {
+      println(e)
     }
   }
 }
@@ -138,12 +164,25 @@ var filterValue = "Beverages"
 var selectedFacets: HashMap<String, MutableList<String>>? = null
 var selectedSortOption: SortOption? = null
 
-ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = limit, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+// Using RxJava
+ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
     it.response?.let {
       view.renderData(it)
+    }
+  }
+}
+
+// Using Coroutines
+runBlocking {
+  launch {
+    try {
+      val browseResults = constructorIo.getBrowseResultsCRT(filterName, filterValue)
+      // Do something with browseResults
+    } catch (e: Exception) {
+      println(e)
     }
   }
 }
@@ -182,12 +221,25 @@ var perPage = 10
 var podId = "best_sellers"
 var selectedFacets: HashMap<String, MutableList<String>>? = null
 
+// Using RxJava
 ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
     it.response?.let {
       view.renderData(it)
+    }
+  }
+}
+
+// Using Coroutines
+runBlocking {
+  launch {
+    try {
+      val recommendationResults = constructorIo.getRecommendationResultsCRT(podId)
+      // Do something with recommendationResults
+    } catch (e: Exception) {
+      println(e)
     }
   }
 }

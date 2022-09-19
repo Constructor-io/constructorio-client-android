@@ -1,11 +1,15 @@
 package io.constructor.data.remote
 
+import io.constructor.data.model.autocomplete.AutocompleteResponse
+import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.RecommendationsResponse
+import io.constructor.data.model.search.SearchResponse
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -19,6 +23,9 @@ interface ConstructorApi {
 
     @GET
     fun getAutocompleteResults(@Url autocompleteUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getAutocompleteResultsCRT(@Url autocompleteUrl: String): AutocompleteResponse
 
     @GET(ApiPaths.URL_AUTOCOMPLETE_SELECT_EVENT)
     fun trackAutocompleteSelect(@Path("term") term: String,
@@ -61,7 +68,13 @@ interface ConstructorApi {
     fun getSearchResults(@Url searchUrl: String): Single<Result<ResponseBody>>
 
     @GET
+    suspend fun getSearchResultsCRT(@Url autocompleteUrl: String): SearchResponse
+
+    @GET
     fun getBrowseResults(@Url browseUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getBrowseResultsCRT(@Url browseUrl: String): BrowseResponse
 
     @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
     fun trackBrowseResultClick(@Body browseResultClickRequestBody: BrowseResultClickRequestBody,
@@ -74,6 +87,9 @@ interface ConstructorApi {
 
     @GET
     fun getRecommendationResults(@Url recommendationUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getRecommendationResultsCRT(@Url recommendationUrl: String): RecommendationsResponse
 
     @POST(ApiPaths.URL_RECOMMENDATION_RESULT_CLICK_EVENT)
     fun trackRecommendationResultClick(@Body recommendationResultClickRequestBody: RecommendationResultClickRequestBody,
