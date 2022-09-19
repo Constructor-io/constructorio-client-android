@@ -57,6 +57,7 @@ class ConstructorIoIntegrationTest {
         observer.assertComplete().assertValue {
             it.get()?.sections!!.isNotEmpty()
             it.get()?.resultId!!.isNotEmpty()
+            it.get()?.sections!!["Products"]?.first()?.isSlotted == true
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -94,6 +95,7 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.groups!!.isNotEmpty()
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.results?.first()?.isSlotted == true
         }
     }
 
@@ -116,6 +118,7 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.groups!!.isNotEmpty()
             it.get()?.response?.filterSortOptions!!.isNotEmpty()
             it.get()?.response?.resultCount!! > 0
+            it.get()?.response?.results?.first()?.isSlotted == true
         }
         Thread.sleep(timeBetweenTests)
     }
