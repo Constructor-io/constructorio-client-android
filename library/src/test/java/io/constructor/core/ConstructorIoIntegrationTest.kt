@@ -207,6 +207,7 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.pod !== null
             it.get()?.response?.results !== null
             it.get()?.response?.resultCount!! >= 0
+            it.get()?.response?.results?.first()?.isSlotted == false
         }
         Thread.sleep(timeBetweenTests)
     }
