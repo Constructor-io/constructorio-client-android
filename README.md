@@ -271,4 +271,8 @@ ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "to
 
 // Track when items are purchased (customerIds, revenue, orderId)
 ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
+
+// v2.18.4+ only
+// Track when items are purchased (PurchaseItems(itemId, variationId?, quantity?), revenue, orderId)
+ConstructorIo.trackPurchase(arrayOf(PurchaseItem("TIT-REP-1997", "RED", 2), PurchaseItem("QE2-REP-1969")), 25.98, "ORD-1312343")
 ```
