@@ -453,6 +453,22 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackPurchaseWithQuantity() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(PurchaseItem("TIT-REP-1997", null, 2), PurchaseItem("QE2-REP-1969")), 12.99, "ORD-1312343").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/purchase?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.18.1&_dt="
+        assertEquals("[{item_id:TIT-REP-1997},{item_id:TIT-REP-1997},{item_id:QE2-REP-1969}]", requestBody["items"])
+        assertEquals("ORD-1312343", requestBody["order_id"])
+        assertEquals("12.99", requestBody["revenue"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackPurchaseWithVariationId() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)

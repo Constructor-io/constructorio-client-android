@@ -750,11 +750,15 @@ object ConstructorIo {
     }
 
     internal fun trackPurchaseInternal(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
+        var itemsCopy: MutableList<PurchaseItem> = ArrayList()
+        for (item in items) {
+            repeat(item.quantity ?: 1) { itemsCopy.add(item) }
+        }
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val params = mutableListOf(Constants.QueryConstants.SECTION to sectionNameParam)
         val purchaseRequestBody = PurchaseRequestBody(
-                items.toList(),
+                itemsCopy,
                 orderID,
                 revenue,
                 BuildConfig.CLIENT_VERSION,
