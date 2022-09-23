@@ -12,5 +12,5 @@ import java.io.Serializable
 data class PurchaseItem(
         @Json(name = "item_id") val itemId: String?,
         @Json(name = "variation_id") val variationId: String? = null,
-        @Transient val quantity: Int? = 1
+        @Transient val quantity: Int = 1
 ) : Serializable
