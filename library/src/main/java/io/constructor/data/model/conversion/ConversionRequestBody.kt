@@ -12,6 +12,7 @@ import java.io.Serializable
 data class ConversionRequestBody(
         @Json(name = "search_term") val searchTerm: String,
         @Json(name = "item_id") val itemID: String,
+        @Json(name = "variation_id") val variationId: String?,
         @Json(name = "item_name") val itemName: String,
         @Json(name = "revenue") val revenue: String,
         @Json(name = "conversion_type") val conversionType: String?,

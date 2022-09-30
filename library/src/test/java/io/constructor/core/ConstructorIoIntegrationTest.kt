@@ -8,6 +8,7 @@ import io.constructor.data.builder.SearchRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.VariationsMap
+import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -232,6 +233,7 @@ class ConstructorIoIntegrationTest {
         val observer = constructorIo.trackSearchResultClickInternal(
             "Boneless Pork Shoulder Roast",
             "prrst_shldr_bls",
+            null,
             "pork"
         ).test()
         observer.assertComplete()
@@ -243,6 +245,7 @@ class ConstructorIoIntegrationTest {
         val observer = constructorIo.trackConversionInternal(
             "Boneless Pork Shoulder Roast",
             "prrst_shldr_bls",
+            null,
             1.99
         ).test()
         observer.assertComplete()
@@ -252,7 +255,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun trackPurchaseAgainstRealResponse() {
         val observer = constructorIo.trackPurchaseInternal(
-            arrayOf("prrst_shldr_bls", "prrst_crwn"),
+            arrayOf(PurchaseItem("prrst_shldr_bls"), PurchaseItem("prrst_crwn")),
             9.98,
             "45273",
             "Products"
@@ -271,7 +274,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun trackBrowseResultClickAgainstRealResponse() {
         val observer =
-            constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls", 5)
+            constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls",null,5)
                 .test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)

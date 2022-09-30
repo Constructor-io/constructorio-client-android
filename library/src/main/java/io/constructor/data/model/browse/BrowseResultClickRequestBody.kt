@@ -13,6 +13,7 @@ data class BrowseResultClickRequestBody(
         @Json(name = "filter_name") val filterName: String,
         @Json(name = "filter_value") val filterValue: String,
         @Json(name = "item_id") val item_id: String,
+        @Json(name= "variation_id") val variation_id: String?,
         @Json(name = "result_position_on_page") val resultPositionOnPage: Int,
         @Json(name = "c") val c: String,
         @Json(name = "i") val i: String,

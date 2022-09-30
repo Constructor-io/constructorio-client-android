@@ -743,17 +743,38 @@ object ConstructorIo {
      * @param resultID the result ID of the search response that the click came from
     */
     fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
-        var completable = trackSearchResultClickInternal(itemName, customerId, searchTerm, sectionName, resultID)
+        var completable = trackSearchResultClickInternal(itemName, customerId, null, searchTerm, sectionName, resultID)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Result Click error: ${t.message}")
         }))
     }
-    internal fun trackSearchResultClickInternal(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
+
+    /**
+     * Tracks search result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "1234567-AB-RED", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+     * ```
+     * @param itemName the name of the clicked item i.e. "Kabocha Pumpkin"
+     * @param customerId the identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param variationId the variation identifier of the clicked item variation i.e "PUMP-KAB-0002-RED"
+     * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
+     * @param sectionName the section that the results came from, i.e. "Products"
+     * @param resultID the result ID of the search response that the click came from
+     */
+    fun trackSearchResultClick(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
+        var completable = trackSearchResultClickInternal(itemName, customerId, variationId, searchTerm, sectionName, resultID)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Search Result Click error: ${t.message}")
+        }))
+    }
+
+    internal fun trackSearchResultClickInternal(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         val sName = sectionName ?: preferenceHelper.defaultItemSection
-        return dataManager.trackSearchResultClick(itemName, customerId, searchTerm, arrayOf(
+        return dataManager.trackSearchResultClick(itemName, customerId, variationId, searchTerm, arrayOf(
                 Constants.QueryConstants.SECTION to sName
         ), encodedParams.toTypedArray())
 
@@ -773,17 +794,40 @@ object ConstructorIo {
      * @param conversionType the type of conversion, i.e. "add_to_cart"
      */
     fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null) {
-        var completable = trackConversionInternal(itemName, customerId, revenue, searchTerm, sectionName, conversionType)
+        var completable = trackConversionInternal(itemName, customerId, null, revenue, searchTerm, sectionName, conversionType)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Conversion error: ${t.message}")
         }))
     }
-    internal fun trackConversionInternal(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null): Completable {
+
+    /**
+     * Tracks conversion (a.k.a add to cart) events
+     *
+     * ##Example
+     * ```
+     * ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", "1234567-AB-RED", 12.99, "tooth", "Products", "add_to_cart")
+     * ```
+     * @param itemName the name of the converting item i.e. "Kabocha Pumpkin"
+     * @param customerId the identifier of the converting item i.e "PUMP-KAB-0002"
+     * @param variationId the variation identifier of the clicked item variation i.e "PUMP-KAB-0002-RED"
+     * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
+     * @param sectionName the section that the results came from, i.e. "Products"
+     * @param conversionType the type of conversion, i.e. "add_to_cart"
+     */
+    fun trackConversion(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null) {
+        var completable = trackConversionInternal(itemName, customerId, variationId, revenue, searchTerm, sectionName, conversionType)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Conversion error: ${t.message}")
+        }))
+    }
+
+    internal fun trackConversionInternal(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val conversionRequestBody = ConversionRequestBody(
                 searchTerm,
                 customerId,
+                variationId,
                 itemName,
                 String.format("%.2f", revenue),
                 conversionType,
@@ -812,18 +856,40 @@ object ConstructorIo {
      * @param orderID the identifier of the order
     */
     fun trackPurchase(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
-        var completable = trackPurchaseInternal(customerIds, revenue, orderID, sectionName)
+        val items = customerIds.map { item -> PurchaseItem(item) }
+        var completable = trackPurchaseInternal(items.toTypedArray(), revenue, orderID, sectionName)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Purchase error: ${t.message}")
         }))
     }
-    internal fun trackPurchaseInternal(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
+
+    /**
+     * Tracks purchase events
+     * ##Example
+     * ```
+     * ConstructorIo.trackPurchase(arrayOf(PurchaseItem("1234567-AB", "1234567-AB-RED")), 25.98, "ORD-1312343")
+     * ```
+     * @param items the purchased items
+     * @param revenue the revenue of the purchase event
+     * @param orderID the identifier of the order
+     */
+    fun trackPurchase(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null) {
+        var completable = trackPurchaseInternal(items, revenue, orderID, sectionName)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Purchase error: ${t.message}")
+        }))
+    }
+
+    internal fun trackPurchaseInternal(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
+        var itemsCopy: MutableList<PurchaseItem> = ArrayList()
+        for (item in items) {
+            repeat(item.quantity) { itemsCopy.add(item) }
+        }
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val items = customerIds.map { item -> PurchaseItem(item) }
         val sectionNameParam = sectionName ?: preferenceHelper.defaultItemSection
         val params = mutableListOf(Constants.QueryConstants.SECTION to sectionNameParam)
         val purchaseRequestBody = PurchaseRequestBody(
-                items.toList(),
+                itemsCopy,
                 orderID,
                 revenue,
                 BuildConfig.CLIENT_VERSION,
@@ -894,12 +960,34 @@ object ConstructorIo {
      * @param resultID the result ID of the browse response that the selection came from
      */
     fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null) {
-        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultID)
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, null, resultPositionOnPage, sectionName, resultID)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Result Click error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
+
+    /**
+     * Tracks browse result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "7654321-BA-RED", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+     * ```
+     * @param filterName the name of the primary filter, i.e. "Aisle"
+     * @param filterValue the value of the primary filter, i.e. "Produce"
+     * @param customerId the item identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param variationId the variation identifier of the clicked item variation i.e "PUMP-KAB-0002-RED"
+     * @param resultPositionOnPage the position of the clicked item on the page i.e. 4
+     * @param sectionName the section that the results came from, i.e. "Products"
+     * @param resultID the result ID of the browse response that the selection came from
+     */
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, variationId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, variationId, resultPositionOnPage, sectionName, resultID)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Browse Result Click error: ${t.message}")
+        }))
+    }
+
+    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
         resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
@@ -908,6 +996,7 @@ object ConstructorIo {
                 filterName,
                 filterValue,
                 customerId,
+                variationId,
                 resultPositionOnPage,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,

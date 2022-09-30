@@ -48,6 +48,7 @@ interface ConstructorApi {
     fun trackSearchResultClick(@Path("term") term: String,
                                @Query("name") itemName: String,
                                @Query("customer_id") customerId: String,
+                               @Query("variation_id") variationId: String?,
                                @QueryMap params: Map<String, String>,
                                @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 

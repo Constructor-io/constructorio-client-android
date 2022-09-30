@@ -3,6 +3,7 @@ package io.constructor.core
 import android.content.Context
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -127,7 +128,7 @@ class ConstructorioTestCellTest {
     fun trackSearchResultClick() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackSearchResultClickInternal("titanic replica", "TIT-REP-1997", "titanic").test()
+        val observer = ConstructorIo.trackSearchResultClickInternal("titanic replica", "TIT-REP-1997", null, "titanic").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.18.3&_dt=";
@@ -138,7 +139,7 @@ class ConstructorioTestCellTest {
     fun trackConversion() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", 89.00).test()
+        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", null, 89.00).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/conversion?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.18.3&_dt=";
@@ -149,7 +150,7 @@ class ConstructorioTestCellTest {
     fun trackPurchase() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackPurchaseInternal(arrayOf("TIT-REP-1997", "QE2-REP-1969"), 12.99, "ORD-1312343").test()
+        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(PurchaseItem("TIT-REP-1997"), PurchaseItem("QE2-REP-1969")), 12.99, "ORD-1312343").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/purchase?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.18.3&_dt=";

@@ -102,8 +102,8 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackConversion(conversionRequestBody, params.toMap())
     }
 
-    fun trackSearchResultClick(itemName: String, customerId: String, term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
-        return constructorApi.trackSearchResultClick(term, itemName, customerId, params.toMap(), encodedParams.toMap())
+    fun trackSearchResultClick(itemName: String, customerId: String, variationId: String?, term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
+        return constructorApi.trackSearchResultClick(term, itemName, customerId, variationId, params.toMap(), encodedParams.toMap())
     }
 
     fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, params: Array<Pair<String, String>>): Completable {

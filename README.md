@@ -293,6 +293,10 @@ ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234
 
 // Track when a search result is clicked (itemName, customerId, searchTerm, sectionName, resultId)
 ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+
+// v2.18.4+ only
+// Track when a search result is clicked (itemName, customerId, variationId, searchTerm, sectionName, resultId)
+ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "RED", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 ```
 
 ### Browse Events
@@ -303,6 +307,10 @@ ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
 
 // Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultId)
 ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+
+// v2.18.4+ only
+// Track when a browse result is clicked (filterName, filterValue, customerId, variationId, resultPositionOnPage, sectionName, resultId)
+ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "RED", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 ```
 
 ### Recommendation Events
@@ -321,6 +329,14 @@ ConstructorIo.trackRecommendationResultsView("Best_Sellers", 4, 1, 4, "179b8a0e-
 // Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, revenue, searchTerm, section, conversionType)
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth", "Products", "add_to_cart")
 
+// v2.18.4+ only
+// Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, variationId, revenue, searchTerm, section, conversionType)
+ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", "RED", 12.99, "tooth", "Products", "add_to_cart")
+
 // Track when items are purchased (customerIds, revenue, orderId)
 ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
+
+// v2.18.4+ only
+// Track when items are purchased (PurchaseItems(itemId, variationId?, quantity?), revenue, orderId)
+ConstructorIo.trackPurchase(arrayOf(PurchaseItem("TIT-REP-1997", "RED", 2), PurchaseItem("QE2-REP-1969")), 25.98, "ORD-1312343")
 ```
