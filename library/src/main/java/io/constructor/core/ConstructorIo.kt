@@ -129,6 +129,68 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
     }
 
+    private fun getEncodedParams(groupIdInt: Int? = null,
+                                 groupId: String? = null,
+                                 groupDisplayName: String? = null,
+                                 page: Int? = null,
+                                 perPage: Int? = null,
+                                 sortBy: String? = null,
+                                 sortOrder: String? = null,
+                                 sectionName: String? = null,
+                                 hiddenFacets: List<String>? = null,
+                                 groupsSortBy: String? = null,
+                                 groupsSortOrder: String? = null,
+                                 facets: List<Pair<String, List<String>>>? = null,
+                                 hiddenFields: List<String>? = null,
+                                 variationsMap: VariationsMap? = null,
+                                 numResultsPerSection: Map<String, Int>? = null,
+                                 resultId: String? = null,
+                                 numResults: Int? = null,
+                                 itemId: String? = null,
+                                 term: String? = null,
+                                 itemIds: List<String>? = null): ArrayList<Pair<String, String>> {
+
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf();
+
+        groupIdInt?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
+        facets?.forEach { facet ->
+            facet.second.forEach {
+                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
+            }
+        }
+        hiddenFields?.forEach { hiddenField ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
+        }
+        variationsMap?.let {
+            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+
+            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+        }
+        numResultsPerSection?.forEach { section ->
+            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+section.key, section.value.toString()))
+        }
+        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
+        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
+        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
+        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
+        hiddenFacets?.forEach { hiddenFacet ->
+            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+        groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
+        groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
+        resultId?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
+        groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
+        groupDisplayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
+        numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to numResults.toString().urlEncode()) }
+        itemId?.let { encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.toString().urlEncode()) }
+        term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to term.toString().urlEncode()) }
+        itemIds?.forEach { itemId ->
+            encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.urlEncode())
+        }
+        return encodedParams;
+    }
+
     /**
      * Returns a list of autocomplete suggestions
      * ##Example
@@ -151,23 +213,10 @@ object ConstructorIo {
      * @param variationsMap specify which attributes within variations should be returned
      */
     fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<AutocompleteResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdInt = groupId, facets = facets, hiddenFields = hiddenFields, variationsMap = variationsMap)
+
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
-        }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        variationsMap?.let {
-            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
-
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
         }
 
         return dataManager.getAutocompleteResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
@@ -194,19 +243,12 @@ object ConstructorIo {
      * @param hiddenFields show fields that are hidden by default
      */
     suspend fun getAutocompleteResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): AutocompleteResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdInt = groupId, facets = facets, hiddenFields = hiddenFields)
+
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
         }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
+
         return dataManager.getAutocompleteResultsCRT(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
@@ -237,30 +279,7 @@ object ConstructorIo {
      * @param request the autocomplete request object
      */
     fun getAutocompleteResults(request: AutocompleteRequest): Observable<ConstructorData<AutocompleteResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-
-        request.filters?.forEach { filter ->
-            if (filter.key == "group_id") {
-                filter.value.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.urlEncode())
-                }
-            } else {
-                filter.value.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
-                }
-            }
-        }
-        request.numResultsPerSection?.forEach { section ->
-            encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+section.key, section.value.toString()))
-        }
-        request.hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        request.variationsMap?.let {
-            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
-
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), hiddenFields = request.hiddenFields, variationsMap = request.variationsMap, numResultsPerSection = request.numResultsPerSection)
 
         return dataManager.getAutocompleteResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -294,32 +313,7 @@ object ConstructorIo {
      * @param variationsMap specify which attributes within variations should be returned
      */
     fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<SearchResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
-        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
-        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        hiddenFacets?.forEach { hiddenFacet ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
-        }
-        groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
-        groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
-        variationsMap?.let {
-            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
-
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap)
 
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -351,24 +345,8 @@ object ConstructorIo {
      * @param hiddenFacets show facets that are hidden by default
      */
     suspend fun getSearchResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): SearchResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
-        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
-        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        hiddenFacets?.forEach { hiddenFacet ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets)
+
         return dataManager.getSearchResultsCRT(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
 
@@ -399,37 +377,7 @@ object ConstructorIo {
      * @param request the search request object
      */
     fun getSearchResults(request: SearchRequest): Observable<ConstructorData<SearchResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-
-        request.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
-        request.perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
-        request.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-        request.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
-        request.filters?.forEach { filter ->
-            if (filter.key == "group_id") {
-                filter.value.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.urlEncode())
-                }
-            } else {
-                filter.value.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
-                }
-            }
-        }
-        request.hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        request.hiddenFacets?.forEach { hiddenFacet ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
-        }
-        request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
-        request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
-        request.variationsMap?.let {
-            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
-
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap)
 
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -465,31 +413,7 @@ object ConstructorIo {
      * @param variationsMap specify which attributes within variations should be returned
      */
     fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<BrowseResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
-        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
-        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        hiddenFacets?.forEach { hiddenFacet ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
-        }
-        groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
-        groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
-        variationsMap?.let {
-            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
-
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap)
 
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
@@ -522,24 +446,8 @@ object ConstructorIo {
      * @param hiddenFacets show facets that are hidden by default
      */
     suspend fun getBrowseResultsCRT(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): BrowseResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        groupId?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
-        page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
-        perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
-        sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-        sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
-        hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        hiddenFacets?.forEach { hiddenFacet ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets)
+
         return dataManager.getBrowseResultsCRT(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
 
@@ -570,37 +478,7 @@ object ConstructorIo {
      * @param request the search request object
      */
     fun getBrowseResults(request: BrowseRequest): Observable<ConstructorData<BrowseResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-
-        request.page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to it.toString().urlEncode()) }
-        request.perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to it.toString().urlEncode()) }
-        request.sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
-        request.sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
-        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
-        request.filters?.forEach { filter ->
-            if (filter.key == "group_id") {
-                filter.value.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.urlEncode())
-                }
-            } else {
-                filter.value.forEach {
-                    encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
-                }
-            }
-        }
-        request.hiddenFields?.forEach { hiddenField ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
-        }
-        request.hiddenFacets?.forEach { hiddenFacet ->
-            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
-        }
-        request.groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to it.urlEncode()) }
-        request.groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to it.urlEncode()) }
-        request.variationsMap?.let {
-            val variationsMapJSONString = jsonAdapter.toJson(request.variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
-
-            encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap)
 
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
     }
@@ -667,10 +545,8 @@ object ConstructorIo {
     }
     internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        resultGroup?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
-        resultGroup?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
-        resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName, resultId = resultID);
+
         return dataManager.trackAutocompleteSelect(searchTerm, arrayOf(
             Constants.QueryConstants.SECTION to sectionName,
             Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
@@ -698,9 +574,8 @@ object ConstructorIo {
     }
     internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        resultGroup?.groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
-        resultGroup?.displayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName);
+
         return dataManager.trackSearchSubmit(searchTerm, arrayOf(
                 Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
                 Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH
@@ -771,8 +646,7 @@ object ConstructorIo {
 
     internal fun trackSearchResultClickInternal(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(resultId = resultID)
         val sName = sectionName ?: preferenceHelper.defaultItemSection
         return dataManager.trackSearchResultClick(itemName, customerId, variationId, searchTerm, arrayOf(
                 Constants.QueryConstants.SECTION to sName
@@ -1040,16 +914,8 @@ object ConstructorIo {
      * @param term: The term to use to refine results (strategy specific)
      */
     fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to numResults.toString().urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        itemId?.let { encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.toString().urlEncode()) }
-        term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to term.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets )
+
         return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
     }
 
@@ -1076,16 +942,8 @@ object ConstructorIo {
      * @param term: The term to use to refine results (strategy specific)
      */
     suspend fun getRecommendationResultsCRT(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null): RecommendationsResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to numResults.toString().urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
-        itemId?.let { encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.toString().urlEncode()) }
-        term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to term.toString().urlEncode()) }
-        facets?.forEach { facet ->
-            facet.second.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(facet.first).urlEncode() to it.urlEncode())
-            }
-        }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets )
+
         return dataManager.getRecommendationResultsCRT(podId, encodedParams = encodedParams.toTypedArray())
     }
 
@@ -1116,18 +974,8 @@ object ConstructorIo {
      * @param section the section the results will come from, i.e. "Products"
      */
     fun getRecommendationResults(request: RecommendationsRequest): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        request.filters?.forEach { filter ->
-            filter.value.forEach {
-                encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(filter.key).urlEncode() to it.urlEncode())
-            }
-        }
-        request.itemIds?.forEach { itemId ->
-            encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.urlEncode())
-        }
-        request.term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to it.urlEncode()) }
-        request.numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to it.toString().urlEncode()) }
-        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section )
+
         return dataManager.getRecommendationResults(request.podId, encodedParams = encodedParams.toTypedArray())
     }
 
