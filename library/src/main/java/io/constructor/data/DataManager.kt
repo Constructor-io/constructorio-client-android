@@ -7,6 +7,7 @@ import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
+import io.constructor.data.model.quiz.QuizResponse
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
@@ -184,5 +185,47 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackRecommendationResultsView(recommendationResultViewRequestBody: RecommendationResultViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackRecommendationResultsView(recommendationResultViewRequestBody, params.toMap())
+    }
+
+    fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<QuizResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getNextQuestion(dynamicUrl).map {
+            if (!it.isError) {
+                it.response()?.let {
+                    if (it.isSuccessful) {
+                        val adapter = moshi.adapter(QuizResponse::class.java)
+                        val response = it.body()?.string()
+                        val result = response?.let { adapter.fromJson(it) }
+                        result?.rawData = response
+                        ConstructorData.of(result!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(it.error())
+            } else {
+                ConstructorData.error(it.error())
+            }
+        }.toObservable()
+    }
+
+    fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<QuizResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getQuizResults(dynamicUrl).map {
+            if (!it.isError) {
+                it.response()?.let {
+                    if (it.isSuccessful) {
+                        val adapter = moshi.adapter(QuizResponse::class.java)
+                        val response = it.body()?.string()
+                        val result = response?.let { adapter.fromJson(it) }
+                        result?.rawData = response
+                        ConstructorData.of(result!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(it.error())
+            } else {
+                ConstructorData.error(it.error())
+            }
+        }.toObservable()
     }
 }

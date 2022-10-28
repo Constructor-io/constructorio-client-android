@@ -4,8 +4,8 @@ import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
-import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
+import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
@@ -99,4 +99,10 @@ interface ConstructorApi {
     @POST(ApiPaths.URL_RECOMMENDATION_RESULT_VIEW_EVENT)
     fun trackRecommendationResultsView(@Body recommendationResultViewRequestBody: RecommendationResultViewRequestBody,
                                        @QueryMap params: Map<String, String>): Completable
+
+    @GET
+    fun getNextQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    fun getQuizResults(@Url quizUrl: String): Single<Result<ResponseBody>>
 }

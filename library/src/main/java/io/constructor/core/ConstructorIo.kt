@@ -10,6 +10,7 @@ import io.constructor.data.builder.AutocompleteRequest
 import io.constructor.data.builder.BrowseRequest
 import io.constructor.data.builder.RecommendationsRequest
 import io.constructor.data.builder.SearchRequest
+import io.constructor.data.builder.QuizRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
@@ -25,6 +26,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.quiz.QuizResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -603,6 +605,30 @@ object ConstructorIo {
         }
 
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
+    }
+
+    fun getNextQuestion(request: QuizRequest): Observable<ConstructorData<QuizResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.a?.forEach { a ->
+            encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
+        }
+        request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getNextQuestion(request.quizId, encodedParams = encodedParams.toTypedArray())
+    }
+
+    fun getQuizResults(request: QuizRequest): Observable<ConstructorData<QuizResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.a?.forEach { a ->
+            encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
+        }
+        request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizResults(request.quizId, encodedParams = encodedParams.toTypedArray())
     }
 
     /**
