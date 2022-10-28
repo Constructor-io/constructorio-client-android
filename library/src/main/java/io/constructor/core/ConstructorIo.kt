@@ -6,11 +6,7 @@ import com.squareup.moshi.Moshi
 import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
-import io.constructor.data.builder.AutocompleteRequest
-import io.constructor.data.builder.BrowseRequest
-import io.constructor.data.builder.RecommendationsRequest
-import io.constructor.data.builder.SearchRequest
-import io.constructor.data.builder.QuizRequest
+import io.constructor.data.builder.*
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
@@ -22,11 +18,11 @@ import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
+import io.constructor.data.model.quiz.QuizResponse
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
-import io.constructor.data.model.quiz.QuizResponse
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -607,6 +603,18 @@ object ConstructorIo {
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
     }
 
+    fun getNextQuestion(quizId: String, a: List<String>? = null, versionId: String? = null, section: String? = null): Observable<ConstructorData<QuizResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        a?.forEach { a ->
+            encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getNextQuestion(quizId, encodedParams = encodedParams.toTypedArray())
+    }
+
     fun getNextQuestion(request: QuizRequest): Observable<ConstructorData<QuizResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
@@ -617,6 +625,18 @@ object ConstructorIo {
         request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
         return dataManager.getNextQuestion(request.quizId, encodedParams = encodedParams.toTypedArray())
+    }
+
+    fun getQuizResults(quizId: String, a: List<String>? = null, versionId: String? = null, section: String? = null): Observable<ConstructorData<QuizResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        a?.forEach { a ->
+            encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizResults(quizId, encodedParams = encodedParams.toTypedArray())
     }
 
     fun getQuizResults(request: QuizRequest): Observable<ConstructorData<QuizResponse>> {
