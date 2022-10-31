@@ -809,14 +809,14 @@ class ConstructorIoIntegrationTest {
             it.get()?.response?.resultCount!! > 0
             it.get()?.response?.refinedContent?.first()?.data!!.isNullOrEmpty()
             it.get()?.response?.refinedContent?.first()?.data?.get("body") === "Content 1 Body"
-            it.get()?.response?.refinedContent?.first()?.data?.get("header") === "Content 1 Header"
+            it.get()?.response?.refinedContent?.first()?.data?.get("header") === "Content 1"
             it.get()?.response?.refinedContent?.first()?.data?.get("assetUrl") === "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png"
             it.get()?.response?.refinedContent?.first()?.data?.get("altText") === "Content 1 desktop alt text"
             it.get()?.response?.refinedContent?.first()?.data?.get("ctaLink") === "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png"
             it.get()?.response?.refinedContent?.first()?.data?.get("ctaText") === "Content 1 CTA Button"
             it.get()?.response?.refinedContent?.first()?.data?.get("tag-1") === "tag-1-value"
             it.get()?.response?.refinedContent?.first()?.data?.get("tag-2") === "tag-2-value"
-            it.get()?.response?.refinedContent?.first()?.data?.get("arbitraryDataObject") !== null
+            it.get()?.response?.refinedContent?.first()?.data?.get("arbitraryDataObject") !== "test"
         }
     }
 }
