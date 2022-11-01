@@ -1,6 +1,7 @@
 package io.constructor.data
 
 import com.squareup.moshi.Moshi
+import io.constructor.BuildConfig
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
@@ -188,8 +189,8 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<QuizResponse>> {
-        var dynamicUrl = "/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
-        return constructorApi.getNextQuestion(dynamicUrl).map {
+        var url = "${BuildConfig.SERVICE_SCHEME}://${BuildConfig.QUIZZES_SERVICE_URL}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getNextQuestion(url).map {
             if (!it.isError) {
                 it.response()?.let {
                     if (it.isSuccessful) {
@@ -209,8 +210,8 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<QuizResponse>> {
-        var dynamicUrl = "/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
-        return constructorApi.getQuizResults(dynamicUrl).map {
+        var url = "${BuildConfig.SERVICE_SCHEME}://${BuildConfig.QUIZZES_SERVICE_URL}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getQuizResults(url).map {
             if (!it.isError) {
                 it.response()?.let {
                     if (it.isSuccessful) {

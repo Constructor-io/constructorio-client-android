@@ -34,7 +34,7 @@ class ConstructorIoIntegrationQuizTest {
         every { preferencesHelper.apiKey } returns "ZqXaOfXuBWD4s3XzCI1q"
         every { preferencesHelper.id } returns "wacko-the-guid"
         every { preferencesHelper.scheme } returns "https"
-        every { preferencesHelper.serviceUrl } returns "quizzes.cnstrc.com"
+        every { preferencesHelper.serviceUrl } returns "ac.cnstrc.com"
         every { preferencesHelper.port } returns 443
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
@@ -44,7 +44,7 @@ class ConstructorIoIntegrationQuizTest {
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
 
-        val config = ConstructorIoConfig("ZqXaOfXuBWD4s3XzCI1q", "quizzes.cnstrc.com")
+        val config = ConstructorIoConfig("ZqXaOfXuBWD4s3XzCI1q")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
 
         constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
@@ -69,7 +69,7 @@ class ConstructorIoIntegrationQuizTest {
         assertEquals(quizResult?.nextQuestion?.options?.get(0)?.id, 1)
         assertEquals(quizResult?.nextQuestion?.options?.get(0)?.value, "Yes")
         assertEquals(quizResult?.nextQuestion?.options?.get(0)?.attribute?.name, "group_id")
-        assertEquals(quizResult?.nextQuestion?.options?.get(0)?.attribute?.value, "Brandx")
+        assertEquals(quizResult?.nextQuestion?.options?.get(0)?.attribute?.value, "BrandX")
         assertEquals(quizResult?.nextQuestion?.options?.get(0)?.images?.primaryUrl, "/test-asset")
 
         Thread.sleep(timeBetweenTests)
@@ -167,18 +167,34 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
+    fun getNextQuestionWithOpenTextTypeAnswerAgainstRealResponseTest() {
+        val answers = listOf("1", "1,2", "seen", "true")
+        val request = QuizRequest.Builder("test-quiz")
+                .setA(answers)
+                .build()
+        val observer = constructorIo.getNextQuestion(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val quizResult = observer.values()[0].get()
+        assertNotNull(quizResult?.versionId)
+        assertEquals(quizResult?.isLastQuestion, true)
+        assertEquals(quizResult?.nextQuestion, null)
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getQuizResultsAgainstRealResponse() {
         val answers = listOf("1", "1,2", "seen", "true")
         val request = QuizRequest.Builder("test-quiz")
                 .setA(answers)
                 .build()
         val observer = constructorIo.getQuizResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.versionId !== null
-            it.get()?.result !== null
-            it.get()?.result?.resultsUrl == "httpsadfasdfs://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.18.5&ui=player-three&s=67"
-            it.get()?.result?.filterExpression?.toString() == "{and=[{name=group_id, value=BrandX}, {or=[{name=Color, value=Blue}, {name=Color, value=red}]}]}"
-        }
+        val quizResult = observer.values()[0].get()
+        assertNotNull(quizResult?.versionId)
+        assertEquals(quizResult?.result?.resultsUrl, "httpsadfasdfs://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.18.5&ui=player-three&s=67")
+        assertEquals(quizResult?.result?.filterExpression?.toString(), "{and=[{name=group_id, value=BrandX}, {or=[{name=Color, value=Blue}, {name=Color, value=red}]}]}")
+
         Thread.sleep(timeBetweenTests)
     }
 }

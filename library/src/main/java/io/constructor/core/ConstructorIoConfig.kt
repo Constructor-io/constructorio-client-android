@@ -16,6 +16,7 @@ import io.constructor.BuildConfig
 data class ConstructorIoConfig(
         val apiKey: String,
         val serviceUrl: String = BuildConfig.SERVICE_URL,
+        val quizzesServiceUrl: String = BuildConfig.QUIZZES_SERVICE_URL,
         val segments: List<String> = emptyList(),
         val testCells: List<Pair<String, String>> = emptyList(),
         val autocompleteResultCount: Map<String, Int> = mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10, Constants.QueryValues.PRODUCTS to 0),
