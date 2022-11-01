@@ -2,6 +2,7 @@ package io.constructor.data
 
 import com.squareup.moshi.Moshi
 import io.constructor.BuildConfig
+import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
@@ -188,8 +189,12 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackRecommendationResultsView(recommendationResultViewRequestBody, params.toMap())
     }
 
-    fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<QuizResponse>> {
-        var url = "${BuildConfig.SERVICE_SCHEME}://${BuildConfig.QUIZZES_SERVICE_URL}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+    fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
+//        var url = "${BuildConfig.SERVICE_SCHEME}://${BuildConfig.QUIZZES_SERVICE_URL}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        val scheme = preferencesHelper.scheme
+        val serviceUrl = if (preferencesHelper.serviceUrl === "ac.cnstrc.com") "${BuildConfig.QUIZZES_SERVICE_URL}" else "${preferencesHelper.serviceUrl}"
+        val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+
         return constructorApi.getNextQuestion(url).map {
             if (!it.isError) {
                 it.response()?.let {
