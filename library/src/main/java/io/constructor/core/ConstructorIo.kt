@@ -89,6 +89,7 @@ object ConstructorIo {
         preferenceHelper = component.preferenceHelper()
         preferenceHelper.apiKey = constructorIoConfig.apiKey
         preferenceHelper.serviceUrl = constructorIoConfig.serviceUrl
+        preferenceHelper.quizzesServiceUrl = constructorIoConfig.quizzesServiceUrl
         preferenceHelper.port = constructorIoConfig.servicePort
         preferenceHelper.scheme = constructorIoConfig.serviceScheme
         preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
@@ -603,18 +604,39 @@ object ConstructorIo {
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
     }
 
-    fun getNextQuestion(quizId: String, a: List<String>? = null, versionId: String? = null, section: String? = null): Observable<ConstructorData<QuizResponse>> {
+    /**
+     * ## Example
+     * ```
+     * ConstructorIo.getNextQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id")
+     * ```
+     * @param quizId id of the quiz you want to retrieve
+     * @param a list of answers to send
+     * @param versionId version identifier for the quiz
+     * @param sectionName the section the quiz and results come from. defaults to "Products"
+     */
+    fun getNextQuestion(quizId: String, a: List<String>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         a?.forEach { a ->
             encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
         }
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
-        section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
         return dataManager.getNextQuestion(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
+    /**
+     * ## Example
+     * ```
+     * val request = QuizRequest.Builder("quiz-id")
+     *     .setA(listOf("1", "1,2", "seen", "true"))
+     *     .setVersionId("version-id")
+     *     .build()
+     * ConstructorIo.getNextQuestion(request)
+     * ```
+     * @param request the quiz request object
+     */
     fun getNextQuestion(request: QuizRequest): Observable<ConstructorData<QuizResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
@@ -627,18 +649,39 @@ object ConstructorIo {
         return dataManager.getNextQuestion(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
-    fun getQuizResults(quizId: String, a: List<String>? = null, versionId: String? = null, section: String? = null): Observable<ConstructorData<QuizResponse>> {
+    /**
+     * ## Example
+     * ```
+     * ConstructorIo.getQuizResults("quiz-id", listOf("1", "1,2", "true", "seen", "version-id")
+     * ```
+     * @param quizId id of the quiz you want to retrieve
+     * @param a list of answers to send
+     * @param versionId version identifier for the quiz
+     * @param sectionName the section the quiz and results come from. defaults to "Products"
+     */
+    fun getQuizResults(quizId: String, a: List<String>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         a?.forEach { a ->
             encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
         }
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
-        section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizResults(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
+    /**
+     * ## Example
+     * ```
+     * val request = QuizRequest.Builder("quiz-id")
+     *     .setA(listOf("1", "1,2", "seen", "true"))
+     *     .setVersionId("version-id")
+     *     .build()
+     * ConstructorIo.getQuizResults(request)
+     * ```
+     * @param request the quiz request object
+     */
     fun getQuizResults(request: QuizRequest): Observable<ConstructorData<QuizResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 

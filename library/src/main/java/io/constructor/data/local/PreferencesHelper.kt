@@ -35,6 +35,10 @@ constructor(@ConstructorSdk val preferences: SharedPreferences) {
         get() = preferences.getString(PREF_SERVICE_URL, "")
         set(value) = preferences.edit().putString(PREF_SERVICE_URL, value).apply()
 
+    var quizzesServiceUrl: String?
+        get() = preferences.getString(PREF_SERVICE_URL, "")
+        set(value) = preferences.edit().putString(PREF_SERVICE_URL, value).apply()
+
     var port: Int
         get() = preferences.getInt(PREF_SERVICE_PORT, 443)
         set(value) = preferences.edit().putInt(PREF_SERVICE_PORT, value).apply()
