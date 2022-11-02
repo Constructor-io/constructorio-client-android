@@ -189,10 +189,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
-        val scheme = preferencesHelper.scheme
-        val serviceUrl = preferencesHelper.quizzesServiceUrl
-        val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
-
+        val url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getNextQuestion(url).map {
             if (!it.isError) {
                 it.response()?.let {
@@ -213,16 +210,12 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     suspend fun getNextQuestionCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResponse {
-        val scheme = preferencesHelper.scheme
-        val serviceUrl = preferencesHelper.quizzesServiceUrl
-        val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        val url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getNextQuestionCRT(url)
     }
 
     fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
-        val scheme = preferencesHelper.scheme
-        val serviceUrl = preferencesHelper.quizzesServiceUrl
-        var url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        var url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getQuizResults(url).map {
             if (!it.isError) {
                 it.response()?.let {
@@ -243,9 +236,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     suspend fun getQuizResultsCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResponse {
-        val scheme = preferencesHelper.scheme
-        val serviceUrl = preferencesHelper.quizzesServiceUrl
-        val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        var url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getQuizResultsCRT(url)
     }
 }
