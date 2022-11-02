@@ -607,7 +607,7 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
-     * ConstructorIo.getNextQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id")
+     * ConstructorIo.getNextQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param a list of answers to send
@@ -652,7 +652,34 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
-     * ConstructorIo.getQuizResults("quiz-id", listOf("1", "1,2", "true", "seen", "version-id")
+     * runBlocking {
+     *      launch {
+     *          try {
+     *              val quizResults = constructorIo.getNextQuestion("quiz-id", listOf("1", "1,2", "seen", "true"))
+     *              // Do something with quizResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     */
+    suspend fun getNextQuestionCRT(quizId: String, a: List<String>? = null, versionId: String? = null, sectionName: String? = null): QuizResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        a?.forEach { a ->
+            encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getNextQuestionCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
+     * ## Example
+     * ```
+     * ConstructorIo.getQuizResults("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param a list of answers to send
@@ -692,6 +719,33 @@ object ConstructorIo {
         request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizResults(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
+     * ## Example
+     * ```
+     * runBlocking {
+     *      launch {
+     *          try {
+     *              val quizResults = constructorIo.getQuizResultsCRT("quiz-id", listOf("1", "1,2", "seen", "true"))
+     *              // Do something with quizResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     */
+    suspend fun getQuizResultsCRT(quizId: String, a: List<String>? = null, versionId: String? = null, sectionName: String? = null): QuizResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        a?.forEach { a ->
+            encodedParams.add(Constants.QueryConstants.A.urlEncode() to a.urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizResultsCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
     /**

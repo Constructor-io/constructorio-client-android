@@ -1,7 +1,6 @@
 package io.constructor.data
 
 import com.squareup.moshi.Moshi
-import io.constructor.BuildConfig
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResponse
@@ -191,7 +190,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
         val scheme = preferencesHelper.scheme
-        val serviceUrl = if (preferencesHelper.serviceUrl === "ac.cnstrc.com") "${BuildConfig.QUIZZES_SERVICE_URL}" else "${preferencesHelper.serviceUrl}"
+        val serviceUrl = preferencesHelper.quizzesServiceUrl
         val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
 
         return constructorApi.getNextQuestion(url).map {
@@ -213,9 +212,16 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
+    suspend fun getNextQuestionCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResponse {
+        val scheme = preferencesHelper.scheme
+        val serviceUrl = preferencesHelper.quizzesServiceUrl
+        val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getNextQuestionCRT(url)
+    }
+
     fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
         val scheme = preferencesHelper.scheme
-        val serviceUrl = if (preferencesHelper.serviceUrl === "ac.cnstrc.com") "${BuildConfig.QUIZZES_SERVICE_URL}" else "${preferencesHelper.serviceUrl}"
+        val serviceUrl = preferencesHelper.quizzesServiceUrl
         var url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getQuizResults(url).map {
             if (!it.isError) {
@@ -234,5 +240,12 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
                 ConstructorData.error(it.error())
             }
         }.toObservable()
+    }
+
+    suspend fun getQuizResultsCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResponse {
+        val scheme = preferencesHelper.scheme
+        val serviceUrl = preferencesHelper.quizzesServiceUrl
+        val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getQuizResultsCRT(url)
     }
 }

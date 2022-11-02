@@ -8,11 +8,12 @@ import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert.assertNotNull
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class ConstructorIoIntegrationQuizTest {
@@ -35,6 +36,7 @@ class ConstructorIoIntegrationQuizTest {
         every { preferencesHelper.id } returns "wacko-the-guid"
         every { preferencesHelper.scheme } returns "https"
         every { preferencesHelper.serviceUrl } returns "ac.cnstrc.com"
+        every { preferencesHelper.quizzesServiceUrl } returns "quizzes.cnstrc.com"
         every { preferencesHelper.port } returns 443
         every { preferencesHelper.defaultItemSection } returns "Products"
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
@@ -167,25 +169,8 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getNextQuestionWithOpenTextTypeAnswerAgainstRealResponseTest() {
-        val answers = listOf("1", "1,2", "seen", "true")
-        val request = QuizRequest.Builder("test-quiz")
-                .setA(answers)
-                .build()
-        val observer = constructorIo.getNextQuestion(request).test()
-        observer.assertComplete()
-        observer.assertNoErrors()
-        val quizResult = observer.values()[0].get()
-        assertNotNull(quizResult?.versionId)
-        assertEquals(quizResult?.isLastQuestion, true)
-        assertEquals(quizResult?.nextQuestion, null)
-
-        Thread.sleep(timeBetweenTests)
-    }
-
-    @Test
     fun getQuizResultsAgainstRealResponse() {
-        val answers = listOf("1", "1,2", "seen", "true")
+        val answers = listOf("1", "1,2", "seen")
         val request = QuizRequest.Builder("test-quiz")
             .setA(answers)
             .build()
@@ -195,6 +180,36 @@ class ConstructorIoIntegrationQuizTest {
         assertEquals(quizResult?.result?.resultsUrl, "https://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.18.5&ui=player-three&s=67")
         assertEquals(quizResult?.result?.filterExpression?.toString(), "{and=[{name=group_id, value=BrandX}, {or=[{name=Color, value=Blue}, {name=Color, value=red}]}]}")
 
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getNextQuestionCRTAgainstRealResponse() {
+        runBlocking {
+            val answers = listOf("1", "1,2", "seen")
+            val quizResult = constructorIo.getNextQuestionCRT("test-quiz", answers)
+            assertNotNull(quizResult?.versionId)
+            assertEquals(quizResult?.isLastQuestion, true)
+            assertEquals(quizResult?.nextQuestion?.id, 4)
+            assertEquals(quizResult?.nextQuestion?.title, "Test Open Text")
+            assertEquals(quizResult?.nextQuestion?.images?.primaryUrl, "/test-asset")
+            assertEquals(quizResult?.nextQuestion?.type, "open")
+            assertEquals(quizResult?.nextQuestion?.ctaText , null)
+            assertEquals(quizResult?.nextQuestion?.inputPlaceholder , "Input Placeholder test")
+            assertEquals(quizResult?.nextQuestion?.description, "This is a open text test.")
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getQuizResultsCRTAgainstRealResponse() {
+        runBlocking {
+            val answers = listOf("1", "1,2", "seen", "true")
+            val quizResult = constructorIo.getQuizResultsCRT("test-quiz", answers)
+            assertNotNull(quizResult?.versionId)
+            assertEquals(quizResult?.result?.resultsUrl, "https://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.18.5&ui=player-three&s=67")
+            assertEquals(quizResult?.result?.filterExpression?.toString(), "{and=[{name=group_id, value=BrandX}, {or=[{name=Color, value=Blue}, {name=Color, value=red}]}]}")
+        }
         Thread.sleep(timeBetweenTests)
     }
 }

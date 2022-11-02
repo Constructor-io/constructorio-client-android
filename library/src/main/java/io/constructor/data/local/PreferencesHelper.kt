@@ -82,6 +82,7 @@ constructor(@ConstructorSdk val preferences: SharedPreferences) {
         const val SESSION_LAST_ACCESS = "session_last_access"
         const val SESSION_TIME_THRESHOLD = 1000 * 60 * 30
         const val PREF_SERVICE_URL = "service_url"
+        const val PREF_QUIZZES_SERVICE_URL = "quizzes_service_url"
         const val PREF_SERVICE_PORT = "service_port"
         const val PREF_SERVICE_SCHEME = "service_scheme"
     }

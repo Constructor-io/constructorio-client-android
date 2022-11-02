@@ -6,6 +6,7 @@ import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
+import io.constructor.data.model.quiz.QuizResponse
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
@@ -104,5 +105,11 @@ interface ConstructorApi {
     fun getNextQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>
 
     @GET
+    suspend fun getNextQuestionCRT(@Url quizUrl: String): QuizResponse
+
+    @GET
     fun getQuizResults(@Url quizUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getQuizResultsCRT(@Url quizUrl: String): QuizResponse
 }
