@@ -187,12 +187,12 @@ class ConstructorIoIntegrationQuizTest {
     fun getQuizResultsAgainstRealResponse() {
         val answers = listOf("1", "1,2", "seen", "true")
         val request = QuizRequest.Builder("test-quiz")
-                .setA(answers)
-                .build()
+            .setA(answers)
+            .build()
         val observer = constructorIo.getQuizResults(request).test()
         val quizResult = observer.values()[0].get()
         assertNotNull(quizResult?.versionId)
-        assertEquals(quizResult?.result?.resultsUrl, "http://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.18.5&ui=player-three&s=67")
+        assertEquals(quizResult?.result?.resultsUrl, "https://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.18.5&ui=player-three&s=67")
         assertEquals(quizResult?.result?.filterExpression?.toString(), "{and=[{name=group_id, value=BrandX}, {or=[{name=Color, value=Blue}, {name=Color, value=red}]}]}")
 
         Thread.sleep(timeBetweenTests)

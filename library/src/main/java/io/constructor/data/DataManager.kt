@@ -190,7 +190,6 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     }
 
     fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
-//        var url = "${BuildConfig.SERVICE_SCHEME}://${BuildConfig.QUIZZES_SERVICE_URL}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         val scheme = preferencesHelper.scheme
         val serviceUrl = if (preferencesHelper.serviceUrl === "ac.cnstrc.com") "${BuildConfig.QUIZZES_SERVICE_URL}" else "${preferencesHelper.serviceUrl}"
         val url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
@@ -214,8 +213,10 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
-    fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<QuizResponse>> {
-        var url = "${BuildConfig.SERVICE_SCHEME}://${BuildConfig.QUIZZES_SERVICE_URL}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
+    fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
+        val scheme = preferencesHelper.scheme
+        val serviceUrl = if (preferencesHelper.serviceUrl === "ac.cnstrc.com") "${BuildConfig.QUIZZES_SERVICE_URL}" else "${preferencesHelper.serviceUrl}"
+        var url = "${scheme}://${serviceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getQuizResults(url).map {
             if (!it.isError) {
                 it.response()?.let {
