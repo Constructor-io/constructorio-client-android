@@ -37,6 +37,7 @@ class ConstructorioQuizTest {
         every { preferencesHelper.apiKey } returns "golden-key"
         every { preferencesHelper.id } returns "guido-the-guid"
         every { preferencesHelper.serviceUrl } returns mockServer.hostName
+        every { preferencesHelper.quizzesServiceUrl } returns mockServer.hostName
         every { preferencesHelper.port } returns mockServer.port
         every { preferencesHelper.scheme } returns "http"
         every { preferencesHelper.defaultItemSection } returns "Products"
