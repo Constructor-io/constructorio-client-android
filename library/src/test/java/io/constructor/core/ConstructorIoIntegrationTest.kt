@@ -324,8 +324,8 @@ class ConstructorIoIntegrationTest {
     @Test
     fun trackRecommendationResultClickAgainstRealResponse() {
         val observer = constructorIo.trackRecommendationResultClickInternal(
-            "pdp5",
-            "User Featured",
+            "pdp3",
+            "filtered_items",
             "prrst_shldr_bls"
         ).test()
         observer.assertComplete()
@@ -334,7 +334,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun trackRecommendationResultsViewAgainstRealResponse() {
-        val observer = constructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        val observer = constructorIo.trackRecommendationResultsViewInternal("pdp3", 4).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -734,7 +734,10 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getRecommendationResultsAgainstRealResponseUsingRequestBuilder() {
-        val request = RecommendationsRequest.Builder("pdp5").build()
+        val filters = mapOf("group_id" to listOf("544"))
+        val request = RecommendationsRequest.Builder("pdp3")
+            .setFilters(filters)
+            .build()
         val observer = constructorIo.getRecommendationResults(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
@@ -867,7 +870,7 @@ class ConstructorIoIntegrationTest {
         assertTrue(searchResponse?.resultId !== null)
         assertTrue(searchResponse?.response?.results!!.isNotEmpty())
         assertTrue(searchResponse?.response?.resultCount!! > 0)
-        assertTrue(searchResponse?.response?.refinedContent?.first()?.data!!.isNullOrEmpty())
+        assertTrue(searchResponse?.response?.refinedContent?.first()?.data!!.isNotEmpty())
         assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("body"), "Content 1 Body")
         assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("header"), "Content 1 Header")
         assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("assetUrl"), "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png")
