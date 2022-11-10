@@ -7,7 +7,7 @@ class QuizRequestTest {
     private val quizId = "test-quiz"
     private val versionId = "11db5ac7-67e1-4000-9000-414d8425cab3"
     private val section = "Products"
-    private val a = listOf("1", "1,2")
+    private val answers = listOf("1", "1,2")
 
     @Test
     fun quizRequestUsingBuilder() {
@@ -26,9 +26,9 @@ class QuizRequestTest {
     @Test
     fun quizRequestWithAnswersUsingBuilder() {
         val request = QuizRequest.Builder(quizId)
-            .setA(a)
+            .setAnswers(answers)
             .build()
-        assertEquals(request.a, a)
+        assertEquals(request.answers, answers)
     }
 
     @Test
@@ -43,11 +43,11 @@ class QuizRequestTest {
     fun quizRequestUsingDSL() {
         val request = QuizRequest.build(quizId) {
             versionId = this@QuizRequestTest.versionId
-            a = this@QuizRequestTest.a
+            answers = this@QuizRequestTest.answers
             section = this@QuizRequestTest.section
         }
         assertEquals(request.versionId, versionId)
-        assertEquals(request.a, a)
+        assertEquals(request.answers, answers)
         assertEquals(request.section, section)
     }
 }

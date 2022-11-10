@@ -53,7 +53,7 @@ class Constants {
         const val VARIATIONS_MAP = "variations_map"
         const val GROUP_BY = "group_by"
         const val VERSION_ID="version_id"
-        const val A = "a"
+        const val ANSWERS = "a"
     }
 
     object QueryValues {

@@ -55,11 +55,11 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getNextQuestion() {
+    fun getQuizQuestion() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getNextQuestion("test-quiz").test()
+        val observer = constructorIo.getQuizQuestion("test-quiz").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -70,11 +70,11 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getNextQuestionWithVersionId() {
+    fun getQuizQuestionWithVersionId() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getNextQuestion("test-quiz", null, "11db5ac7-67e1-4000-9000-414d8425cab3").test()
+        val observer = constructorIo.getQuizQuestion("test-quiz", null, "11db5ac7-67e1-4000-9000-414d8425cab3").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -85,11 +85,11 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getNextQuestionWithSection() {
+    fun getQuizQuestionWithSection() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getNextQuestion("test-quiz", null, null, "Products").test()
+        val observer = constructorIo.getQuizQuestion("test-quiz", null, null, "Products").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -100,12 +100,12 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getNextQuestionWithAnswers() {
+    fun getQuizQuestionWithAnswers() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
         val answers = listOf("1", "2,3")
-        val observer = constructorIo.getNextQuestion("test-quiz", answers).test()
+        val observer = constructorIo.getQuizQuestion("test-quiz", answers).test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -170,11 +170,11 @@ class ConstructorioQuizTest {
         mockServer.enqueue(mockResponse)
         val answers = listOf("1", "2,3")
         val quizRequest = QuizRequest.Builder("test-quiz")
-            .setA(answers)
+            .setAnswers(answers)
             .setVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
             .setSection("Products")
             .build()
-        val observer = constructorIo.getNextQuestion(quizRequest).test()
+        val observer = constructorIo.getQuizQuestion(quizRequest).test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -191,7 +191,7 @@ class ConstructorioQuizTest {
         mockServer.enqueue(mockResponse)
         val answers = listOf("1", "2,3")
         val quizRequest = QuizRequest.Builder("test-quiz")
-            .setA(answers)
+            .setAnswers(answers)
             .setVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
             .setSection("Products")
             .build()

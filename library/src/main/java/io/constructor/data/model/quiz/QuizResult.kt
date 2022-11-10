@@ -6,6 +6,6 @@ import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 class QuizResult (
-        @Json(name = "filter_expression") val filterExpression: Map<String, Object>,
+        @Json(name = "filter_expression") val filterExpression: Map<String, Any>,
         @Json(name = "results_url") val resultsUrl: String?,
 ) : Serializable

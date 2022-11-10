@@ -8,7 +8,8 @@ import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
-import io.constructor.data.model.quiz.QuizResponse
+import io.constructor.data.model.quiz.QuizQuestionResponse
+import io.constructor.data.model.quiz.QuizResultsResponse
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
@@ -188,13 +189,13 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackRecommendationResultsView(recommendationResultViewRequestBody, params.toMap())
     }
 
-    fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
+    fun getNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizQuestionResponse>> {
         val url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getNextQuestion(url).map {
             if (!it.isError) {
                 it.response()?.let {
                     if (it.isSuccessful) {
-                        val adapter = moshi.adapter(QuizResponse::class.java)
+                        val adapter = moshi.adapter(QuizQuestionResponse::class.java)
                         val response = it.body()?.string()
                         val result = response?.let { adapter.fromJson(it) }
                         result?.rawData = response
@@ -209,18 +210,18 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
-    suspend fun getNextQuestionCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResponse {
+    suspend fun getNextQuestionCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizQuestionResponse {
         val url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getNextQuestionCRT(url)
     }
 
-    fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResponse>> {
+    fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResultsResponse>> {
         var url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getQuizResults(url).map {
             if (!it.isError) {
                 it.response()?.let {
                     if (it.isSuccessful) {
-                        val adapter = moshi.adapter(QuizResponse::class.java)
+                        val adapter = moshi.adapter(QuizResultsResponse::class.java)
                         val response = it.body()?.string()
                         val result = response?.let { adapter.fromJson(it) }
                         result?.rawData = response
@@ -235,7 +236,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
-    suspend fun getQuizResultsCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResponse {
+    suspend fun getQuizResultsCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResultsResponse {
         var url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getQuizResultsCRT(url)
     }
