@@ -8,5 +8,4 @@ import java.io.Serializable
 class QuizOptionAttribute (
         @Json(name = "name") val name: String?,
         @Json(name = "value") val value: String?,
-        @Json(name = "images") val images: QuizImages?,
 ) : Serializable
