@@ -4,10 +4,10 @@ package io.constructor.data.builder
  * Create a Quiz request object utilizing a builder
  */
 class QuizRequest (
-        val quizId: String,
-        val answers: List<String>? = null,
-        val versionId: String? = null,
-        val section: String? = null,
+    val quizId: String,
+    val answers: List<String>? = null,
+    val versionId: String? = null,
+    val section: String? = null,
 ) {
     private constructor(builder: Builder) : this(
         builder.quizId,

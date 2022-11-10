@@ -53,7 +53,7 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getNextQuestionAgainstRealResponse() {
+    fun getQuizQuestionAgainstRealResponse() {
         val request = QuizRequest.Builder("test-quiz").build()
         val observer = constructorIo.getQuizQuestion(request).test()
         observer.assertComplete()
@@ -78,7 +78,7 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getNextQuestionWithSingleTypeAnswerAgainstRealResponse() {
+    fun getQuizQuestionWithSingleTypeAnswerAgainstRealResponse() {
         val answers = listOf("1")
         val request = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
@@ -107,7 +107,7 @@ class ConstructorIoIntegrationQuizTest {
 
 
     @Test
-    fun getNextQuestionWithMultipleTypeAnswerAgainstRealResponse() {
+    fun getQuizQuestionWithMultipleTypeAnswerAgainstRealResponse() {
         val answers = listOf("1", "1,2")
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
@@ -129,7 +129,7 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getNextQuestionWithCoverPageTypeAnswerAgainstRealResponse() {
+    fun getQuizQuestionWithCoverPageTypeAnswerAgainstRealResponse() {
         val answers = listOf("1", "1,2", "seen")
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
@@ -152,7 +152,7 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getNextQuestionWithOpenTextTypeAnswerAgainstRealResponse() {
+    fun getQuizQuestionWithOpenTextTypeAnswerAgainstRealResponse() {
         val answers = listOf("1", "1,2", "seen", "true")
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
@@ -184,7 +184,7 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getNextQuestionCRTAgainstRealResponse() {
+    fun getQuizQuestionCRTAgainstRealResponse() {
         runBlocking {
             val answers = listOf("1", "1,2", "seen")
             val quizResult = constructorIo.getQuizQuestionCRT("test-quiz", answers)

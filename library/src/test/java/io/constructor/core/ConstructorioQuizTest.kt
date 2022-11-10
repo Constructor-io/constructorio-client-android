@@ -164,7 +164,7 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getNextQuestionUsingBuilder() {
+    fun getQuizQuestionUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)

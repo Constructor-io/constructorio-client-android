@@ -608,7 +608,7 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
-     * ConstructorIo.getNextQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
+     * ConstructorIo.getQuizQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
@@ -624,7 +624,7 @@ object ConstructorIo {
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
-        return dataManager.getNextQuestion(quizId, encodedParams.toTypedArray(), preferenceHelper)
+        return dataManager.getQuizQuestion(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
     /**
@@ -634,7 +634,7 @@ object ConstructorIo {
      *     .setAnswers(listOf("1", "1,2", "seen", "true"))
      *     .setVersionId("version-id")
      *     .build()
-     * ConstructorIo.getNextQuestion(request)
+     * ConstructorIo.getQuizQuestion(request)
      * ```
      * @param request the quiz request object
      */
@@ -647,7 +647,7 @@ object ConstructorIo {
         request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
-        return dataManager.getNextQuestion(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
+        return dataManager.getQuizQuestion(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
     /**
@@ -656,7 +656,7 @@ object ConstructorIo {
      * runBlocking {
      *      launch {
      *          try {
-     *              val quizResults = constructorIo.getNextQuestion("quiz-id", listOf("1", "1,2", "seen", "true"))
+     *              val quizResults = constructorIo.getQuizQuestionCRT("quiz-id", listOf("1", "1,2", "seen", "true"))
      *              // Do something with quizResults
      *          } catch (e: Exception) {
      *              println(e)
@@ -674,7 +674,7 @@ object ConstructorIo {
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
-        return dataManager.getNextQuestionCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
+        return dataManager.getQuizQuestionCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
     /**
