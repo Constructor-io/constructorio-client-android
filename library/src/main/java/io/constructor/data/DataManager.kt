@@ -189,9 +189,9 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackRecommendationResultsView(recommendationResultViewRequestBody, params.toMap())
     }
 
-    fun getQuizQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizQuestionResponse>> {
+    fun getQuizNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizQuestionResponse>> {
         val url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
-        return constructorApi.getQuizQuestion(url).map {
+        return constructorApi.getQuizNextQuestion(url).map {
             if (!it.isError) {
                 it.response()?.let {
                     if (it.isSuccessful) {
@@ -210,9 +210,9 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
-    suspend fun getQuizQuestionCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizQuestionResponse {
+    suspend fun getQuizNextQuestionCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizQuestionResponse {
         val url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_NEXT_QUESTION.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
-        return constructorApi.getQuizQuestionCRT(url)
+        return constructorApi.getQuizNextQuestionCRT(url)
     }
 
     fun getQuizResults(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizResultsResponse>> {

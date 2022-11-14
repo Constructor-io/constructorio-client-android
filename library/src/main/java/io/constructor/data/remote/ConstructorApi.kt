@@ -103,10 +103,10 @@ interface ConstructorApi {
                                        @QueryMap params: Map<String, String>): Completable
 
     @GET
-    fun getQuizQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>
+    fun getQuizNextQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>
 
     @GET
-    suspend fun getQuizQuestionCRT(@Url quizUrl: String): QuizQuestionResponse
+    suspend fun getQuizNextQuestionCRT(@Url quizUrl: String): QuizQuestionResponse
 
     @GET
     fun getQuizResults(@Url quizUrl: String): Single<Result<ResponseBody>>

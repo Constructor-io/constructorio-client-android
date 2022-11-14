@@ -55,11 +55,11 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getQuizQuestion() {
+    fun getQuizNextQuestion() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getQuizQuestion("test-quiz").test()
+        val observer = constructorIo.getQuizNextQuestion("test-quiz").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -70,11 +70,11 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getQuizQuestionWithVersionId() {
+    fun getQuizNextQuestionWithVersionId() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getQuizQuestion("test-quiz", null, "11db5ac7-67e1-4000-9000-414d8425cab3").test()
+        val observer = constructorIo.getQuizNextQuestion("test-quiz", null, "11db5ac7-67e1-4000-9000-414d8425cab3").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -85,11 +85,11 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getQuizQuestionWithSection() {
+    fun getQuizNextQuestionWithSection() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getQuizQuestion("test-quiz", null, null, "Products").test()
+        val observer = constructorIo.getQuizNextQuestion("test-quiz", null, null, "Products").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -100,12 +100,12 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getQuizQuestionWithAnswers() {
+    fun getQuizNextQuestionWithAnswers() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
         val answers = listOf("1", "2,3")
-        val observer = constructorIo.getQuizQuestion("test-quiz", answers).test()
+        val observer = constructorIo.getQuizNextQuestion("test-quiz", answers).test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -164,7 +164,7 @@ class ConstructorioQuizTest {
     }
 
     @Test
-    fun getQuizQuestionUsingBuilder() {
+    fun getQuizNextQuestionUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
@@ -174,7 +174,7 @@ class ConstructorioQuizTest {
             .setVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
             .setSection("Products")
             .build()
-        val observer = constructorIo.getQuizQuestion(quizRequest).test()
+        val observer = constructorIo.getQuizNextQuestion(quizRequest).test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null

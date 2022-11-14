@@ -608,14 +608,14 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
-     * ConstructorIo.getQuizQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
+     * ConstructorIo.getQuizNextQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
      * @param versionId version identifier for the quiz
      * @param sectionName the section the quiz and results come from. defaults to "Products"
      */
-    fun getQuizQuestion(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
+    fun getQuizNextQuestion(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
@@ -624,7 +624,7 @@ object ConstructorIo {
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
-        return dataManager.getQuizQuestion(quizId, encodedParams.toTypedArray(), preferenceHelper)
+        return dataManager.getQuizNextQuestion(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
     /**
@@ -634,11 +634,11 @@ object ConstructorIo {
      *     .setAnswers(listOf("1", "1,2", "seen", "true"))
      *     .setVersionId("version-id")
      *     .build()
-     * ConstructorIo.getQuizQuestion(request)
+     * ConstructorIo.getQuizNextQuestion(request)
      * ```
      * @param request the quiz request object
      */
-    fun getQuizQuestion(request: QuizRequest): Observable<ConstructorData<QuizQuestionResponse>> {
+    fun getQuizNextQuestion(request: QuizRequest): Observable<ConstructorData<QuizQuestionResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         request.answers?.forEach { answer ->
@@ -647,7 +647,7 @@ object ConstructorIo {
         request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
-        return dataManager.getQuizQuestion(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
+        return dataManager.getQuizNextQuestion(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
     /**
@@ -656,7 +656,7 @@ object ConstructorIo {
      * runBlocking {
      *      launch {
      *          try {
-     *              val quizResults = constructorIo.getQuizQuestionCRT("quiz-id", listOf("1", "1,2", "seen", "true"))
+     *              val quizResults = constructorIo.getQuizNextQuestionCRT("quiz-id", listOf("1", "1,2", "seen", "true"))
      *              // Do something with quizResults
      *          } catch (e: Exception) {
      *              println(e)
@@ -665,7 +665,7 @@ object ConstructorIo {
      *  }
      * ```
      */
-    suspend fun getQuizQuestionCRT(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): QuizQuestionResponse {
+    suspend fun getQuizNextQuestionCRT(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): QuizQuestionResponse {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
@@ -674,7 +674,7 @@ object ConstructorIo {
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
-        return dataManager.getQuizQuestionCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
+        return dataManager.getQuizNextQuestionCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
 
     /**

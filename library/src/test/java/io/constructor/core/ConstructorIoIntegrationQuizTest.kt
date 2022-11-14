@@ -53,9 +53,9 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getQuizQuestionAgainstRealResponse() {
+    fun getQuizNextQuestionAgainstRealResponse() {
         val request = QuizRequest.Builder("test-quiz").build()
-        val observer = constructorIo.getQuizQuestion(request).test()
+        val observer = constructorIo.getQuizNextQuestion(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
@@ -78,12 +78,12 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getQuizQuestionWithSingleTypeAnswerAgainstRealResponse() {
+    fun getQuizNextQuestionWithSingleTypeAnswerAgainstRealResponse() {
         val answers = listOf("1")
         val request = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
             .build()
-        val observer = constructorIo.getQuizQuestion(request).test()
+        val observer = constructorIo.getQuizNextQuestion(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
@@ -107,12 +107,12 @@ class ConstructorIoIntegrationQuizTest {
 
 
     @Test
-    fun getQuizQuestionWithMultipleTypeAnswerAgainstRealResponse() {
+    fun getQuizNextQuestionWithMultipleTypeAnswerAgainstRealResponse() {
         val answers = listOf("1", "1,2")
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
                 .build()
-        val observer = constructorIo.getQuizQuestion(request).test()
+        val observer = constructorIo.getQuizNextQuestion(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
@@ -129,12 +129,12 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getQuizQuestionWithCoverPageTypeAnswerAgainstRealResponse() {
+    fun getQuizNextQuestionWithCoverPageTypeAnswerAgainstRealResponse() {
         val answers = listOf("1", "1,2", "seen")
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
                 .build()
-        val observer = constructorIo.getQuizQuestion(request).test()
+        val observer = constructorIo.getQuizNextQuestion(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
@@ -152,12 +152,12 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getQuizQuestionWithOpenTextTypeAnswerAgainstRealResponse() {
+    fun getQuizNextQuestionWithOpenTextTypeAnswerAgainstRealResponse() {
         val answers = listOf("1", "1,2", "seen", "true")
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
                 .build()
-        val observer = constructorIo.getQuizQuestion(request).test()
+        val observer = constructorIo.getQuizNextQuestion(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
@@ -184,10 +184,10 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
-    fun getQuizQuestionCRTAgainstRealResponse() {
+    fun getQuizNextQuestionCRTAgainstRealResponse() {
         runBlocking {
             val answers = listOf("1", "1,2", "seen")
-            val quizResult = constructorIo.getQuizQuestionCRT("test-quiz", answers)
+            val quizResult = constructorIo.getQuizNextQuestionCRT("test-quiz", answers)
             assertNotNull(quizResult?.versionId)
             assertEquals(quizResult?.isLastQuestion, true)
             assertEquals(quizResult?.nextQuestion?.id, 4)
