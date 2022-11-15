@@ -253,6 +253,19 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun trackConversionWithConversionTypeAgainstRealResponse() {
+        val observer = constructorIo.trackConversionInternal(
+                "Boneless Pork Shoulder Roast",
+                "prrst_shldr_bls",
+                null,
+                1.99,
+                conversionType = "add_to_cart",
+        ).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackPurchaseAgainstRealResponse() {
         val observer = constructorIo.trackPurchaseInternal(
             arrayOf(PurchaseItem("prrst_shldr_bls"), PurchaseItem("prrst_crwn")),
@@ -276,6 +289,15 @@ class ConstructorIoIntegrationTest {
         val observer =
             constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls",null,5)
                 .test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackBrowseResultClickWithResultIdAgainstRealResponse() {
+        val observer =
+                constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls",null,5, "Products", "123")
+                        .test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }

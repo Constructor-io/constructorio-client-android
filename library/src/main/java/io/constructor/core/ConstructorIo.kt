@@ -989,8 +989,6 @@ object ConstructorIo {
 
     internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultClickRequestBody = BrowseResultClickRequestBody(
                 filterName,
@@ -1006,13 +1004,13 @@ object ConstructorIo {
                 configMemoryHolder.segments,
                 true,
                 section,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                resultID,
         )
 
         return dataManager.trackBrowseResultClick(
                 browseResultClickRequestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section),
-                encodedParams.toTypedArray()
         )
 
     }

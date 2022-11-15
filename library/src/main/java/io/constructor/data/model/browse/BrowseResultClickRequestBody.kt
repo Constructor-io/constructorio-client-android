@@ -23,5 +23,6 @@ data class BrowseResultClickRequestBody(
         @Json(name = "us") val us: List<String?>,
         @Json(name= "beacon") val beacon: Boolean?,
         @Json(name= "section") val section: String?,
-        @Json(name= "_dt") val _dt: Long?
+        @Json(name= "_dt") val _dt: Long?,
+        @Json(name= "result_id") val resultId: String?,
 ) : Serializable
