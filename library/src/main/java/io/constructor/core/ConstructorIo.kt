@@ -1004,7 +1004,8 @@ object ConstructorIo {
                 configMemoryHolder.segments,
                 true,
                 section,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                resultID,
         )
 
         return dataManager.trackBrowseResultClick(

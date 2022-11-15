@@ -63,6 +63,8 @@ internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
         }
     }
 
+    splitArr.add(stringSum);
+
     return splitArr.associate {
         val (key, value) = it.split(":", ignoreCase = true, limit = 2)
         key to value
@@ -574,7 +576,7 @@ class ConstructorIoTrackingTest {
     fun trackBrowseResultClick() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", null,4).test()
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", null,4, "Products", "123456").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -584,6 +586,7 @@ class ConstructorIoTrackingTest {
         assertEquals("TIT-REP-1997", requestBody["item_id"])
         assertEquals("4", requestBody["result_position_on_page"])
         assertEquals(null, requestBody["variation_id"])
+        assertEquals("123456", requestBody["result_id"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
