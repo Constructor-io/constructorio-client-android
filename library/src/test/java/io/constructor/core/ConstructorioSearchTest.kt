@@ -17,6 +17,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.TimeUnit
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ConstructorIoSearchTest {
 
@@ -62,19 +64,22 @@ class ConstructorIoSearchTest {
             .setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.response?.results!!.size == 24
-            it.get()!!.response?.results!![0].value == "Del Monte Fresh Cut Corn Whole Kernel Golden Sweet with Natural Sea Salt - 15.25 Oz"
-            it.get()!!.response?.results!![0].data.id == "121150086"
-            it.get()!!.response?.results!![0].data.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150086.png"
-            it.get()!!.response?.results!![0].data.metadata?.get("price") == 2.29
-            it.get()!!.response?.results!![0].matchedTerms!![0] == "corn"
-            it.get()!!.response?.facets!!.size == 3
-            it.get()!!.response?.facets!![0].displayName == "Brand"
-            it.get()!!.response?.facets!![0].type == "multiple"
-            it.get()!!.response?.groups!!.size == 1
-            it.get()!!.response?.resultCount == 225
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertEquals(searchResponse?.response?.results?.size, 24)
+        assertEquals(searchResponse?.response?.results!![0].value, "Del Monte Fresh Cut Corn Whole Kernel Golden Sweet with Natural Sea Salt - 15.25 Oz")
+        assertEquals(searchResponse?.response?.results!![0].data.id, "121150086")
+        assertEquals(searchResponse?.response?.results!![0].data.imageUrl, "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-121150086.png")
+        assertEquals(searchResponse?.response?.results!![0].data.metadata?.get("price"), 2.29)
+        assertEquals(searchResponse?.response?.results!![0].matchedTerms!![0], "corn")
+        assertEquals(searchResponse?.response?.facets!!.size, 3)
+        assertEquals(searchResponse?.response?.facets!![0].displayName, "Brand")
+        assertEquals(searchResponse?.response?.facets!![0].type, "multiple")
+        assertEquals(searchResponse?.response?.groups!!.size, 1)
+        assertEquals(searchResponse?.response?.resultCount, 225)
+
         val request = mockServer.takeRequest()
         val path =
             "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
@@ -117,12 +122,15 @@ class ConstructorIoSearchTest {
             .setBody(TestDataLoader.loadAsString("search_response_empty.json"))
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("corn").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.response?.results!!.isEmpty()
-            it.get()!!.response?.facets!!.isEmpty()
-            it.get()!!.response?.groups!!.isEmpty()
-            it.get()!!.response?.resultCount == 0
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.response?.results!!.isEmpty())
+        assertTrue(searchResponse?.response?.results!!.isEmpty())
+        assertTrue(searchResponse?.response?.results!!.isEmpty())
+        assertEquals(searchResponse?.response?.resultCount, 0)
+
         val request = mockServer.takeRequest()
         val path =
             "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
@@ -135,10 +143,13 @@ class ConstructorIoSearchTest {
             .setBody(TestDataLoader.loadAsString("search_response_redirect.json"))
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getSearchResults("bbq").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.response?.redirect?.data?.url == "/mccormicks_farmstand.html?barbeque-and-grilling=1"
-            it.get()!!.response?.redirect?.matchedTerms!![0] == "bbq"
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertEquals(searchResponse?.response?.redirect?.data?.url, "/mccormicks_farmstand.html?barbeque-and-grilling=1")
+        assertEquals(searchResponse?.response?.redirect?.matchedTerms!![0], "bbq")
+
         val request = mockServer.takeRequest()
         val path =
             "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
