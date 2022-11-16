@@ -608,18 +608,24 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
-     * ConstructorIo.getQuizNextQuestion("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
+     * ConstructorIo.getQuizNextQuestion("quiz-id", answers, "version-id")
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
      * @param versionId version identifier for the quiz
      * @param sectionName the section the quiz and results come from. defaults to "Products"
      */
-    fun getQuizNextQuestion(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
+    fun getQuizNextQuestion(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
-            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.urlEncode())
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
@@ -630,8 +636,14 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
      * val request = QuizRequest.Builder("quiz-id")
-     *     .setAnswers(listOf("1", "1,2", "seen", "true"))
+     *     .setAnswers(answers)
      *     .setVersionId("version-id")
      *     .build()
      * ConstructorIo.getQuizNextQuestion(request)
@@ -642,7 +654,7 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         request.answers?.forEach { answer ->
-            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.urlEncode())
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
         request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
@@ -656,7 +668,13 @@ object ConstructorIo {
      * runBlocking {
      *      launch {
      *          try {
-     *              val quizResults = constructorIo.getQuizNextQuestionCRT("quiz-id", listOf("1", "1,2", "seen", "true"))
+     *              val answers = listOf(
+     *                  listOf("1"),
+     *                  listOf("1", "2"),
+     *                  listOf("true"),
+     *                  listOf("seen"),
+     *              )
+     *              val quizResults = constructorIo.getQuizNextQuestionCRT("quiz-id", answers, "version-id")
      *              // Do something with quizResults
      *          } catch (e: Exception) {
      *              println(e)
@@ -665,11 +683,11 @@ object ConstructorIo {
      *  }
      * ```
      */
-    suspend fun getQuizNextQuestionCRT(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): QuizQuestionResponse {
+    suspend fun getQuizNextQuestionCRT(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): QuizQuestionResponse {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
-            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.urlEncode())
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
@@ -680,18 +698,24 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
-     * ConstructorIo.getQuizResults("quiz-id", listOf("1", "1,2", "true", "seen", "version-id"))
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
+     * ConstructorIo.getQuizResults("quiz-id", answers, "version-id")
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
      * @param versionId version identifier for the quiz
      * @param sectionName the section the quiz and results come from. defaults to "Products"
      */
-    fun getQuizResults(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizResultsResponse>> {
+    fun getQuizResults(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizResultsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
-            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.urlEncode())
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
@@ -702,8 +726,14 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
      * val request = QuizRequest.Builder("quiz-id")
-     *     .setAnswers(listOf("1", "1,2", "seen", "true"))
+     *     .setAnswers(answers)
      *     .setVersionId("version-id")
      *     .build()
      * ConstructorIo.getQuizResults(request)
@@ -714,7 +744,7 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         request.answers?.forEach { answer ->
-            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.urlEncode())
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
         request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
@@ -728,7 +758,13 @@ object ConstructorIo {
      * runBlocking {
      *      launch {
      *          try {
-     *              val quizResults = constructorIo.getQuizResultsCRT("quiz-id", listOf("1", "1,2", "seen", "true"))
+     *              val answers = listOf(
+     *                  listOf("1"),
+     *                  listOf("1", "2"),
+     *                  listOf("true"),
+     *                  listOf("seen"),
+     *              )
+     *              val quizResults = constructorIo.getQuizResultsCRT("quiz-id", answers, "version-id")
      *              // Do something with quizResults
      *          } catch (e: Exception) {
      *              println(e)
@@ -737,11 +773,11 @@ object ConstructorIo {
      *  }
      * ```
      */
-    suspend fun getQuizResultsCRT(quizId: String, answers: List<String>? = null, versionId: String? = null, sectionName: String? = null): QuizResultsResponse {
+    suspend fun getQuizResultsCRT(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): QuizResultsResponse {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
-            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.urlEncode())
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
         versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }

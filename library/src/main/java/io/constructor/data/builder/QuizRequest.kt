@@ -5,7 +5,7 @@ package io.constructor.data.builder
  */
 class QuizRequest (
     val quizId: String,
-    val answers: List<String>? = null,
+    val answers: List<List<String>>? = null,
     val versionId: String? = null,
     val section: String? = null,
 ) {
@@ -23,11 +23,11 @@ class QuizRequest (
     class Builder(
         val quizId: String,
     ) {
-        var answers: List<String>? = null
+        var answers: List<List<String>>? = null
         var versionId: String? = null
         var section: String? = null
 
-        fun setAnswers(answers: List<String>): Builder = apply { this.answers = answers }
+        fun setAnswers(answers: List<List<String>>): Builder = apply { this.answers = answers }
         fun setVersionId(versionId: String): Builder = apply { this.versionId = versionId }
         fun setSection(section: String): Builder = apply { this.section = section }
         fun build(): QuizRequest = QuizRequest(this)

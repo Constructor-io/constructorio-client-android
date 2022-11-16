@@ -104,7 +104,10 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val answers = listOf("1", "2,3")
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
         val observer = constructorIo.getQuizNextQuestion("test-quiz", answers).test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
@@ -120,7 +123,10 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_results_response.json"))
         mockServer.enqueue(mockResponse)
-        val answers = listOf("1", "2,3")
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
         val observer = constructorIo.getQuizResults("test-quiz", answers).test()
         observer.assertComplete().assertValue {
             var quizResultsUrl = it.get()!!.result?.resultsUrl
@@ -136,7 +142,10 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_results_response.json"))
         mockServer.enqueue(mockResponse)
-        val answers = listOf("1", "2,3")
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
         val observer = constructorIo.getQuizResults("test-quiz", answers, "11db5ac7-67e1-4000-9000-414d8425cab3").test()
         observer.assertComplete().assertValue {
             var quizResultsUrl = it.get()!!.result?.resultsUrl
@@ -152,7 +161,10 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_results_response.json"))
         mockServer.enqueue(mockResponse)
-        val answers = listOf("1", "2,3")
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
         val observer = constructorIo.getQuizResults("test-quiz", answers, null, "Products").test()
         observer.assertComplete().assertValue {
             var quizResultsUrl = it.get()!!.result?.resultsUrl
@@ -168,7 +180,10 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val answers = listOf("1", "2,3")
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
         val quizRequest = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
             .setVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
@@ -189,7 +204,10 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_results_response.json"))
         mockServer.enqueue(mockResponse)
-        val answers = listOf("1", "2,3")
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
         val quizRequest = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
             .setVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")

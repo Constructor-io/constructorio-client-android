@@ -79,7 +79,7 @@ class ConstructorIoIntegrationQuizTest {
 
     @Test
     fun getQuizNextQuestionWithSingleTypeAnswerAgainstRealResponse() {
-        val answers = listOf("1")
+        val answers = listOf(listOf("1"))
         val request = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
             .build()
@@ -108,7 +108,10 @@ class ConstructorIoIntegrationQuizTest {
 
     @Test
     fun getQuizNextQuestionWithMultipleTypeAnswerAgainstRealResponse() {
-        val answers = listOf("1", "1,2")
+        val answers = listOf(
+            listOf("1"),
+            listOf("1", "2")
+        )
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
                 .build()
@@ -130,7 +133,11 @@ class ConstructorIoIntegrationQuizTest {
 
     @Test
     fun getQuizNextQuestionWithCoverPageTypeAnswerAgainstRealResponse() {
-        val answers = listOf("1", "1,2", "seen")
+        val answers = listOf(
+            listOf("1"),
+            listOf("1", "2"),
+            listOf("seen")
+        )
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
                 .build()
@@ -153,7 +160,12 @@ class ConstructorIoIntegrationQuizTest {
 
     @Test
     fun getQuizNextQuestionWithOpenTextTypeAnswerAgainstRealResponse() {
-        val answers = listOf("1", "1,2", "seen", "true")
+        val answers = listOf(
+                listOf("1"),
+                listOf("1", "2"),
+                listOf("seen"),
+                listOf("true")
+        )
         val request = QuizRequest.Builder("test-quiz")
                 .setAnswers(answers)
                 .build()
@@ -170,7 +182,11 @@ class ConstructorIoIntegrationQuizTest {
 
     @Test
     fun getQuizResultsAgainstRealResponse() {
-        val answers = listOf("1", "1,2", "seen")
+        val answers = listOf(
+            listOf("1"),
+            listOf("1", "2"),
+            listOf("seen")
+        )
         val request = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
             .build()
@@ -186,7 +202,11 @@ class ConstructorIoIntegrationQuizTest {
     @Test
     fun getQuizNextQuestionCRTAgainstRealResponse() {
         runBlocking {
-            val answers = listOf("1", "1,2", "seen")
+            val answers = listOf(
+                listOf("1"),
+                listOf("1", "2"),
+                listOf("seen")
+            )
             val quizResult = constructorIo.getQuizNextQuestionCRT("test-quiz", answers)
             assertNotNull(quizResult?.versionId)
             assertEquals(quizResult?.isLastQuestion, true)
@@ -204,7 +224,11 @@ class ConstructorIoIntegrationQuizTest {
     @Test
     fun getQuizResultsCRTAgainstRealResponse() {
         runBlocking {
-            val answers = listOf("1", "1,2", "seen", "true")
+            val answers = listOf(
+                listOf("1"),
+                listOf("1", "2"),
+                listOf("seen")
+            )
             val quizResult = constructorIo.getQuizResultsCRT("test-quiz", answers)
             assertNotNull(quizResult?.versionId)
             assertEquals(quizResult?.result?.resultsUrl, "https://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.18.5&ui=player-three&s=67")
