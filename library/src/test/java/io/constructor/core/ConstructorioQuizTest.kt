@@ -65,7 +65,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/next?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -80,7 +80,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/next?version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -95,7 +95,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/next?section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -114,7 +114,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -133,7 +133,7 @@ class ConstructorioQuizTest {
             quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -152,7 +152,7 @@ class ConstructorioQuizTest {
             quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -171,7 +171,7 @@ class ConstructorioQuizTest {
             quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -195,7 +195,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -219,7 +219,7 @@ class ConstructorioQuizTest {
             quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.5&_dt="
+        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.18.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
