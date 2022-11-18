@@ -194,7 +194,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackAutocompleteSelectInternal("titanic", "tit", "Search Suggestions", ResultGroup("recommended", "123123"), "2346784").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/select?section=Search%20Suggestions&original_query=tit&tr=click&group%5Bgroup_id%5D=123123&group%5Bdisplay_name%5D=recommended&result_id=2346784&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.19.0&_dt="
+        val path = "/autocomplete/titanic/select?section=Search%20Suggestions&original_query=tit&tr=click&result_id=2346784&group%5Bgroup_id%5D=123123&group%5Bdisplay_name%5D=recommended&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
