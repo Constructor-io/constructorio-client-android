@@ -133,10 +133,20 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getSearchResultsWithFiltersAgainstRealResponse() {
-        val facet = hashMapOf("storeLocation" to listOf("CA"))
-        val observer =
-            constructorIo.getSearchResults("pork", facet.map { it.key to it.value }).test()
+        val facet = hashMapOf(
+            "group_id" to listOf("544"),
+            "Claims" to listOf("Raised Without Antibiotics")
+        )
+        val observer = constructorIo.getSearchResults("pork", facet.map { it.key to it.value }).test()
         observer.assertComplete()
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+
         Thread.sleep(timeBetweenTests)
     }
 
