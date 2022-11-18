@@ -129,26 +129,28 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
     }
 
-    private fun getEncodedParams(groupIdInt: Int? = null,
-                                 groupId: String? = null,
-                                 groupDisplayName: String? = null,
-                                 page: Int? = null,
-                                 perPage: Int? = null,
-                                 sortBy: String? = null,
-                                 sortOrder: String? = null,
-                                 sectionName: String? = null,
-                                 hiddenFacets: List<String>? = null,
-                                 groupsSortBy: String? = null,
-                                 groupsSortOrder: String? = null,
-                                 facets: List<Pair<String, List<String>>>? = null,
-                                 hiddenFields: List<String>? = null,
-                                 variationsMap: VariationsMap? = null,
-                                 numResultsPerSection: Map<String, Int>? = null,
-                                 resultId: String? = null,
-                                 numResults: Int? = null,
-                                 itemId: String? = null,
-                                 term: String? = null,
-                                 itemIds: List<String>? = null): ArrayList<Pair<String, String>> {
+    private fun getEncodedParams(
+        groupIdInt: Int? = null,
+        groupId: String? = null,
+        groupDisplayName: String? = null,
+        page: Int? = null,
+        perPage: Int? = null,
+        sortBy: String? = null,
+        sortOrder: String? = null,
+        sectionName: String? = null,
+        hiddenFacets: List<String>? = null,
+        groupsSortBy: String? = null,
+        groupsSortOrder: String? = null,
+        facets: List<Pair<String, List<String>>>? = null,
+        hiddenFields: List<String>? = null,
+        variationsMap: VariationsMap? = null,
+        numResultsPerSection: Map<String, Int>? = null,
+        resultId: String? = null,
+        numResults: Int? = null,
+        itemId: String? = null,
+        term: String? = null,
+        itemIds: List<String>? = null
+    ): ArrayList<Pair<String, String>> {
 
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf();
 
