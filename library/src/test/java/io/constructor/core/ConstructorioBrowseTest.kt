@@ -17,6 +17,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.TimeUnit
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ConstructorIoBrowseTest {
 
@@ -62,21 +64,24 @@ class ConstructorIoBrowseTest {
             .setBody(TestDataLoader.loadAsString("browse_response.json"))
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.response?.results!!.size == 24
-            it.get()!!.response?.results!![0].value == "Crystal Geyser Natural Alpine Spring Water - 1 Gallon"
-            it.get()!!.response?.results!![0].data.id == "108200440"
-            it.get()!!.response?.results!![0].data.imageUrl == "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108200440.png"
-            it.get()!!.response?.results!![0].data.metadata?.get("price") == 1.25
-            it.get()!!.response?.facets!!.size == 3
-            it.get()!!.response?.facets!![0].displayName == "Brand"
-            it.get()!!.response?.facets!![0].type == "multiple"
-            it.get()!!.response?.groups!!.size == 1
-            it.get()!!.response?.resultCount == 367
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertEquals(browseResponse?.response?.results?.size, 5)
+        assertEquals(browseResponse?.response?.results!![0].value, "Crystal Geyser Natural Alpine Spring Water - 1 Gallon")
+        assertEquals(browseResponse?.response?.results!![0].data.id, "108200440")
+        assertEquals(browseResponse?.response?.results!![0].data.imageUrl, "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-108200440.png")
+        assertEquals(browseResponse?.response?.results!![0].data.metadata?.get("price"), 1.25)
+        assertEquals(browseResponse?.response?.facets!!.size, 3)
+        assertEquals(browseResponse?.response?.facets!![0].displayName, "Brand")
+        assertEquals(browseResponse?.response?.facets!![0].type, "multiple")
+        assertEquals(browseResponse?.response?.groups!!.size, 1)
+        assertEquals(browseResponse?.response?.resultCount, 367)
+
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt"
+            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -90,7 +95,7 @@ class ConstructorIoBrowseTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt"
+            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -106,7 +111,7 @@ class ConstructorIoBrowseTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt"
+            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -116,15 +121,18 @@ class ConstructorIoBrowseTest {
             .setBody(TestDataLoader.loadAsString("browse_response_empty.json"))
         mockServer.enqueue(mockResponse)
         val observer = constructorIo.getBrowseResults("group_id", "Beverages").test()
-        observer.assertComplete().assertValue {
-            it.get()!!.response?.results!!.isEmpty()
-            it.get()!!.response?.facets!!.isEmpty()
-            it.get()!!.response?.groups!!.isEmpty()
-            it.get()!!.response?.resultCount == 0
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.response?.results!!.isEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isEmpty())
+        assertTrue(browseResponse?.response?.resultCount == 0)
+
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt"
+            "/browse/group_id/Beverages?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -146,7 +154,7 @@ class ConstructorIoBrowseTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?section=Sold%20Out&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt"
+            "/browse/group_id/Beverages?section=Sold%20Out&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -172,7 +180,7 @@ class ConstructorIoBrowseTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
+            "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -195,7 +203,7 @@ class ConstructorIoBrowseTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
+            "/browse/group_id/Beverages?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -220,7 +228,7 @@ class ConstructorIoBrowseTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
+            "/browse/group_id/Beverages?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -232,7 +240,7 @@ class ConstructorIoBrowseTest {
         val observer = constructorIo.getBrowseResults("collection_id", "test-collection").test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/collection_id/test-collection?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
+            "/browse/collection_id/test-collection?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -249,7 +257,7 @@ class ConstructorIoBrowseTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
+            "/browse/group_id/Beverages?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -268,7 +276,7 @@ class ConstructorIoBrowseTest {
         val observer = constructorIo.getBrowseResults(browseRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
+            "/browse/group_id/Beverages?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -284,7 +292,7 @@ class ConstructorIoBrowseTest {
         val observer = constructorIo.getBrowseResults(browseRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/group_id/Beverages?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.18.5&_dt="
+            "/browse/group_id/Beverages?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -314,7 +322,7 @@ class ConstructorIoBrowseTest {
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",
                 "s" to "92",
-                "c" to "cioand-2.18.5",
+                "c" to "cioand-2.19.0",
                 "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)

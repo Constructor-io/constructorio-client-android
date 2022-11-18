@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ConstructorIoIntegrationTest {
@@ -57,11 +58,14 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getAutocompleteResultsAgainstRealResponse() {
         val observer = constructorIo.getAutocompleteResults("pork").test()
-        observer.assertComplete().assertValue {
-            it.get()?.sections!!.isNotEmpty()
-            it.get()?.resultId!!.isNotEmpty()
-            it.get()?.sections!!["Products"]?.first()?.isSlotted == true
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val autocompleteResponse = observer.values()[0].get()
+        assertTrue(autocompleteResponse?.sections!!.isNotEmpty())
+        assertTrue(autocompleteResponse?.resultId!!.isNotEmpty())
+        assertEquals(autocompleteResponse?.sections!!["Products"]?.first()?.isSlotted, true)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -112,15 +116,19 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsAgainstRealResponse() {
         val observer = constructorIo.getSearchResults("pork").test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.results?.first()?.isSlotted == true
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertEquals(searchResponse?.response?.results?.first()?.isSlotted, true)
+
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
@@ -163,15 +171,18 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseResultsAgainstRealResponse() {
         val observer = constructorIo.getBrowseResults("group_id", "744").test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.results?.first()?.isSlotted == true
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+        assertEquals(browseResponse?.response?.results?.first()?.isSlotted, true)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -253,6 +264,19 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun trackConversionWithConversionTypeAgainstRealResponse() {
+        val observer = constructorIo.trackConversionInternal(
+                "Boneless Pork Shoulder Roast",
+                "prrst_shldr_bls",
+                null,
+                1.99,
+                conversionType = "add_to_cart",
+        ).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackPurchaseAgainstRealResponse() {
         val observer = constructorIo.trackPurchaseInternal(
             arrayOf(PurchaseItem("prrst_shldr_bls"), PurchaseItem("prrst_crwn")),
@@ -281,16 +305,28 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun trackBrowseResultClickWithResultIdAgainstRealResponse() {
+        val observer =
+                constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls",null,5, "Products", "123")
+                        .test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getRecommendationResultsAgainstRealResponse() {
         val facet = hashMapOf("Claims" to listOf("Organic"))
         val observer = constructorIo.getRecommendationResults("pdp3", facet.map { it.key to it.value }).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.pod !== null
-            it.get()?.response?.results !== null
-            it.get()?.response?.resultCount!! >= 0
-            it.get()?.response?.results?.first()?.isSlotted == false
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val recommendationResponse = observer.values()[0].get()
+        assertTrue(recommendationResponse?.resultId !== null)
+        assertTrue(recommendationResponse?.response?.pod !== null)
+        assertTrue(recommendationResponse?.response?.results !== null)
+        assertTrue(recommendationResponse?.response?.resultCount!! >= 0)
+        assertEquals(recommendationResponse?.response?.results?.first()?.isSlotted, false)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -310,8 +346,8 @@ class ConstructorIoIntegrationTest {
     @Test
     fun trackRecommendationResultClickAgainstRealResponse() {
         val observer = constructorIo.trackRecommendationResultClickInternal(
-            "pdp5",
-            "User Featured",
+            "pdp3",
+            "filtered_items",
             "prrst_shldr_bls"
         ).test()
         observer.assertComplete()
@@ -320,7 +356,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun trackRecommendationResultsViewAgainstRealResponse() {
-        val observer = constructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        val observer = constructorIo.trackRecommendationResultsViewInternal("pdp3", 4).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -329,14 +365,15 @@ class ConstructorIoIntegrationTest {
     fun getAutocompleteResultsWithHiddenFieldsAgainstRealResponse() {
         val hiddenFields = listOf("hiddenField1", "hiddenField2")
         val observer = constructorIo.getAutocompleteResults("pork", null, null, hiddenFields).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.sections!!.isNotEmpty()
-            it.get()?.sections?.get("Products")
-                ?.first()?.data?.metadata?.get("hiddenField1") !== null
-            it.get()?.sections?.get("Products")
-                ?.first()?.data?.metadata?.get("hiddenField2") !== null
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val autocompleteResponse = observer.values()[0].get()
+        assertTrue(autocompleteResponse?.resultId !== null)
+        assertTrue(autocompleteResponse?.sections!!.isNotEmpty())
+        assertTrue(autocompleteResponse?.sections?.get("Products")?.first()?.data?.metadata?.get("hiddenField1") !== null)
+        assertTrue(autocompleteResponse?.sections?.get("Products")?.first()?.data?.metadata?.get("hiddenField2") !== null)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -344,22 +381,18 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultsWithHiddenFieldsAgainstRealResponse() {
         val hiddenFields = listOf("hiddenField1", "hiddenField2")
         val observer = constructorIo.getSearchResults(
-            "pork",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            hiddenFields
+            term =  "pork",
+            hiddenFields = hiddenFields
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField1") !== null
-            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField2") !== null
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.results?.first()?.data?.metadata?.get("hiddenField1") !== null)
+        assertTrue(searchResponse?.response?.results?.first()?.data?.metadata?.get("hiddenField2") !== null)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -367,24 +400,18 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultsWithHiddenFacetsAgainstRealResponse() {
         val hiddenFacets = listOf("Brand")
         val observer = constructorIo.getSearchResults(
-            "pork",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            hiddenFacets
+            term = "pork",
+            hiddenFacets = hiddenFacets
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.facets!!.isNotEmpty()
-            val brandFacet =
-                it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
-            brandFacet !== null
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        val brandFacet = searchResponse?.response?.facets?.find { facet -> facet.name.contains("Brand") }
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(brandFacet !== null)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -395,11 +422,14 @@ class ConstructorIoIntegrationTest {
             groupsSortBy = "value",
             groupsSortOrder = "ascending"
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.groups?.get(0)?.displayName == "Dairy"
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertEquals(searchResponse?.response?.groups?.get(0)?.displayName, "Dairy")
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -410,11 +440,14 @@ class ConstructorIoIntegrationTest {
             groupsSortBy = "value",
             groupsSortOrder = "descending"
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.groups?.get(0)?.displayName == "Meat & Poultry"
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertEquals(searchResponse?.response?.groups?.get(0)?.displayName, "Meat & Poultry")
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -422,23 +455,19 @@ class ConstructorIoIntegrationTest {
     fun getBrowseResultsWithHiddenFieldsAgainstRealResponse() {
         val hiddenFields = listOf("hiddenField1", "hiddenField2")
         val observer = constructorIo.getBrowseResults(
-            "group_id",
-            "431",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            hiddenFields
+            filterName = "group_id",
+            filterValue = "431",
+            hiddenFields = hiddenFields
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField1") !== null
-            it.get()?.response?.results?.first()?.data?.metadata?.get("hiddenField2") !== null
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.results?.first()?.data?.metadata?.get("hiddenField1") !== null)
+        assertTrue(browseResponse?.response?.results?.first()?.data?.metadata?.get("hiddenField2") !== null)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -446,47 +475,48 @@ class ConstructorIoIntegrationTest {
     fun getBrowseResultsWithHiddenFacetsAgainstRealResponse() {
         val hiddenFacets = listOf("Brand")
         val observer = constructorIo.getBrowseResults(
-            "group_id",
-            "431",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            hiddenFacets
+            filterName = "group_id",
+            filterValue = "431",
+            hiddenFacets = hiddenFacets,
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.facets!!.isNotEmpty()
-            val brandFacet =
-                it.get()?.response?.facets?.find { facet -> facet.name.contains("Brand") }
-            brandFacet !== null
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        val brandFacet = browseResponse?.response?.facets?.find { facet -> facet.name.contains("Brand")}
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(brandFacet !== null)
+
         Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun getBrowseResultsWithCollectionAgainstRealResponse() {
         val observer = constructorIo.getBrowseResults("collection_id", "test-collection").test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.collection?.id == "test-collection"
-            it.get()?.response?.collection?.displayName == "test collection"
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertEquals(browseResponse?.response?.collection?.id, "test-collection")
+        assertEquals(browseResponse?.response?.collection?.displayName, "test collection")
+
+        Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun getAutocompleteResultsAgainstRealResponseUsingRequestBuilder() {
         val request = AutocompleteRequest.Builder("pork").build()
         val observer = constructorIo.getAutocompleteResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.sections!!.isNotEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val autocompleteResponse = observer.values()[0].get()
+        assertTrue(autocompleteResponse?.resultId !== null)
+        assertTrue(autocompleteResponse?.sections!!.isNotEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -502,13 +532,15 @@ class ConstructorIoIntegrationTest {
         val request =
             AutocompleteRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getAutocompleteResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.sections!!.isNotEmpty()
-            val returnedVariationsMap =
-                it.get()?.sections!!["Products"]?.get(0)?.variationsMap as List<*>
-            returnedVariationsMap.isNotEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val autocompleteResponse = observer.values()[0].get()
+        val returnedVariationsMap = autocompleteResponse?.sections!!["Products"]?.get(0)?.variationsMap as List<*>
+        assertTrue(autocompleteResponse?.resultId !== null)
+        assertTrue(autocompleteResponse?.sections!!.isNotEmpty())
+        assertTrue(returnedVariationsMap.isNotEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -524,13 +556,15 @@ class ConstructorIoIntegrationTest {
         val request =
             AutocompleteRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getAutocompleteResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.sections!!.isNotEmpty()
-            val returnedVariationsMap =
-                it.get()?.sections!!["Products"]?.get(0)?.variationsMap as Map<*, *>
-            returnedVariationsMap.isNotEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val autocompleteResponse = observer.values()[0].get()
+        val returnedVariationsMap = autocompleteResponse?.sections!!["Products"]?.get(0)?.variationsMap as Map<*, *>
+        assertTrue(autocompleteResponse?.resultId !== null)
+        assertTrue(autocompleteResponse?.sections!!.isNotEmpty())
+        assertTrue(returnedVariationsMap.isNotEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -538,14 +572,17 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultAgainstRealResponseUsingRequestBuilder() {
         val request = SearchRequest.Builder("pork").build()
         val observer = constructorIo.getSearchResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -560,16 +597,19 @@ class ConstructorIoIntegrationTest {
         )
         val request = SearchRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getSearchResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            val returnedVariationsMap = it.get()?.response?.results!![0].variationsMap as? List<*>
-            returnedVariationsMap!!.isNotEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        val returnedVariationsMap = searchResponse?.response?.results!![0].variationsMap as? List<*>
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertTrue(returnedVariationsMap!!.isNotEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -584,16 +624,19 @@ class ConstructorIoIntegrationTest {
         )
         val request = SearchRequest.Builder("angus beef").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getSearchResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            val returnedVariationsMap = it.get()?.response?.results!![0].variationsMap as? Map<*, *>
-            returnedVariationsMap!!.isNotEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        val returnedVariationsMap = searchResponse?.response?.results!![0].variationsMap as? Map<*, *>
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertTrue(returnedVariationsMap!!.isNotEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -601,16 +644,19 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultAgainstRealResponseWithResultSources() {
         val request = SearchRequest.Builder("angus beef").build()
         val observer = constructorIo.getSearchResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
-            it.get()?.response?.resultSources!!.tokenMatch!!.count!! >= 0
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertTrue(searchResponse?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0)
+        assertTrue(searchResponse?.response?.resultSources!!.tokenMatch!!.count!! >= 0)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -618,14 +664,17 @@ class ConstructorIoIntegrationTest {
     fun getBrowseResultAgainstRealResponseUsingRequestBuilder() {
         val request = BrowseRequest.Builder("group_id", "431").build()
         val observer = constructorIo.getBrowseResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -641,16 +690,19 @@ class ConstructorIoIntegrationTest {
         val request =
             BrowseRequest.Builder("group_id", "544").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getBrowseResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            val returnedVariationsMap = it.get()?.response?.results!![0].variationsMap as? List<*>
-            returnedVariationsMap!!.isNotEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        val returnedVariationsMap = browseResponse?.response?.results!![0].variationsMap as? List<*>
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+        assertTrue(returnedVariationsMap!!.isNotEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -666,16 +718,19 @@ class ConstructorIoIntegrationTest {
         val request =
             BrowseRequest.Builder("group_id", "431").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getBrowseResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            val returnedVariationsMap = it.get()?.response?.results!![0].variationsMap as? Map<*, *>
-            returnedVariationsMap!!.isNotEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        val returnedVariationsMap = browseResponse?.response?.results!![0].variationsMap as? Map<*, *>
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+        assertTrue(returnedVariationsMap!!.isNotEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -683,29 +738,38 @@ class ConstructorIoIntegrationTest {
     fun getBrowseResultAgainstRealResponseWithResultSources() {
         val request = BrowseRequest.Builder("group_id", "431").build()
         val observer = constructorIo.getBrowseResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.filterSortOptions!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0
-            it.get()?.response?.resultSources!!.tokenMatch!!.count!! >= 0
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+        assertTrue(browseResponse?.response?.resultSources!!.embeddingsMatch!!.count!! >= 0)
+        assertTrue(browseResponse?.response?.resultSources!!.tokenMatch!!.count!! >= 0)
+
         Thread.sleep(timeBetweenTests)
     }
 
     @Test
     fun getRecommendationResultsAgainstRealResponseUsingRequestBuilder() {
-        val request = RecommendationsRequest.Builder("pdp5").build()
+        val filters = mapOf("group_id" to listOf("544"))
+        val request = RecommendationsRequest.Builder("pdp3")
+            .setFilters(filters)
+            .build()
         val observer = constructorIo.getRecommendationResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.pod !== null
-            it.get()?.response?.results !== null
-            it.get()?.response?.resultCount!! >= 0
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val recommendationResponse = observer.values()[0].get()
+        assertTrue(recommendationResponse?.resultId !== null)
+        assertTrue(recommendationResponse?.response?.pod !== null)
+        assertTrue(recommendationResponse?.response?.results !== null)
+        assertTrue(recommendationResponse?.response?.resultCount!! >= 0)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -717,12 +781,15 @@ class ConstructorIoIntegrationTest {
             groupsSortBy = "value",
             groupsSortOrder = "ascending",
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.groups?.get(0)?.displayName == "Grocery"
-            it.get()?.response?.groups?.get(0)?.children?.get(0)?.displayName == "Baby"
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertEquals(browseResponse?.response?.groups?.get(0)?.displayName, "Grocery")
+        assertEquals(browseResponse?.response?.groups?.get(0)?.children?.get(0)?.displayName, "Baby")
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -734,12 +801,15 @@ class ConstructorIoIntegrationTest {
             groupsSortBy = "value",
             groupsSortOrder = "descending",
         ).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.groups?.get(0)?.displayName == "Grocery"
-            it.get()?.response?.groups?.get(0)?.children?.get(0)?.displayName == "Pet"
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertEquals(browseResponse?.response?.groups?.get(0)?.displayName, "Grocery")
+        assertEquals(browseResponse?.response?.groups?.get(0)?.children?.get(0)?.displayName, "Pet")
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -747,11 +817,14 @@ class ConstructorIoIntegrationTest {
     fun getAutocompleteResultsWithLabelsAgainstRealResponse() {
         val request = AutocompleteRequest.Builder("pork").build()
         val observer = constructorIo.getAutocompleteResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.sections!!.isNotEmpty()
-            it.get()?.sections?.get("Products")?.first()?.labels!!["is_sponsored"] == true
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val autocompleteResponse = observer.values()[0].get()
+        assertTrue(autocompleteResponse?.resultId !== null)
+        assertTrue(autocompleteResponse?.sections!!.isNotEmpty())
+        assertEquals(autocompleteResponse?.sections?.get("Products")?.first()?.labels!!["is_sponsored"], true)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -759,14 +832,17 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultsWithLabelsAgainstRealResponse() {
         val request = SearchRequest.Builder("pork").build()
         val observer = constructorIo.getSearchResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.results?.first()?.labels!!["is_sponsored"] == true
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertEquals(searchResponse?.response?.results?.first()?.labels!!["is_sponsored"], true)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -774,14 +850,17 @@ class ConstructorIoIntegrationTest {
     fun getBrowseResultsWithLabelsAgainstRealResponse() {
         val request = BrowseRequest.Builder("group_id", "544").build()
         val observer = constructorIo.getBrowseResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.facets!!.isNotEmpty()
-            it.get()?.response?.groups!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.results?.first()?.labels!!["is_sponsored"] == true
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+        assertEquals(browseResponse?.response?.results?.first()?.labels!!["is_sponsored"], true)
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -790,12 +869,15 @@ class ConstructorIoIntegrationTest {
         val filters = mapOf("group_id" to listOf("544"))
         val request = RecommendationsRequest.Builder("pdp3").setFilters(filters).build()
         val observer = constructorIo.getRecommendationResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.results?.first()?.labels!!.isNullOrEmpty()
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val recommendationResponse = observer.values()[0].get()
+        assertTrue(recommendationResponse?.resultId !== null)
+        assertTrue(recommendationResponse?.response?.results!!.isNotEmpty())
+        assertTrue(recommendationResponse?.response?.resultCount!! > 0)
+        assertTrue(recommendationResponse?.response?.results?.first()?.labels!!.isNullOrEmpty())
+
         Thread.sleep(timeBetweenTests)
     }
 
@@ -803,20 +885,24 @@ class ConstructorIoIntegrationTest {
     fun getSearchResultAgainstRealResponseWithRefinedContent() {
         val request = SearchRequest.Builder("superbowl").build()
         val observer = constructorIo.getSearchResults(request).test()
-        observer.assertComplete().assertValue {
-            it.get()?.resultId !== null
-            it.get()?.response?.results!!.isNotEmpty()
-            it.get()?.response?.resultCount!! > 0
-            it.get()?.response?.refinedContent?.first()?.data!!.isNullOrEmpty()
-            it.get()?.response?.refinedContent?.first()?.data?.get("body") === "Content 1 Body"
-            it.get()?.response?.refinedContent?.first()?.data?.get("header") === "Content 1 Header"
-            it.get()?.response?.refinedContent?.first()?.data?.get("assetUrl") === "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png"
-            it.get()?.response?.refinedContent?.first()?.data?.get("altText") === "Content 1 desktop alt text"
-            it.get()?.response?.refinedContent?.first()?.data?.get("ctaLink") === "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png"
-            it.get()?.response?.refinedContent?.first()?.data?.get("ctaText") === "Content 1 CTA Button"
-            it.get()?.response?.refinedContent?.first()?.data?.get("tag-1") === "tag-1-value"
-            it.get()?.response?.refinedContent?.first()?.data?.get("tag-2") === "tag-2-value"
-            it.get()?.response?.refinedContent?.first()?.data?.get("arbitraryDataObject") !== null
-        }
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertTrue(searchResponse?.response?.refinedContent?.first()?.data!!.isNotEmpty())
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("body"), "Content 1 Body")
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("header"), "Content 1 Header")
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("assetUrl"), "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png")
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("altText"), "Content 1 desktop alt text")
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("ctaLink"), "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png")
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("ctaText"), "Content 1 CTA Button")
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("tag-1"), "tag-1-value")
+        assertEquals(searchResponse?.response?.refinedContent?.first()?.data?.get("tag-2"), "tag-2-value")
+        assertTrue(searchResponse?.response?.refinedContent?.first()?.data?.get("arbitraryDataObject") !== null)
+
+        Thread.sleep(timeBetweenTests)
     }
 }

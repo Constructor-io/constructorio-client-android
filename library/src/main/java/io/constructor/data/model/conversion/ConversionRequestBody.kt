@@ -15,7 +15,7 @@ data class ConversionRequestBody(
         @Json(name = "variation_id") val variationId: String?,
         @Json(name = "item_name") val itemName: String,
         @Json(name = "revenue") val revenue: String,
-        @Json(name = "conversion_type") val conversionType: String?,
+        @Json(name = "type") val conversionType: String?,
         @Json(name = "c") val c: String,
         @Json(name = "i") val i: String,
         @Json(name = "s") val s: Int,

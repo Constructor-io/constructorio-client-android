@@ -6,10 +6,7 @@ import com.squareup.moshi.Moshi
 import io.constructor.BuildConfig
 import io.constructor.data.ConstructorData
 import io.constructor.data.DataManager
-import io.constructor.data.builder.AutocompleteRequest
-import io.constructor.data.builder.BrowseRequest
-import io.constructor.data.builder.RecommendationsRequest
-import io.constructor.data.builder.SearchRequest
+import io.constructor.data.builder.*
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
@@ -21,6 +18,8 @@ import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
+import io.constructor.data.model.quiz.QuizQuestionResponse
+import io.constructor.data.model.quiz.QuizResultsResponse
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
@@ -91,6 +90,7 @@ object ConstructorIo {
         preferenceHelper = component.preferenceHelper()
         preferenceHelper.apiKey = constructorIoConfig.apiKey
         preferenceHelper.serviceUrl = constructorIoConfig.serviceUrl
+        preferenceHelper.quizzesServiceUrl = constructorIoConfig.quizzesServiceUrl
         preferenceHelper.port = constructorIoConfig.servicePort
         preferenceHelper.scheme = constructorIoConfig.serviceScheme
         preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
@@ -484,6 +484,186 @@ object ConstructorIo {
     }
 
     /**
+     * ## Example
+     * ```
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
+     * ConstructorIo.getQuizNextQuestion("quiz-id", answers, "version-id")
+     * ```
+     * @param quizId id of the quiz you want to retrieve
+     * @param answers list of answers to send
+     * @param versionId version identifier for the quiz
+     * @param sectionName the section the quiz and results come from. defaults to "Products"
+     */
+    fun getQuizNextQuestion(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        answers?.forEach { answer ->
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizNextQuestion(quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
+     * ## Example
+     * ```
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
+     * val request = QuizRequest.Builder("quiz-id")
+     *     .setAnswers(answers)
+     *     .setVersionId("version-id")
+     *     .build()
+     * ConstructorIo.getQuizNextQuestion(request)
+     * ```
+     * @param request the quiz request object
+     */
+    fun getQuizNextQuestion(request: QuizRequest): Observable<ConstructorData<QuizQuestionResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.answers?.forEach { answer ->
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
+        }
+        request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizNextQuestion(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
+     * ## Example
+     * ```
+     * runBlocking {
+     *      launch {
+     *          try {
+     *              val answers = listOf(
+     *                  listOf("1"),
+     *                  listOf("1", "2"),
+     *                  listOf("true"),
+     *                  listOf("seen"),
+     *              )
+     *              val quizResults = constructorIo.getQuizNextQuestionCRT("quiz-id", answers, "version-id")
+     *              // Do something with quizResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     */
+    suspend fun getQuizNextQuestionCRT(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): QuizQuestionResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        answers?.forEach { answer ->
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizNextQuestionCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
+     * ## Example
+     * ```
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
+     * ConstructorIo.getQuizResults("quiz-id", answers, "version-id")
+     * ```
+     * @param quizId id of the quiz you want to retrieve
+     * @param answers list of answers to send
+     * @param versionId version identifier for the quiz
+     * @param sectionName the section the quiz and results come from. defaults to "Products"
+     */
+    fun getQuizResults(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizResultsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        answers?.forEach { answer ->
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizResults(quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
+     * ## Example
+     * ```
+     * val answers = listOf(
+     *      listOf("1"),
+     *      listOf("1", "2"),
+     *      listOf("true"),
+     *      listOf("seen"),
+     * )
+     * val request = QuizRequest.Builder("quiz-id")
+     *     .setAnswers(answers)
+     *     .setVersionId("version-id")
+     *     .build()
+     * ConstructorIo.getQuizResults(request)
+     * ```
+     * @param request the quiz request object
+     */
+    fun getQuizResults(request: QuizRequest): Observable<ConstructorData<QuizResultsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        request.answers?.forEach { answer ->
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
+        }
+        request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizResults(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
+     * ## Example
+     * ```
+     * runBlocking {
+     *      launch {
+     *          try {
+     *              val answers = listOf(
+     *                  listOf("1"),
+     *                  listOf("1", "2"),
+     *                  listOf("true"),
+     *                  listOf("seen"),
+     *              )
+     *              val quizResults = constructorIo.getQuizResultsCRT("quiz-id", answers, "version-id")
+     *              // Do something with quizResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     */
+    suspend fun getQuizResultsCRT(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): QuizResultsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+
+        answers?.forEach { answer ->
+            encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
+        }
+        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+
+        return dataManager.getQuizResultsCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
+    }
+
+    /**
      * Tracks session start events
      * ##Example
      * ```
@@ -863,8 +1043,6 @@ object ConstructorIo {
 
     internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
-        resultID?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultClickRequestBody = BrowseResultClickRequestBody(
                 filterName,
@@ -880,13 +1058,13 @@ object ConstructorIo {
                 configMemoryHolder.segments,
                 true,
                 section,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                resultID,
         )
 
         return dataManager.trackBrowseResultClick(
                 browseResultClickRequestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section),
-                encodedParams.toTypedArray()
         )
 
     }
