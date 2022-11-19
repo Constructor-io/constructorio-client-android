@@ -136,6 +136,14 @@ class ConstructorIoIntegrationTest {
         val observer =
             constructorIo.getSearchResults("item", facet.map { it.key to it.value }).test()
         observer.assertComplete()
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+
         Thread.sleep(timeBetweenTests)
     }
 

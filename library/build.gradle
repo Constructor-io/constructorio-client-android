@@ -25,10 +25,11 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
-        versionName '2.18.6'
+        versionName '2.19.1'
         buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
         buildConfigField("String", "DEFAULT_ITEM_SECTION", "\"Products\"")
         buildConfigField("String", "SERVICE_URL", "\"ac.cnstrc.com\"")
+        buildConfigField("String", "QUIZZES_SERVICE_URL", "\"quizzes.cnstrc.com\"")
         buildConfigField("Integer", "SERVICE_PORT", "443")
         buildConfigField("String", "SERVICE_SCHEME", "\"https\"")
     }

@@ -35,6 +35,10 @@ constructor(@ConstructorSdk val preferences: SharedPreferences) {
         get() = preferences.getString(PREF_SERVICE_URL, "")
         set(value) = preferences.edit().putString(PREF_SERVICE_URL, value).apply()
 
+    var quizzesServiceUrl: String?
+        get() = preferences.getString(PREF_QUIZZES_SERVICE_URL, "")
+        set(value) = preferences.edit().putString(PREF_QUIZZES_SERVICE_URL, value).apply()
+
     var port: Int
         get() = preferences.getInt(PREF_SERVICE_PORT, 443)
         set(value) = preferences.edit().putInt(PREF_SERVICE_PORT, value).apply()
@@ -78,6 +82,7 @@ constructor(@ConstructorSdk val preferences: SharedPreferences) {
         const val SESSION_LAST_ACCESS = "session_last_access"
         const val SESSION_TIME_THRESHOLD = 1000 * 60 * 30
         const val PREF_SERVICE_URL = "service_url"
+        const val PREF_QUIZZES_SERVICE_URL = "quizzes_service_url"
         const val PREF_SERVICE_PORT = "service_port"
         const val PREF_SERVICE_SCHEME = "service_scheme"
     }

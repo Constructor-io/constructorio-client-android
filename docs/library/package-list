@@ -9,6 +9,12 @@ $dokka.location:io.constructor.core/ConstructorIo/getBrowseResults/#io.construct
 $dokka.location:io.constructor.core/ConstructorIo/getBrowseResults/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.Int?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.List[kotlin.String]?#kotlin.collections.List[kotlin.String]?#kotlin.String?#kotlin.String?#io.constructor.data.model.common.VariationsMap?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-browse-results.html
 $dokka.location:io.constructor.core/ConstructorIo/getBrowseResultsCRT/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.Int?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.List[kotlin.String]?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-browse-results-c-r-t.html
 $dokka.location:io.constructor.core/ConstructorIo/getClientId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-client-id.html
+$dokka.location:io.constructor.core/ConstructorIo/getQuizNextQuestion/#io.constructor.data.builder.QuizRequest/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-quiz-next-question.html
+$dokka.location:io.constructor.core/ConstructorIo/getQuizNextQuestion/#kotlin.String#kotlin.collections.List[kotlin.collections.List[kotlin.String]]?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-quiz-next-question.html
+$dokka.location:io.constructor.core/ConstructorIo/getQuizNextQuestionCRT/#kotlin.String#kotlin.collections.List[kotlin.collections.List[kotlin.String]]?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-quiz-next-question-c-r-t.html
+$dokka.location:io.constructor.core/ConstructorIo/getQuizResults/#io.constructor.data.builder.QuizRequest/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-quiz-results.html
+$dokka.location:io.constructor.core/ConstructorIo/getQuizResults/#kotlin.String#kotlin.collections.List[kotlin.collections.List[kotlin.String]]?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-quiz-results.html
+$dokka.location:io.constructor.core/ConstructorIo/getQuizResultsCRT/#kotlin.String#kotlin.collections.List[kotlin.collections.List[kotlin.String]]?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-quiz-results-c-r-t.html
 $dokka.location:io.constructor.core/ConstructorIo/getRecommendationResults/#io.constructor.data.builder.RecommendationsRequest/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-recommendation-results.html
 $dokka.location:io.constructor.core/ConstructorIo/getRecommendationResults/#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-recommendation-results.html
 $dokka.location:io.constructor.core/ConstructorIo/getRecommendationResultsCRT/#kotlin.String#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.collections.List[kotlin.String]]]?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-recommendation-results-c-r-t.html
@@ -34,10 +40,11 @@ $dokka.location:io.constructor.core/ConstructorIo/trackSearchResultsLoaded/#kotl
 $dokka.location:io.constructor.core/ConstructorIo/trackSearchSubmit/#kotlin.String#kotlin.String#io.constructor.data.model.common.ResultGroup?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-search-submit.html
 $dokka.location:io.constructor.core/ConstructorIo/userId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/user-id.html
 $dokka.location:io.constructor.core/ConstructorIoConfig///PointingToDeclaration/library/io.constructor.core/-constructor-io-config/index.html
-$dokka.location:io.constructor.core/ConstructorIoConfig/ConstructorIoConfig/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]#kotlin.collections.Map[kotlin.String,kotlin.Int]#kotlin.String#kotlin.Int#kotlin.String/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/-constructor-io-config.html
+$dokka.location:io.constructor.core/ConstructorIoConfig/ConstructorIoConfig/#kotlin.String#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]#kotlin.collections.Map[kotlin.String,kotlin.Int]#kotlin.String#kotlin.Int#kotlin.String/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/-constructor-io-config.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/apiKey/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/api-key.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/autocompleteResultCount/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/autocomplete-result-count.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/defaultItemSection/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/default-item-section.html
+$dokka.location:io.constructor.core/ConstructorIoConfig/quizzesServiceUrl/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/quizzes-service-url.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/segments/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/segments.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/servicePort/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/service-port.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/serviceScheme/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/service-scheme.html
@@ -109,6 +116,24 @@ $dokka.location:io.constructor.data.builder/BrowseRequest/section/#/PointingToDe
 $dokka.location:io.constructor.data.builder/BrowseRequest/sortBy/#/PointingToDeclaration/library/io.constructor.data.builder/-browse-request/sort-by.html
 $dokka.location:io.constructor.data.builder/BrowseRequest/sortOrder/#/PointingToDeclaration/library/io.constructor.data.builder/-browse-request/sort-order.html
 $dokka.location:io.constructor.data.builder/BrowseRequest/variationsMap/#/PointingToDeclaration/library/io.constructor.data.builder/-browse-request/variations-map.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder///PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/index.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/Builder/#kotlin.String/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/-builder.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/answers/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/answers.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/build/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/build.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/quizId/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/quiz-id.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/section/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/section.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/setAnswers/#kotlin.collections.List[kotlin.collections.List[kotlin.String]]/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/set-answers.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/setSection/#kotlin.String/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/set-section.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/setVersionId/#kotlin.String/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/set-version-id.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Builder/versionId/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-builder/version-id.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Companion///PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-companion/index.html
+$dokka.location:io.constructor.data.builder/QuizRequest.Companion/build/#kotlin.String#kotlin.Function1[io.constructor.data.builder.QuizRequest.Builder,kotlin.Unit]/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-companion/build.html
+$dokka.location:io.constructor.data.builder/QuizRequest///PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/index.html
+$dokka.location:io.constructor.data.builder/QuizRequest/QuizRequest/#kotlin.String#kotlin.collections.List[kotlin.collections.List[kotlin.String]]?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/-quiz-request.html
+$dokka.location:io.constructor.data.builder/QuizRequest/answers/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/answers.html
+$dokka.location:io.constructor.data.builder/QuizRequest/quizId/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/quiz-id.html
+$dokka.location:io.constructor.data.builder/QuizRequest/section/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/section.html
+$dokka.location:io.constructor.data.builder/QuizRequest/versionId/#/PointingToDeclaration/library/io.constructor.data.builder/-quiz-request/version-id.html
 $dokka.location:io.constructor.data.builder/RecommendationsRequest.Builder///PointingToDeclaration/library/io.constructor.data.builder/-recommendations-request/-builder/index.html
 $dokka.location:io.constructor.data.builder/RecommendationsRequest.Builder/Builder/#kotlin.String/PointingToDeclaration/library/io.constructor.data.builder/-recommendations-request/-builder/-builder.html
 $dokka.location:io.constructor.data.builder/RecommendationsRequest.Builder/build/#/PointingToDeclaration/library/io.constructor.data.builder/-recommendations-request/-builder/build.html
@@ -272,6 +297,48 @@ $dokka.location:io.constructor.data.model.common/VariationsMap/VariationsMap/#ko
 $dokka.location:io.constructor.data.model.common/VariationsMap/dtype/#/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/dtype.html
 $dokka.location:io.constructor.data.model.common/VariationsMap/groupBy/#/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/group-by.html
 $dokka.location:io.constructor.data.model.common/VariationsMap/values/#/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/values.html
+$dokka.location:io.constructor.data.model.quiz////PointingToDeclaration/library/io.constructor.data.model.quiz/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizImages///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-images/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizImages/QuizImages/#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-images/-quiz-images.html
+$dokka.location:io.constructor.data.model.quiz/QuizImages/primaryAlt/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-images/primary-alt.html
+$dokka.location:io.constructor.data.model.quiz/QuizImages/primaryUrl/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-images/primary-url.html
+$dokka.location:io.constructor.data.model.quiz/QuizImages/secondaryAlt/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-images/secondary-alt.html
+$dokka.location:io.constructor.data.model.quiz/QuizImages/secondaryUrl/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-images/secondary-url.html
+$dokka.location:io.constructor.data.model.quiz/QuizOption///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizOption/QuizOption/#kotlin.Int?#kotlin.String?#io.constructor.data.model.quiz.QuizOptionAttribute?#io.constructor.data.model.quiz.QuizImages?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option/-quiz-option.html
+$dokka.location:io.constructor.data.model.quiz/QuizOption/attribute/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option/attribute.html
+$dokka.location:io.constructor.data.model.quiz/QuizOption/id/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option/id.html
+$dokka.location:io.constructor.data.model.quiz/QuizOption/images/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option/images.html
+$dokka.location:io.constructor.data.model.quiz/QuizOption/value/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option/value.html
+$dokka.location:io.constructor.data.model.quiz/QuizOptionAttribute///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option-attribute/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizOptionAttribute/QuizOptionAttribute/#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option-attribute/-quiz-option-attribute.html
+$dokka.location:io.constructor.data.model.quiz/QuizOptionAttribute/name/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option-attribute/name.html
+$dokka.location:io.constructor.data.model.quiz/QuizOptionAttribute/value/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-option-attribute/value.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/QuizQuestion/#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#io.constructor.data.model.quiz.QuizImages?#kotlin.collections.List[io.constructor.data.model.quiz.QuizOption]?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/-quiz-question.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/ctaText/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/cta-text.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/description/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/description.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/id/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/id.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/images/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/images.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/inputPlaceholder/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/input-placeholder.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/options/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/options.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/title/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/title.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestion/type/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/type.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/QuizQuestionResponse/#io.constructor.data.model.quiz.QuizQuestion?#kotlin.String?#kotlin.Boolean?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/-quiz-question-response.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/isLastQuestion/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/is-last-question.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/nextQuestion/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/next-question.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/rawData/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/raw-data.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/versionId/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/version-id.html
+$dokka.location:io.constructor.data.model.quiz/QuizResult///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-result/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizResult/QuizResult/#kotlin.collections.Map[kotlin.String,kotlin.Any]#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-result/-quiz-result.html
+$dokka.location:io.constructor.data.model.quiz/QuizResult/filterExpression/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-result/filter-expression.html
+$dokka.location:io.constructor.data.model.quiz/QuizResult/resultsUrl/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-result/results-url.html
+$dokka.location:io.constructor.data.model.quiz/QuizResultsResponse///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-results-response/index.html
+$dokka.location:io.constructor.data.model.quiz/QuizResultsResponse/QuizResultsResponse/#kotlin.String?#io.constructor.data.model.quiz.QuizResult?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-results-response/-quiz-results-response.html
+$dokka.location:io.constructor.data.model.quiz/QuizResultsResponse/rawData/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-results-response/raw-data.html
+$dokka.location:io.constructor.data.model.quiz/QuizResultsResponse/result/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-results-response/result.html
+$dokka.location:io.constructor.data.model.quiz/QuizResultsResponse/versionId/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-results-response/version-id.html
 $dokka.location:io.constructor.data.model.recommendations////PointingToDeclaration/library/io.constructor.data.model.recommendations/index.html
 $dokka.location:io.constructor.data.model.recommendations/Pod///PointingToDeclaration/library/io.constructor.data.model.recommendations/-pod/index.html
 $dokka.location:io.constructor.data.model.recommendations/Pod/Pod/#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.recommendations/-pod/-pod.html
@@ -358,6 +425,7 @@ io.constructor.data.builder
 io.constructor.data.model.autocomplete
 io.constructor.data.model.browse
 io.constructor.data.model.common
+io.constructor.data.model.quiz
 io.constructor.data.model.recommendations
 io.constructor.data.model.search
 io.constructor.injection
