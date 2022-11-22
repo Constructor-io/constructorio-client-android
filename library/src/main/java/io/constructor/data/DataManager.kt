@@ -147,6 +147,11 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.getBrowseResultsCRT(dynamicUrl)
     }
 
+    suspend fun getBrowseItemsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseResponse {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_ITEMS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseResultsCRT(dynamicUrl)
+    }
+
     fun trackBrowseResultsLoaded(browseResultLoadRequestBody: BrowseResultLoadRequestBody, params: Array<Pair<String, String>>): Completable {
         return constructorApi.trackBrowseResultsLoaded(browseResultLoadRequestBody, params.toMap())
     }
