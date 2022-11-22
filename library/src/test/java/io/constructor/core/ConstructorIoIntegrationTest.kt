@@ -234,6 +234,32 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getBrowseItemsResultsCRTAgainstRealResponse() {
+        runBlocking {
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("dai_pid_2003438"))
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseItemsResultsCRTWithFiltersAgainstRealResponse() {
+        runBlocking {
+            val facet = hashMapOf("Claims" to listOf("Low Fat"))
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("dai_pid_2003438"), facet.map { it.key to it.value })
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.facets!!.isNotEmpty())
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackAutocompleteSelectAgainstRealResponse() {
         val observer =
             constructorIo.trackAutocompleteSelectInternal("pork", "pork", "Search Suggestions")

@@ -149,7 +149,8 @@ object ConstructorIo {
         numResults: Int? = null,
         itemId: String? = null,
         term: String? = null,
-        itemIds: List<String>? = null
+        itemIds: List<String>? = null,
+        ids: List<String>? = null
     ): ArrayList<Pair<String, String>> {
 
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf();
@@ -189,6 +190,9 @@ object ConstructorIo {
         term?.let { encodedParams.add(Constants.QueryConstants.TERM.urlEncode() to term.toString().urlEncode()) }
         itemIds?.forEach { itemId ->
             encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.urlEncode())
+        }
+        ids?.forEach { id ->
+            encodedParams.add(Constants.QueryConstants.IDS.urlEncode() to id.urlEncode())
         }
         return encodedParams;
     }
@@ -512,7 +516,7 @@ object ConstructorIo {
      * @param hiddenFacets show facets that are hidden by default
      */
     suspend fun getBrowseItemsResultsCRT(itemIds: List<String>, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): BrowseResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, itemIds = itemIds)
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, ids = itemIds)
 
         return dataManager.getBrowseItemsResultsCRT(encodedParams = encodedParams.toTypedArray())
     }
