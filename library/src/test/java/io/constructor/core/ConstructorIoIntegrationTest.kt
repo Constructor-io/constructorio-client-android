@@ -772,6 +772,64 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getRecommendationResultsAgainstRealResponseWithVariationsMapArrayUsingRequestBuilder() {
+        val filters = mapOf("Brand" to listOf("XYZ"))
+        val variationsMap = VariationsMap(
+                dtype = "array",
+                values = mapOf(
+                        "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
+                ),
+                groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+        )
+        val request = RecommendationsRequest.Builder("filtered_items")
+                .setFilters(filters)
+                .setVariationsMap(variationsMap)
+                .build()
+        val observer = constructorIo.getRecommendationResults(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val recommendationResponse = observer.values()[0].get()
+        val returnedVariationsMap = recommendationResponse?.response?.results!![0].variationsMap as? List<*>
+        assertTrue(recommendationResponse?.resultId !== null)
+        assertTrue(recommendationResponse?.response?.pod !== null)
+        assertTrue(recommendationResponse?.response?.results !== null)
+        assertTrue(recommendationResponse?.response?.resultCount!! >= 0)
+        assertTrue(returnedVariationsMap!!.isNotEmpty())
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getRecommendationResultsAgainstRealResponseWithVariationsMapObjectUsingRequestBuilder() {
+        val filters = mapOf("Brand" to listOf("XYZ"))
+        val variationsMap = VariationsMap(
+                dtype = "object",
+                values = mapOf(
+                        "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
+                ),
+                groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+        )
+        val request = RecommendationsRequest.Builder("filtered_items")
+                .setFilters(filters)
+                .setVariationsMap(variationsMap)
+                .build()
+        val observer = constructorIo.getRecommendationResults(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val recommendationResponse = observer.values()[0].get()
+        val returnedVariationsMap = recommendationResponse?.response?.results!![0].variationsMap as? Map<*, *>
+        assertTrue(recommendationResponse?.resultId !== null)
+        assertTrue(recommendationResponse?.response?.pod !== null)
+        assertTrue(recommendationResponse?.response?.results !== null)
+        assertTrue(recommendationResponse?.response?.resultCount!! >= 0)
+        assertTrue(returnedVariationsMap!!.isNotEmpty())
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getBrowseResultsWithGroupsSortValueAscendingAgainstRealResponse() {
         val observer = constructorIo.getBrowseResults(
             filterName = "Brand",

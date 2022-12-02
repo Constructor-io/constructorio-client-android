@@ -4,6 +4,7 @@ import android.content.Context
 import io.constructor.data.builder.RecommendationsRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -11,6 +12,7 @@ import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -165,5 +167,51 @@ class ConstructorIoRecommendationsTest {
         val request = mockServer.takeRequest()
         val path = "/recommendations/v1/pods/titanic?item_id=item_id_1&item_id=item_id_2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.19.2&_dt="
         assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getRecommendationResultsWithVariationsMapUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        mockServer.enqueue(mockResponse)
+        val variationsMap = VariationsMap(
+                dtype = "array",
+                values = mapOf(
+                        "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                        "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+                ),
+                groupBy = listOf(mapOf("name" to "Country", "field" to "data.facets.Country"))
+        )
+        val recommendationsRequest = RecommendationsRequest.Builder("titanic")
+                .setVariationsMap(variationsMap)
+                .build()
+        val observer = constructorIo.getRecommendationResults(recommendationsRequest).test()
+        observer.assertComplete().assertValue {
+            var recommendationResponse = it.get()
+            recommendationResponse?.response?.results?.isNotEmpty()!!
+        }
+        observer.assertNoErrors()
+
+        val request = mockServer.takeRequest()
+        assertThat(request.requestUrl!!.encodedPath).isEqualTo("/recommendations/v1/pods/titanic")
+        with(request.requestUrl!!) {
+            val queryParams = mapOf(
+                "variations_map" to """{"dtype":"array","values":{"Price":{"aggregation":"min","field":"data.facets.price"},"Country":{"aggregation":"all","field":"data.facets.country"}},"group_by":[{"name":"Country","field":"data.facets.Country"}]}""",
+                "key" to "golden-key",
+                "i" to "guido-the-guid",
+                "ui" to "player-one",
+                "s" to "79",
+                "c" to "cioand-2.19.2",
+                "_dt" to "1"
+            )
+            assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
+
+            queryParams.forEach { (key, value) ->
+                if (key == "_dt") {
+                    assertThat(queryParameter(key)).containsOnlyDigits()
+                } else {
+                    assertThat(queryParameter(key)).isEqualTo(value)
+                }
+            }
+        }
     }
 }
