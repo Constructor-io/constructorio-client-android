@@ -106,9 +106,17 @@ var perPage = 10
 var query = "Dave's bread"
 var selectedFacets: HashMap<String, MutableList<String>>? = null
 var selectedSortOption: SortOption? = null
+var variationsMap: VariationsMap = VariationsMap(
+  groupBy = listOf(mapOf("name" to "Color", "field" to "data.color")),
+  values = mapOf(
+    "min_price" to mapOf("aggregation" to "min", "field" to "data.price"),
+    "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
+  ),
+  dtype = "array",
+)
 
 // Using RxJava
-ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder, variationsMap = variationsMap)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -140,6 +148,7 @@ val searchRequest = SearchRequest.Builder("potato")
     "Brand" to listOf("Kings Hawaiin")
   ))
   .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
+  .setVariationsMap(variationsMap)
   .build()
 
 // Creating a request using DSL
@@ -163,9 +172,17 @@ var filterName = "group_id"
 var filterValue = "Beverages"
 var selectedFacets: HashMap<String, MutableList<String>>? = null
 var selectedSortOption: SortOption? = null
+var variationsMap: VariationsMap = VariationsMap(
+  groupBy = listOf(mapOf("name" to "Color", "field" to "data.color")),
+  values = mapOf(
+    "min_price" to mapOf("aggregation" to "min", "field" to "data.price"),
+    "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
+  ),
+  dtype = "array",
+)
 
 // Using RxJava
-ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder)
+ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder, variationsMap = variationsMap)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -198,6 +215,7 @@ val browseRequest = BrowseRequest.Builder("group_id", "123")
     "Color" to listOf("Red", "Blue")
   ))
   .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+  .setVariationsMap(variationsMap)
   .build()
 
 // Creating a request using DSL
@@ -220,9 +238,17 @@ var numResults = 6
 var perPage = 10
 var podId = "best_sellers"
 var selectedFacets: HashMap<String, MutableList<String>>? = null
+var variationsMap: VariationsMap = VariationsMap(
+  groupBy = listOf(mapOf("name" to "Color", "field" to "data.color")),
+  values = mapOf(
+    "min_price" to mapOf("aggregation" to "min", "field" to "data.price"),
+    "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
+  ),
+  dtype = "array",
+)
 
 // Using RxJava
-ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
+ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults, variationsMap = variationsMap)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -250,6 +276,7 @@ runBlocking {
 // Creating a request using Request Builder
 val recommendationsRequest = RecommendationsRequest.Builder("product_detail_page")
   .setItemIds(listOf("item_id_123"))
+  .setVariationsMap(variationsMap)
   .build()
 
 // Creating a request using DSL
