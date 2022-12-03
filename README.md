@@ -44,9 +44,17 @@ ConstructorIo.init(this, config)
 
 var query = "Dav"
 var selectedFacet: HashMap<String, MutableList<String>>? = null
+var variationsMap: VariationsMap = VariationsMap(
+  groupBy = listOf(mapOf("name" to "Color", "field" to "data.color")),
+  values = mapOf(
+    "min_price" to mapOf("aggregation" to "min", "field" to "data.price"),
+    "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
+  ),
+  dtype = "array",
+)
 
 // Using RxJava
-ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.value })
+ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.value }, variationsMap = variationsMap)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -81,6 +89,7 @@ val autocompleteRequest = AutocompleteRequest.Builder("potato")
     "group_id" to listOf("G123"),
     "availability" to listOf("US", "CA")
   ))
+  .setVariationsMap(variationsMap)
   .build()
 
 // Creating a request using DSL
