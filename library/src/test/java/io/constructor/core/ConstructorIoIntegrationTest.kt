@@ -100,6 +100,25 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getAutocompleteResultsCRTWithVariationsMapAgainstRealResponse() {
+        runBlocking {
+            val variationsMap = VariationsMap(
+                    dtype = "array",
+                    values = mapOf(
+                        "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
+                    ),
+                    groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+            )
+            val autocompleteResults = constructorIo.getAutocompleteResultsCRT("Jacket", variationsMap = variationsMap)
+            val returnedVariationsMap = autocompleteResults?.sections!!["Products"]?.get(0)?.variationsMap as List<*>
+            assertTrue(autocompleteResults.sections!!.isNotEmpty())
+            assertTrue(autocompleteResults.resultId!!.isNotEmpty())
+            assertTrue(returnedVariationsMap.isNotEmpty())
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackSessionStartAgainstRealResponse() {
         val observer = constructorIo.trackSessionStartInternal().test()
         observer.assertComplete()
@@ -160,7 +179,6 @@ class ConstructorIoIntegrationTest {
         Thread.sleep(timeBetweenTests)
     }
 
-
     @Test
     fun getSearchResultsCRTWithFiltersAgainstRealResponse() {
         runBlocking {
@@ -171,6 +189,27 @@ class ConstructorIoIntegrationTest {
             assertTrue(searchResults.response!!.groups!!.isNotEmpty())
             assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
             assertTrue(searchResults.response!!.resultCount!! > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getSearchResultsCRTWithVariationsMapAgainstRealResponse() {
+        runBlocking {
+            val variationsMap = VariationsMap(
+                dtype = "array",
+                values = mapOf(
+                    "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
+                ),
+                groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+            )
+            val searchResults = constructorIo.getSearchResultsCRT("jacket", variationsMap = variationsMap)
+            val returnedVariationsMap = searchResults?.response?.results!![0].variationsMap as? List<*>
+            assertTrue(searchResults.resultId !== null)
+            assertTrue(searchResults.response!!.results!!.isNotEmpty())
+            assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(searchResults.response!!.resultCount!! > 0)
+            assertTrue(returnedVariationsMap!!.isNotEmpty())
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -226,6 +265,28 @@ class ConstructorIoIntegrationTest {
             assertTrue(browseResults.response!!.groups!!.isNotEmpty())
             assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
             assertTrue(browseResults.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsCRTWithVariationsMapAgainstRealResponse() {
+        runBlocking {
+            val variationsMap = VariationsMap(
+                    dtype = "array",
+                    values = mapOf(
+                            "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
+                    ),
+                    groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+            )
+            val browseResults = constructorIo.getBrowseResultsCRT("Brand", "XYZ", variationsMap = variationsMap)
+            val returnedVariationsMap = browseResults?.response?.results!![0].variationsMap as? List<*>
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.facets!!.isNotEmpty())
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
+            assertTrue(returnedVariationsMap!!.isNotEmpty())
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -343,6 +404,28 @@ class ConstructorIoIntegrationTest {
             val recommendationResults = constructorIo.getRecommendationResultsCRT("home_page_1", facet.map { it.key to it.value })
             assertTrue(recommendationResults.resultId !== null)
             assertTrue(recommendationResults.response?.pod !== null)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getRecommendationResultsCRTWithVariationsMapAgainstRealResponse() {
+        runBlocking {
+            val facet = hashMapOf("Brand" to listOf("XYZ"))
+            val variationsMap = VariationsMap(
+                    dtype = "array",
+                    values = mapOf(
+                            "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
+                    ),
+                    groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+            )
+            val recommendationResults = constructorIo.getRecommendationResultsCRT("filtered_items", facets = facet.map { it.key to it.value }, variationsMap = variationsMap)
+            val returnedVariationsMap = recommendationResults?.response?.results!![0].variationsMap as? List<*>
+            assertTrue(recommendationResults.resultId !== null)
+            assertTrue(recommendationResults.response?.pod !== null)
+            assertTrue(recommendationResults.response?.results !== null)
+            assertTrue(recommendationResults.response?.resultCount!! >= 0)
+            assertTrue(returnedVariationsMap!!.isNotEmpty())
         }
         Thread.sleep(timeBetweenTests)
     }
