@@ -655,6 +655,53 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackItemDetailLoaded() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackItemDetailLoadedInternal("pencil", "123", "456", "Products").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/item_detail_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.19.2&_dt="
+        assertEquals("pencil", requestBody["item_name"])
+        assertEquals("123", requestBody["item_id"])
+        assertEquals("456", requestBody["variation_id"])
+        assertEquals("Products", requestBody["section"])
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackItemDetailLoaded500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackItemDetailLoadedInternal("pencil", "123", "456", "Products").test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/item_detail_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.19.2&_dt="
+        assertEquals("pencil", requestBody["item_name"])
+        assertEquals("123", requestBody["item_id"])
+        assertEquals("456", requestBody["variation_id"])
+        assertEquals("Products", requestBody["section"])
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackItemDetailLoadedTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackItemDetailLoadedInternal("pencil", "123", "456", "Products").test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
+    }
+
+    @Test
     fun trackRecommendationResultClick() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
