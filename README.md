@@ -340,3 +340,10 @@ ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-131
 // Track when items are purchased (PurchaseItems(itemId, variationId?, quantity?), revenue, orderId)
 ConstructorIo.trackPurchase(arrayOf(PurchaseItem("TIT-REP-1997", "RED", 2), PurchaseItem("QE2-REP-1969")), 25.98, "ORD-1312343")
 ```
+
+### Miscellaneous Events
+
+```kotlin
+// Track when a product detail page is loaded a.k.a after a user clicks on an item. (itemName, itemId, variationId?, sectionName?, url?)
+ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
+```
