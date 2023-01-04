@@ -22,7 +22,7 @@ import io.constructor.core.ConstructorIo
 import io.constructor.core.ConstructorIoConfig
 
 // Create the client config
-let config = ConstructorIoConfig(
+val config = ConstructorIoConfig(
   apiKey = "YOUR API KEY",
   serviceUrl = "ac.cnstrc.com" // default
 )
@@ -194,7 +194,7 @@ runBlocking {
 val browseRequest = BrowseRequest.Builder("group_id", "123")
   .setFilters(mapOf(
     "group_id" to listOf("G1234"),
-    "Brand" to listOf("Cnstrc")
+    "Brand" to listOf("Cnstrc"),
     "Color" to listOf("Red", "Blue")
   ))
   .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
@@ -204,7 +204,7 @@ val browseRequest = BrowseRequest.Builder("group_id", "123")
 val browseRequest = BrowseRequest.build("group_id", "123") {
   filters = mapOf(
     "group_id" to listOf("G1234"),
-    "Brand" to listOf("Cnstrc")
+    "Brand" to listOf("Cnstrc"),
     "Color" to listOf("Red", "Blue")
   )
   hiddenFacets = listOf("hidden_facet_1", "hidden_facet_2")
@@ -260,7 +260,71 @@ val recommendationsRequest = RecommendationsRequest.build("product_detail_page")
 ConstructorIo.getRecommendationResults(recommendationsRequest)
 ```
 
-## 8. Instrument Behavioral Events
+## 8. Request Quiz Results
+
+```kotlin
+val quizId = "quiz-id-1"
+val answers = listOf(
+    listOf("1"), 
+    listOf("1, 2"), 
+    listOf("true"), 
+)
+val versionId = "version-1"
+val sectionName = "first-section"
+
+// Using RxJava
+ConstructorIo.getQuizResults(quizId, answers, versionId, sectionName)
+    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    .subscribe {
+        it.onValue {
+            it.response?.let {
+                view.renderData(it)
+            }
+        }
+    }
+
+// Using Coroutines
+runBlocking {
+    launch {
+        try {
+            val quizResults = constructorIo.getQuizResultCRT(quizId, answers, versionId, sectionName)
+            // Render/Send Quiz Results
+        } catch (e: Exception) {
+            // Handle error
+            println(e)
+        }
+    }
+}
+```
+
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val quizRequest = QuizRequest.Builder("quiz-id-1")
+    .setAnswers(listOf(
+        listOf("1"),
+        listOf("1, 2"),
+        listOf("true"),
+    ))
+    .setVersionId("version-1")
+    .setSection("first-section")
+    .build()
+
+// Creating a request using DSL
+val quizRequest = QuizRequest.build("quiz-id-1") {
+    answers = listOf(
+        listOf("1"),
+        listOf("1, 2"),
+        listOf("true"),
+    )
+    versionId = "version-1"
+    section = "first-section"
+}
+
+ConstructorIo.getQuizResults(quizRequest)
+```
+
+## 9. Instrument Behavioral Events
 
 The Android Client sends behavioral events to [Constructor.io](http://constructor.io/) in order to continuously learn and improve results for future Autosuggest and Search requests.  The Client only sends events in response to being called by the consuming app or in response to user interaction . For example, if the consuming app never calls the SDK code, no events will be sent.  Besides the explicitly passed in event parameters, all user events contain a GUID based user ID that the client sets to identify the user as well as a session ID.
 
