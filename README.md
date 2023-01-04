@@ -260,7 +260,7 @@ val recommendationsRequest = RecommendationsRequest.build("product_detail_page")
 ConstructorIo.getRecommendationResults(recommendationsRequest)
 ```
 
-## 8. Request Quiz Results
+## 8. Request Quiz Next Question
 
 ```kotlin
 val quizId = "quiz-id-1"
@@ -270,10 +270,10 @@ val answers = listOf(
     listOf("true"), 
 )
 val versionId = "version-1"
-val sectionName = "first-section"
+val sectionName = "Products"
 
 // Using RxJava
-ConstructorIo.getQuizResults(quizId, answers, versionId, sectionName)
+ConstructorIo.getQuizNextQuestion(quizId, answers, versionId, sectionName)
     .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     .subscribe {
         it.onValue {
@@ -287,8 +287,8 @@ ConstructorIo.getQuizResults(quizId, answers, versionId, sectionName)
 runBlocking {
     launch {
         try {
-            val quizResults = constructorIo.getQuizResultCRT(quizId, answers, versionId, sectionName)
-            // Render/Send Quiz Results
+            val quizNextQuestion = constructorIo.getQuizNextQuestionCRT(quizId, answers, versionId, sectionName)
+            // Render/Send quizNextQuestion
         } catch (e: Exception) {
             // Handle error
             println(e)
@@ -307,7 +307,7 @@ val quizRequest = QuizRequest.Builder("quiz-id-1")
         listOf("true"),
     ))
     .setVersionId("version-1")
-    .setSection("first-section")
+    .setSection("Products")
     .build()
 
 // Creating a request using DSL
@@ -318,13 +318,79 @@ val quizRequest = QuizRequest.build("quiz-id-1") {
         listOf("true"),
     )
     versionId = "version-1"
-    section = "first-section"
+    section = "Products"
 }
 
-ConstructorIo.getQuizResults(quizRequest)
+val quizNextQuestion = ConstructorIo.getQuizNextQuestion(quizRequest)
+// Render/Send quizNextQuestion
 ```
 
-## 9. Instrument Behavioral Events
+## 9. Request Quiz Results
+
+```kotlin
+val quizId = "quiz-id-1"
+val answers = listOf(
+    listOf("1"), 
+    listOf("1, 2"), 
+    listOf("true"), 
+)
+val versionId = "version-1"
+val sectionName = "Products"
+
+// Using RxJava
+ConstructorIo.getQuizResults(quizId, answers, versionId, sectionName)
+    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    .subscribe {
+        it.onValue {
+            it.response?.let {
+                view.renderData(it)
+            }
+        }
+    }
+
+// Using Coroutines
+runBlocking {
+    launch {
+        try {
+            val quizResults = constructorIo.getQuizResultCRT(quizId, answers, versionId, sectionName)
+            // Render/Send quizResults
+        } catch (e: Exception) {
+            // Handle error
+            println(e)
+        }
+    }
+}
+```
+
+### Alternative using Request Builder or DSL
+```kotlin
+// Creating a request using Request Builder
+val quizRequest = QuizRequest.Builder("quiz-id-1")
+    .setAnswers(listOf(
+        listOf("1"),
+        listOf("1, 2"),
+        listOf("true"),
+    ))
+    .setVersionId("version-1")
+    .setSection("Products")
+    .build()
+
+// Creating a request using DSL
+val quizRequest = QuizRequest.build("quiz-id-1") {
+    answers = listOf(
+        listOf("1"),
+        listOf("1, 2"),
+        listOf("true"),
+    )
+    versionId = "version-1"
+    section = "Products"
+}
+
+val quizResults = ConstructorIo.getQuizResults(quizRequest)
+// Render/Send quizResults
+```
+
+## 10. Instrument Behavioral Events
 
 The Android Client sends behavioral events to [Constructor.io](http://constructor.io/) in order to continuously learn and improve results for future Autosuggest and Search requests.  The Client only sends events in response to being called by the consuming app or in response to user interaction . For example, if the consuming app never calls the SDK code, no events will be sent.  Besides the explicitly passed in event parameters, all user events contain a GUID based user ID that the client sets to identify the user as well as a session ID.
 
