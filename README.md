@@ -60,7 +60,7 @@ ConstructorIo.getAutocompleteResults(query, selectedFacet?.map { it.key to it.va
 runBlocking {
   launch {
     try {
-      val autocompleteResults = constructorIo.getAutocompleteResultsCRT(query, selectedFacet?.map { it.key to it.value })
+      val autocompleteResults = ConstructorIo.getAutocompleteResultsCRT(query, selectedFacet?.map { it.key to it.value })
       // Do something with autocompleteResults
     } catch (e: Exception) {
       println(e)
@@ -95,7 +95,7 @@ val autocompleteRequest = AutocompleteRequest.build("potato") {
   )
 }
 
-constructorIo.getAutocompleteResults(autocompleteRequest)
+ConstructorIo.getAutocompleteResults(autocompleteRequest)
 ```
 
 ## 5. Request Search Results
@@ -122,7 +122,7 @@ ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }
 runBlocking {
   launch {
     try {
-      val searchResults = constructorIo.getSearchResultsCRT(query)
+      val searchResults = ConstructorIo.getSearchResultsCRT(query)
       // Do something with searchResults
     } catch (e: Exception) {
       println(e)
@@ -179,7 +179,7 @@ ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it
 runBlocking {
   launch {
     try {
-      val browseResults = constructorIo.getBrowseResultsCRT(filterName, filterValue)
+      val browseResults = ConstructorIo.getBrowseResultsCRT(filterName, filterValue)
       // Do something with browseResults
     } catch (e: Exception) {
       println(e)
@@ -236,7 +236,7 @@ ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it
 runBlocking {
   launch {
     try {
-      val recommendationResults = constructorIo.getRecommendationResultsCRT(podId)
+      val recommendationResults = ConstructorIo.getRecommendationResultsCRT(podId)
       // Do something with recommendationResults
     } catch (e: Exception) {
       println(e)
@@ -287,8 +287,8 @@ ConstructorIo.getQuizNextQuestion(quizId, answers, versionId, sectionName)
 runBlocking {
     launch {
         try {
-            val quizNextQuestion = constructorIo.getQuizNextQuestionCRT(quizId, answers, versionId, sectionName)
-            // Render/Send quizNextQuestion
+            val quizNextQuestion = ConstructorIo.getQuizNextQuestionCRT(quizId, answers, versionId, sectionName)
+            // Do something with quizNextQuestion
         } catch (e: Exception) {
             // Handle error
             println(e)
@@ -321,8 +321,7 @@ val quizRequest = QuizRequest.build("quiz-id-1") {
     section = "Products"
 }
 
-val quizNextQuestion = ConstructorIo.getQuizNextQuestion(quizRequest)
-// Render/Send quizNextQuestion
+ConstructorIo.getQuizNextQuestion(quizRequest)
 ```
 
 ## 9. Request Quiz Results
@@ -352,8 +351,8 @@ ConstructorIo.getQuizResults(quizId, answers, versionId, sectionName)
 runBlocking {
     launch {
         try {
-            val quizResults = constructorIo.getQuizResultCRT(quizId, answers, versionId, sectionName)
-            // Render/Send quizResults
+            val quizResults = ConstructorIo.getQuizResultCRT(quizId, answers, versionId, sectionName)
+            // Do something with quizResults
         } catch (e: Exception) {
             // Handle error
             println(e)
@@ -386,8 +385,7 @@ val quizRequest = QuizRequest.build("quiz-id-1") {
     section = "Products"
 }
 
-val quizResults = ConstructorIo.getQuizResults(quizRequest)
-// Render/Send quizResults
+ConstructorIo.getQuizResults(quizRequest)
 ```
 
 ## 10. Instrument Behavioral Events
