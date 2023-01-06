@@ -247,9 +247,10 @@ object ConstructorIo {
      * @param facets additional facets used to refine results
      * @param groupId category facet used to refine results
      * @param hiddenFields show fields that are hidden by default
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    suspend fun getAutocompleteResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null): AutocompleteResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdInt = groupId, facets = facets, hiddenFields = hiddenFields)
+    suspend fun getAutocompleteResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null, variationsMap: VariationsMap? = null): AutocompleteResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdInt = groupId, facets = facets, hiddenFields = hiddenFields, variationsMap = variationsMap)
 
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
@@ -349,9 +350,12 @@ object ConstructorIo {
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
      * @param hiddenFacets show facets that are hidden by default
+     * @param groupsSortBy the sort method for groups
+     * @param groupsSortOrder the sort order for groups
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    suspend fun getSearchResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): SearchResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets)
+    suspend fun getSearchResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): SearchResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap)
 
         return dataManager.getSearchResultsCRT(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -450,9 +454,12 @@ object ConstructorIo {
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
      * @param hiddenFacets show facets that are hidden by default
+     * @param groupsSortBy the sort method for groups
+     * @param groupsSortOrder the sort order for groups
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    suspend fun getBrowseResultsCRT(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): BrowseResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets)
+    suspend fun getBrowseResultsCRT(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): BrowseResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap)
 
         return dataManager.getBrowseResultsCRT(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
@@ -1160,9 +1167,10 @@ object ConstructorIo {
      * @param sectionName the section the selection will come from, i.e. "Products"
      * @param itemId: The item id to retrieve recommendations (strategy specific)
      * @param term: The term to use to refine results (strategy specific)
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets )
+    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<RecommendationsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap)
 
         return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
     }
@@ -1188,9 +1196,10 @@ object ConstructorIo {
      * @param sectionName the section the selection will come from, i.e. "Products"
      * @param itemId: The item id to retrieve recommendations (strategy specific)
      * @param term: The term to use to refine results (strategy specific)
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    suspend fun getRecommendationResultsCRT(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null): RecommendationsResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets )
+    suspend fun getRecommendationResultsCRT(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null): RecommendationsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap)
 
         return dataManager.getRecommendationResultsCRT(podId, encodedParams = encodedParams.toTypedArray())
     }
@@ -1222,7 +1231,7 @@ object ConstructorIo {
      * @param section the section the results will come from, i.e. "Products"
      */
     fun getRecommendationResults(request: RecommendationsRequest): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section )
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section, variationsMap = request.variationsMap )
 
         return dataManager.getRecommendationResults(request.podId, encodedParams = encodedParams.toTypedArray())
     }
