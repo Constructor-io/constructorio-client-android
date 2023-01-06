@@ -22,9 +22,9 @@ import io.constructor.core.ConstructorIo
 import io.constructor.core.ConstructorIoConfig
 
 // Create the client config
-let config = ConstructorIoConfig(
-  apiKey = "YOUR API KEY",
-  serviceUrl = "ac.cnstrc.com" // default
+var config = ConstructorIoConfig(
+    apiKey = "YOUR API KEY",
+    serviceUrl = "ac.cnstrc.com" // default
 )
 
 // Create the client instance
@@ -137,7 +137,7 @@ runBlocking {
 val searchRequest = SearchRequest.Builder("potato")
   .setFilters(mapOf(
     "group_id" to listOf("G123"),
-    "Brand" to listOf("Kings Hawaiin")
+    "Brand" to listOf("Kings")
   ))
   .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
   .build()
@@ -146,7 +146,7 @@ val searchRequest = SearchRequest.Builder("potato")
 val searchRequest = SearchRequest.build("potato") {
   filters = mapOf(
     "group_id" to listOf("G123"),
-    "Brand" to listOf("Kings Hawaiin")
+    "Brand" to listOf("Kings")
   )
   hiddenFields = listOf("hidden_field_1", "hidden_field_2")
 }
@@ -188,13 +188,46 @@ runBlocking {
 }
 ```
 
+## 6.1 Request Browse Items Results
+
+```kotlin
+var itemIds = listOf("item1", "item2")
+var selectedFilters: List<Pair<String, List<String>>>? = null
+var browseItemsRequest = BrowseItemsRequest.Builder(itemIds)
+    .setFilters(selectedFilters)
+    .build()
+
+// Using RxJava
+ConstructorIo.getBrowseItemsResults(browseItemsRequest)
+.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+.subscribe {
+  it.onValue {
+    it.response?.let {
+      view.renderData(it)
+    }
+  }
+}
+
+// Using Coroutines
+runBlocking {
+  launch {
+    try {
+      val browseResults = constructorIo.getBrowseItemsResultsCRT(filterName, filterValue)
+      // Do something with browseResults
+    } catch (e: Exception) {
+      println(e)
+    }
+  }
+}
+```
+
 ### Alternative using Request Builder or DSL
 ```kotlin
 // Creating a request using Request Builder
 val browseRequest = BrowseRequest.Builder("group_id", "123")
   .setFilters(mapOf(
     "group_id" to listOf("G1234"),
-    "Brand" to listOf("Cnstrc")
+    "Brand" to listOf("Cnstrc"),
     "Color" to listOf("Red", "Blue")
   ))
   .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
@@ -204,7 +237,7 @@ val browseRequest = BrowseRequest.Builder("group_id", "123")
 val browseRequest = BrowseRequest.build("group_id", "123") {
   filters = mapOf(
     "group_id" to listOf("G1234"),
-    "Brand" to listOf("Cnstrc")
+    "Brand" to listOf("Cnstrc"),
     "Color" to listOf("Red", "Blue")
   )
   hiddenFacets = listOf("hidden_facet_1", "hidden_facet_2")

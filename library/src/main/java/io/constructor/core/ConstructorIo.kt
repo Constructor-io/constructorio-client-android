@@ -524,6 +524,38 @@ object ConstructorIo {
     /**
      * ## Example
      * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val request = BrowseRequest.Builder("group_id", "123")
+     *      .setFilters(filters)
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+     *      .build()
+     *
+     * ConstructorIo.getBrowseResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the browse request object
+     */
+    fun getBrowseItemsResults(request: BrowseItemsRequest): Observable<ConstructorData<BrowseResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, ids = request.ids)
+
+        return dataManager.getBrowseItemsResults(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * ## Example
+     * ```
      * val answers = listOf(
      *      listOf("1"),
      *      listOf("1", "2"),
