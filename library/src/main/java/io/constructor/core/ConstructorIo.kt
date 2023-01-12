@@ -1079,24 +1079,24 @@ object ConstructorIo {
      * ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
      * ```
      * @param itemName the name of the item loaded
-     * @param itemId the id of the item loaded
+     * @param customerId the id of the item loaded
      * @param variationId the variationId of the item loaded
      * @param sectionName section of the item loaded
      * @param url the url of the item
      */
-    fun trackItemDetailLoaded(itemName: String, itemId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available") {
-        var completable = trackItemDetailLoadedInternal(itemName, itemId, variationId, sectionName, url)
+    fun trackItemDetailLoaded(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available") {
+        var completable = trackItemDetailLoadedInternal(itemName, customerId, variationId, sectionName, url)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Item Detail Loaded error: ${t.message}")
         }))
     }
 
-    internal fun trackItemDetailLoadedInternal(itemName: String, itemId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
+    internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val itemDetailLoadRequestBody = ItemDetailLoadRequestBody(
                 itemName,
-                itemId,
+                customerId,
                 variationId,
                 url,
                 BuildConfig.CLIENT_VERSION,

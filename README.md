@@ -194,7 +194,7 @@ runBlocking {
 val browseRequest = BrowseRequest.Builder("group_id", "123")
   .setFilters(mapOf(
     "group_id" to listOf("G1234"),
-    "Brand" to listOf("Cnstrc")
+    "Brand" to listOf("Cnstrc"),
     "Color" to listOf("Red", "Blue")
   ))
   .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
@@ -204,7 +204,7 @@ val browseRequest = BrowseRequest.Builder("group_id", "123")
 val browseRequest = BrowseRequest.build("group_id", "123") {
   filters = mapOf(
     "group_id" to listOf("G1234"),
-    "Brand" to listOf("Cnstrc")
+    "Brand" to listOf("Cnstrc"),
     "Color" to listOf("Red", "Blue")
   )
   hiddenFacets = listOf("hidden_facet_1", "hidden_facet_2")
@@ -344,6 +344,6 @@ ConstructorIo.trackPurchase(arrayOf(PurchaseItem("TIT-REP-1997", "RED", 2), Purc
 ### Miscellaneous Events
 
 ```kotlin
-// Track when a product detail page is loaded a.k.a after a user clicks on an item. (itemName, itemId, variationId?, sectionName?, url?)
+// Track when a product detail page is loaded a.k.a after a user clicks on an item. (itemName, customerId, variationId?, sectionName?, url?)
 ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
 ```
