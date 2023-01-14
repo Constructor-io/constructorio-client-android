@@ -6,6 +6,7 @@ import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.QuizQuestionResponse
@@ -153,6 +154,10 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackBrowseResultClick(browseResultClickRequestBody: BrowseResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
         return constructorApi.trackBrowseResultClick(browseResultClickRequestBody, params.toMap(), encodedParams.toMap())
+    }
+
+    fun trackItemDetailLoaded(itemDetailLoadRequestBody: ItemDetailLoadRequestBody, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackItemDetailLoaded(itemDetailLoadRequestBody, params.toMap())
     }
 
     fun getRecommendationResults(podId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<RecommendationsResponse>> {

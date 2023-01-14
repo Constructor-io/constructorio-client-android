@@ -24,6 +24,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -1076,6 +1077,50 @@ object ConstructorIo {
                 arrayOf(Constants.QueryConstants.SECTION to section),
         )
 
+    }
+
+    /**
+     * Tracks item result loaded events
+     * ##Example
+     * ```
+     * ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
+     * ```
+     * @param itemName the name of the item loaded
+     * @param customerId the id of the item loaded
+     * @param variationId the variationId of the item loaded
+     * @param sectionName section of the item loaded
+     * @param url the url of the item
+     */
+    fun trackItemDetailLoaded(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available") {
+        var completable = trackItemDetailLoadedInternal(itemName, customerId, variationId, sectionName, url)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Item Detail Loaded error: ${t.message}")
+        }))
+    }
+
+    internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val itemDetailLoadRequestBody = ItemDetailLoadRequestBody(
+                itemName,
+                customerId,
+                variationId,
+                url,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                true,
+                section,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackItemDetailLoaded(
+                itemDetailLoadRequestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section),
+        )
     }
 
     /**
