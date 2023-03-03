@@ -4,6 +4,7 @@ import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.BrowseResponse
 import io.constructor.data.model.browse.BrowseResultClickRequestBody
 import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.QuizQuestionResponse
@@ -86,6 +87,10 @@ interface ConstructorApi {
 
     @POST(ApiPaths.URL_BROWSE_RESULT_LOAD_EVENT)
     fun trackBrowseResultsLoaded(@Body browseRequestBody: BrowseResultLoadRequestBody,
+                                 @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_ITEM_DETAIL_LOAD_EVENT)
+    fun trackItemDetailLoaded(@Body itemDetailLoadRequestBody: ItemDetailLoadRequestBody,
                                  @QueryMap params: Map<String, String>): Completable
 
     @GET

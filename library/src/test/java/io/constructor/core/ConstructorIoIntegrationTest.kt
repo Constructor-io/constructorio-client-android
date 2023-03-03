@@ -483,6 +483,20 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun trackItemDetailLoadedAgainstRealResponse() {
+        val observer = constructorIo.trackItemDetailLoadedInternal("Pencil", "1234").test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackItemDetailLoadedWithOptionalParamsAgainstRealResponse() {
+        val observer = constructorIo.trackItemDetailLoadedInternal("Pencil", "1234", "456", "Products", "test.com").test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getRecommendationResultsAgainstRealResponse() {
         val facet = hashMapOf("Brand" to listOf("XYZ"))
         val observer = constructorIo.getRecommendationResults("home_page_1", facet.map { it.key to it.value }).test()
