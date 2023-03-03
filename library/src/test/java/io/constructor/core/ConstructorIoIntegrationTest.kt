@@ -291,7 +291,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseItemsResultsCRTAgainstRealResponse() {
         runBlocking {
-            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("dai_pid_2003438"))
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("10001"))
             assertTrue(browseResults.resultId !== null)
             assertTrue(browseResults.response!!.groups!!.isNotEmpty())
             assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
@@ -303,7 +303,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseItemsResultsWithHiddenFacetsAgainstRealResponseWithRequestBuilder() {
         val hiddenFacets = listOf("Brand")
-        val request = BrowseItemsRequest.Builder(listOf("dai_pid_2003438"))
+        val request = BrowseItemsRequest.Builder(listOf("10001"))
             .setHiddenFacets(hiddenFacets)
             .build()
         val observer = constructorIo.getBrowseItemsResults(request).test()
@@ -329,19 +329,19 @@ class ConstructorIoIntegrationTest {
                 "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
             )
         )
-        val request = BrowseItemsRequest.Builder(listOf("bstp_fajita_local")).setVariationsMap(variationsMap).build()
+        val request = BrowseItemsRequest.Builder(listOf("10001")).setVariationsMap(variationsMap).build()
         val observer = constructorIo.getBrowseItemsResults(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
 
-        val searchResponse = observer.values()[0].get()
-        val returnedVariationsMap = searchResponse?.response?.results!![0].variationsMap as? Map<*, *>
-        assertTrue(searchResponse?.resultId !== null)
-        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
-        assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
-        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
-        assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
-        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        val browseResponse = observer.values()[0].get()
+        val returnedVariationsMap = browseResponse?.response?.results!![0].variationsMap as? Map<*, *>
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
         assertTrue(returnedVariationsMap!!.isNotEmpty())
 
         Thread.sleep(timeBetweenTests)
@@ -350,8 +350,8 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseItemsResultsCRTWithFiltersAgainstRealResponse() {
         runBlocking {
-            val facet = hashMapOf("Claims" to listOf("Low Fat"))
-            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("dai_pid_2003438"), facet.map { it.key to it.value })
+            val facet = hashMapOf("Brand" to listOf("XYZ"))
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("10001"), facet.map { it.key to it.value })
             assertTrue(browseResults.resultId !== null)
             assertTrue(browseResults.response!!.facets!!.isNotEmpty())
             assertTrue(browseResults.response!!.groups!!.isNotEmpty())
@@ -364,7 +364,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseItemsResultsAgainstRealResponseUsingRequestBuilder() {
         runBlocking {
-            val request = BrowseItemsRequest.Builder(listOf("dai_pid_2003438")).build()
+            val request = BrowseItemsRequest.Builder(listOf("10001")).build()
             val observer = constructorIo.getBrowseItemsResults(request).test()
             observer.assertComplete()
             observer.assertNoErrors()
@@ -381,8 +381,8 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseItemsResultsCRTWithFiltersAgainstRealResponseUsingRequestBuilder() {
         runBlocking {
-            val facet = hashMapOf("Claims" to listOf("Low Fat"))
-            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("dai_pid_2003438"), facet.map { it.key to it.value })
+            val facet = hashMapOf("Brand" to listOf("XYZ"))
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("10001"), facet.map { it.key to it.value })
             assertTrue(browseResults.resultId !== null)
             assertTrue(browseResults.response!!.facets!!.isNotEmpty())
             assertTrue(browseResults.response!!.groups!!.isNotEmpty())

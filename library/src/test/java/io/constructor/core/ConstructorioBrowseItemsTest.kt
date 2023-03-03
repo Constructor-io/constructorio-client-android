@@ -31,7 +31,7 @@ class ConstructorIoBrowseItemsTest {
     private val ctx = mockk<Context>()
     private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
-    private val ids = listOf("dai_pid_2003438", "dai_pid_2003597")
+    private val ids = listOf("10001", "dai_pid_2003597")
 
     @Before
     fun setup() {
@@ -84,7 +84,7 @@ class ConstructorIoBrowseItemsTest {
 
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt="
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -100,7 +100,7 @@ class ConstructorIoBrowseItemsTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt"
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -118,7 +118,7 @@ class ConstructorIoBrowseItemsTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt"
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -141,7 +141,7 @@ class ConstructorIoBrowseItemsTest {
 
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt"
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -156,14 +156,14 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?section=Sold%20Out&ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt="
+            "/browse/items?section=Sold%20Out&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt="
         assert(request.path!!.startsWith(path))
     }
 
     @Test
     fun getBrowseItemsResultsWithFacets() {
         val mockResponse = MockResponse().setResponseCode(200)
-            .setBody(TestDataLoader.loadAsString("search_response.json"))
+            .setBody(TestDataLoader.loadAsString("browse_response.json"))
         mockServer.enqueue(mockResponse)
         val facets = mapOf(
             "Brand" to listOf("Signature Farms", "Del Monte"),
@@ -175,7 +175,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt="
+            "/browse/items?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -190,7 +190,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt="
+            "/browse/items?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -206,7 +206,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt="
+            "/browse/items?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -222,7 +222,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&ids=dai_pid_2003438&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.1&_dt="
+            "/browse/items?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.3&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -252,9 +252,9 @@ class ConstructorIoBrowseItemsTest {
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",
                 "s" to "92",
-                "c" to "cioand-2.19.1",
+                "c" to "cioand-2.19.3",
                 "_dt" to "1",
-                "ids" to "dai_pid_2003438",
+                "ids" to "10001",
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
 

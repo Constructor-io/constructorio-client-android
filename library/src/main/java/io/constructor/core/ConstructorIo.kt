@@ -521,9 +521,12 @@ object ConstructorIo {
      * @param sectionName the section the results will come from defaults to "Products"
      * @param hiddenFields show fields that are hidden by default
      * @param hiddenFacets show facets that are hidden by default
+     * @param groupsSortBy the sort method for groups
+     * @param groupsSortOrder the sort order for groups
+     * @param variationsMap specify which attributes within variations should be returned
      */
-    suspend fun getBrowseItemsResultsCRT(itemIds: List<String>, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null): BrowseResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, ids = itemIds)
+    suspend fun getBrowseItemsResultsCRT(itemIds: List<String>, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): BrowseResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, ids = itemIds, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap)
 
         return dataManager.getBrowseItemsResultsCRT(encodedParams = encodedParams.toTypedArray())
     }
@@ -536,12 +539,12 @@ object ConstructorIo {
      *      "Brand" to listOf("Cnstrc")
      *      "Color" to listOf("Red", "Blue")
      * )
-     * val request = BrowseRequest.Builder("group_id", "123")
+     * val request = BrowseItemsRequest.Builder("group_id", "123")
      *      .setFilters(filters)
      *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
      *      .build()
      *
-     * ConstructorIo.getBrowseResults(request)
+     * ConstructorIo.getBrowseItemsResults(request)
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {

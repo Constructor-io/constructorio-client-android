@@ -4,7 +4,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class BrowseItemsRequestTest {
-    private val ids = listOf("dai_pid_2003438", "dai_pid_2003597")
+    private val ids = listOf("10001", "dai_pid_2003597")
     private val filtersToApply = mapOf(
             "Brand" to listOf("XYZ", "123"),
             "group_id" to listOf("123"),
