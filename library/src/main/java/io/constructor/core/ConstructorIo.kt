@@ -512,8 +512,8 @@ object ConstructorIo {
      *      }
      *  }
      * ```
-     * @param facets  additional facets used to refine results
      * @param itemIds the list of item ids to retrieve recommendations for (strategy specific)
+     * @param facets  additional facets used to refine results
      * @param page the page number of the results
      * @param perPage The number of results per page to return
      * @param groupId category facet used to refine results
