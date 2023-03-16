@@ -24,6 +24,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
@@ -1119,6 +1120,48 @@ object ConstructorIo {
 
         return dataManager.trackItemDetailLoaded(
                 itemDetailLoadRequestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section),
+        )
+    }
+
+    /**
+     * Tracks generic result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
+     * ```
+     * @param itemName the name of the item loaded
+     * @param customerId the id of the item loaded
+     * @param variationId the variationId of the item loaded
+     * @param sectionName section of the item loaded
+     */
+    fun trackGenericResultClick(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null) {
+        var completable = trackItemDetailLoadedInternal(itemName, customerId, variationId, sectionName)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Generic Result Click error: ${t.message}")
+        }))
+    }
+
+    internal fun trackGenericResultClickInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val genericResultClickRequestBody = GenericResultClickRequestBody(
+                itemName,
+                customerId,
+                variationId,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                true,
+                section,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackGenericResultClick(
+                genericResultClickRequestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section),
         )
     }
