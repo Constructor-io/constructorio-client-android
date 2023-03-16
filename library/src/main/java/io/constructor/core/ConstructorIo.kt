@@ -1130,10 +1130,10 @@ object ConstructorIo {
      * ```
      * ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
      * ```
-     * @param itemName the name of the item loaded
-     * @param customerId the id of the item loaded
-     * @param variationId the variationId of the item loaded
-     * @param sectionName section of the item loaded
+     * @param itemName the name of the item clicked
+     * @param customerId the id of the item clicked
+     * @param variationId the variationId of the item clicked
+     * @param sectionName section of the item clicked
      */
     fun trackGenericResultClick(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null) {
         var completable = trackItemDetailLoadedInternal(itemName, customerId, variationId, sectionName)
