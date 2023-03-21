@@ -1136,7 +1136,7 @@ object ConstructorIo {
      * @param sectionName section of the item clicked
      */
     fun trackGenericResultClick(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null) {
-        var completable = trackItemDetailLoadedInternal(itemName, customerId, variationId, sectionName)
+        var completable = trackGenericResultClickInternal(itemName, customerId, variationId, sectionName)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Generic Result Click error: ${t.message}")
         }))
