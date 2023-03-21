@@ -510,4 +510,7 @@ ConstructorIo.trackPurchase(arrayOf(PurchaseItem("TIT-REP-1997", "RED", 2), Purc
 ```kotlin
 // Track when a product detail page is loaded a.k.a after a user clicks on an item. (itemName, customerId, variationId?, sectionName?, url?)
 ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
+
+// Track when a product is clicked. Should be used when a clicked product is not part of search/browse/recommendation experiences. (itemName, customerId, variationId?, sectionName?)
+ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
 ```
