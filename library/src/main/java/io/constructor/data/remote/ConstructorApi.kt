@@ -13,6 +13,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -92,6 +93,10 @@ interface ConstructorApi {
     @POST(ApiPaths.URL_ITEM_DETAIL_LOAD_EVENT)
     fun trackItemDetailLoaded(@Body itemDetailLoadRequestBody: ItemDetailLoadRequestBody,
                                  @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_RESULT_CLICK_EVENT)
+    fun trackGenericResultClick(@Body resultClickRequestBody: GenericResultClickRequestBody,
+                              @QueryMap params: Map<String, String>): Completable
 
     @GET
     fun getRecommendationResults(@Url recommendationUrl: String): Single<Result<ResponseBody>>

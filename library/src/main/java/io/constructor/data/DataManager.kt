@@ -15,6 +15,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.injection.ConstructorSdk
@@ -180,6 +181,10 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackBrowseResultClick(browseResultClickRequestBody: BrowseResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
         return constructorApi.trackBrowseResultClick(browseResultClickRequestBody, params.toMap(), encodedParams.toMap())
+    }
+
+    fun trackGenericResultClick(genericResultClickRequestBody: GenericResultClickRequestBody, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackGenericResultClick(genericResultClickRequestBody, params.toMap())
     }
 
     fun trackItemDetailLoaded(itemDetailLoadRequestBody: ItemDetailLoadRequestBody, params: Array<Pair<String, String>>): Completable {
