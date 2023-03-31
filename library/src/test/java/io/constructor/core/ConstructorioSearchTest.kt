@@ -82,7 +82,7 @@ class ConstructorIoSearchTest {
 
         val request = mockServer.takeRequest()
         val path =
-            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -96,7 +96,7 @@ class ConstructorIoSearchTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -112,7 +112,7 @@ class ConstructorIoSearchTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -133,7 +133,7 @@ class ConstructorIoSearchTest {
 
         val request = mockServer.takeRequest()
         val path =
-            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/corn?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -152,7 +152,7 @@ class ConstructorIoSearchTest {
 
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/bbq?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -166,7 +166,7 @@ class ConstructorIoSearchTest {
                 .test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?section=Sold%20Out&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/bbq?section=Sold%20Out&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -183,7 +183,7 @@ class ConstructorIoSearchTest {
             constructorIo.getSearchResults("bbq", facets, null, null, null, null, null, null).test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5"
+            "/search/bbq?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6"
         assert(request.path!!.startsWith(path))
     }
 
@@ -205,7 +205,7 @@ class ConstructorIoSearchTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/bbq?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -229,7 +229,7 @@ class ConstructorIoSearchTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/bbq?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -241,7 +241,7 @@ class ConstructorIoSearchTest {
         val observer = constructorIo.getSearchResults("2% cheese").test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/2%25%20cheese?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/2%25%20cheese?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -257,7 +257,7 @@ class ConstructorIoSearchTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=descending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=descending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -276,7 +276,7 @@ class ConstructorIoSearchTest {
         val observer = constructorIo.getSearchResults(searchRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5"
+            "/search/bbq?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6"
         assert(request.path!!.startsWith(path))
     }
 
@@ -292,7 +292,7 @@ class ConstructorIoSearchTest {
         val observer = constructorIo.getSearchResults(searchRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.5&_dt="
+            "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.19.6&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -323,7 +323,7 @@ class ConstructorIoSearchTest {
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",
                 "s" to "92",
-                "c" to "cioand-2.19.5",
+                "c" to "cioand-2.19.6",
                 "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)

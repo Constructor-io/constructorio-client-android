@@ -63,6 +63,15 @@ object ConstructorIo {
             configMemoryHolder.userId = value
         }
 
+    /**
+     *  Sets the test cells param
+     */
+    var testCells: List<Pair<String, String>?>
+        get() = configMemoryHolder.testCellParams
+        set(value) {
+            configMemoryHolder.testCellParams = value
+        }
+
     internal val component: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(context))
