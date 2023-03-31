@@ -149,6 +149,32 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.getBrowseResultsCRT(dynamicUrl)
     }
 
+    fun getBrowseItemsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_ITEMS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseResults(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
+                    if (it.isSuccessful){
+                        val adapter = moshi.adapter(BrowseResponse::class.java)
+                        val response = it.body()?.string()
+                        val res = response?.let { adapter.fromJson(it) }
+                        res?.rawData = response
+                        ConstructorData.of(res!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(result.error())
+            } else {
+                ConstructorData.error(result.error())
+            }
+        }.toObservable()
+    }
+
+    suspend fun getBrowseItemsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseResponse {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_ITEMS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseResultsCRT(dynamicUrl)
+    }
+
     fun trackBrowseResultsLoaded(browseResultLoadRequestBody: BrowseResultLoadRequestBody, params: Array<Pair<String, String>>): Completable {
         return constructorApi.trackBrowseResultsLoaded(browseResultLoadRequestBody, params.toMap())
     }

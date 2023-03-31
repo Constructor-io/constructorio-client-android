@@ -49,6 +49,7 @@ class Constants {
         const val RESULT_COUNT = "result_count"
         const val NUM_RESULT = "num_result"
         const val ITEM_ID = "item_id"
+        const val IDS = "ids"
         const val TERM = "term"
         const val VARIATIONS_MAP = "variations_map"
         const val GROUP_BY = "group_by"

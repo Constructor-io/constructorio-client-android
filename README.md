@@ -154,7 +154,7 @@ runBlocking {
 val searchRequest = SearchRequest.Builder("potato")
   .setFilters(mapOf(
     "group_id" to listOf("G123"),
-    "Brand" to listOf("Kings Hawaiin")
+    "Brand" to listOf("Kings")
   ))
   .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
   .setVariationsMap(variationsMap)
@@ -164,7 +164,7 @@ val searchRequest = SearchRequest.Builder("potato")
 val searchRequest = SearchRequest.build("potato") {
   filters = mapOf(
     "group_id" to listOf("G123"),
-    "Brand" to listOf("Kings Hawaiin")
+    "Brand" to listOf("Kings")
   )
   hiddenFields = listOf("hidden_field_1", "hidden_field_2")
 }
@@ -206,6 +206,39 @@ runBlocking {
   launch {
     try {
       val browseResults = ConstructorIo.getBrowseResultsCRT(filterName, filterValue)
+      // Do something with browseResults
+    } catch (e: Exception) {
+      println(e)
+    }
+  }
+}
+```
+
+## 6.1 Request Browse Items Results
+
+```kotlin
+var itemIds = listOf("item1", "item2")
+var selectedFilters: List<Pair<String, List<String>>>? = null
+var browseItemsRequest = BrowseItemsRequest.Builder(itemIds)
+    .setFilters(selectedFilters)
+    .build()
+
+// Using RxJava
+ConstructorIo.getBrowseItemsResults(browseItemsRequest)
+.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+.subscribe {
+  it.onValue {
+    it.response?.let {
+      view.renderData(it)
+    }
+  }
+}
+
+// Using Coroutines
+runBlocking {
+  launch {
+    try {
+      val browseResults = constructorIo.getBrowseItemsResultsCRT(filterName, filterValue)
       // Do something with browseResults
     } catch (e: Exception) {
       println(e)
