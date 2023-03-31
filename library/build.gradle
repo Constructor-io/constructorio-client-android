@@ -25,7 +25,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1
-        versionName '2.19.6'
+        versionName '2.20.0'
         buildConfigField("String", "CLIENT_VERSION", "\"cioand-${versionName}\"")
         buildConfigField("String", "DEFAULT_ITEM_SECTION", "\"Products\"")
         buildConfigField("String", "SERVICE_URL", "\"ac.cnstrc.com\"")
