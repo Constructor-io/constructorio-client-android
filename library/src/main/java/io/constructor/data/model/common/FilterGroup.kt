@@ -13,5 +13,6 @@ data class FilterGroup(
         @Json(name = "parents") val parents: List<FilterGroup>?,
         @Json(name = "count") val count: Int?,
         @Json(name = "display_name") val displayName: String,
-        @Json(name = "group_id") val groupId: String
+        @Json(name = "group_id") val groupId: String,
+        @Json(name = "data") val data: Map<String, Any?>?,
 ) : Serializable

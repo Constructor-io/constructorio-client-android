@@ -58,6 +58,7 @@ class Constants {
         const val GROUP_BY = "group_by"
         const val VERSION_ID="version_id"
         const val ANSWERS = "a"
+        const val FACET_NAME="facet_name"
     }
 
     object QueryValues {

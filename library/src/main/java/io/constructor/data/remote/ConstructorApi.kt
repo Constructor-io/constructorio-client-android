@@ -1,9 +1,7 @@
 package io.constructor.data.remote
 
 import io.constructor.data.model.autocomplete.AutocompleteResponse
-import io.constructor.data.model.browse.BrowseResponse
-import io.constructor.data.model.browse.BrowseResultClickRequestBody
-import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.browse.*
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
@@ -79,6 +77,24 @@ interface ConstructorApi {
 
     @GET
     suspend fun getBrowseResultsCRT(@Url browseUrl: String): BrowseResponse
+
+    @GET
+    fun getBrowseFacetsResults(@Url browseFacetsUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getBrowseFacetsResultsCRT(@Url browseFacetsUrl: String): BrowseFacetsResponse
+
+    @GET
+    fun getBrowseFacetOptionsResults(@Url browseFacetOptionsUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getBrowseFacetOptionsResultsCRT(@Url browseFacetOptionsUrl: String): BrowseFacetOptionsResponse
+
+    @GET
+    fun getBrowseGroupsResults(@Url browseGroupsUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getBrowseGroupsResultsCRT(@Url browseGroupsUrl: String): BrowseGroupsResponse
 
     @POST(ApiPaths.URL_BROWSE_RESULT_CLICK_EVENT)
     fun trackBrowseResultClick(@Body browseResultClickRequestBody: BrowseResultClickRequestBody,

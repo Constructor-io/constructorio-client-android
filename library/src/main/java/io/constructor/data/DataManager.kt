@@ -3,9 +3,7 @@ package io.constructor.data
 import com.squareup.moshi.Moshi
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.autocomplete.AutocompleteResponse
-import io.constructor.data.model.browse.BrowseResponse
-import io.constructor.data.model.browse.BrowseResultClickRequestBody
-import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.browse.*
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
@@ -172,6 +170,84 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     suspend fun getBrowseItemsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseResponse {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_ITEMS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseResultsCRT(dynamicUrl)
+    }
+
+    fun getBrowseFacetsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseFacetsResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACETS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseFacetsResults(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
+                    if (it.isSuccessful){
+                        val adapter = moshi.adapter(BrowseFacetsResponse::class.java)
+                        val response = it.body()?.string()
+                        val res = response?.let { adapter.fromJson(it) }
+                        res?.rawData = response
+                        ConstructorData.of(res!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(result.error())
+            } else {
+                ConstructorData.error(result.error())
+            }
+        }.toObservable()
+    }
+
+    suspend fun getBrowseFacetsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseFacetsResponse {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACETS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseFacetsResultsCRT(dynamicUrl)
+    }
+
+    fun getBrowseFacetOptionsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACET_OPTIONS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseFacetOptionsResults(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
+                    if (it.isSuccessful){
+                        val adapter = moshi.adapter(BrowseFacetOptionsResponse::class.java)
+                        val response = it.body()?.string()
+                        val res = response?.let { adapter.fromJson(it) }
+                        res?.rawData = response
+                        ConstructorData.of(res!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(result.error())
+            } else {
+                ConstructorData.error(result.error())
+            }
+        }.toObservable()
+    }
+
+    suspend fun getBrowseFacetOptionsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseFacetOptionsResponse {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACET_OPTIONS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseFacetOptionsResultsCRT(dynamicUrl)
+    }
+
+    fun getBrowseGroupsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseGroupsResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_GROUPS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseGroupsResults(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
+                    if (it.isSuccessful){
+                        val adapter = moshi.adapter(BrowseGroupsResponse::class.java)
+                        val response = it.body()?.string()
+                        val res = response?.let { adapter.fromJson(it) }
+                        res?.rawData = response
+                        ConstructorData.of(res!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(result.error())
+            } else {
+                ConstructorData.error(result.error())
+            }
+        }.toObservable()
+    }
+
+    suspend fun getBrowseGroupsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseGroupsResponse {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_GROUPS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseGroupsResultsCRT(dynamicUrl)
     }
 
     fun trackBrowseResultsLoaded(browseResultLoadRequestBody: BrowseResultLoadRequestBody, params: Array<Pair<String, String>>): Completable {
