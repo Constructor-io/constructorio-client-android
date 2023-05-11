@@ -2,11 +2,8 @@ package io.constructor.core
 
 import android.content.Context
 import io.constructor.data.builder.BrowseFacetsRequest
-import io.constructor.data.builder.BrowseItemsRequest
-import io.constructor.data.builder.BrowseRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
-import io.constructor.data.model.common.VariationsMap
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.constructor.util.TestDataLoader
@@ -14,7 +11,6 @@ import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
