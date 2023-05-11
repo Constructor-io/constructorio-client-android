@@ -17,7 +17,7 @@ class RequestInterceptor(
     private val configMemoryHolder: ConfigMemoryHolder
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val ignoreDtPaths = listOf(ApiPaths.URL_BROWSE_GROUPS, ApiPaths.URL_BROWSE_FACETS);
+        val ignoreDtPaths = listOf(ApiPaths.URL_BROWSE_GROUPS, ApiPaths.URL_BROWSE_FACETS, ApiPaths.URL_BROWSE_FACET_OPTIONS);
         val request = chain.request()
         val builder = request.url.newBuilder()
             .port(preferencesHelper.port)
@@ -46,7 +46,7 @@ class RequestInterceptor(
 
         builder.addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
 
-        if (ignoreDtPaths.any { path -> request.url.toString().startsWith(path)}) {
+        if (ignoreDtPaths.none { path -> request.url.encodedPath.endsWith(path)}) {
             builder.addQueryParameter(Constants.QueryConstants.TIMESTAMP, System.currentTimeMillis().toString())
         }
 

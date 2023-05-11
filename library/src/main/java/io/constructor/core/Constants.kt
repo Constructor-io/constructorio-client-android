@@ -59,7 +59,7 @@ class Constants {
         const val ANSWERS = "a"
         const val FACET_NAME="facet_name"
         const val GROUPS_MAX_DEPTH = "groups_max_depth"
-        const val FILTER_GROUP_ID = "group_id"
+        const val FILTER_GROUP_ID = "filters[group_id]"
 
     }
 

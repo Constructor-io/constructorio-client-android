@@ -199,7 +199,7 @@ object ConstructorIo {
         groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
         resultId?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
-        groupIdFilter?.let { encodedParams.add(Constants.QueryConstants.FILTER_FACET.format(Constants.QueryConstants.FILTER_GROUP_ID).urlEncode() to it) }
+        groupIdFilter?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it) }
         groupsMaxDepth?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_MAX_DEPTH).urlEncode() to it.toString().urlEncode()) }
         groupDisplayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
         numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to numResults.toString().urlEncode()) }
@@ -636,7 +636,7 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param request the browse request object
+     * @param request the browse facet options request object
      */
     fun getBrowseFacetOptionsResults(request: BrowseFacetOptionsRequest): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = request.showHiddenFacets)
@@ -652,7 +652,7 @@ object ConstructorIo {
      *  runBlocking {
      *      launch {
      *          try {
-     *              val browseResults = constructorIo.getBrowseFacetOptionsCRT("Brand", false)
+     *              val browseResults = constructorIo.getBrowseFacetOptionsResultsCRT("Brand", false)
      *              // Do something with browseResults
      *          } catch (e: Exception) {
      *              println(e)
