@@ -9,7 +9,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.19.4) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.20.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 
@@ -154,7 +154,7 @@ runBlocking {
 val searchRequest = SearchRequest.Builder("potato")
   .setFilters(mapOf(
     "group_id" to listOf("G123"),
-    "Brand" to listOf("Kings Hawaiin")
+    "Brand" to listOf("Kings")
   ))
   .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
   .setVariationsMap(variationsMap)
@@ -164,7 +164,7 @@ val searchRequest = SearchRequest.Builder("potato")
 val searchRequest = SearchRequest.build("potato") {
   filters = mapOf(
     "group_id" to listOf("G123"),
-    "Brand" to listOf("Kings Hawaiin")
+    "Brand" to listOf("Kings")
   )
   hiddenFields = listOf("hidden_field_1", "hidden_field_2")
 }
@@ -206,6 +206,39 @@ runBlocking {
   launch {
     try {
       val browseResults = ConstructorIo.getBrowseResultsCRT(filterName, filterValue)
+      // Do something with browseResults
+    } catch (e: Exception) {
+      println(e)
+    }
+  }
+}
+```
+
+## 6.1 Request Browse Items Results
+
+```kotlin
+var itemIds = listOf("item1", "item2")
+var selectedFilters: List<Pair<String, List<String>>>? = null
+var browseItemsRequest = BrowseItemsRequest.Builder(itemIds)
+    .setFilters(selectedFilters)
+    .build()
+
+// Using RxJava
+ConstructorIo.getBrowseItemsResults(browseItemsRequest)
+.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+.subscribe {
+  it.onValue {
+    it.response?.let {
+      view.renderData(it)
+    }
+  }
+}
+
+// Using Coroutines
+runBlocking {
+  launch {
+    try {
+      val browseResults = constructorIo.getBrowseItemsResultsCRT(filterName, filterValue)
       // Do something with browseResults
     } catch (e: Exception) {
       println(e)
@@ -510,4 +543,7 @@ ConstructorIo.trackPurchase(arrayOf(PurchaseItem("TIT-REP-1997", "RED", 2), Purc
 ```kotlin
 // Track when a product detail page is loaded a.k.a after a user clicks on an item. (itemName, customerId, variationId?, sectionName?, url?)
 ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
+
+// Track when a product is clicked. Should be used when a clicked product is not part of search/browse/recommendation experiences. (itemName, customerId, variationId?, sectionName?)
+ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
 ```

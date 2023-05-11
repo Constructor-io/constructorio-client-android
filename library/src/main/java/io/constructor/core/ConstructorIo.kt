@@ -22,6 +22,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
@@ -58,6 +59,15 @@ object ConstructorIo {
         get() = configMemoryHolder.userId
         set(value) {
             configMemoryHolder.userId = value
+        }
+
+    /**
+     *  Sets the test cells param
+     */
+    var testCells: List<Pair<String, String>?>
+        get() = configMemoryHolder.testCellParams
+        set(value) {
+            configMemoryHolder.testCellParams = value
         }
 
     internal val component: AppComponent by lazy {
@@ -152,7 +162,6 @@ object ConstructorIo {
         itemIds: List<String>? = null,
         ids: List<String>? = null,
         showHiddenFacets: Boolean? = null,
-        showProtectedFacets: Boolean? = null
     ): ArrayList<Pair<String, String>> {
 
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf();
@@ -588,7 +597,7 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param request the search request object
+     * @param request the browse request object
      */
     fun getBrowseFacetOptionsResults(request: BrowseFacetOptionsRequest): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = request.showHiddenFacets)
@@ -620,6 +629,73 @@ object ConstructorIo {
         encodedParams.add(Constants.QueryConstants.FACET_NAME to facetName.urlEncode());
 
         return dataManager.getBrowseFacetOptionsResultsCRT(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of browse results from a list of item IDs including filters, categories, sort options, etc.
+     * ##Example
+     * ```
+     *  runBlocking {
+     *      launch {
+     *          try {
+     *              val browseItemResults = constructorIo.getBrowseItemsResultsCRT("group_id", "888")
+     *              // Do something with browseItemsResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     * @param itemIds the list of item ids to retrieve recommendations for (strategy specific)
+     * @param facets additional facets used to refine results
+     * @param page the page number of the results
+     * @param perPage The number of results per page to return
+     * @param groupId category facet used to refine results
+     * @param sortBy the sort method for results
+     * @param sortOrder the sort order for results
+     * @param sectionName the section the results will come from defaults to "Products"
+     * @param hiddenFields show fields that are hidden by default
+     * @param hiddenFacets show facets that are hidden by default
+     * @param groupsSortBy the sort method for groups
+     * @param groupsSortOrder the sort order for groups
+     * @param variationsMap specify which attributes within variations should be returned
+     */
+    suspend fun getBrowseItemsResultsCRT(itemIds: List<String>, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null): BrowseResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, ids = itemIds, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap)
+
+        return dataManager.getBrowseItemsResultsCRT(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * ## Example
+     * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val request = BrowseItemsRequest.Builder("group_id", "123")
+     *      .setFilters(filters)
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+     *      .build()
+     *
+     * ConstructorIo.getBrowseItemsResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the browse request object
+     */
+    fun getBrowseItemsResults(request: BrowseItemsRequest): Observable<ConstructorData<BrowseResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, ids = request.ids)
+
+        return dataManager.getBrowseItemsResults(encodedParams = encodedParams.toTypedArray())
     }
 
     /**
@@ -1248,6 +1324,48 @@ object ConstructorIo {
 
         return dataManager.trackItemDetailLoaded(
                 itemDetailLoadRequestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section),
+        )
+    }
+
+    /**
+     * Tracks generic result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
+     * ```
+     * @param itemName the name of the item clicked
+     * @param customerId the id of the item clicked
+     * @param variationId the variationId of the item clicked
+     * @param sectionName section of the item clicked
+     */
+    fun trackGenericResultClick(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null) {
+        var completable = trackGenericResultClickInternal(itemName, customerId, variationId, sectionName)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Generic Result Click error: ${t.message}")
+        }))
+    }
+
+    internal fun trackGenericResultClickInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val genericResultClickRequestBody = GenericResultClickRequestBody(
+                itemName,
+                customerId,
+                variationId,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                true,
+                section,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackGenericResultClick(
+                genericResultClickRequestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section),
         )
     }

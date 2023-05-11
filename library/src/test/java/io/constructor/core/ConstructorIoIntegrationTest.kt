@@ -1,10 +1,7 @@
 package io.constructor.core
 
 import android.content.Context
-import io.constructor.data.builder.AutocompleteRequest
-import io.constructor.data.builder.BrowseRequest
-import io.constructor.data.builder.RecommendationsRequest
-import io.constructor.data.builder.SearchRequest
+import io.constructor.data.builder.*
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.VariationsMap
@@ -292,6 +289,110 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getBrowseItemsResultsCRTAgainstRealResponse() {
+        runBlocking {
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("10001"))
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseItemsResultsWithHiddenFacetsAgainstRealResponseWithRequestBuilder() {
+        val hiddenFacets = listOf("Brand")
+        val request = BrowseItemsRequest.Builder(listOf("10001"))
+            .setHiddenFacets(hiddenFacets)
+            .build()
+        val observer = constructorIo.getBrowseItemsResults(request).test()
+
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        val brandFacet = browseResponse?.response?.facets?.find { facet -> facet.name.contains("Brand")}
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(brandFacet !== null)
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseItemsResultsAgainstRealResponseWithVariationsMapObjectUsingRequestBuilder() {
+        val variationsMap = VariationsMap(
+            dtype = "object",
+            values = mapOf(
+                "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
+                "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
+            )
+        )
+        val request = BrowseItemsRequest.Builder(listOf("10001")).setVariationsMap(variationsMap).build()
+        val observer = constructorIo.getBrowseItemsResults(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        val returnedVariationsMap = browseResponse?.response?.results!![0].variationsMap as? Map<*, *>
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+        assertTrue(returnedVariationsMap!!.isNotEmpty())
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseItemsResultsCRTWithFiltersAgainstRealResponse() {
+        runBlocking {
+            val facet = hashMapOf("Brand" to listOf("XYZ"))
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("10001"), facet.map { it.key to it.value })
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.facets!!.isNotEmpty())
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseItemsResultsAgainstRealResponseUsingRequestBuilder() {
+        runBlocking {
+            val request = BrowseItemsRequest.Builder(listOf("10001")).build()
+            val observer = constructorIo.getBrowseItemsResults(request).test()
+            observer.assertComplete()
+            observer.assertNoErrors()
+            val browseResponse = observer.values()[0].get()
+
+            assertTrue(browseResponse?.resultId !== null)
+            assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResponse?.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResponse?.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseItemsResultsCRTWithFiltersAgainstRealResponseUsingRequestBuilder() {
+        runBlocking {
+            val facet = hashMapOf("Brand" to listOf("XYZ"))
+            val browseResults = constructorIo.getBrowseItemsResultsCRT(listOf("10001"), facet.map { it.key to it.value })
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.facets!!.isNotEmpty())
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackAutocompleteSelectAgainstRealResponse() {
         val observer =
             constructorIo.trackAutocompleteSelectInternal("pork", "pork", "Search Suggestions")
@@ -391,6 +492,13 @@ class ConstructorIoIntegrationTest {
     @Test
     fun trackItemDetailLoadedWithOptionalParamsAgainstRealResponse() {
         val observer = constructorIo.trackItemDetailLoadedInternal("Pencil", "1234", "456", "Products", "test.com").test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackGenericResultClickAgainstRealResponse() {
+        val observer = constructorIo.trackGenericResultClickInternal("Pencil", "1234", "456").test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }

@@ -13,6 +13,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.injection.ConstructorSdk
@@ -146,6 +147,32 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.getBrowseResultsCRT(dynamicUrl)
     }
 
+    fun getBrowseItemsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseResponse>> {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_ITEMS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseResults(dynamicUrl).map { result ->
+            if (!result.isError) {
+                result.response()?.let {
+                    if (it.isSuccessful){
+                        val adapter = moshi.adapter(BrowseResponse::class.java)
+                        val response = it.body()?.string()
+                        val res = response?.let { adapter.fromJson(it) }
+                        res?.rawData = response
+                        ConstructorData.of(res!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(result.error())
+            } else {
+                ConstructorData.error(result.error())
+            }
+        }.toObservable()
+    }
+
+    suspend fun getBrowseItemsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseResponse {
+        var dynamicUrl = "/${ApiPaths.URL_BROWSE_ITEMS}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getBrowseResultsCRT(dynamicUrl)
+    }
+    
     fun getBrowseFacetsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseFacetsResponse>> {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACETS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseFacetsResults(dynamicUrl).map { result ->
@@ -230,6 +257,10 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackBrowseResultClick(browseResultClickRequestBody: BrowseResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String,  String>> = arrayOf()): Completable {
         return constructorApi.trackBrowseResultClick(browseResultClickRequestBody, params.toMap(), encodedParams.toMap())
+    }
+
+    fun trackGenericResultClick(genericResultClickRequestBody: GenericResultClickRequestBody, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackGenericResultClick(genericResultClickRequestBody, params.toMap())
     }
 
     fun trackItemDetailLoaded(itemDetailLoadRequestBody: ItemDetailLoadRequestBody, params: Array<Pair<String, String>>): Completable {

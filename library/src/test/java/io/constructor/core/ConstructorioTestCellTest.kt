@@ -65,7 +65,7 @@ class ConstructorioTestCellTest {
             suggestions?.isNotEmpty()!! && suggestions.size == 5
         }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt="
+        val path = "/autocomplete/titanic?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -76,7 +76,7 @@ class ConstructorioTestCellTest {
         val observer = constructorIo.trackSessionStartInternal().test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?action=session_start&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt=";
+        val path = "/behavior?action=session_start&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
@@ -87,7 +87,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackInputFocusInternal("tita").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?term=tita&action=focus&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt=";
+        val path = "/behavior?term=tita&action=focus&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
@@ -98,7 +98,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackAutocompleteSelectInternal("titanic", "tit", "Search Suggestions").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/select?section=Search%20Suggestions&original_query=tit&tr=click&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt="
+        val path = "/autocomplete/titanic/select?section=Search%20Suggestions&original_query=tit&tr=click&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -109,7 +109,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt=";
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
@@ -120,7 +120,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt=";
+        val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
@@ -131,7 +131,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchResultClickInternal("titanic replica", "TIT-REP-1997", null, "titanic").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt=";
+        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
@@ -142,7 +142,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", null, 89.00).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/conversion?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt=";
+        val path = "/v2/behavioral_action/conversion?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
@@ -153,7 +153,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackPurchaseInternal(arrayOf(PurchaseItem("TIT-REP-1997"), PurchaseItem("QE2-REP-1969")), 12.99, "ORD-1312343").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/purchase?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt=";
+        val path = "/v2/behavioral_action/purchase?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt=";
         assertTrue(request.bodySize > 230)
         assert(request.path!!.startsWith(path))
     }
@@ -165,7 +165,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured", "prrst_shldr_bls").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt="
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -176,7 +176,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.19.4&_dt="
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
