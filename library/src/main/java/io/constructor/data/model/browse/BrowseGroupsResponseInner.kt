@@ -11,5 +11,5 @@ import kotlin.collections.Collection
  */
 @JsonClass(generateAdapter = true)
 data class BrowseGroupsResponseInner(
-        @Json(name = "groups") val facets: List<FilterGroup>?,
+        @Json(name = "groups") val groups: List<FilterGroup>?,
 ) : Serializable

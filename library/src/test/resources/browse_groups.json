@@ -1,0 +1,136 @@
+{
+  "response": {
+    "result_sources": {
+      "token_match": {
+        "count": 0
+      },
+      "embeddings_match": {
+        "count": 0
+      }
+    },
+    "groups": [
+      {
+        "group_id": "All",
+        "display_name": "All",
+        "count": 10,
+        "data": {},
+        "children": [
+          {
+            "group_id": "Brands",
+            "display_name": "Brands",
+            "count": 6,
+            "data": {},
+            "children": [
+              {
+                "group_id": "BrandX",
+                "display_name": "BrandX",
+                "count": 3,
+                "data": {},
+                "children": [],
+                "parents": [
+                  {
+                    "display_name": "All",
+                    "group_id": "All"
+                  },
+                  {
+                    "display_name": "Brands",
+                    "group_id": "Brands"
+                  }
+                ]
+              },
+              {
+                "group_id": "BrandA",
+                "display_name": "BrandA",
+                "count": 3,
+                "data": {},
+                "children": [],
+                "parents": [
+                  {
+                    "display_name": "All",
+                    "group_id": "All"
+                  },
+                  {
+                    "display_name": "Brands",
+                    "group_id": "Brands"
+                  }
+                ]
+              }
+            ],
+            "parents": [
+              {
+                "display_name": "All",
+                "group_id": "All"
+              }
+            ]
+          },
+          {
+            "group_id": "Styles",
+            "display_name": "Styles",
+            "count": 4,
+            "data": {},
+            "children": [
+              {
+                "group_id": "StyleB",
+                "display_name": "StyleB",
+                "count": 2,
+                "data": {},
+                "children": [],
+                "parents": [
+                  {
+                    "display_name": "All",
+                    "group_id": "All"
+                  },
+                  {
+                    "display_name": "Styles",
+                    "group_id": "Styles"
+                  }
+                ]
+              },
+              {
+                "group_id": "StyleA",
+                "display_name": "StyleA",
+                "count": 2,
+                "data": {},
+                "children": [],
+                "parents": [
+                  {
+                    "display_name": "All",
+                    "group_id": "All"
+                  },
+                  {
+                    "display_name": "Styles",
+                    "group_id": "Styles"
+                  }
+                ]
+              }
+            ],
+            "parents": [
+              {
+                "display_name": "All",
+                "group_id": "All"
+              }
+            ]
+          }
+        ],
+        "parents": []
+      }
+    ],
+    "refined_content": []
+  },
+  "result_id": "2a1aeb80-5e99-4926-85ba-2429c31a6bc0",
+  "request": {
+    "fmt_options": {
+      "groups_max_depth": 2,
+      "groups_start": "current",
+      "show_hidden_facets": false,
+      "show_hidden_fields": false,
+      "show_protected_facets": false
+    },
+    "term": "",
+    "page": 1,
+    "num_results_per_page": 20,
+    "sort_by": "relevance",
+    "sort_order": "descending",
+    "section": "Products"
+  }
+}

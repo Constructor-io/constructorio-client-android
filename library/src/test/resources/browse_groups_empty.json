@@ -1,0 +1,30 @@
+{
+  "response": {
+    "result_sources": {
+      "token_match": {
+        "count": 0
+      },
+      "embeddings_match": {
+        "count": 0
+      }
+    },
+    "groups": [],
+    "refined_content": []
+  },
+  "result_id": "2a1aeb80-5e99-4926-85ba-2429c31a6bc0",
+  "request": {
+    "fmt_options": {
+      "groups_max_depth": 2,
+      "groups_start": "current",
+      "show_hidden_facets": false,
+      "show_hidden_fields": false,
+      "show_protected_facets": false
+    },
+    "term": "",
+    "page": 1,
+    "num_results_per_page": 20,
+    "sort_by": "relevance",
+    "sort_order": "descending",
+    "section": "Products"
+  }
+}

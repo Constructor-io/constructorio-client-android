@@ -36,7 +36,6 @@ class Constants {
         const val PER_PAGE = "num_results_per_page"
         const val SORT_BY = "sort_by"
         const val SORT_ORDER = "sort_order"
-        const val FILTER_GROUP_ID = "filters[group_id]"
         const val FILTER_FACET = "filters[%s]"
         const val FMT_OPTIONS = "fmt_options[%s]"
         const val SHOW_HIDDEN_FACETS = "show_hidden_facets"
@@ -59,6 +58,9 @@ class Constants {
         const val VERSION_ID="version_id"
         const val ANSWERS = "a"
         const val FACET_NAME="facet_name"
+        const val GROUPS_MAX_DEPTH = "groups_max_depth"
+        const val FILTER_GROUP_ID = "group_id"
+
     }
 
     object QueryValues {
