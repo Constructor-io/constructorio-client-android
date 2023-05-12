@@ -191,10 +191,40 @@ class ConstructorIoIntegrationQuizTest {
             .setAnswers(answers)
             .build()
         val observer = constructorIo.getQuizResults(request).test()
+
         val quizResult = observer.values()[0].get()
-        assertNotNull(quizResult?.versionId)
-        assertEquals(quizResult?.result?.resultsUrl, "https://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22or%22%3A%5B%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%2C%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.20.0&ui=player-three&s=67")
-        assertEquals(quizResult?.result?.filterExpression?.toString(), "{or=[{and=[{name=group_id, value=BrandX}, {name=Color, value=Blue}]}, {and=[{name=group_id, value=BrandX}, {name=Color, value=red}]}]}")
+        assertEquals(quizResult?.quizId, "test-quiz");
+        assertNotNull(quizResult?.quizVersionId)
+        assertNotNull(quizResult?.quizSessionId)
+        assertNotNull(quizResult?.request)
+        assertNotNull(quizResult?.response)
+        assertNotNull(quizResult?.response?.facets)
+        assertNotNull(quizResult?.response?.groups)
+        assertNotNull(quizResult?.response?.results)
+        assertNotNull(quizResult?.response?.resultCount)
+        assertNotNull(quizResult?.response?.filterSortOptions)
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getQuizResultsShouldMatchPassedIdsAgainstRealResponse() {
+        val answers = listOf(
+            listOf("1"),
+            listOf("1", "2"),
+            listOf("seen")
+        )
+        val request = QuizRequest.Builder("test-quiz")
+            .setAnswers(answers)
+            .setQuizVersionId("dd10eea4-f765-4bb1-b8e5-46b09a190cfe")
+            .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
+            .build()
+        val observer = constructorIo.getQuizResults(request).test()
+
+        val quizResult = observer.values()[0].get()
+        assertEquals("test-quiz", quizResult?.quizId);
+        assertEquals("dd10eea4-f765-4bb1-b8e5-46b09a190cfe", quizResult?.quizVersionId);
+        assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
 
         Thread.sleep(timeBetweenTests)
     }
@@ -230,9 +260,36 @@ class ConstructorIoIntegrationQuizTest {
                 listOf("seen")
             )
             val quizResult = constructorIo.getQuizResultsCRT("test-quiz", answers)
-            assertNotNull(quizResult?.versionId)
-            assertEquals(quizResult?.result?.resultsUrl, "https://ac.cnstrc.com/browse/items?key=ZqXaOfXuBWD4s3XzCI1q&num_results_per_page=10&collection_filter_expression=%7B%22or%22%3A%5B%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%2C%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22BrandX%22%7D%2C%7B%22name%22%3A%22Color%22%2C%22value%22%3A%22red%22%7D%5D%7D%5D%7D&i=wacko-the-guid&c=cioand-2.20.0&ui=player-three&s=67")
-            assertEquals(quizResult?.result?.filterExpression?.toString(), "{or=[{and=[{name=group_id, value=BrandX}, {name=Color, value=Blue}]}, {and=[{name=group_id, value=BrandX}, {name=Color, value=red}]}]}")
+            assertEquals(quizResult?.quizId, "test-quiz");
+            assertNotNull(quizResult?.quizVersionId)
+            assertNotNull(quizResult?.quizSessionId)
+            assertNotNull(quizResult?.request)
+            assertNotNull(quizResult?.response)
+            assertNotNull(quizResult?.response?.facets)
+            assertNotNull(quizResult?.response?.groups)
+            assertNotNull(quizResult?.response?.results)
+            assertNotNull(quizResult?.response?.resultCount)
+            assertNotNull(quizResult?.response?.filterSortOptions)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getQuizResultsCRTShouldMatchPassedIdsAgainstRealResponse() {
+        runBlocking {
+            val answers = listOf(
+                listOf("1"),
+                listOf("1", "2"),
+                listOf("seen")
+            )
+            val quizResult = constructorIo.getQuizResultsCRT("test-quiz",
+                answers,
+                "dd10eea4-f765-4bb1-b8e5-46b09a190cfe",
+                "bc48a85d-2f45-4c91-ba3a-dcf655b33831"
+            )
+            assertEquals("test-quiz", quizResult?.quizId);
+            assertEquals("dd10eea4-f765-4bb1-b8e5-46b09a190cfe", quizResult?.quizVersionId);
+            assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
         }
         Thread.sleep(timeBetweenTests)
     }

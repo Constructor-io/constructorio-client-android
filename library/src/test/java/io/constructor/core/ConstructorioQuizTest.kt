@@ -26,6 +26,12 @@ class ConstructorioQuizTest {
     private val ctx = mockk<Context>()
     private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
+    private val page = 2
+    private val perPage = 30
+    private val filtersToApply = mapOf(
+        "Brand" to listOf("XYZ", "123"),
+        "group_id" to listOf("123"),
+    )
 
     @Before
     fun setup() {
@@ -74,13 +80,28 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getQuizNextQuestion("test-quiz", null, "11db5ac7-67e1-4000-9000-414d8425cab3").test()
+        val observer = constructorIo.getQuizNextQuestion("test-quiz", quizVersionId = "11db5ac7-67e1-4000-9000-414d8425cab3").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        val path = "/v1/quizzes/test-quiz/next?quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getQuizNextQuestionWithSessionId() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getQuizNextQuestion("test-quiz", quizSessionId = "31f6bdae-6f1d-482f-b37f-f7a9e346973a").test()
+        observer.assertComplete().assertValue {
+            var quizQuestionId = it.get()!!.nextQuestion?.id
+            quizQuestionId !== null
+        }
+        val request = mockServer.takeRequest()
+        val path = "/v1/quizzes/test-quiz/next?quiz_session_id=31f6bdae-6f1d-482f-b37f-f7a9e346973a&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -89,7 +110,7 @@ class ConstructorioQuizTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("quiz_next_response.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getQuizNextQuestion("test-quiz", null, null, "Products").test()
+        val observer = constructorIo.getQuizNextQuestion("test-quiz", sectionName = "Products").test()
         observer.assertComplete().assertValue {
             var quizQuestionId = it.get()!!.nextQuestion?.id
             quizQuestionId !== null
@@ -129,11 +150,11 @@ class ConstructorioQuizTest {
         )
         val observer = constructorIo.getQuizResults("test-quiz", answers).test()
         observer.assertComplete().assertValue {
-            var quizResultsUrl = it.get()!!.result?.resultsUrl
-            quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
+            var quizId = it.get()!!.quizId
+            quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -148,11 +169,30 @@ class ConstructorioQuizTest {
         )
         val observer = constructorIo.getQuizResults("test-quiz", answers, "11db5ac7-67e1-4000-9000-414d8425cab3").test()
         observer.assertComplete().assertValue {
-            var quizResultsUrl = it.get()!!.result?.resultsUrl
-            quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
+            var quizVersionId = it.get()!!.quizVersionId
+            quizVersionId == "11db5ac7-67e1-4000-9000-414d8425cab3"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getQuizResultsWithSessionId() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("quiz_results_response.json"))
+        mockServer.enqueue(mockResponse)
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
+        val observer = constructorIo.getQuizResults("test-quiz", answers, quizSessionId = "31f6bdae-6f1d-482f-b37f-f7a9e346973a").test()
+        observer.assertComplete().assertValue {
+            var quizVersionId = it.get()!!.quizVersionId
+            quizVersionId == "11db5ac7-67e1-4000-9000-414d8425cab3"
+        }
+        val request = mockServer.takeRequest()
+        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&quiz_session_id=31f6bdae-6f1d-482f-b37f-f7a9e346973a&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -165,13 +205,51 @@ class ConstructorioQuizTest {
             listOf("1"),
             listOf("2", "3")
         )
-        val observer = constructorIo.getQuizResults("test-quiz", answers, null, "Products").test()
+        val observer = constructorIo.getQuizResults("test-quiz", answers, sectionName = "Products").test()
         observer.assertComplete().assertValue {
-            var quizResultsUrl = it.get()!!.result?.resultsUrl
-            quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
+            var quizId = it.get()!!.quizId
+            quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        val path = "/v1/quizzes/test-quiz/results?section=Products&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getQuizResultsWithPagination() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("quiz_results_response.json"))
+        mockServer.enqueue(mockResponse)
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
+        val observer = constructorIo.getQuizResults("test-quiz", answers, page = page, perPage = perPage).test()
+        observer.assertComplete().assertValue {
+            var quizId = it.get()!!.quizId
+            quizId == "test-quiz"
+        }
+        val request = mockServer.takeRequest()
+        val path = "/v1/quizzes/test-quiz/results?page=2&num_results_per_page=30&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun getQuizResultsWithFilters() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("quiz_results_response.json"))
+        mockServer.enqueue(mockResponse)
+        val answers = listOf(
+            listOf("1"),
+            listOf("2", "3")
+        )
+        val observer = constructorIo.getQuizResults("test-quiz", answers, filters = filtersToApply).test()
+        observer.assertComplete().assertValue {
+            var quizId = it.get()!!.quizId
+            quizId == "test-quiz"
+        }
+        val request = mockServer.takeRequest()
+        val path = "/v1/quizzes/test-quiz/results?filters%5BBrand%5D=XYZ&filters%5BBrand%5D=123&filters%5Bgroup_id%5D=123&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -186,7 +264,7 @@ class ConstructorioQuizTest {
         )
         val quizRequest = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
-            .setVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
+            .setQuizVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
             .setSection("Products")
             .build()
         val observer = constructorIo.getQuizNextQuestion(quizRequest).test()
@@ -195,7 +273,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -210,16 +288,16 @@ class ConstructorioQuizTest {
         )
         val quizRequest = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
-            .setVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
+            .setQuizVersionId("11db5ac7-67e1-4000-9000-414d8425cab3")
             .setSection("Products")
             .build()
         val observer = constructorIo.getQuizResults(quizRequest).test()
         observer.assertComplete().assertValue {
-            var quizResultsUrl = it.get()!!.result?.resultsUrl
-            quizResultsUrl == "https://ac.cnstrc.com/browse/items?key=xaUaZEQHQWnrNZbq&num_results_per_page=10&collection_filter_expression=%3D%7B%22and%22%3A%5B%7B%22name%22%3A%22group_id%22%2C%22value%22%3A%22W123456%22%7D%2C%7B%22or%22%3A%5B%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Purple%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Black%22%7D%2C%7B%22name%22%3A%22color%22%2C%22value%22%3A%22Blue%22%7D%5D%7D%5D%7D"
+            var quizId = it.get()!!.quizId
+            quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/finalize?a=1&a=2%2C3&version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
+        val path = "/v1/quizzes/test-quiz/results?section=Products&a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.20.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }

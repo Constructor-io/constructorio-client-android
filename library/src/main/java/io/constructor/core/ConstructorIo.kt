@@ -587,16 +587,18 @@ object ConstructorIo {
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
-     * @param versionId version identifier for the quiz
+     * @param quizVersionId version identifier for the quiz. version ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning
+     * @param quizSessionId session identifier for the quiz. session ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions
      * @param sectionName the section the quiz and results come from. defaults to "Products"
      */
-    fun getQuizNextQuestion(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
+    fun getQuizNextQuestion(quizId: String, answers: List<List<String>>? = null, quizVersionId: String? = null, quizSessionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
             encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
-        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        quizVersionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_VERSION_ID.urlEncode() to it.urlEncode()) }
+        quizSessionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_SESSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizNextQuestion(quizId, encodedParams.toTypedArray(), preferenceHelper)
@@ -625,7 +627,8 @@ object ConstructorIo {
         request.answers?.forEach { answer ->
             encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
-        request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        request.quizVersionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_VERSION_ID.urlEncode() to it.urlEncode()) }
+        request.quizSessionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_SESSION_ID.urlEncode() to it.urlEncode()) }
         request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizNextQuestion(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
@@ -652,13 +655,14 @@ object ConstructorIo {
      *  }
      * ```
      */
-    suspend fun getQuizNextQuestionCRT(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): QuizQuestionResponse {
+    suspend fun getQuizNextQuestionCRT(quizId: String, answers: List<List<String>>? = null, quizVersionId: String? = null, quizSessionId: String? = null, sectionName: String? = null): QuizQuestionResponse {
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         answers?.forEach { answer ->
             encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
-        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
+        quizVersionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_VERSION_ID.urlEncode() to it.urlEncode()) }
+        quizSessionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_SESSION_ID.urlEncode() to it.urlEncode()) }
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizNextQuestionCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
@@ -677,17 +681,26 @@ object ConstructorIo {
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
-     * @param versionId version identifier for the quiz
+     * @param quizVersionId version identifier for the quiz. version ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning
+     * @param quizSessionId session identifier for the quiz. session ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions
      * @param sectionName the section the quiz and results come from. defaults to "Products"
+     * @param filters additional filters used to refine results
+     * @param page the page number of the results
+     * @param perPage The number of results per page to return
      */
-    fun getQuizResults(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizResultsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+    fun getQuizResults(quizId: String, answers: List<List<String>>? = null, quizVersionId: String? = null, quizSessionId: String? = null, sectionName: String? = null, filters: Map<String, List<String>>? = null, page: Int? = null, perPage: Int? = null): Observable<ConstructorData<QuizResultsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(
+            facets = filters?.toList(),
+            page = page,
+            perPage = perPage,
+            sectionName = sectionName
+        )
 
         answers?.forEach { answer ->
             encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
-        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        quizVersionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_VERSION_ID.urlEncode() to it.urlEncode()) }
+        quizSessionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_SESSION_ID.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizResults(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
@@ -710,13 +723,18 @@ object ConstructorIo {
      * @param request the quiz request object
      */
     fun getQuizResults(request: QuizRequest): Observable<ConstructorData<QuizResultsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(
+            facets = request.filters?.toList(),
+            page = request.page,
+            perPage = request.perPage,
+            sectionName = request.section
+        )
 
         request.answers?.forEach { answer ->
             encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
-        request.versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
-        request.section?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        request.quizVersionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_VERSION_ID.urlEncode() to it.urlEncode()) }
+        request.quizSessionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_SESSION_ID.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizResults(request.quizId, encodedParams.toTypedArray(), preferenceHelper)
     }
@@ -742,14 +760,19 @@ object ConstructorIo {
      *  }
      * ```
      */
-    suspend fun getQuizResultsCRT(quizId: String, answers: List<List<String>>? = null, versionId: String? = null, sectionName: String? = null): QuizResultsResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
+    suspend fun getQuizResultsCRT(quizId: String, answers: List<List<String>>? = null, quizVersionId: String? = null, quizSessionId: String? = null, sectionName: String? = null, filters: Map<String, List<String>>? = null, page: Int? = null, perPage: Int? = null): QuizResultsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(
+            facets = filters?.toList(),
+            page = page,
+            perPage = perPage,
+            sectionName = sectionName
+        )
 
         answers?.forEach { answer ->
             encodedParams.add(Constants.QueryConstants.ANSWERS.urlEncode() to answer.joinToString(",").urlEncode())
         }
-        versionId?.let { encodedParams.add(Constants.QueryConstants.VERSION_ID.urlEncode() to it.urlEncode()) }
-        sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to it.urlEncode()) }
+        quizVersionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_VERSION_ID.urlEncode() to it.urlEncode()) }
+        quizSessionId?.let { encodedParams.add(Constants.QueryConstants.QUIZ_SESSION_ID.urlEncode() to it.urlEncode()) }
 
         return dataManager.getQuizResultsCRT(quizId, encodedParams.toTypedArray(), preferenceHelper)
     }

@@ -37,6 +37,8 @@
       }
     ]
   },
-  "version_id": "11db5ac7-67e1-4000-9000-414d8425cab3",
+  "quiz_version_id": "11db5ac7-67e1-4000-9000-414d8425cab3",
+  "quiz_session_id": "31f6bdae-6f1d-482f-b37f-f7a9e346973a",
+  "quiz_id": "test-quiz",
   "is_last_question": false
 }
