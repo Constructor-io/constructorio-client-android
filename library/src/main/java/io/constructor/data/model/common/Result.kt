@@ -16,4 +16,4 @@ data class Result(
         @Json(name = "value") val value: String,
         @Json(name = "is_slotted") val isSlotted: Boolean?,
         @Json(name = "labels") val labels: Map<String, Boolean>?,
-        ) : Serializable
+) : Serializable
