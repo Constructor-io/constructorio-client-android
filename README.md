@@ -9,7 +9,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.20.0) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.21.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 
