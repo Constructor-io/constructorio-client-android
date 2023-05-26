@@ -15,5 +15,6 @@ data class FilterFacet(
        @Json(name = "min") val min: Double?,
        @Json(name = "max") val max: Double?,
        @Json(name = "options") val options: List<FilterFacetOption>?,
-       @Json(name = "type") val type: String?
+       @Json(name = "type") val type: String?,
+       @Json(name = "hidden") val hidden: Boolean?,
 ) : Serializable

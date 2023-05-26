@@ -32,12 +32,14 @@ class Constants {
         const val USER_ID = "ui"
         const val TERM_UNKNOWN = "TERM_UNKNOWN"
         const val PAGE = "page"
+        const val OFFSET = "offset"
         const val PER_PAGE = "num_results_per_page"
         const val SORT_BY = "sort_by"
         const val SORT_ORDER = "sort_order"
-        const val FILTER_GROUP_ID = "filters[group_id]"
         const val FILTER_FACET = "filters[%s]"
         const val FMT_OPTIONS = "fmt_options[%s]"
+        const val SHOW_HIDDEN_FACETS = "show_hidden_facets"
+        const val SHOW_PROTECTED_FACETS = "show_protected_facets"
         const val HIDDEN_FIELD = "hidden_fields"
         const val HIDDEN_FACET = "hidden_facets"
         const val GROUPS_SORT_BY = "groups_sort_by"
@@ -56,6 +58,10 @@ class Constants {
         const val QUIZ_VERSION_ID="quiz_version_id"
         const val QUIZ_SESSION_ID="quiz_session_id"
         const val ANSWERS = "a"
+        const val FACET_NAME="facet_name"
+        const val GROUPS_MAX_DEPTH = "groups_max_depth"
+        const val FILTER_GROUP_ID = "filters[group_id]"
+
     }
 
     object QueryValues {

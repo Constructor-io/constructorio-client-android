@@ -10,9 +10,7 @@ import io.constructor.data.builder.*
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
-import io.constructor.data.model.browse.BrowseResponse
-import io.constructor.data.model.browse.BrowseResultClickRequestBody
-import io.constructor.data.model.browse.BrowseResultLoadRequestBody
+import io.constructor.data.model.browse.*
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.conversion.ConversionRequestBody
@@ -145,6 +143,7 @@ object ConstructorIo {
         groupId: String? = null,
         groupDisplayName: String? = null,
         page: Int? = null,
+        offset: Int? = null,
         perPage: Int? = null,
         sortBy: String? = null,
         sortOrder: String? = null,
@@ -161,7 +160,10 @@ object ConstructorIo {
         itemId: String? = null,
         term: String? = null,
         itemIds: List<String>? = null,
-        ids: List<String>? = null
+        ids: List<String>? = null,
+        showHiddenFacets: Boolean? = null,
+        groupsMaxDepth: Int? = null,
+        groupIdFilter: String? = null,
     ): ArrayList<Pair<String, String>> {
 
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf();
@@ -184,6 +186,7 @@ object ConstructorIo {
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+section.key, section.value.toString()))
         }
         page?.let { encodedParams.add(Constants.QueryConstants.PAGE.urlEncode() to page.toString().urlEncode()) }
+        offset?.let { encodedParams.add(Constants.QueryConstants.OFFSET.urlEncode() to offset.toString().urlEncode()) }
         perPage?.let { encodedParams.add(Constants.QueryConstants.PER_PAGE.urlEncode() to perPage.toString().urlEncode()) }
         sortBy?.let { encodedParams.add(Constants.QueryConstants.SORT_BY.urlEncode() to it.urlEncode()) }
         sortOrder?.let { encodedParams.add(Constants.QueryConstants.SORT_ORDER.urlEncode() to it.urlEncode()) }
@@ -191,10 +194,13 @@ object ConstructorIo {
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
         }
+        showHiddenFacets?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.SHOW_HIDDEN_FACETS).urlEncode() to showHiddenFacets.toString().urlEncode()) }
         groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
         groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
         resultId?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
         groupId?.let { encodedParams.add(Constants.QueryConstants.GROUP_ID.urlEncode() to it) }
+        groupIdFilter?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it) }
+        groupsMaxDepth?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_MAX_DEPTH).urlEncode() to it.toString().urlEncode()) }
         groupDisplayName?.let { encodedParams.add(Constants.QueryConstants.GROUP_DISPLAY_NAME.urlEncode() to it.urlEncode()) }
         numResults?.let { encodedParams.add(Constants.QueryConstants.NUM_RESULT.urlEncode() to numResults.toString().urlEncode()) }
         itemId?.let { encodedParams.add(Constants.QueryConstants.ITEM_ID.urlEncode() to itemId.toString().urlEncode()) }
@@ -440,6 +446,38 @@ object ConstructorIo {
     }
 
     /**
+     * ## Example
+     * ```
+     * val filters = mapOf(
+     *      "group_id" to listOf("G1234"),
+     *      "Brand" to listOf("Cnstrc")
+     *      "Color" to listOf("Red", "Blue")
+     * )
+     * val request = BrowseRequest.Builder("group_id", "123")
+     *      .setFilters(filters)
+     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+     *      .build()
+     *
+     * ConstructorIo.getBrowseResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the browse request object
+     */
+    fun getBrowseResults(request: BrowseRequest): Observable<ConstructorData<BrowseResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap)
+
+        return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
      * Returns a list of browse results including filters, categories, sort options, etc.
      * ##Example
      * ```
@@ -476,19 +514,41 @@ object ConstructorIo {
     }
 
     /**
+     * Returns a list of browse facet results
+     * ##Example
+     * ```
+     * ConstructorIo.getBrowseFacets(1, 20)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it.response?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param page the page number of the results (Can't be used with offset)
+     * @param perPage the number of results per page to return
+     * @param offset the number of results to skip from the start (Can't be used with page)
+     * @param showHiddenFacets show fields that are hidden by default
+     */
+    fun getBrowseFacets(page: Int? = null, perPage: Int? = null, offset: Int? = null, showHiddenFacets: Boolean? = null): Observable<ConstructorData<BrowseFacetsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(page = page, perPage = perPage, offset = offset, showHiddenFacets = showHiddenFacets)
+
+        return dataManager.getBrowseFacets(encodedParams = encodedParams.toTypedArray())
+    }
+
+
+    /**
      * ## Example
      * ```
-     * val filters = mapOf(
-     *      "group_id" to listOf("G1234"),
-     *      "Brand" to listOf("Cnstrc")
-     *      "Color" to listOf("Red", "Blue")
-     * )
-     * val request = BrowseRequest.Builder("group_id", "123")
-     *      .setFilters(filters)
-     *      .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
+     * val request = BrowseFacetsRequest.Builder()
+     *      .setPage(2)
+     *      .setNumResultsPerPage(40)
      *      .build()
      *
-     * ConstructorIo.getBrowseResults(request)
+     * ConstructorIo.getBrowseFacets(request)
      *      .subscribeOn(Schedulers.io())
      *      .observeOn(AndroidSchedulers.mainThread())
      *      .subscribe {
@@ -499,12 +559,190 @@ object ConstructorIo {
      *          }
      *      }
      * ```
-     * @param request the browse request object
+     * @param request the search request object
      */
-    fun getBrowseResults(request: BrowseRequest): Observable<ConstructorData<BrowseResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap)
+    fun getBrowseFacets(request: BrowseFacetsRequest): Observable<ConstructorData<BrowseFacetsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(page = request.page, perPage = request.numResultsPerPage, offset = request.offset, showHiddenFacets = request.showHiddenFacets)
 
-        return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
+        return dataManager.getBrowseFacets(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of browse facets results
+     * ##Example
+     * ```
+     *  runBlocking {
+     *      launch {
+     *          try {
+     *              val browseFacetsResults = constructorIo.getBrowseFacetsCRT(1)
+     *              // Do something with browseFacetsResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     * @param page the page number of the results (Can't be used with offset)
+     * @param perPage the number of results per page to return
+     * @param offset the number of results to skip from the start (Can't be used with page)
+     * @param showHiddenFacets show fields that are hidden by default
+     */
+    suspend fun getBrowseFacetsCRT(page: Int? = null, perPage: Int? = null, offset: Int? = null, showHiddenFacets: Boolean? = null): BrowseFacetsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(page = page, perPage = perPage, offset = offset, showHiddenFacets = showHiddenFacets)
+
+        return dataManager.getBrowseFacetsCRT(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of browse facet options results
+     * ##Example
+     * ```
+     * ConstructorIo.getBrowseFacetOptions("Brand", false)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it.response?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param facetName name of the facet whose options to return
+     * @param showHiddenFacets show fields that are hidden by default
+     */
+    fun getBrowseFacetOptions(facetName: String, showHiddenFacets: Boolean? = null): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = showHiddenFacets)
+        encodedParams.add(Constants.QueryConstants.FACET_NAME to facetName.urlEncode());
+
+        return dataManager.getBrowseFacetOptions(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * ## Example
+     * ```
+     * val request = BrowseFacetOptionsRequest.Builder("Brand")
+     *      .setShowHiddenFacets(true)
+     *      .build()
+     *
+     * ConstructorIo.getBrowseFacetOptions(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the browse facet options request object
+     */
+    fun getBrowseFacetOptions(request: BrowseFacetOptionsRequest): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = request.showHiddenFacets)
+        encodedParams.add(Constants.QueryConstants.FACET_NAME to request.facetName.urlEncode());
+
+        return dataManager.getBrowseFacetOptions(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of browse facet options results
+     * ##Example
+     * ```
+     *  runBlocking {
+     *      launch {
+     *          try {
+     *              val browseFacetOptionsResults = constructorIo.getBrowseFacetOptionsCRT("Brand", false)
+     *              // Do something with browseFacetOptionsResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     * @param facetName name of the facet whose options to return
+     * @param showHiddenFacets show fields that are hidden by default
+     */
+    suspend fun getBrowseFacetOptionsCRT(facetName: String, showHiddenFacets: Boolean? = null): BrowseFacetOptionsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = showHiddenFacets)
+        encodedParams.add(Constants.QueryConstants.FACET_NAME to facetName.urlEncode());
+
+        return dataManager.getBrowseFacetOptionsCRT(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of browse groups results
+     * ##Example
+     * ```
+     * ConstructorIo.getBrowseGroups("Brand", 5)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it.response?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param groupId id of the specific group to be included in the response
+     * @param groupsMaxDepth maximum depth of group hierarchy to be included in response
+     */
+    fun getBrowseGroups(groupId: String? = null, groupsMaxDepth: Int? = null): Observable<ConstructorData<BrowseGroupsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdFilter = groupId, groupsMaxDepth = groupsMaxDepth)
+
+        return dataManager.getBrowseGroups(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * ## Example
+     * ```
+     * val request = BrowseGroupsRequest.Builder()
+     *      .setGroupId("Brand")
+     *      .setGroupsMaxDepth(5)
+     *      .build()
+     *
+     * ConstructorIo.getBrowseGroups(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it?.let {
+     *                  view.renderData(it)
+     *              }
+     *          }
+     *      }
+     * ```
+     * @param request the browse groups request object
+     */
+    fun getBrowseGroups(request: BrowseGroupsRequest): Observable<ConstructorData<BrowseGroupsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdFilter = request.groupId, groupsMaxDepth = request.groupsMaxDepth)
+
+        return dataManager.getBrowseGroups(encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns a list of browse groups results
+     * ##Example
+     * ```
+     *  runBlocking {
+     *      launch {
+     *          try {
+     *              val browseGroupsResults = constructorIo.getBrowseGroupsCRT("Brand", 3)
+     *              // Do something with browseGroupsResults
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     * @param groupId id of the specific group to be included in the response
+     * @param groupsMaxDepth maximum depth of group hierarchy to be included in response
+     */
+    suspend fun getBrowseGroupsCRT(groupId: String? = null, groupsMaxDepth: Int? = null): BrowseGroupsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdFilter = groupId, groupsMaxDepth = groupsMaxDepth)
+
+        return dataManager.getBrowseGroupsCRT(encodedParams = encodedParams.toTypedArray())
     }
 
     /**

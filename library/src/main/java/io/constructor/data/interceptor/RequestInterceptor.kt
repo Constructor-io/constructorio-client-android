@@ -4,6 +4,7 @@ import io.constructor.BuildConfig
 import io.constructor.core.Constants
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
+import io.constructor.data.remote.ApiPaths
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -16,6 +17,7 @@ class RequestInterceptor(
     private val configMemoryHolder: ConfigMemoryHolder
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
+        val ignoreDtPaths = listOf(ApiPaths.URL_BROWSE_GROUPS, ApiPaths.URL_BROWSE_FACETS, ApiPaths.URL_BROWSE_FACET_OPTIONS);
         val request = chain.request()
         val builder = request.url.newBuilder()
             .port(preferencesHelper.port)
@@ -43,7 +45,10 @@ class RequestInterceptor(
         }
 
         builder.addQueryParameter(Constants.QueryConstants.CLIENT, BuildConfig.CLIENT_VERSION)
-        builder.addQueryParameter(Constants.QueryConstants.TIMESTAMP, System.currentTimeMillis().toString())
+
+        if (ignoreDtPaths.none { path -> request.url.encodedPath.endsWith(path)}) {
+            builder.addQueryParameter(Constants.QueryConstants.TIMESTAMP, System.currentTimeMillis().toString())
+        }
 
         val url = builder.build()
         val newRequest = request.newBuilder().url(url).build()

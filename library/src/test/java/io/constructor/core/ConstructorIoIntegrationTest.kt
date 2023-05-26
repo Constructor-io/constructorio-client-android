@@ -33,7 +33,7 @@ class ConstructorIoIntegrationTest {
     fun setup() {
         every { ctx.applicationContext } returns ctx
 
-        every { preferencesHelper.apiKey } returns "ZqXaOfXuBWD4s3XzCI1q"
+        every { preferencesHelper.apiKey } returns "key_vM4GkLckwiuxwyRA"
         every { preferencesHelper.id } returns "wacko-the-guid"
         every { preferencesHelper.scheme } returns "https"
         every { preferencesHelper.serviceUrl } returns "ac.cnstrc.com"
@@ -388,6 +388,458 @@ class ConstructorIoIntegrationTest {
             assertTrue(browseResults.response!!.groups!!.isNotEmpty())
             assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
             assertTrue(browseResults.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsAgainstRealResponse() {
+        val observer = constructorIo.getBrowseFacets().test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithPageAgainstRealResponse() {
+        val observer = constructorIo.getBrowseFacets(page = 10).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithNumResultsPerPageAgainstRealResponse() {
+        val observer = constructorIo.getBrowseFacets(perPage = 1).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.size == 1)
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithShowHiddenFacetsAgainstRealResponse() {
+        val observer = constructorIo.getBrowseFacets(showHiddenFacets = true).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 2)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithOffsetAgainstRealResponse() {
+        val observer = constructorIo.getBrowseFacets(offset = 100).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseFacetsRequest.Builder().build()
+        val observer = constructorIo.getBrowseFacets(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithPageAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseFacetsRequest.Builder()
+                .setPage(10)
+                .build()
+        val observer = constructorIo.getBrowseFacets(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithNumResultsPerPageAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseFacetsRequest.Builder()
+                .setNumResultsPerPage(1)
+                .build()
+        val observer = constructorIo.getBrowseFacets(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.size == 1)
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithShowHiddenFacetsAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseFacetsRequest.Builder()
+                .setShowHiddenFacets(true)
+                .build()
+        val observer = constructorIo.getBrowseFacets(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 2)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsWithOffsetAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseFacetsRequest.Builder()
+                .setOffset(100)
+                .build()
+        val observer = constructorIo.getBrowseFacets(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isEmpty())
+        assertTrue(browseResponse?.response!!.resultCount > 0)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsCRTWithOffsetAgainstRealResponseUsingRequestBuilder() {
+        runBlocking {
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(offset = 10)
+
+            assertTrue(browseFacetsResponse?.resultId !== null)
+            assertTrue(browseFacetsResponse?.response!!.facets!!.isEmpty())
+            assertTrue(browseFacetsResponse?.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsCRTWithPageAgainstRealResponseUsingRequestBuilder() {
+        runBlocking {
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(page = 10)
+
+            assertTrue(browseFacetsResponse?.resultId !== null)
+            assertTrue(browseFacetsResponse?.response!!.facets!!.isEmpty())
+            assertTrue(browseFacetsResponse?.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsCRTWithNumResultsPerPageAgainstRealResponseUsingRequestBuilder() {
+        runBlocking {
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(perPage = 1)
+
+            assertTrue(browseFacetsResponse?.resultId !== null)
+            assertTrue(browseFacetsResponse?.response!!.facets!!.size == 1)
+            assertTrue(browseFacetsResponse?.response!!.resultCount > 0)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetsResultsCRTWithShowHiddenFacetsAgainstRealResponseUsingRequestBuilder() {
+        runBlocking {
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(showHiddenFacets = true)
+
+            assertTrue(browseFacetsResponse?.resultId !== null)
+            assertTrue(browseFacetsResponse?.response!!.facets!!.isNotEmpty())
+            assertTrue(browseFacetsResponse?.response!!.resultCount > 2)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+
+    @Test
+    fun getBrowseFacetOptionsResultsAgainstRealResponse() {
+        val observer = constructorIo.getBrowseFacetOptions("Color").test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].options!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].displayName == "Color")
+        assertTrue(browseResponse?.response!!.facets!![0].name == "Color")
+        assertTrue(browseResponse?.response!!.facets!![0].type == "multiple")
+        assertTrue(browseResponse?.response!!.facets!![0].hidden == false)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetOptionsResultsWithShowHiddenFacetsAgainstRealResponse() {
+        val observer = constructorIo.getBrowseFacetOptions("Brand", showHiddenFacets = true).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].options!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].displayName == "Brand")
+        assertTrue(browseResponse?.response!!.facets!![0].name == "Brand")
+        assertTrue(browseResponse?.response!!.facets!![0].type == "multiple")
+        assertTrue(browseResponse?.response!!.facets!![0].hidden == true)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetOptionsResultsAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseFacetOptionsRequest.Builder("Color").build()
+        val observer = constructorIo.getBrowseFacetOptions(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].options!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].displayName == "Color")
+        assertTrue(browseResponse?.response!!.facets!![0].name == "Color")
+        assertTrue(browseResponse?.response!!.facets!![0].type == "multiple")
+        assertTrue(browseResponse?.response!!.facets!![0].hidden == false)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetOptionsResultsWithShowHiddenFacetsAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseFacetOptionsRequest.Builder("Brand")
+                .setShowHiddenFacets(true)
+                .build()
+        val observer = constructorIo.getBrowseFacetOptions(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].options!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.facets!![0].displayName == "Brand")
+        assertTrue(browseResponse?.response!!.facets!![0].name == "Brand")
+        assertTrue(browseResponse?.response!!.facets!![0].type == "multiple")
+        assertTrue(browseResponse?.response!!.facets!![0].hidden == true)
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetOptionsResultsCRTAgainstRealResponse() {
+        runBlocking {
+            val browseFacetOptionsResponse = constructorIo.getBrowseFacetOptionsCRT("Color")
+
+            assertTrue(browseFacetOptionsResponse?.resultId !== null)
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!!.isNotEmpty())
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].options!!.isNotEmpty())
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].displayName == "Color")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].name == "Color")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].type == "multiple")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].hidden == false)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetOptionsResultsCRTWithShowHiddenFacetsAgainstRealResponse() {
+        runBlocking {
+            val browseFacetOptionsResponse = constructorIo.getBrowseFacetOptionsCRT("Brand", true)
+
+            assertTrue(browseFacetOptionsResponse?.resultId !== null)
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!!.isNotEmpty())
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].options!!.isNotEmpty())
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].displayName == "Brand")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].name == "Brand")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].type == "multiple")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].hidden == true)
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseGroupsResultsAgainstRealResponse() {
+        val observer = constructorIo.getBrowseGroups().test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].count == 10)
+        assertTrue(browseResponse?.response!!.groups!![0].children!!.isNotEmpty())
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseGroupsResultsWithGroupIdAgainstRealResponse() {
+        val observer = constructorIo.getBrowseGroups("Brands").test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].displayName == "Brands")
+        assertTrue(browseResponse?.response!!.groups!![0].groupId == "Brands")
+        assertTrue(browseResponse?.response!!.groups!![0].count == 6)
+        assertTrue(browseResponse?.response!!.groups!![0].children!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].parents!!.isNotEmpty())
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseGroupsResultsWithGroupsMaxDepthAgainstRealResponse() {
+        val observer = constructorIo.getBrowseGroups(groupsMaxDepth = 0).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].count == 10)
+        assertTrue(browseResponse?.response!!.groups!![0].children!!.isEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].parents!!.isEmpty())
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetGroupsAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseGroupsRequest.Builder().build()
+        val observer = constructorIo.getBrowseGroups(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].count == 10)
+        assertTrue(browseResponse?.response!!.groups!![0].children!!.isNotEmpty())
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetGroupsWithGroupIdAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseGroupsRequest.Builder()
+                .setGroupId("Brands")
+                .build()
+        val observer = constructorIo.getBrowseGroups(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].displayName == "Brands")
+        assertTrue(browseResponse?.response!!.groups!![0].groupId == "Brands")
+        assertTrue(browseResponse?.response!!.groups!![0].count == 6)
+        assertTrue(browseResponse?.response!!.groups!![0].children!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].parents!!.isNotEmpty())
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseFacetGroupsWithGroupsMaxDepthAgainstRealResponseUsingRequestBuilder() {
+        val request = BrowseGroupsRequest.Builder()
+                .setGroupsMaxDepth(0)
+                .build()
+        val observer = constructorIo.getBrowseGroups(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        val browseResponse = observer.values()[0].get()
+
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
+        assertTrue(browseResponse?.response!!.groups!![0].count == 10)
+        assertTrue(browseResponse?.response!!.groups!![0].children!!.isEmpty())
+        assertTrue(browseResponse?.response!!.groups!![0].parents!!.isEmpty())
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseGroupsResultsCRTAgainstRealResponse() {
+        runBlocking {
+            val browseResponse = constructorIo.getBrowseGroupsCRT()
+
+            assertTrue(browseResponse?.resultId !== null)
+            assertTrue(browseResponse?.resultId !== null)
+            assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
+            assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
+            assertTrue(browseResponse?.response!!.groups!![0].count == 10)
+            assertTrue(browseResponse?.response!!.groups!![0].children!!.isNotEmpty())
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseGroupsResultsCRTWithGroupIdAgainstRealResponse() {
+        runBlocking {
+            val browseResponse = constructorIo.getBrowseGroupsCRT(groupId = "Brands")
+
+            assertTrue(browseResponse?.resultId !== null)
+            assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResponse?.response!!.groups!![0].displayName == "Brands")
+            assertTrue(browseResponse?.response!!.groups!![0].groupId == "Brands")
+            assertTrue(browseResponse?.response!!.groups!![0].count == 6)
+            assertTrue(browseResponse?.response!!.groups!![0].children!!.isNotEmpty())
+            assertTrue(browseResponse?.response!!.groups!![0].parents!!.isNotEmpty())
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseGroupsResultsCRTWithGroupsMaxDepthAgainstRealResponse() {
+        runBlocking {
+            val browseResponse = constructorIo.getBrowseGroupsCRT(groupsMaxDepth = 0)
+
+            assertTrue(browseResponse?.resultId !== null)
+            assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
+            assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
+            assertTrue(browseResponse?.response!!.groups!![0].count == 10)
+            assertTrue(browseResponse?.response!!.groups!![0].children!!.isEmpty())
+            assertTrue(browseResponse?.response!!.groups!![0].parents!!.isEmpty())
         }
         Thread.sleep(timeBetweenTests)
     }
