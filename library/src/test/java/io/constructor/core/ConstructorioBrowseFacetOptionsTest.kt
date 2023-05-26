@@ -61,7 +61,7 @@ class ConstructorioBrowseFacetOptionsTest {
         val mockResponse = MockResponse().setResponseCode(200)
                 .setBody(TestDataLoader.loadAsString("browse_facet_options.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseFacetOptionsResults("brands").test()
+        val observer = constructorIo.getBrowseFacetOptions("brands").test()
         observer.assertComplete()
         observer.assertNoErrors()
 
@@ -85,7 +85,7 @@ class ConstructorioBrowseFacetOptionsTest {
     fun getBrowseFacetsResultsWithServerError() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseFacetOptionsResults("Brand").test()
+        val observer = constructorIo.getBrowseFacetOptions("Brand").test()
         observer.assertComplete().assertValue {
             it.networkError
         }
@@ -98,7 +98,7 @@ class ConstructorioBrowseFacetOptionsTest {
                 .setBody(TestDataLoader.loadAsString("browse_facet_options.json"))
         mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseFacetOptionsResults("Brand").test()
+        val observer = constructorIo.getBrowseFacetOptions("Brand").test()
         observer.assertComplete().assertValue {
             it.isError
         }
@@ -110,7 +110,7 @@ class ConstructorioBrowseFacetOptionsTest {
         val mockResponse = MockResponse().setResponseCode(200)
                 .setBody(TestDataLoader.loadAsString("browse_facet_options_empty.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseFacetOptionsResults("Brand").test()
+        val observer = constructorIo.getBrowseFacetOptions("Brand").test()
         observer.assertComplete()
         observer.assertNoErrors()
 
@@ -125,7 +125,7 @@ class ConstructorioBrowseFacetOptionsTest {
         val mockResponse = MockResponse().setResponseCode(200)
                 .setBody(TestDataLoader.loadAsString("browse_facet_options.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseFacetOptionsResults("Brands", true).test()
+        val observer = constructorIo.getBrowseFacetOptions("Brands", true).test()
         observer.assertComplete()
         observer.assertNoErrors()
 
@@ -143,7 +143,7 @@ class ConstructorioBrowseFacetOptionsTest {
         val browseFacetOptionsRequest = BrowseFacetOptionsRequest.Builder("Brands")
                 .setShowHiddenFacets(true)
                 .build()
-        val observer = constructorIo.getBrowseFacetOptionsResults(browseFacetOptionsRequest).test()
+        val observer = constructorIo.getBrowseFacetOptions(browseFacetOptionsRequest).test()
         val request = mockServer.takeRequest()
         val path =
                 "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.20.0"

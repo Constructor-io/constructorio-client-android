@@ -33,7 +33,7 @@ class ConstructorIoIntegrationTest {
     fun setup() {
         every { ctx.applicationContext } returns ctx
 
-        every { preferencesHelper.apiKey } returns "ZqXaOfXuBWD4s3XzCI1q"
+        every { preferencesHelper.apiKey } returns "key_vM4GkLckwiuxwyRA"
         every { preferencesHelper.id } returns "wacko-the-guid"
         every { preferencesHelper.scheme } returns "https"
         every { preferencesHelper.serviceUrl } returns "ac.cnstrc.com"
@@ -394,7 +394,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetsResultsAgainstRealResponse() {
-        val observer = constructorIo.getBrowseFacetsResults().test()
+        val observer = constructorIo.getBrowseFacets().test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -407,7 +407,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetsResultsWithPageAgainstRealResponse() {
-        val observer = constructorIo.getBrowseFacetsResults(page = 10).test()
+        val observer = constructorIo.getBrowseFacets(page = 10).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -420,7 +420,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetsResultsWithNumResultsPerPageAgainstRealResponse() {
-        val observer = constructorIo.getBrowseFacetsResults(perPage = 1).test()
+        val observer = constructorIo.getBrowseFacets(perPage = 1).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -433,7 +433,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetsResultsWithShowHiddenFacetsAgainstRealResponse() {
-        val observer = constructorIo.getBrowseFacetsResults(showHiddenFacets = true).test()
+        val observer = constructorIo.getBrowseFacets(showHiddenFacets = true).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -446,7 +446,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetsResultsWithOffsetAgainstRealResponse() {
-        val observer = constructorIo.getBrowseFacetsResults(offset = 100).test()
+        val observer = constructorIo.getBrowseFacets(offset = 100).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -460,7 +460,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetsResultsAgainstRealResponseUsingRequestBuilder() {
         val request = BrowseFacetsRequest.Builder().build()
-        val observer = constructorIo.getBrowseFacetsResults(request).test()
+        val observer = constructorIo.getBrowseFacets(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -476,7 +476,7 @@ class ConstructorIoIntegrationTest {
         val request = BrowseFacetsRequest.Builder()
                 .setPage(10)
                 .build()
-        val observer = constructorIo.getBrowseFacetsResults(request).test()
+        val observer = constructorIo.getBrowseFacets(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -492,7 +492,7 @@ class ConstructorIoIntegrationTest {
         val request = BrowseFacetsRequest.Builder()
                 .setNumResultsPerPage(1)
                 .build()
-        val observer = constructorIo.getBrowseFacetsResults(request).test()
+        val observer = constructorIo.getBrowseFacets(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -508,7 +508,7 @@ class ConstructorIoIntegrationTest {
         val request = BrowseFacetsRequest.Builder()
                 .setShowHiddenFacets(true)
                 .build()
-        val observer = constructorIo.getBrowseFacetsResults(request).test()
+        val observer = constructorIo.getBrowseFacets(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -524,7 +524,7 @@ class ConstructorIoIntegrationTest {
         val request = BrowseFacetsRequest.Builder()
                 .setOffset(100)
                 .build()
-        val observer = constructorIo.getBrowseFacetsResults(request).test()
+        val observer = constructorIo.getBrowseFacets(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -538,7 +538,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetsResultsCRTWithOffsetAgainstRealResponseUsingRequestBuilder() {
         runBlocking {
-            val browseFacetsResponse = constructorIo.getBrowseFacetsResultsCRT(offset = 10)
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(offset = 10)
 
             assertTrue(browseFacetsResponse?.resultId !== null)
             assertTrue(browseFacetsResponse?.response!!.facets!!.isEmpty())
@@ -550,7 +550,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetsResultsCRTWithPageAgainstRealResponseUsingRequestBuilder() {
         runBlocking {
-            val browseFacetsResponse = constructorIo.getBrowseFacetsResultsCRT(page = 10)
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(page = 10)
 
             assertTrue(browseFacetsResponse?.resultId !== null)
             assertTrue(browseFacetsResponse?.response!!.facets!!.isEmpty())
@@ -562,7 +562,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetsResultsCRTWithNumResultsPerPageAgainstRealResponseUsingRequestBuilder() {
         runBlocking {
-            val browseFacetsResponse = constructorIo.getBrowseFacetsResultsCRT(perPage = 1)
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(perPage = 1)
 
             assertTrue(browseFacetsResponse?.resultId !== null)
             assertTrue(browseFacetsResponse?.response!!.facets!!.size == 1)
@@ -574,7 +574,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetsResultsCRTWithShowHiddenFacetsAgainstRealResponseUsingRequestBuilder() {
         runBlocking {
-            val browseFacetsResponse = constructorIo.getBrowseFacetsResultsCRT(showHiddenFacets = true)
+            val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(showHiddenFacets = true)
 
             assertTrue(browseFacetsResponse?.resultId !== null)
             assertTrue(browseFacetsResponse?.response!!.facets!!.isNotEmpty())
@@ -586,7 +586,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetOptionsResultsAgainstRealResponse() {
-        val observer = constructorIo.getBrowseFacetOptionsResults("color").test()
+        val observer = constructorIo.getBrowseFacetOptions("Color").test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -594,8 +594,8 @@ class ConstructorIoIntegrationTest {
         assertTrue(browseResponse?.resultId !== null)
         assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.facets!![0].options!!.isNotEmpty())
-        assertTrue(browseResponse?.response!!.facets!![0].displayName == "color")
-        assertTrue(browseResponse?.response!!.facets!![0].name == "color")
+        assertTrue(browseResponse?.response!!.facets!![0].displayName == "Color")
+        assertTrue(browseResponse?.response!!.facets!![0].name == "Color")
         assertTrue(browseResponse?.response!!.facets!![0].type == "multiple")
         assertTrue(browseResponse?.response!!.facets!![0].hidden == false)
         Thread.sleep(timeBetweenTests)
@@ -603,7 +603,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetOptionsResultsWithShowHiddenFacetsAgainstRealResponse() {
-        val observer = constructorIo.getBrowseFacetOptionsResults("Brand", showHiddenFacets = true).test()
+        val observer = constructorIo.getBrowseFacetOptions("Brand", showHiddenFacets = true).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -620,8 +620,8 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseFacetOptionsResultsAgainstRealResponseUsingRequestBuilder() {
-        val request = BrowseFacetOptionsRequest.Builder("color").build()
-        val observer = constructorIo.getBrowseFacetOptionsResults(request).test()
+        val request = BrowseFacetOptionsRequest.Builder("Color").build()
+        val observer = constructorIo.getBrowseFacetOptions(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -629,8 +629,8 @@ class ConstructorIoIntegrationTest {
         assertTrue(browseResponse?.resultId !== null)
         assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.facets!![0].options!!.isNotEmpty())
-        assertTrue(browseResponse?.response!!.facets!![0].displayName == "color")
-        assertTrue(browseResponse?.response!!.facets!![0].name == "color")
+        assertTrue(browseResponse?.response!!.facets!![0].displayName == "Color")
+        assertTrue(browseResponse?.response!!.facets!![0].name == "Color")
         assertTrue(browseResponse?.response!!.facets!![0].type == "multiple")
         assertTrue(browseResponse?.response!!.facets!![0].hidden == false)
         Thread.sleep(timeBetweenTests)
@@ -641,7 +641,7 @@ class ConstructorIoIntegrationTest {
         val request = BrowseFacetOptionsRequest.Builder("Brand")
                 .setShowHiddenFacets(true)
                 .build()
-        val observer = constructorIo.getBrowseFacetOptionsResults(request).test()
+        val observer = constructorIo.getBrowseFacetOptions(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -659,13 +659,13 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetOptionsResultsCRTAgainstRealResponse() {
         runBlocking {
-            val browseFacetOptionsResponse = constructorIo.getBrowseFacetOptionsResultsCRT("color")
+            val browseFacetOptionsResponse = constructorIo.getBrowseFacetOptionsCRT("Color")
 
             assertTrue(browseFacetOptionsResponse?.resultId !== null)
             assertTrue(browseFacetOptionsResponse?.response!!.facets!!.isNotEmpty())
             assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].options!!.isNotEmpty())
-            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].displayName == "color")
-            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].name == "color")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].displayName == "Color")
+            assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].name == "Color")
             assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].type == "multiple")
             assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].hidden == false)
         }
@@ -675,7 +675,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetOptionsResultsCRTWithShowHiddenFacetsAgainstRealResponse() {
         runBlocking {
-            val browseFacetOptionsResponse = constructorIo.getBrowseFacetOptionsResultsCRT("Brand", true)
+            val browseFacetOptionsResponse = constructorIo.getBrowseFacetOptionsCRT("Brand", true)
 
             assertTrue(browseFacetOptionsResponse?.resultId !== null)
             assertTrue(browseFacetOptionsResponse?.response!!.facets!!.isNotEmpty())
@@ -690,7 +690,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseGroupsResultsAgainstRealResponse() {
-        val observer = constructorIo.getBrowseGroupsResults().test()
+        val observer = constructorIo.getBrowseGroups().test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -706,7 +706,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseGroupsResultsWithGroupIdAgainstRealResponse() {
-        val observer = constructorIo.getBrowseGroupsResults("Brands").test()
+        val observer = constructorIo.getBrowseGroups("Brands").test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -723,7 +723,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun getBrowseGroupsResultsWithGroupsMaxDepthAgainstRealResponse() {
-        val observer = constructorIo.getBrowseGroupsResults(groupsMaxDepth = 0).test()
+        val observer = constructorIo.getBrowseGroups(groupsMaxDepth = 0).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -741,7 +741,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseFacetGroupsAgainstRealResponseUsingRequestBuilder() {
         val request = BrowseGroupsRequest.Builder().build()
-        val observer = constructorIo.getBrowseGroupsResults(request).test()
+        val observer = constructorIo.getBrowseGroups(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -761,7 +761,7 @@ class ConstructorIoIntegrationTest {
         val request = BrowseGroupsRequest.Builder()
                 .setGroupId("Brands")
                 .build()
-        val observer = constructorIo.getBrowseGroupsResults(request).test()
+        val observer = constructorIo.getBrowseGroups(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -781,7 +781,7 @@ class ConstructorIoIntegrationTest {
         val request = BrowseGroupsRequest.Builder()
                 .setGroupsMaxDepth(0)
                 .build()
-        val observer = constructorIo.getBrowseGroupsResults(request).test()
+        val observer = constructorIo.getBrowseGroups(request).test()
         observer.assertComplete()
         observer.assertNoErrors()
         val browseResponse = observer.values()[0].get()
@@ -799,7 +799,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseGroupsResultsCRTAgainstRealResponse() {
         runBlocking {
-            val browseResponse = constructorIo.getBrowseGroupsResultsCRT()
+            val browseResponse = constructorIo.getBrowseGroupsCRT()
 
             assertTrue(browseResponse?.resultId !== null)
             assertTrue(browseResponse?.resultId !== null)
@@ -815,7 +815,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseGroupsResultsCRTWithGroupIdAgainstRealResponse() {
         runBlocking {
-            val browseResponse = constructorIo.getBrowseGroupsResultsCRT(groupId = "Brands")
+            val browseResponse = constructorIo.getBrowseGroupsCRT(groupId = "Brands")
 
             assertTrue(browseResponse?.resultId !== null)
             assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
@@ -831,7 +831,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseGroupsResultsCRTWithGroupsMaxDepthAgainstRealResponse() {
         runBlocking {
-            val browseResponse = constructorIo.getBrowseGroupsResultsCRT(groupsMaxDepth = 0)
+            val browseResponse = constructorIo.getBrowseGroupsCRT(groupsMaxDepth = 0)
 
             assertTrue(browseResponse?.resultId !== null)
             assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())

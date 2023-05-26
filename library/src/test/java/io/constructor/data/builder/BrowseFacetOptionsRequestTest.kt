@@ -28,6 +28,7 @@ class BrowseFacetOptionsRequestTest {
             showHiddenFacets = this@BrowseFacetOptionsRequestTest.showHiddenFacets
         }
 
+        assertEquals(request.facetName, facetName)
         assertEquals(request.showHiddenFacets, showHiddenFacets)
     }
 }

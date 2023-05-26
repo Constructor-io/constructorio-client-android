@@ -1,7 +1,6 @@
 package io.constructor.core
 
 import android.content.Context
-import io.constructor.data.builder.BrowseFacetsRequest
 import io.constructor.data.builder.BrowseGroupsRequest
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
@@ -62,7 +61,7 @@ class ConstructorioBrowseGroupsTest {
         val mockResponse = MockResponse().setResponseCode(200)
                 .setBody(TestDataLoader.loadAsString("browse_groups.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseGroupsResults().test()
+        val observer = constructorIo.getBrowseGroups().test()
         observer.assertComplete()
         observer.assertNoErrors()
 
@@ -80,7 +79,7 @@ class ConstructorioBrowseGroupsTest {
     fun getBrowseGroupsResultsWithServerError() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseGroupsResults().test()
+        val observer = constructorIo.getBrowseGroups().test()
         observer.assertComplete().assertValue {
             it.networkError
         }
@@ -93,7 +92,7 @@ class ConstructorioBrowseGroupsTest {
                 .setBody(TestDataLoader.loadAsString("browse_groups.json"))
         mockResponse.throttleBody(128, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseGroupsResults().test()
+        val observer = constructorIo.getBrowseGroups().test()
         observer.assertComplete().assertValue {
             it.isError
         }
@@ -105,7 +104,7 @@ class ConstructorioBrowseGroupsTest {
         val mockResponse = MockResponse().setResponseCode(200)
                 .setBody(TestDataLoader.loadAsString("browse_groups_empty.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseGroupsResults().test()
+        val observer = constructorIo.getBrowseGroups().test()
         observer.assertComplete()
         observer.assertNoErrors()
 
@@ -120,7 +119,7 @@ class ConstructorioBrowseGroupsTest {
         val mockResponse = MockResponse().setResponseCode(200)
                 .setBody(TestDataLoader.loadAsString("browse_groups_empty.json"))
         mockServer.enqueue(mockResponse)
-        val observer = constructorIo.getBrowseGroupsResults("Brand", 1).test()
+        val observer = constructorIo.getBrowseGroups("Brand", 1).test()
         observer.assertComplete()
         observer.assertNoErrors()
 
@@ -139,7 +138,7 @@ class ConstructorioBrowseGroupsTest {
                 .setGroupId("Brand")
                 .setGroupsMaxDepth(1)
                 .build()
-        val observer = constructorIo.getBrowseGroupsResults(browseGroupsRequest).test()
+        val observer = constructorIo.getBrowseGroups(browseGroupsRequest).test()
         val request = mockServer.takeRequest()
         val path =
                 "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.20.0"

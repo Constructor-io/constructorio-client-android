@@ -173,7 +173,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.getBrowseResultsCRT(dynamicUrl)
     }
     
-    fun getBrowseFacetsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseFacetsResponse>> {
+    fun getBrowseFacets(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseFacetsResponse>> {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACETS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseFacetsResults(dynamicUrl).map { result ->
             if (!result.isError) {
@@ -194,12 +194,12 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
-    suspend fun getBrowseFacetsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseFacetsResponse {
+    suspend fun getBrowseFacetsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseFacetsResponse {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACETS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseFacetsResultsCRT(dynamicUrl)
     }
 
-    fun getBrowseFacetOptionsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
+    fun getBrowseFacetOptions(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACET_OPTIONS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseFacetOptionsResults(dynamicUrl).map { result ->
             if (!result.isError) {
@@ -220,12 +220,12 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
-    suspend fun getBrowseFacetOptionsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseFacetOptionsResponse {
+    suspend fun getBrowseFacetOptionsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseFacetOptionsResponse {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_FACET_OPTIONS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseFacetOptionsResultsCRT(dynamicUrl)
     }
 
-    fun getBrowseGroupsResults(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseGroupsResponse>> {
+    fun getBrowseGroups(encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<BrowseGroupsResponse>> {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_GROUPS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseGroupsResults(dynamicUrl).map { result ->
             if (!result.isError) {
@@ -246,7 +246,7 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         }.toObservable()
     }
 
-    suspend fun getBrowseGroupsResultsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseGroupsResponse {
+    suspend fun getBrowseGroupsCRT(encodedParams: Array<Pair<String, String>> = arrayOf()): BrowseGroupsResponse {
         var dynamicUrl = "/${ApiPaths.URL_BROWSE_GROUPS}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getBrowseGroupsResultsCRT(dynamicUrl)
     }
