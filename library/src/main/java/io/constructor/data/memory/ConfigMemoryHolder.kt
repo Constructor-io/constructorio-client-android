@@ -18,7 +18,7 @@ class ConfigMemoryHolder @Inject constructor() {
             if (s.isNotEmpty()) {
                 s.split(";").forEach {
                     val pair = it.split("=")
-                    result.add("ef-${pair[0].base64Decode()}" to pair[1].base64Decode())
+                    result.add("${pair[0].base64Decode()}" to pair[1].base64Decode())
                 }
             }
             return result
