@@ -21,8 +21,8 @@ class ConfigMemoryHolderTest {
     fun verifyTestCellsWrittenAndEncoded() {
         configMemoryHolder.testCellParams = listOf("1" to "2", "3" to "4")
         val params = configMemoryHolder.testCellParams
-        assert(params[0]!!.first == "ef-1" && params[0]!!.second == "2")
-        assert(params[1]!!.first == "ef-3" && params[1]!!.second == "4")
+        assert(params[0]!!.first == "1" && params[0]!!.second == "2")
+        assert(params[1]!!.first == "3" && params[1]!!.second == "4")
     }
 
     @Test

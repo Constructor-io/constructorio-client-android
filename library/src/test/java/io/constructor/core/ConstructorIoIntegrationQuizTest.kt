@@ -32,7 +32,7 @@ class ConstructorIoIntegrationQuizTest {
     fun setup() {
         every { ctx.applicationContext } returns ctx
 
-        every { preferencesHelper.apiKey } returns "ZqXaOfXuBWD4s3XzCI1q"
+        every { preferencesHelper.apiKey } returns "key_vM4GkLckwiuxwyRA"
         every { preferencesHelper.id } returns "wacko-the-guid"
         every { preferencesHelper.scheme } returns "https"
         every { preferencesHelper.serviceUrl } returns "ac.cnstrc.com"
@@ -216,14 +216,14 @@ class ConstructorIoIntegrationQuizTest {
         )
         val request = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
-            .setQuizVersionId("dd10eea4-f765-4bb1-b8e5-46b09a190cfe")
+            .setQuizVersionId("e03210db-0cc6-459c-8f17-bf014c4f554d")
             .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
             .build()
         val observer = constructorIo.getQuizResults(request).test()
 
         val quizResult = observer.values()[0].get()
         assertEquals("test-quiz", quizResult?.quizId);
-        assertEquals("dd10eea4-f765-4bb1-b8e5-46b09a190cfe", quizResult?.quizVersionId);
+        assertEquals("e03210db-0cc6-459c-8f17-bf014c4f554d", quizResult?.quizVersionId);
         assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
 
         Thread.sleep(timeBetweenTests)
@@ -281,14 +281,14 @@ class ConstructorIoIntegrationQuizTest {
                 listOf("1"),
                 listOf("1", "2"),
                 listOf("seen")
-            )
+            )h
             val quizResult = constructorIo.getQuizResultsCRT("test-quiz",
                 answers,
-                "dd10eea4-f765-4bb1-b8e5-46b09a190cfe",
+                "e03210db-0cc6-459c-8f17-bf014c4f554d",
                 "bc48a85d-2f45-4c91-ba3a-dcf655b33831"
             )
             assertEquals("test-quiz", quizResult?.quizId);
-            assertEquals("dd10eea4-f765-4bb1-b8e5-46b09a190cfe", quizResult?.quizVersionId);
+            assertEquals("e03210db-0cc6-459c-8f17-bf014c4f554d", quizResult?.quizVersionId);
             assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
         }
         Thread.sleep(timeBetweenTests)
