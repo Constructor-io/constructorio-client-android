@@ -61,6 +61,7 @@ class ConstructorIoIntegrationTest {
         val autocompleteResponse = observer.values()[0].get()
         assertTrue(autocompleteResponse?.sections!!.isNotEmpty())
         assertTrue(autocompleteResponse?.resultId!!.isNotEmpty())
+        assertTrue(autocompleteResponse?.request!!.isNotEmpty())
         assertEquals(autocompleteResponse?.sections!!["Products"]?.first()?.isSlotted, true)
 
         Thread.sleep(timeBetweenTests)
@@ -81,6 +82,7 @@ class ConstructorIoIntegrationTest {
             val autocompleteResults = constructorIo.getAutocompleteResultsCRT("item")
             assertTrue(autocompleteResults.sections!!.isNotEmpty())
             assertTrue(autocompleteResults.resultId!!.isNotEmpty())
+            assertTrue(autocompleteResults.request!!.isNotEmpty())
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -137,6 +139,7 @@ class ConstructorIoIntegrationTest {
 
         val searchResponse = observer.values()[0].get()
         assertTrue(searchResponse?.resultId!!.isNotEmpty())
+        assertTrue(searchResponse?.request!!.isNotEmpty())
         assertTrue(searchResponse?.response?.results!!.isNotEmpty())
         assertTrue(searchResponse?.response?.facets!!.isNotEmpty())
         assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
@@ -168,6 +171,7 @@ class ConstructorIoIntegrationTest {
         runBlocking {
             val searchResults = constructorIo.getSearchResultsCRT("item1")
             assertTrue(searchResults.resultId !== null)
+            assertTrue(searchResults.request!!.isNotEmpty())
             assertTrue(searchResults.response!!.facets!!.isNotEmpty())
             assertTrue(searchResults.response!!.groups!!.isNotEmpty())
             assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
@@ -219,6 +223,7 @@ class ConstructorIoIntegrationTest {
 
         val browseResponse = observer.values()[0].get()
         assertTrue(browseResponse?.resultId!!.isNotEmpty())
+        assertTrue(browseResponse?.request!!.isNotEmpty())
         assertTrue(browseResponse?.response?.results!!.isNotEmpty())
         assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
         assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
@@ -244,6 +249,7 @@ class ConstructorIoIntegrationTest {
         runBlocking {
             val browseResults = constructorIo.getBrowseResultsCRT("Brand", "XYZ")
             assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.request!!.isNotEmpty())
             assertTrue(browseResults.response!!.facets!!.isNotEmpty())
             assertTrue(browseResults.response!!.groups!!.isNotEmpty())
             assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
@@ -400,6 +406,7 @@ class ConstructorIoIntegrationTest {
         val browseResponse = observer.values()[0].get()
 
         assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.request!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.resultCount > 0)
         Thread.sleep(timeBetweenTests)
@@ -541,6 +548,7 @@ class ConstructorIoIntegrationTest {
             val browseFacetsResponse = constructorIo.getBrowseFacetsCRT(offset = 10)
 
             assertTrue(browseFacetsResponse?.resultId !== null)
+            assertTrue(browseFacetsResponse.request!!.isNotEmpty())
             assertTrue(browseFacetsResponse?.response!!.facets!!.isEmpty())
             assertTrue(browseFacetsResponse?.response!!.resultCount > 0)
         }
@@ -592,6 +600,7 @@ class ConstructorIoIntegrationTest {
         val browseResponse = observer.values()[0].get()
 
         assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.request!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.facets!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.facets!![0].options!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.facets!![0].displayName == "Color")
@@ -662,6 +671,7 @@ class ConstructorIoIntegrationTest {
             val browseFacetOptionsResponse = constructorIo.getBrowseFacetOptionsCRT("Color")
 
             assertTrue(browseFacetOptionsResponse?.resultId !== null)
+            assertTrue(browseFacetOptionsResponse?.request!!.isNotEmpty())
             assertTrue(browseFacetOptionsResponse?.response!!.facets!!.isNotEmpty())
             assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].options!!.isNotEmpty())
             assertTrue(browseFacetOptionsResponse?.response!!.facets!![0].displayName == "Color")
@@ -696,6 +706,7 @@ class ConstructorIoIntegrationTest {
         val browseResponse = observer.values()[0].get()
 
         assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.request!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
         assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
@@ -747,7 +758,7 @@ class ConstructorIoIntegrationTest {
         val browseResponse = observer.values()[0].get()
 
         assertTrue(browseResponse?.resultId !== null)
-        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.request!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
         assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
         assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
@@ -802,7 +813,7 @@ class ConstructorIoIntegrationTest {
             val browseResponse = constructorIo.getBrowseGroupsCRT()
 
             assertTrue(browseResponse?.resultId !== null)
-            assertTrue(browseResponse?.resultId !== null)
+            assertTrue(browseResponse?.request!!.isNotEmpty())
             assertTrue(browseResponse?.response!!.groups!!.isNotEmpty())
             assertTrue(browseResponse?.response!!.groups!![0].displayName == "All")
             assertTrue(browseResponse?.response!!.groups!![0].groupId == "All")
@@ -964,6 +975,7 @@ class ConstructorIoIntegrationTest {
 
         val recommendationResponse = observer.values()[0].get()
         assertTrue(recommendationResponse?.resultId !== null)
+        assertTrue(recommendationResponse?.request!!.isNotEmpty())
         assertTrue(recommendationResponse?.response?.pod !== null)
         assertTrue(recommendationResponse?.response?.results !== null)
         assertTrue(recommendationResponse?.response?.resultCount!! >= 0)
@@ -977,6 +989,7 @@ class ConstructorIoIntegrationTest {
             val facet = hashMapOf("Brand" to listOf("XYZ"))
             val recommendationResults = constructorIo.getRecommendationResultsCRT("home_page_1", facet.map { it.key to it.value })
             assertTrue(recommendationResults.resultId !== null)
+            assertTrue(recommendationResults.request!!.isNotEmpty())
             assertTrue(recommendationResults.response?.pod !== null)
         }
         Thread.sleep(timeBetweenTests)

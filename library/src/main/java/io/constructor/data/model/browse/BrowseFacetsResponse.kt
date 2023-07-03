@@ -11,5 +11,6 @@ import java.io.Serializable
 data class BrowseFacetsResponse(
         @Json(name = "response") val response: BrowseFacetsResponseInner?,
         @Json(name = "result_id") val resultId: String?,
+        @Json(name= "request") val request:Map<String, Any?>?,
         var rawData: String?
 ) : Serializable
