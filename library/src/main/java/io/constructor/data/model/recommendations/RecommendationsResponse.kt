@@ -8,5 +8,6 @@ import java.io.Serializable
 data class RecommendationsResponse(
         @Json(name = "response") val response: RecommendationsResponseInner?,
         @Json(name = "result_id") val resultId: String?,
+        @Json(name= "request") val request:Map<String, Any?>?,
         var rawData: String?
 ) : Serializable

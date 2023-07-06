@@ -281,7 +281,7 @@ class ConstructorIoIntegrationQuizTest {
                 listOf("1"),
                 listOf("1", "2"),
                 listOf("seen")
-            )h
+            )
             val quizResult = constructorIo.getQuizResultsCRT("test-quiz",
                 answers,
                 "e03210db-0cc6-459c-8f17-bf014c4f554d",
