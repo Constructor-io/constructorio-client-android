@@ -245,6 +245,31 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getBrowseResultAgainstRealResponseWithRefinedContent() {
+        val request = BrowseRequest.Builder("group_id", "BrandA").build()
+        val observer = constructorIo.getBrowseResults(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.results!!.isNotEmpty())
+        assertTrue(browseResponse?.response?.resultCount!! > 0)
+        assertTrue(browseResponse?.response?.refinedContent?.first()?.data!!.isNotEmpty())
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("body"), "Content 1 Body")
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("header"), "Content 1 Header")
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("assetUrl"), "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png")
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("altText"), "Content 1 desktop alt text")
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("ctaLink"), "https://constructor.io/wp-content/uploads/2022/09/groceryshop-2022-r2.png")
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("ctaText"), "Content 1 CTA Button")
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("tag-1"), "tag-1-value")
+        assertEquals(browseResponse?.response?.refinedContent?.first()?.data?.get("tag-2"), "tag-2-value")
+        assertTrue(browseResponse?.response?.refinedContent?.first()?.data?.get("arbitraryDataObject") !== null)
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getBrowseResultsCRTAgainstRealResponse() {
         runBlocking {
             val browseResults = constructorIo.getBrowseResultsCRT("Brand", "XYZ")
