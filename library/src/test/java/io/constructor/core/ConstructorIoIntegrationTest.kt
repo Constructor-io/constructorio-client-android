@@ -1636,4 +1636,38 @@ class ConstructorIoIntegrationTest {
 
         Thread.sleep(timeBetweenTests)
     }
+
+    @Test
+    fun getSearchResultAgainstRealResponseWithFacetAndFacetOptionsData() {
+        val request = SearchRequest.Builder("item").build()
+        val observer = constructorIo.getSearchResults(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertEquals(searchResponse?.response?.facets?.first()?.data?.get("cheese"), "pizza");
+        assertEquals(searchResponse?.response?.facets?.first()?.options?.first()?.data?.get("milk"), "shake");
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultAgainstRealResponseWithFacetAndFacetOptionsData() {
+        val request = BrowseRequest.Builder("Color", "green").build()
+        val observer = constructorIo.getBrowseResults(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.results!!.isNotEmpty())
+        assertTrue(searchResponse?.response?.resultCount!! > 0)
+        assertEquals(searchResponse?.response?.facets?.first()?.data?.get("cheese"), "pizza");
+        assertEquals(searchResponse?.response?.facets?.first()?.options?.first()?.data?.get("milk"), "shake");
+
+        Thread.sleep(timeBetweenTests)
+    }
 }
