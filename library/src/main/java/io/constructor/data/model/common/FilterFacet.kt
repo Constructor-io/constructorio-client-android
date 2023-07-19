@@ -17,4 +17,5 @@ data class FilterFacet(
        @Json(name = "options") val options: List<FilterFacetOption>?,
        @Json(name = "type") val type: String?,
        @Json(name = "hidden") val hidden: Boolean?,
+       @Json(name = "data") val data: Map<String, Any?>?,
 ) : Serializable
