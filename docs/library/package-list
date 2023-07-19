@@ -380,7 +380,8 @@ $dokka.location:io.constructor.data.model.common/Feature/featureName/#/PointingT
 $dokka.location:io.constructor.data.model.common/Feature/min/#/PointingToDeclaration/library/io.constructor.data.model.common/-feature/min.html
 $dokka.location:io.constructor.data.model.common/Feature/variant/#/PointingToDeclaration/library/io.constructor.data.model.common/-feature/variant.html
 $dokka.location:io.constructor.data.model.common/FilterFacet///PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/index.html
-$dokka.location:io.constructor.data.model.common/FilterFacet/FilterFacet/#kotlin.String?#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.Any]?#kotlin.Double?#kotlin.Double?#kotlin.collections.List[io.constructor.data.model.common.FilterFacetOption]?#kotlin.String?#kotlin.Boolean?/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/-filter-facet.html
+$dokka.location:io.constructor.data.model.common/FilterFacet/FilterFacet/#kotlin.String?#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.Any]?#kotlin.Double?#kotlin.Double?#kotlin.collections.List[io.constructor.data.model.common.FilterFacetOption]?#kotlin.String?#kotlin.Boolean?#kotlin.collections.Map[kotlin.String,kotlin.Any?]?/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/-filter-facet.html
+$dokka.location:io.constructor.data.model.common/FilterFacet/data/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/data.html
 $dokka.location:io.constructor.data.model.common/FilterFacet/displayName/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/display-name.html
 $dokka.location:io.constructor.data.model.common/FilterFacet/hidden/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/hidden.html
 $dokka.location:io.constructor.data.model.common/FilterFacet/max/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/max.html
@@ -390,8 +391,9 @@ $dokka.location:io.constructor.data.model.common/FilterFacet/options/#/PointingT
 $dokka.location:io.constructor.data.model.common/FilterFacet/status/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/status.html
 $dokka.location:io.constructor.data.model.common/FilterFacet/type/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet/type.html
 $dokka.location:io.constructor.data.model.common/FilterFacetOption///PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/index.html
-$dokka.location:io.constructor.data.model.common/FilterFacetOption/FilterFacetOption/#kotlin.Int#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/-filter-facet-option.html
+$dokka.location:io.constructor.data.model.common/FilterFacetOption/FilterFacetOption/#kotlin.Int#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlin.Any?]?/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/-filter-facet-option.html
 $dokka.location:io.constructor.data.model.common/FilterFacetOption/count/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/count.html
+$dokka.location:io.constructor.data.model.common/FilterFacetOption/data/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/data.html
 $dokka.location:io.constructor.data.model.common/FilterFacetOption/displayName/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/display-name.html
 $dokka.location:io.constructor.data.model.common/FilterFacetOption/status/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/status.html
 $dokka.location:io.constructor.data.model.common/FilterFacetOption/value/#/PointingToDeclaration/library/io.constructor.data.model.common/-filter-facet-option/value.html
