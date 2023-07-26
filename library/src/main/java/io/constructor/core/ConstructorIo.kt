@@ -16,8 +16,7 @@ import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.purchase.PurchaseRequestBody
-import io.constructor.data.model.quiz.QuizQuestionResponse
-import io.constructor.data.model.quiz.QuizResultsResponse
+import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
@@ -1016,6 +1015,170 @@ object ConstructorIo {
     }
 
     /**
+     * Tracks quiz result click events
+     * ##Example
+     * ```
+     * ConstructorIo.trackQuizResultClick("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10, null);
+     * ```
+     * @param quizId The quiz id
+     * @param quizVersionId version identifier for the quiz. version ID will be returned in quiz request responses
+     * @param quizSessionId session identifier for the quiz. session ID will be returned in quiz request responses
+     * @param customerId The item identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param variationId The variation item identifier of the clicked item
+     * @param itemName The item name of the clicked item i.e "Jacket Denim"
+     * @param sectionName The section that the results came from, i.e. "Products"
+     * @param resultId The result ID of the quiz response that the selection came from
+     * @param numResultsPerPage The count of quiz results on each page
+     * @param resultPage The current page that quiz result is on
+     * @param resultCount The total number of quiz results
+     * @param actionClass The event class. Leave this blank in mose cases.
+     */
+    fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click") {
+        var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, numResultsPerPage, resultPage, resultCount, actionClass)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+                t -> e("Quiz Result Click error: ${t.message}")
+        }))
+    }
+    internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click"): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val quizResultClickRequestBody = QuizResultClickRequestBody(
+            quizId,
+            quizVersionId,
+            quizSessionId,
+            resultPage,
+            resultCount,
+            numResultsPerPage,
+            resultId,
+            customerId,
+            itemName,
+            variationId,
+            actionClass,
+            BuildConfig.CLIENT_VERSION,
+            preferenceHelper.id,
+            preferenceHelper.getSessionId(),
+            preferenceHelper.apiKey,
+            configMemoryHolder.userId,
+            configMemoryHolder.segments,
+            true,
+            section,
+            System.currentTimeMillis()
+        )
+
+        return dataManager.trackQuizResultClick(
+            quizResultClickRequestBody,
+            arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks quiz result load events
+     * ##Example
+     * ```
+     * ConstructorIo.trackQuizResultLoad("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, 1, 10, null)
+     * ```
+     * @param quizId The quiz id
+     * @param quizVersionId version identifier for the quiz. version ID will be returned in quiz request responses
+     * @param quizSessionId session identifier for the quiz. session ID will be returned in quiz request responses
+     * @param sectionName The section that the results came from, i.e. "Products"
+     * @param resultId The result ID of the quiz response response that the selection came from
+     * @param resultPage The current page that quiz result is on
+     * @param resultCount The total number of quiz results
+     * @param actionClass The event class. Leave this blank in mose cases.
+     */
+    fun trackQuizResultLoad(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_load", url: String = "Not Available") {
+        var completable = trackQuizResultLoadInternal(quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount, actionClass, url)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+                t -> e("Quiz Result Load error: ${t.message}")
+        }))
+    }
+    internal fun trackQuizResultLoadInternal(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_load", url: String = "Not Available"): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val quizResultLoadRequestBody = QuizResultLoadRequestBody(
+            quizId,
+            quizVersionId,
+            quizSessionId,
+            url,
+            resultPage,
+            resultCount,
+            resultId,
+            actionClass,
+            BuildConfig.CLIENT_VERSION,
+            preferenceHelper.id,
+            preferenceHelper.getSessionId(),
+            preferenceHelper.apiKey,
+            configMemoryHolder.userId,
+            configMemoryHolder.segments,
+            true,
+            section,
+            System.currentTimeMillis()
+        )
+
+        return dataManager.trackQuizResultLoad(
+            quizResultLoadRequestBody,
+            arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks quiz conversion events
+     * ##Example
+     * ```
+     * ConstructorIo.trackQuizConversion("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, null, "shirt-a", "shirt-a--reg", "White shirt", null, "129.99", null)
+     * ```
+     * @param quizId The quiz id
+     * @param quizVersionId Version identifier for the quiz. version ID will be returned in quiz request responses
+     * @param quizSessionId Session identifier for the quiz. session ID will be returned in quiz request responses
+     * @param displayName Display name for the conversion event. This display name will be shown on the dashboard in the future. Required if isCustomType is true.
+     * @param type Type of conversion event. Defaults to add_to_cart if not specified
+     * @param isCustomType Specifies if the conversion type is a custom event
+     * @param customerId The item identifier of the clicked item i.e "PUMP-KAB-0002"
+     * @param variationId The variation item identifier of the clicked item
+     * @param itemName The item name of the clicked item i.e "Jacket Denim"
+     * @param sectionName The section that the results came from, i.e. "Products"
+     * @param revenue The revenue of the item converted
+     * @param actionClass The event class. Leave this blank in mose cases.
+     */
+    fun trackQuizConversion(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null, actionClass: String? = "conversion") {
+        var completable = trackQuizConversionInternal(quizId, quizVersionId, quizSessionId, displayName, type, isCustomType, customerId, variationId, itemName, sectionName, revenue, actionClass)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+                t -> e("Quiz Conversion error: ${t.message}")
+        }))
+    }
+    internal fun trackQuizConversionInternal(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null, actionClass: String? = "conversion"): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val quizConversionRequestBody = QuizConversionRequestBody(
+            quizId,
+            quizVersionId,
+            quizSessionId,
+            displayName,
+            type,
+            isCustomType,
+            customerId,
+            itemName,
+            variationId,
+            revenue,
+            actionClass,
+            BuildConfig.CLIENT_VERSION,
+            preferenceHelper.id,
+            preferenceHelper.getSessionId(),
+            preferenceHelper.apiKey,
+            configMemoryHolder.userId,
+            configMemoryHolder.segments,
+            true,
+            section,
+            System.currentTimeMillis()
+        )
+
+        return dataManager.trackQuizConversion(
+            quizConversionRequestBody,
+            arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+        /**
      * Tracks session start events
      * ##Example
      * ```

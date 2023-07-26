@@ -25,6 +25,9 @@ object ApiPaths {
     const val URL_RECOMMENDATIONS = "recommendations/v1/pods/%s"
     const val URL_RECOMMENDATION_RESULT_CLICK_EVENT = "v2/behavioral_action/recommendation_result_click"
     const val URL_RECOMMENDATION_RESULT_VIEW_EVENT = "v2/behavioral_action/recommendation_result_view"
+    const val URL_QUIZ_RESULT_CLICK_EVENT = "v2/behavioral_action/quiz_result_click"
+    const val URL_QUIZ_RESULT_LOAD_EVENT = "v2/behavioral_action/quiz_result_load"
+    const val URL_QUIZ_CONVERSION_EVENT = "v2/behavioral_action/quiz_conversion"
     const val URL_QUIZ_NEXT_QUESTION = "v1/quizzes/%s/next"
     const val URL_QUIZ_RESULTS = "v1/quizzes/%s/results"
 }

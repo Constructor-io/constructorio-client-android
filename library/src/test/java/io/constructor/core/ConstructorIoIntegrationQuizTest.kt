@@ -293,4 +293,25 @@ class ConstructorIoIntegrationQuizTest {
         }
         Thread.sleep(timeBetweenTests)
     }
+
+    @Test
+    fun trackQuizResultClickAgainstRealResponse() {
+        val observer = ConstructorIo.trackQuizResultClickInternal("test-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", "Products", "123", 10, 1, 10, null).test();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackQuizResultLoadAgainstRealResponse() {
+        val observer = ConstructorIo.trackQuizResultLoadInternal("test-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "Products", "123", 1, 10, null).test();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackQuizConversionAgainstRealResponse() {
+        val observer = ConstructorIo.trackQuizConversionInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, null, "shirt-a", "shirt-a--reg", "White shirt", "Products", "129.99", null).test();
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
 }
