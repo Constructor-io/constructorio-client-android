@@ -34,7 +34,7 @@ ConstructorIo.init(this, config)
 ConstructorIo.userId = "uid"
 ```
 ## 4. Retrieving the client_id and session_id
-If you are retrieving results from your backend servers instead of direclty using our sdk, there are two parameters that you will want to forward along with your request.
+If you are retrieving results from your backend servers instead of direclty using our SDK, there are certain personalization parameters that are needed to be passed along with your requests. And those parameters can be accessed from the Constructor instance.
 
 1. **Client Id**
 This Can be retrieved by calling **getClientId** function on the client sdk instance.
@@ -47,7 +47,7 @@ This Can be retrieved by calling **getSessionId** function on the client sdk ins
 var constructorSessionId = ConstructorIo.getSessionId()
 ```
 
-In most cases, you will want to attach these parameters as the cookies **ConstructorioID_client_id** and **ConstructorioID_session_id** to requests to your backend servers.
+In most cases, you will want to store those parameters as cookies preferably as **ConstructorioID_client_id** and **ConstructorioID_session_id** to be sent with your requests to your backend servers.
 
 ## 5. Request Autocomplete Results
 
