@@ -33,8 +33,23 @@ ConstructorIo.init(this, config)
 // Set the user ID (for a logged in user) used for cross device personalization
 ConstructorIo.userId = "uid"
 ```
+## 4. Retrieving the client_id and session_id
+If you are retrieving results from your backend servers instead of direclty using our SDK, there are certain personalization parameters that are needed to be passed along with your requests. And those parameters can be accessed from the Constructor instance.
 
-## 4. Request Autocomplete Results
+1. **Client Id**
+This Can be retrieved by calling **getClientId** function on the client sdk instance.
+```kotlin
+var constructorClientId = ConstructorIo.getClientId()
+```
+2. **Session Id**
+This Can be retrieved by calling **getSessionId** function on the client sdk instance.
+```kotlin
+var constructorSessionId = ConstructorIo.getSessionId()
+```
+
+In most cases, you will want to store those parameters as cookies preferably as **ConstructorioID_client_id** and **ConstructorioID_session_id** to be sent with your requests to your backend servers.
+
+## 5. Request Autocomplete Results
 
 ```kotlin
 // To specify the number of results you want to have returned from each section, you will need to
@@ -107,7 +122,7 @@ val autocompleteRequest = AutocompleteRequest.build("potato") {
 ConstructorIo.getAutocompleteResults(autocompleteRequest)
 ```
 
-## 5. Request Search Results
+## 6. Request Search Results
 
 ```kotlin
 var page = 1
@@ -172,7 +187,7 @@ val searchRequest = SearchRequest.build("potato") {
 ConstructorIo.getSearchResults(searchRequest)
 ```
 
-## 6. Request Browse Results
+## 7. Request Browse Results
 
 ```kotlin
 var page = 1
@@ -214,7 +229,7 @@ runBlocking {
 }
 ```
 
-## 6.1 Request Browse Items Results
+## 7.1 Request Browse Items Results
 
 ```kotlin
 var itemIds = listOf("item1", "item2")
@@ -273,7 +288,7 @@ val browseRequest = BrowseRequest.build("group_id", "123") {
 ConstructorIo.getBrowseResults(browseRequest)
 ```
 
-## 7. Request Recommendation Results
+## 8. Request Recommendation Results
 
 ```kotlin
 var numResults = 6
@@ -329,7 +344,7 @@ val recommendationsRequest = RecommendationsRequest.build("product_detail_page")
 ConstructorIo.getRecommendationResults(recommendationsRequest)
 ```
 
-## 8. Request Quiz Next Question
+## 9. Request Quiz Next Question
 
 ```kotlin
 val quizId = "quiz-id-1"
@@ -393,7 +408,7 @@ val quizRequest = QuizRequest.build("quiz-id-1") {
 ConstructorIo.getQuizNextQuestion(quizRequest)
 ```
 
-## 9. Request Quiz Results
+## 10. Request Quiz Results
 
 ```kotlin
 val quizId = "quiz-id-1"
@@ -457,7 +472,7 @@ val quizRequest = QuizRequest.build("quiz-id-1") {
 ConstructorIo.getQuizResults(quizRequest)
 ```
 
-## 10. Instrument Behavioral Events
+## 11. Instrument Behavioral Events
 
 The Android Client sends behavioral events to [Constructor.io](http://constructor.io/) in order to continuously learn and improve results for future Autosuggest and Search requests.  The Client only sends events in response to being called by the consuming app or in response to user interaction . For example, if the consuming app never calls the SDK code, no events will be sent.  Besides the explicitly passed in event parameters, all user events contain a GUID based user ID that the client sets to identify the user as well as a session ID.
 
@@ -500,14 +515,14 @@ ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "RE
 
 ```kotlin
 // Track when browse results are loaded into view (filterName, filterValue, resultCount)
-ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
+ConstructorIo.trackBrowseResultsLoaded("group_id", "Snacks", 674)
 
 // Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultId)
-ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+ConstructorIo.trackBrowseResultClick("group_id", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 
 // v2.18.4+ only
 // Track when a browse result is clicked (filterName, filterValue, customerId, variationId, resultPositionOnPage, sectionName, resultId)
-ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "RED", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
+ConstructorIo.trackBrowseResultClick("group_id", "Snacks", "7654321-BA", "RED", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 ```
 
 ### Recommendation Events
