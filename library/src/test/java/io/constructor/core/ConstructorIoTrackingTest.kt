@@ -868,7 +868,7 @@ class ConstructorIoTrackingTest {
     fun trackQuizResultClick() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10).test();
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 10, 1, 10).test();
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -879,6 +879,7 @@ class ConstructorIoTrackingTest {
         assertEquals("1", requestBody["result_page"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("10", requestBody["num_results_per_page"])
+        assertEquals("10", requestBody["result_position_on_page"])
         assertEquals("shirt-a", requestBody["item_id"])
         assertEquals("White shirt", requestBody["item_name"])
         assertEquals("shirt-a--reg", requestBody["variation_id"])
@@ -891,7 +892,7 @@ class ConstructorIoTrackingTest {
     fun trackQuizResultClickWithSectionAndResultIDAndActionClass() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "123", 10, 1, 10, "quiz_click").test();
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "123", 10, 10, 1, 10, "quiz_click").test();
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -902,6 +903,7 @@ class ConstructorIoTrackingTest {
         assertEquals("1", requestBody["result_page"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("10", requestBody["num_results_per_page"])
+        assertEquals("10", requestBody["result_position_on_page"])
         assertEquals("shirt-a", requestBody["item_id"])
         assertEquals("White shirt", requestBody["item_name"])
         assertEquals("shirt-a--reg", requestBody["variation_id"])
@@ -914,7 +916,7 @@ class ConstructorIoTrackingTest {
     @Test
     fun trackQuizResultClick500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
-        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10, null).test();
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 10, 1, 10, null).test();
         observer.assertError{ true }
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -925,6 +927,7 @@ class ConstructorIoTrackingTest {
         assertEquals("1", requestBody["result_page"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("10", requestBody["num_results_per_page"])
+        assertEquals("10", requestBody["result_position_on_page"])
         assertEquals("shirt-a", requestBody["item_id"])
         assertEquals("White shirt", requestBody["item_name"])
         assertEquals("shirt-a--reg", requestBody["variation_id"])
@@ -936,7 +939,7 @@ class ConstructorIoTrackingTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10, null).test();
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 10, 1, 10, null).test();
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)

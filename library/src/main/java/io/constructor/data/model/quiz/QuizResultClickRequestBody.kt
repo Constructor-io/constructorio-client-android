@@ -13,6 +13,7 @@ data class QuizResultClickRequestBody(
     @Json(name = "result_page") val resultPage: Int?,
     @Json(name = "result_count") val resultCount: Int?,
     @Json(name = "num_results_per_page") val numResultsPerPage: Int?,
+    @Json(name = "result_position_on_page") val resultPositionOnPage: Int?,
     @Json(name = "result_id") val resultId: String?,
     @Json(name = "item_id") val itemId: String,
     @Json(name = "item_name") val itemName: String?,

@@ -296,7 +296,7 @@ class ConstructorIoIntegrationQuizTest {
 
     @Test
     fun trackQuizResultClickAgainstRealResponse() {
-        val observer = ConstructorIo.trackQuizResultClickInternal("test-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", "Products", "123", 10, 1, 10, null).test();
+        val observer = ConstructorIo.trackQuizResultClickInternal("test-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", "Products", "123", 10, 10, 1, 10, null).test();
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }

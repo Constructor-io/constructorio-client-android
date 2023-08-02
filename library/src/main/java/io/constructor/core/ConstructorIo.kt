@@ -1033,13 +1033,13 @@ object ConstructorIo {
      * @param resultCount The total number of quiz results
      * @param actionClass The event class. Leave this blank in most cases.
      */
-    fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click") {
-        var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, numResultsPerPage, resultPage, resultCount, actionClass)
+    fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null,resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click") {
+        var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, resultPositionOnPage, numResultsPerPage, resultPage, resultCount, actionClass)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Quiz Result Click error: ${t.message}")
         }))
     }
-    internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click"): Completable {
+    internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizResultClickRequestBody = QuizResultClickRequestBody(
@@ -1049,6 +1049,7 @@ object ConstructorIo {
             resultPage,
             resultCount,
             numResultsPerPage,
+            resultPositionOnPage,
             resultId,
             customerId,
             itemName,
