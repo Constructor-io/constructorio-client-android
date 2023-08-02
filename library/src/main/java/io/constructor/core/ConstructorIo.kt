@@ -1031,7 +1031,7 @@ object ConstructorIo {
      * @param numResultsPerPage The count of quiz results on each page
      * @param resultPage The current page that quiz result is on
      * @param resultCount The total number of quiz results
-     * @param actionClass The event class. Leave this blank in mose cases.
+     * @param actionClass The event class. Leave this blank in most cases.
      */
     fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click") {
         var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, numResultsPerPage, resultPage, resultCount, actionClass)
@@ -1084,7 +1084,7 @@ object ConstructorIo {
      * @param resultId The result ID of the quiz response response that the selection came from
      * @param resultPage The current page that quiz result is on
      * @param resultCount The total number of quiz results
-     * @param actionClass The event class. Leave this blank in mose cases.
+     * @param actionClass The event class. Leave this blank in most cases.
      */
     fun trackQuizResultLoad(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_load", url: String = "Not Available") {
         var completable = trackQuizResultLoadInternal(quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount, actionClass, url)
@@ -1138,7 +1138,7 @@ object ConstructorIo {
      * @param itemName The item name of the clicked item i.e "Jacket Denim"
      * @param sectionName The section that the results came from, i.e. "Products"
      * @param revenue The revenue of the item converted
-     * @param actionClass The event class. Leave this blank in mose cases.
+     * @param actionClass The event class. Leave this blank in most cases.
      */
     fun trackQuizConversion(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null, actionClass: String? = "conversion") {
         var completable = trackQuizConversionInternal(quizId, quizVersionId, quizSessionId, displayName, type, isCustomType, customerId, variationId, itemName, sectionName, revenue, actionClass)
