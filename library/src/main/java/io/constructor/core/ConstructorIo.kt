@@ -1028,6 +1028,7 @@ object ConstructorIo {
      * @param itemName The item name of the clicked item i.e "Jacket Denim"
      * @param sectionName The section that the results came from, i.e. "Products"
      * @param resultId The result ID of the quiz response that the selection came from
+     * @param resultPositionOnPage the position of the clicked item on the page i.e. 4
      * @param numResultsPerPage The count of quiz results on each page
      * @param resultPage The current page that quiz result is on
      * @param resultCount The total number of quiz results
