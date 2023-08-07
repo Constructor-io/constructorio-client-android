@@ -13,7 +13,6 @@ import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
-import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -267,7 +266,7 @@ class ConstructorIoSearchTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
-        val preFilterExpression = JSONObject("""{ "and": [ { "name": "Country", "value": "US" } ] }""")
+        val preFilterExpression = """{"and":[{"name":"Country","value":"US"}]}"""
         val observer = constructorIo.getSearchResults(
             term = "bbq",
             groupsSortBy = "value",
@@ -361,8 +360,7 @@ class ConstructorIoSearchTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
-        val preFilterStr = """{"and":[{"name":"Country","value":"US"}]}"""
-        val preFilterExpression = JSONObject(preFilterStr)
+        val preFilterExpression = """{"and":[{"name":"Country","value":"US"}]}"""
         val searchRequest = SearchRequest.Builder("bbq")
             .setPreFilterExpression(preFilterExpression)
             .build()
@@ -372,7 +370,7 @@ class ConstructorIoSearchTest {
         assertThat(request.requestUrl!!.encodedPath).isEqualTo("/search/bbq")
         with(request.requestUrl!!) {
             val queryParams = mapOf(
-                "pre_filter_expression" to preFilterStr,
+                "pre_filter_expression" to preFilterExpression,
                 "key" to "silver-key",
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",

@@ -138,7 +138,7 @@ var variationsMap: VariationsMap = VariationsMap(
   ),
   dtype = "array",
 )
-var preFilterExpression = JSONObject("""{ "and": [ { "name": "Color", "value": "green" } ] }""")
+var preFilterExpression = """{ "and": [ { "name": "Color", "value": "green" } ] }"""
 
 
 // Using RxJava
@@ -207,7 +207,7 @@ var variationsMap: VariationsMap = VariationsMap(
   ),
   dtype = "array",
 )
-var preFilterExpression = JSONObject("""{ "and": [ { "name": "Color", "value": "green" } ] }""")
+var preFilterExpression = """{ "and": [ { "name": "Color", "value": "green" } ] }"""
 
 
 // Using RxJava

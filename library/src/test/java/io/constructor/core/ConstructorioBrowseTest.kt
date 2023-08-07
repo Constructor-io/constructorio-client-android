@@ -13,7 +13,6 @@ import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
-import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -263,6 +262,22 @@ class ConstructorIoBrowseTest {
     }
 
     @Test
+    fun getBrowseResultWithPreFilterExpression() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val preFilterExpression = """{"and":[{"name":"Country","value":"US"}]}"""
+        val observer = constructorIo.getBrowseResults(
+            filterName = "group_id",
+            filterValue = "Beverages",
+            preFilterExpression = preFilterExpression
+        ).test()
+        val request = mockServer.takeRequest()
+        val path = "/browse/group_id/Beverages?pre_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22Country%22%2C%22value%22%3A%22US%22%7D%5D%7D&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.22.4&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getBrowseResultsWithFiltersUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("browse_response.json"))
@@ -343,8 +358,7 @@ class ConstructorIoBrowseTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("browse_response.json"))
         mockServer.enqueue(mockResponse)
-        val preFilterStr = """{"and":[{"name":"Country","value":"US"}]}"""
-        val preFilterExpression = JSONObject(preFilterStr)
+        val preFilterExpression = """{"and":[{"name":"Country","value":"US"}]}"""
         val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
             .setPreFilterExpression(preFilterExpression)
             .build()
@@ -353,7 +367,7 @@ class ConstructorIoBrowseTest {
         assertThat(request.requestUrl!!.encodedPath).isEqualTo("/browse/group_id/Beverages")
         with(request.requestUrl!!) {
             val queryParams = mapOf(
-                "pre_filter_expression" to preFilterStr,
+                "pre_filter_expression" to preFilterExpression,
                 "key" to "silver-key",
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",

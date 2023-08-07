@@ -11,7 +11,6 @@ import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -220,7 +219,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getSearchResultsCRTWithPreFilterExpressionAgainstRealResponse() {
         runBlocking {
-            val preFilterExpression = JSONObject("""{ "and": [ { "name": "Color", "value": "green" } ] }""")
+            val preFilterExpression = """{"and":[{"name":"Color","value":"green"}]}"""
             val searchResults = constructorIo.getSearchResultsCRT("item", preFilterExpression = preFilterExpression)
             assertTrue(searchResults.resultId !== null)
             assertTrue(searchResults.response!!.results!!.isNotEmpty())
@@ -338,7 +337,7 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getBrowseResultsCRTWithPreFilterExpressionAgainstRealResponse() {
         runBlocking {
-            val preFilterExpression = JSONObject("""{ "and": [ { "name": "Color", "value": "green" } ] }""")
+            val preFilterExpression = """{"and":[{"name":"Color","value":"green"}]}"""
             val browseResults = constructorIo.getBrowseResultsCRT("Brand", "XYZ", preFilterExpression = preFilterExpression)
             assertTrue(browseResults.resultId !== null)
             assertTrue(browseResults.response!!.facets!!.isNotEmpty())
