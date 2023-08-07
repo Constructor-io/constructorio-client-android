@@ -59,7 +59,9 @@ class ConstructorIoIntegrationQuizTest {
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
-        assertNotNull(quizResult?.versionId)
+        assertNotNull(quizResult?.quizId)
+        assertNotNull(quizResult?.quizVersionId)
+        assertNotNull(quizResult?.quizSessionId)
         assertEquals(quizResult?.isLastQuestion, false)
         assertEquals(quizResult?.nextQuestion?.id, 1)
         assertEquals(quizResult?.nextQuestion?.title, "This is a test quiz.")
@@ -78,6 +80,22 @@ class ConstructorIoIntegrationQuizTest {
     }
 
     @Test
+    fun getQuizNextQuestionShouldMatchPassedIdsAgainstRealResponse() {
+        val request = QuizRequest.Builder("test-quiz")
+            .setQuizVersionId("e03210db-0cc6-459c-8f17-bf014c4f554d")
+            .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
+            .build()
+        val observer = constructorIo.getQuizResults(request).test()
+
+        val quizResult = observer.values()[0].get()
+        assertEquals("test-quiz", quizResult?.quizId);
+        assertEquals("e03210db-0cc6-459c-8f17-bf014c4f554d", quizResult?.quizVersionId);
+        assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getQuizNextQuestionWithSingleTypeAnswerAgainstRealResponse() {
         val answers = listOf(listOf("1"))
         val request = QuizRequest.Builder("test-quiz")
@@ -87,7 +105,9 @@ class ConstructorIoIntegrationQuizTest {
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
-        assertNotNull(quizResult?.versionId)
+        assertNotNull(quizResult?.quizId)
+        assertNotNull(quizResult?.quizVersionId)
+        assertNotNull(quizResult?.quizSessionId)
         assertEquals(quizResult?.isLastQuestion, false)
         assertEquals(quizResult?.nextQuestion?.id, 2)
         assertEquals(quizResult?.nextQuestion?.title, "This is a multiple select question")
@@ -119,7 +139,9 @@ class ConstructorIoIntegrationQuizTest {
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
-        assertNotNull(quizResult?.versionId)
+        assertNotNull(quizResult?.quizId)
+        assertNotNull(quizResult?.quizVersionId)
+        assertNotNull(quizResult?.quizSessionId)
         assertEquals(quizResult?.isLastQuestion, false)
         assertEquals(quizResult?.nextQuestion?.id, 3)
         assertEquals(quizResult?.nextQuestion?.title, "Test Cover")
@@ -145,7 +167,9 @@ class ConstructorIoIntegrationQuizTest {
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
-        assertNotNull(quizResult?.versionId)
+        assertNotNull(quizResult?.quizId)
+        assertNotNull(quizResult?.quizVersionId)
+        assertNotNull(quizResult?.quizSessionId)
         assertEquals(quizResult?.isLastQuestion, true)
         assertEquals(quizResult?.nextQuestion?.id, 4)
         assertEquals(quizResult?.nextQuestion?.title, "Test Open Text")
@@ -173,7 +197,9 @@ class ConstructorIoIntegrationQuizTest {
         observer.assertComplete()
         observer.assertNoErrors()
         val quizResult = observer.values()[0].get()
-        assertNotNull(quizResult?.versionId)
+        assertNotNull(quizResult?.quizId)
+        assertNotNull(quizResult?.quizVersionId)
+        assertNotNull(quizResult?.quizSessionId)
         assertEquals(quizResult?.isLastQuestion, true)
         assertEquals(quizResult?.nextQuestion, null)
 
@@ -238,7 +264,9 @@ class ConstructorIoIntegrationQuizTest {
                 listOf("seen")
             )
             val quizResult = constructorIo.getQuizNextQuestionCRT("test-quiz", answers)
-            assertNotNull(quizResult?.versionId)
+            assertNotNull(quizResult?.quizId)
+            assertNotNull(quizResult?.quizVersionId)
+            assertNotNull(quizResult?.quizSessionId)
             assertEquals(quizResult?.isLastQuestion, true)
             assertEquals(quizResult?.nextQuestion?.id, 4)
             assertEquals(quizResult?.nextQuestion?.title, "Test Open Text")

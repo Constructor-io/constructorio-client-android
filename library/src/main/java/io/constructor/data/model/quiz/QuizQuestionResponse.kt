@@ -10,7 +10,9 @@ import java.io.Serializable
 @JsonClass(generateAdapter = true)
 data class QuizQuestionResponse(
     @Json(name="next_question") val nextQuestion: QuizQuestion?,
-    @Json(name="version_id") val versionId: String?,
+    @Json(name="quiz_version_id") val quizVersionId: String?,
+    @Json(name="quiz_session_id") val quizSessionId: String?,
     @Json(name="is_last_question") val isLastQuestion: Boolean?,
+    @Json(name="quiz_id") val quizId: String,
     var rawData: String?
 ) : Serializable
