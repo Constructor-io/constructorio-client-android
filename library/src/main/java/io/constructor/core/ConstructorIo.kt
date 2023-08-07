@@ -212,7 +212,7 @@ object ConstructorIo {
         ids?.forEach { id ->
             encodedParams.add(Constants.QueryConstants.IDS.urlEncode() to id.urlEncode())
         }
-        preFilterExpression?.let { encodedParams.add(Constants.QueryConstants.PRE_FILTER_EXPRESSION.urlEncode() to it.toString().urlEncode())}
+        preFilterExpression?.let { encodedParams.add(Constants.QueryConstants.PRE_FILTER_EXPRESSION.urlEncode() to it.urlEncode())}
 
         return encodedParams;
     }
