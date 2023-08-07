@@ -34,7 +34,7 @@ ConstructorIo.init(this, config)
 ConstructorIo.userId = "uid"
 ```
 ## 4. Retrieving the client_id and session_id
-If you are retrieving results from your backend servers instead of direclty using our SDK, there are certain personalization parameters that are needed to be passed along with your requests. And those parameters can be accessed from the Constructor instance.
+If you are retrieving results from your backend servers instead of directly using our SDK, there are certain personalization parameters that are needed to be passed along with your requests. And those parameters can be accessed from the Constructor instance.
 
 1. **Client Id**
 This Can be retrieved by calling **getClientId** function on the client sdk instance.
@@ -138,9 +138,11 @@ var variationsMap: VariationsMap = VariationsMap(
   ),
   dtype = "array",
 )
+var preFilterExpression = JSONObject("""{ "and": [ { "name": "Color", "value": "green" } ] }""")
+
 
 // Using RxJava
-ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder, variationsMap = variationsMap)
+ConstructorIo.getSearchResults(query, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -173,6 +175,7 @@ val searchRequest = SearchRequest.Builder("potato")
   ))
   .setHiddenFields(listOf("hidden_field_1", "hidden_field_2"))
   .setVariationsMap(variationsMap)
+  .setPreFilterExpression(preFilterExpression)
   .build()
 
 // Creating a request using DSL
@@ -204,9 +207,11 @@ var variationsMap: VariationsMap = VariationsMap(
   ),
   dtype = "array",
 )
+var preFilterExpression = JSONObject("""{ "and": [ { "name": "Color", "value": "green" } ] }""")
+
 
 // Using RxJava
-ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder, variationsMap = variationsMap)
+ConstructorIo.getBrowseResults(filterName, filterValue, selectedFacets?.map { it.key to it.value }, page = page, perPage = perPage, sortBy = selectedSortOption?.sortBy, sortOrder = selectedSortOption?.sortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {
@@ -273,6 +278,7 @@ val browseRequest = BrowseRequest.Builder("group_id", "123")
   ))
   .setHiddenFacets(listOf("hidden_facet_1", "hidden_facet_2"))
   .setVariationsMap(variationsMap)
+  .setPreFilterExpression(preFilterExpression)
   .build()
 
 // Creating a request using DSL

@@ -1,6 +1,7 @@
 package io.constructor.data.builder
 
 import io.constructor.data.model.common.VariationsMap
+import org.json.JSONObject
 
 /**
  * Create a Browse Items request object utilizing a builder
@@ -17,7 +18,8 @@ class BrowseItemsRequest (
     val hiddenFacets: List<String>? = null,
     val groupsSortBy: String? = null,
     val groupsSortOrder: String? = null,
-    val variationsMap: VariationsMap? = null
+    val variationsMap: VariationsMap? = null,
+    val preFilterExpression: JSONObject? = null,
 ) {
     private constructor(builder: Builder) : this(
         builder.ids,
@@ -32,6 +34,7 @@ class BrowseItemsRequest (
         builder.groupsSortBy,
         builder.groupsSortOrder,
         builder.variationsMap,
+        builder.preFilterExpression,
     )
 
     companion object {
@@ -52,6 +55,7 @@ class BrowseItemsRequest (
         var groupsSortBy: String? = null
         var groupsSortOrder: String? = null
         var variationsMap: VariationsMap? = null
+        var preFilterExpression: JSONObject? = null
 
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
         fun setPage(page: Int): Builder = apply { this.page = page }
@@ -64,6 +68,7 @@ class BrowseItemsRequest (
         fun setGroupsSortBy(groupsSortBy: String): Builder = apply { this.groupsSortBy = groupsSortBy }
         fun setGroupsSortOrder(groupsSortOrder: String): Builder = apply { this.groupsSortOrder = groupsSortOrder }
         fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
+        fun setPreFilterExpression(preFilterExpression: JSONObject): Builder = apply { this.preFilterExpression = preFilterExpression }
         fun build(): BrowseItemsRequest = BrowseItemsRequest(this)
     }
 }

@@ -13,6 +13,7 @@ import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -318,6 +319,41 @@ class ConstructorIoBrowseTest {
         with(request.requestUrl!!) {
             val queryParams = mapOf(
                 "variations_map" to """{"dtype":"array","values":{"Price":{"aggregation":"min","field":"data.facets.price"},"Country":{"aggregation":"all","field":"data.facets.country"}},"group_by":[{"name":"Country","field":"data.facets.Country"}]}""",
+                "key" to "silver-key",
+                "i" to "guapo-the-guid",
+                "ui" to "player-two",
+                "s" to "92",
+                "c" to "cioand-2.22.4",
+                "_dt" to "1"
+            )
+            assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
+
+            queryParams.forEach { (key, value) ->
+                if (key == "_dt") {
+                    assertThat(queryParameter(key)).containsOnlyDigits()
+                } else {
+                    assertThat(queryParameter(key)).isEqualTo(value)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun getBrowseResultsWithPreFilterExpressionUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("browse_response.json"))
+        mockServer.enqueue(mockResponse)
+        val preFilterStr = """{"and":[{"name":"Country","value":"US"}]}"""
+        val preFilterExpression = JSONObject(preFilterStr)
+        val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
+            .setPreFilterExpression(preFilterExpression)
+            .build()
+        val observer = constructorIo.getBrowseResults(browseRequest).test()
+        val request = mockServer.takeRequest()
+        assertThat(request.requestUrl!!.encodedPath).isEqualTo("/browse/group_id/Beverages")
+        with(request.requestUrl!!) {
+            val queryParams = mapOf(
+                "pre_filter_expression" to preFilterStr,
                 "key" to "silver-key",
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",

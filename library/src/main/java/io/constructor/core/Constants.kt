@@ -61,7 +61,7 @@ class Constants {
         const val FACET_NAME="facet_name"
         const val GROUPS_MAX_DEPTH = "groups_max_depth"
         const val FILTER_GROUP_ID = "filters[group_id]"
-
+        const val PRE_FILTER_EXPRESSION = "pre_filter_expression"
     }
 
     object QueryValues {
