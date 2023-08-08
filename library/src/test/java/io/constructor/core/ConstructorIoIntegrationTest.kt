@@ -15,6 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class ConstructorIoIntegrationTest {
@@ -216,6 +217,20 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getSearchResultsCRTWithPreFilterExpressionAgainstRealResponse() {
+        runBlocking {
+            val preFilterExpression = """{"and":[{"name":"Color","value":"green"}]}"""
+            val searchResults = constructorIo.getSearchResultsCRT("item", preFilterExpression = preFilterExpression)
+            assertTrue(searchResults.resultId !== null)
+            assertTrue(searchResults.response!!.results!!.isNotEmpty())
+            assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(searchResults.response!!.resultCount!! > 0)
+            assertNotNull(searchResults.request!!["pre_filter_expression"])
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getBrowseResultsAgainstRealResponse() {
         val observer = constructorIo.getBrowseResults("Brand", "XYZ").test()
         observer.assertComplete()
@@ -301,11 +316,11 @@ class ConstructorIoIntegrationTest {
     fun getBrowseResultsCRTWithVariationsMapAgainstRealResponse() {
         runBlocking {
             val variationsMap = VariationsMap(
-                    dtype = "array",
-                    values = mapOf(
-                            "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
-                    ),
-                    groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+                dtype = "array",
+                values = mapOf(
+                    "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
+                ),
+                groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
             )
             val browseResults = constructorIo.getBrowseResultsCRT("Brand", "XYZ", variationsMap = variationsMap)
             val returnedVariationsMap = browseResults?.response?.results!![0].variationsMap as? List<*>
@@ -315,6 +330,21 @@ class ConstructorIoIntegrationTest {
             assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
             assertTrue(browseResults.response!!.resultCount > 0)
             assertTrue(returnedVariationsMap!!.isNotEmpty())
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsCRTWithPreFilterExpressionAgainstRealResponse() {
+        runBlocking {
+            val preFilterExpression = """{"and":[{"name":"Color","value":"green"}]}"""
+            val browseResults = constructorIo.getBrowseResultsCRT("Brand", "XYZ", preFilterExpression = preFilterExpression)
+            assertTrue(browseResults.resultId !== null)
+            assertTrue(browseResults.response!!.facets!!.isNotEmpty())
+            assertTrue(browseResults.response!!.groups!!.isNotEmpty())
+            assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
+            assertTrue(browseResults.response!!.resultCount > 0)
+            assertNotNull(browseResults.request!!["pre_filter_expression"])
         }
         Thread.sleep(timeBetweenTests)
     }

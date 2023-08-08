@@ -18,6 +18,7 @@ class SearchRequest (
     val groupsSortBy: String? = null,
     val groupsSortOrder: String? = null,
     val variationsMap: VariationsMap? = null,
+    val preFilterExpression: String? = null,
 ) {
     private constructor(builder: Builder) : this(
         builder.term,
@@ -32,6 +33,7 @@ class SearchRequest (
         builder.groupsSortBy,
         builder.groupsSortOrder,
         builder.variationsMap,
+        builder.preFilterExpression
     )
 
     companion object {
@@ -52,6 +54,7 @@ class SearchRequest (
         var groupsSortBy: String? = null
         var groupsSortOrder: String? = null
         var variationsMap: VariationsMap? = null
+        var preFilterExpression: String? = null
 
 
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
@@ -65,6 +68,7 @@ class SearchRequest (
         fun setGroupsSortBy(groupsSortBy: String): Builder = apply { this.groupsSortBy = groupsSortBy }
         fun setGroupsSortOrder(groupsSortOrder: String): Builder = apply { this.groupsSortOrder = groupsSortOrder }
         fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
+        fun setPreFilterExpression(preFilterExpression: String): Builder = apply { this.preFilterExpression = preFilterExpression }
         fun build(): SearchRequest = SearchRequest(this)
     }
 }

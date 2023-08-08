@@ -262,6 +262,24 @@ class ConstructorIoSearchTest {
     }
 
     @Test
+    fun getSearchResultsWithPreFilterExpression() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val preFilterExpression = """{"and":[{"name":"Country","value":"US"}]}"""
+        val observer = constructorIo.getSearchResults(
+            term = "bbq",
+            groupsSortBy = "value",
+            groupsSortOrder = "descending",
+            preFilterExpression = preFilterExpression,
+        ).test()
+        val request = mockServer.takeRequest()
+        val path =
+            "/search/bbq?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=descending&pre_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22Country%22%2C%22value%22%3A%22US%22%7D%5D%7D&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.22.4&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getSearchResultsWithFiltersUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("search_response.json"))
@@ -324,6 +342,40 @@ class ConstructorIoSearchTest {
                 "ui" to "player-two",
                 "s" to "92",
                 "c" to "cioand-2.22.5",
+                "_dt" to "1"
+            )
+            assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
+
+            queryParams.forEach { (key, value) ->
+                if (key == "_dt") {
+                    assertThat(queryParameter(key)).containsOnlyDigits()
+                } else {
+                    assertThat(queryParameter(key)).isEqualTo(value)
+                }
+            }
+        }
+    }
+    @Test
+    fun getSearchResultsWithPreFilterExpressionUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val preFilterExpression = """{"and":[{"name":"Country","value":"US"}]}"""
+        val searchRequest = SearchRequest.Builder("bbq")
+            .setPreFilterExpression(preFilterExpression)
+            .build()
+        val observer = constructorIo.getSearchResults(searchRequest).test()
+        val request = mockServer.takeRequest()
+
+        assertThat(request.requestUrl!!.encodedPath).isEqualTo("/search/bbq")
+        with(request.requestUrl!!) {
+            val queryParams = mapOf(
+                "pre_filter_expression" to preFilterExpression,
+                "key" to "silver-key",
+                "i" to "guapo-the-guid",
+                "ui" to "player-two",
+                "s" to "92",
+                "c" to "cioand-2.22.4",
                 "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
