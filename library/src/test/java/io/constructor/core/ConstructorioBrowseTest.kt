@@ -273,7 +273,7 @@ class ConstructorIoBrowseTest {
             preFilterExpression = preFilterExpression
         ).test()
         val request = mockServer.takeRequest()
-        val path = "/browse/group_id/Beverages?pre_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22Country%22%2C%22value%22%3A%22US%22%7D%5D%7D&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.22.4&_dt="
+        val path = "/browse/group_id/Beverages?pre_filter_expression=%7B%22and%22%3A%5B%7B%22name%22%3A%22Country%22%2C%22value%22%3A%22US%22%7D%5D%7D&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.23.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -372,7 +372,7 @@ class ConstructorIoBrowseTest {
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",
                 "s" to "92",
-                "c" to "cioand-2.22.4",
+                "c" to "cioand-2.23.0",
                 "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)

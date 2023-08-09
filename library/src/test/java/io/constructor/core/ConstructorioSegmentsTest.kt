@@ -46,7 +46,7 @@ class ConstructorioSegmentsTest {
         every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns emptyList()
-        every { configMemoryHolder.segments } returns  listOf("mobile", "COUNTRY_US")
+        every { configMemoryHolder.segments } returns listOf("mobile", "COUNTRY_US")
 
         val config = ConstructorIoConfig("dummyKey")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
@@ -75,7 +75,7 @@ class ConstructorioSegmentsTest {
         val observer = constructorIo.trackSessionStartInternal().test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?action=session_start&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt=";
+        val path = "/behavior?action=session_start&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -86,7 +86,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackInputFocusInternal("tita").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?term=tita&action=focus&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt=";
+        val path = "/behavior?term=tita&action=focus&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -108,7 +108,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt=";
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -119,7 +119,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt=";
+        val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -130,7 +130,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackSearchResultClickInternal("titanic replica", "TIT-REP-1997", null,"titanic").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt=";
+        val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -141,7 +141,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", null, 89.00).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/conversion?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt=";
+        val path = "/v2/behavioral_action/conversion?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -152,7 +152,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackPurchaseInternal(arrayOf(PurchaseItem("TIT-REP-1997"), PurchaseItem("QE2-REP-1969")), 12.99, "ORD-1312343").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/purchase?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt=";
+        val path = "/v2/behavioral_action/purchase?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.23.0&_dt="
         assertTrue(request.bodySize > 250)
         assert(request.path!!.startsWith(path))
     }
