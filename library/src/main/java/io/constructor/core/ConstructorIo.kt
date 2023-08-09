@@ -70,6 +70,15 @@ object ConstructorIo {
             configMemoryHolder.testCellParams = value
         }
 
+    /**
+     *  Sets the segments param
+     */
+    var segments: List<String?>
+        get() = configMemoryHolder.segments
+        set(value) {
+            configMemoryHolder.segments = value
+        }
+
     internal val component: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(context))
@@ -167,7 +176,7 @@ object ConstructorIo {
         preFilterExpression: String? = null,
     ): ArrayList<Pair<String, String>> {
 
-        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf();
+        val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
 
         groupIdInt?.let { encodedParams.add(Constants.QueryConstants.FILTER_GROUP_ID.urlEncode() to it.toString()) }
         facets?.forEach { facet ->
@@ -620,7 +629,7 @@ object ConstructorIo {
      */
     fun getBrowseFacetOptions(facetName: String, showHiddenFacets: Boolean? = null): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = showHiddenFacets)
-        encodedParams.add(Constants.QueryConstants.FACET_NAME to facetName.urlEncode());
+        encodedParams.add(Constants.QueryConstants.FACET_NAME to facetName.urlEncode())
 
         return dataManager.getBrowseFacetOptions(encodedParams = encodedParams.toTypedArray())
     }
@@ -647,7 +656,7 @@ object ConstructorIo {
      */
     fun getBrowseFacetOptions(request: BrowseFacetOptionsRequest): Observable<ConstructorData<BrowseFacetOptionsResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = request.showHiddenFacets)
-        encodedParams.add(Constants.QueryConstants.FACET_NAME to request.facetName.urlEncode());
+        encodedParams.add(Constants.QueryConstants.FACET_NAME to request.facetName.urlEncode())
 
         return dataManager.getBrowseFacetOptions(encodedParams = encodedParams.toTypedArray())
     }
@@ -672,7 +681,7 @@ object ConstructorIo {
      */
     suspend fun getBrowseFacetOptionsCRT(facetName: String, showHiddenFacets: Boolean? = null): BrowseFacetOptionsResponse {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(showHiddenFacets = showHiddenFacets)
-        encodedParams.add(Constants.QueryConstants.FACET_NAME to facetName.urlEncode());
+        encodedParams.add(Constants.QueryConstants.FACET_NAME to facetName.urlEncode())
 
         return dataManager.getBrowseFacetOptionsCRT(encodedParams = encodedParams.toTypedArray())
     }
@@ -1060,7 +1069,7 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         return dataManager.trackInputFocus(term, arrayOf(
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS
-        ));
+        ))
     }
 
     /**
@@ -1076,7 +1085,7 @@ object ConstructorIo {
      * @param resultID the result ID of the autocomplete response that the selection came from
      */
     fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null) {
-        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID);
+        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
             context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
         }, {
@@ -1085,7 +1094,7 @@ object ConstructorIo {
     }
     internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName, resultId = resultID);
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName, resultId = resultID)
 
         return dataManager.trackAutocompleteSelect(searchTerm, arrayOf(
             Constants.QueryConstants.SECTION to sectionName,
@@ -1114,7 +1123,7 @@ object ConstructorIo {
     }
     internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName);
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName)
 
         return dataManager.trackSearchSubmit(searchTerm, arrayOf(
                 Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
