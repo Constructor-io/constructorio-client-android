@@ -91,6 +91,7 @@ object ConstructorIo {
 
     /**
      *  Initializes the client
+     *
      *  @param context the context
      *  @param constructorIoConfig the client configuration
      */
@@ -227,8 +228,9 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of autocomplete suggestions
-     * ##Example
+     * Returns a list of autocomplete suggestions.
+     *
+     * Example:
      * ```
      * ConstructorIo.getAutocompleteResults("Dav", selectedFacet?.map { it.key to it.value })
      *      .subscribeOn(Schedulers.io())
@@ -258,8 +260,10 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of autocomplete suggestions
-     * ##Example
+     * Returns a list of autocomplete suggestions.
+     * This function should be called within a coroutine scope.
+     *
+     * Example:
      * ```
      *  runBlocking {
      *      launch {
@@ -289,7 +293,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns a list of autocomplete suggestions utilizing a request object.
+     *
+     * Example
      * ```
      * val filters = mapOf(
      *      "group_id" to listOf("G1234"),
@@ -322,7 +328,8 @@ object ConstructorIo {
 
     /**
      * Returns a list of search results including filters, categories, sort options, etc.
-     * ##Example
+     *
+     * Example:
      * ```
      * ConstructorIo.getSearchResults("Dave's bread", selectedFacets?.map { it.key to it.value }, 1, 24)
      *      .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -357,7 +364,10 @@ object ConstructorIo {
 
     /**
      * Returns a list of search results including filters, categories, sort options, etc.
-     * ##Example
+     * This function should be called within a coroutine scope.
+     *
+     *
+     * Example:
      * ```
      *  runBlocking {
      *      launch {
@@ -392,7 +402,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns a list of search results including filters, categories, sort options, etc. utilizing a request object.
+     *
+     * Example:
      * ```
      * val filters = mapOf(
      *      "group_id" to listOf("G1234"),
@@ -425,7 +437,8 @@ object ConstructorIo {
 
     /**
      * Returns a list of browse results including filters, categories, sort options, etc.
-     * ##Example
+     *
+     * Example:
      * ```
      * ConstructorIo.getBrowseResults("group_id", "Beverages", selectedFacets?.map { it.key to it.value }, 1, perPage = 24)
      *      .subscribeOn(Schedulers.io())
@@ -461,7 +474,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns a list of browse results including filters, categories, sort options, etc. utilizing a request object.
+     *
+     * Example:
      * ```
      * val filters = mapOf(
      *      "group_id" to listOf("G1234"),
@@ -494,7 +509,9 @@ object ConstructorIo {
 
     /**
      * Returns a list of browse results including filters, categories, sort options, etc.
-     * ##Example
+     * This function should be called within a coroutine scope.
+     *
+     * Example:
      * ```
      *  runBlocking {
      *      launch {
@@ -530,8 +547,9 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of browse facet results
-     * ##Example
+     * Returns a list of browse facet results.
+     *
+     * Example:
      * ```
      * ConstructorIo.getBrowseFacets(1, 20)
      *      .subscribeOn(Schedulers.io())
@@ -557,7 +575,9 @@ object ConstructorIo {
 
 
     /**
-     * ## Example
+     * Returns a list of browse facet results utilizing a request object.
+     *
+     * Example:
      * ```
      * val request = BrowseFacetsRequest.Builder()
      *      .setPage(2)
@@ -584,8 +604,10 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of browse facets results
-     * ##Example
+     * Returns a list of browse facets results.
+     * This function should be called within a coroutine scope.
+     *
+     * Example:
      * ```
      *  runBlocking {
      *      launch {
@@ -610,8 +632,9 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of browse facet options results
-     * ##Example
+     * Returns a list of browse facet options results.
+     *
+     * Example:
      * ```
      * ConstructorIo.getBrowseFacetOptions("Brand", false)
      *      .subscribeOn(Schedulers.io())
@@ -635,7 +658,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns a list of browse facet options utilizing a request object.
+     *
+     * Example:
      * ```
      * val request = BrowseFacetOptionsRequest.Builder("Brand")
      *      .setShowHiddenFacets(true)
@@ -662,8 +687,10 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of browse facet options results
-     * ##Example
+     * Returns a list of browse facet options results.
+     * This function should be called within a coroutine scope.
+     *
+     * Example:
      * ```
      *  runBlocking {
      *      launch {
@@ -687,8 +714,9 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of browse groups results
-     * ##Example
+     * Returns a list of browse groups results.
+     *
+     * Example:
      * ```
      * ConstructorIo.getBrowseGroups("Brand", 5)
      *      .subscribeOn(Schedulers.io())
@@ -711,7 +739,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns a list of browse groups results utilizing a request object.
+     *
+     * Example:
      * ```
      * val request = BrowseGroupsRequest.Builder()
      *      .setGroupId("Brand")
@@ -738,8 +768,10 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of browse groups results
-     * ##Example
+     * Returns a list of browse groups results.
+     * This function should be called within a coroutine scope.
+     *
+     * Example:
      * ```
      *  runBlocking {
      *      launch {
@@ -763,7 +795,9 @@ object ConstructorIo {
 
     /**
      * Returns a list of browse results from a list of item IDs including filters, categories, sort options, etc.
-     * ##Example
+     * This function should be called within a coroutine scope.
+     *
+     * Example
      * ```
      *  runBlocking {
      *      launch {
@@ -798,7 +832,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns a list of browse results from a list of item IDs including filters, categories, sort options, etc. utilizing a request object.
+     *
+     * Example:
      * ```
      * val filters = mapOf(
      *      "group_id" to listOf("G1234"),
@@ -830,7 +866,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns the next quiz question including options and attributes.
+     *
+     * Example:
      * ```
      * val answers = listOf(
      *      listOf("1"),
@@ -860,7 +898,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Returns the next quiz question including options and attributes utilizing a request object.
+     *
+     * Example:
      * ```
      * val answers = listOf(
      *      listOf("1"),
@@ -890,7 +930,10 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Return the next quiz question including options and attributes.
+     * This function should be called within a coroutine scope.
+     *
+     * Example:
      * ```
      * runBlocking {
      *      launch {
@@ -924,7 +967,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Return a list of quiz results.
+     *
+     * Example:
      * ```
      * val answers = listOf(
      *      listOf("1"),
@@ -961,7 +1006,9 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Return a list of quiz results utilizing a request object.
+     *
+     * Example:
      * ```
      * val answers = listOf(
      *      listOf("1"),
@@ -995,7 +1042,10 @@ object ConstructorIo {
     }
 
     /**
-     * ## Example
+     * Return a list of quiz results.
+     * This function should be called within a coroutine scope.
+     *
+     * Example:
      * ```
      * runBlocking {
      *      launch {
@@ -1033,8 +1083,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks session start events
-     * ##Example
+     * Tracks session start events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackSessionStart()
      * ```
@@ -1052,8 +1103,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks input focus events
-     * ##Example
+     * Tracks input focus events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackInputFocus("food")
      * ```
@@ -1073,8 +1125,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks autocomplete select events
-     * ##Example
+     * Tracks autocomplete select events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackAutocompleteSelect("toothpicks", "tooth", "Search Suggestions")
      * ```
@@ -1104,8 +1157,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks search submit events
-     * ##Example
+     * Tracks search submit events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
      * ```
@@ -1132,8 +1186,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks search results loaded (a.k.a. search results viewed) events
-     * ##Example
+     * Tracks search results loaded (a.k.a. search results viewed) events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"))
      * ```
@@ -1155,8 +1210,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks search result click events
-     * ##Example
+     * Tracks search result click events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
      * ```
@@ -1174,8 +1230,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks search result click events
-     * ##Example
+     * Tracks search result click events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "1234567-AB-RED", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
      * ```
@@ -1204,9 +1261,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks conversion (a.k.a add to cart) events
+     * Tracks conversion (a.k.a add to cart) events.
      *
-     * ##Example
+     * Example:
      * ```
      * ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth", "Products", "add_to_cart")
      * ```
@@ -1224,9 +1281,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks conversion (a.k.a add to cart) events
+     * Tracks conversion (a.k.a add to cart) events.
      *
-     * ##Example
+     * Example:
      * ```
      * ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", "1234567-AB-RED", 12.99, "tooth", "Products", "add_to_cart")
      * ```
@@ -1269,8 +1326,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks purchase events
-     * ##Example
+     * Tracks purchase events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackPurchase(arrayOf("1234567-AB", "1234567-AB"), 25.98, "ORD-1312343")
      * ```
@@ -1287,8 +1345,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks purchase events
-     * ##Example
+     * Tracks purchase events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackPurchase(arrayOf(PurchaseItem("1234567-AB", "1234567-AB-RED")), 25.98, "ORD-1312343")
      * ```
@@ -1329,8 +1388,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks browse result loaded (a.k.a. browse results viewed) events
-     * ##Example
+     * Tracks browse result loaded (a.k.a. browse results viewed) events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
      * ```
@@ -1370,8 +1430,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks browse result click events
-     * ##Example
+     * Tracks browse result click events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
      * ```
@@ -1390,8 +1451,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks browse result click events
-     * ##Example
+     * Tracks browse result click events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackBrowseResultClick("Category", "Snacks", "7654321-BA", "7654321-BA-RED", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
      * ```
@@ -1439,8 +1501,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks item result loaded events
-     * ##Example
+     * Tracks item result loaded events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
      * ```
@@ -1483,8 +1546,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks generic result click events
-     * ##Example
+     * Tracks generic result click events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
      * ```
@@ -1525,8 +1589,9 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of recommendation results for the specified pod
-     * ##Example
+     * Returns a list of recommendation results for the specified pod.
+     *
+     * Example:
      * ```
      * ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults)
      *      .subscribeOn(Schedulers.io())
@@ -1555,7 +1620,8 @@ object ConstructorIo {
 
     /**
      * Returns a list of recommendation results including filters, categories, sort options, etc.
-     * ##Example
+     *
+     * Example:
      * ```
      *  runBlocking {
      *      launch {
@@ -1583,8 +1649,9 @@ object ConstructorIo {
     }
 
     /**
-     * Returns a list of recommendation results for the specified pod
-     * ## Example
+     * Returns a list of recommendation results for the specified pod.
+     *
+     * Example:
      * ```
      * val request = RecommendationsRequest.Builder("product_detail_page")
      *      .setItemIds(listOf("item_id_123"))
@@ -1615,8 +1682,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks recommendation result click events
-     * ##Example
+     * Tracks recommendation result click events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackRecommendationResultClick("Best_Sellers", "User Featured", "7654321-BA", null, "Products", "179b8a0e-3799-4a31-be87-127b06871de2", 4, 1, 4, 2)
      * ```
@@ -1668,8 +1736,9 @@ object ConstructorIo {
     }
 
     /**
-     * Tracks recommendation result view events
-     * ##Example
+     * Tracks recommendation result view events.
+     *
+     * Example:
      * ```
      * ConstructorIo.trackRecommendationResultsView("Best_Sellers", "User Featured", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
      * ```
