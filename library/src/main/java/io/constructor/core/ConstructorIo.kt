@@ -366,7 +366,6 @@ object ConstructorIo {
      * Returns a list of search results including filters, categories, sort options, etc.
      * This function should be called within a coroutine scope.
      *
-     *
      * Example:
      * ```
      *  runBlocking {
