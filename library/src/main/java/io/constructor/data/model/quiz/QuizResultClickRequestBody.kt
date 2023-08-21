@@ -18,7 +18,6 @@ data class QuizResultClickRequestBody(
     @Json(name = "item_id") val itemId: String,
     @Json(name = "item_name") val itemName: String?,
     @Json(name = "variation_id") val variationId: String?,
-    @Json(name = "action_class") val actionClass: String?,
     @Json(name = "c") val c: String,
     @Json(name = "i") val i: String,
     @Json(name = "s") val s: Int,

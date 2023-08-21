@@ -1032,15 +1032,14 @@ object ConstructorIo {
      * @param numResultsPerPage The count of quiz results on each page
      * @param resultPage The current page that quiz result is on
      * @param resultCount The total number of quiz results
-     * @param actionClass The event class. Leave this blank in most cases.
      */
-    fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null,resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click") {
-        var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, resultPositionOnPage, numResultsPerPage, resultPage, resultCount, actionClass)
+    fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null,resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null) {
+        var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, resultPositionOnPage, numResultsPerPage, resultPage, resultCount)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Quiz Result Click error: ${t.message}")
         }))
     }
-    internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_click"): Completable {
+    internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizResultClickRequestBody = QuizResultClickRequestBody(
@@ -1055,7 +1054,6 @@ object ConstructorIo {
             customerId,
             itemName,
             variationId,
-            actionClass,
             BuildConfig.CLIENT_VERSION,
             preferenceHelper.id,
             preferenceHelper.getSessionId(),
@@ -1083,18 +1081,17 @@ object ConstructorIo {
      * @param quizVersionId version identifier for the quiz. version ID will be returned in quiz request responses
      * @param quizSessionId session identifier for the quiz. session ID will be returned in quiz request responses
      * @param sectionName The section that the results came from, i.e. "Products"
-     * @param resultId The result ID of the quiz response response that the selection came from
+     * @param resultId The result ID of the quiz response that the selection came from
      * @param resultPage The current page that quiz result is on
      * @param resultCount The total number of quiz results
-     * @param actionClass The event class. Leave this blank in most cases.
      */
-    fun trackQuizResultLoad(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_load", url: String = "Not Available") {
-        var completable = trackQuizResultLoadInternal(quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount, actionClass, url)
+    fun trackQuizResultLoad(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, url: String = "Not Available") {
+        var completable = trackQuizResultLoadInternal(quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount, url)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Quiz Result Load error: ${t.message}")
         }))
     }
-    internal fun trackQuizResultLoadInternal(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, actionClass: String? = "result_load", url: String = "Not Available"): Completable {
+    internal fun trackQuizResultLoadInternal(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, url: String = "Not Available"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizResultLoadRequestBody = QuizResultLoadRequestBody(
@@ -1105,7 +1102,6 @@ object ConstructorIo {
             resultPage,
             resultCount,
             resultId,
-            actionClass,
             BuildConfig.CLIENT_VERSION,
             preferenceHelper.id,
             preferenceHelper.getSessionId(),
@@ -1140,15 +1136,14 @@ object ConstructorIo {
      * @param itemName The item name of the clicked item i.e "Jacket Denim"
      * @param sectionName The section that the results came from, i.e. "Products"
      * @param revenue The revenue of the item converted
-     * @param actionClass The event class. Leave this blank in most cases.
      */
-    fun trackQuizConversion(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null, actionClass: String? = "conversion") {
-        var completable = trackQuizConversionInternal(quizId, quizVersionId, quizSessionId, displayName, type, isCustomType, customerId, variationId, itemName, sectionName, revenue, actionClass)
+    fun trackQuizConversion(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null) {
+        var completable = trackQuizConversionInternal(quizId, quizVersionId, quizSessionId, displayName, type, isCustomType, customerId, variationId, itemName, sectionName, revenue)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Quiz Conversion error: ${t.message}")
         }))
     }
-    internal fun trackQuizConversionInternal(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null, actionClass: String? = "conversion"): Completable {
+    internal fun trackQuizConversionInternal(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizConversionRequestBody = QuizConversionRequestBody(
@@ -1162,7 +1157,6 @@ object ConstructorIo {
             itemName,
             variationId,
             revenue,
-            actionClass,
             BuildConfig.CLIENT_VERSION,
             preferenceHelper.id,
             preferenceHelper.getSessionId(),

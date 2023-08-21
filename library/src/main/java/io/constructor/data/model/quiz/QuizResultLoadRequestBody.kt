@@ -14,7 +14,6 @@ data class QuizResultLoadRequestBody(
     @Json(name = "result_page") val resultPage: Int?,
     @Json(name = "result_count") val resultCount: Int?,
     @Json(name = "result_id") val resultId: String?,
-    @Json(name = "action_class") val actionClass: String?,
     @Json(name = "c") val c: String,
     @Json(name = "i") val i: String,
     @Json(name = "s") val s: Int,

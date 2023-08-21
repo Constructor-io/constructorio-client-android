@@ -525,12 +525,12 @@ ConstructorIo.trackRecommendationResultsView("Best_Sellers", 4, 1, 4, "179b8a0e-
 ### Quiz Events
 
 ```kotlin
-// Track when a quiz result is clicked (quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, numResultsPerPage, resultPage, resultCount, actionClass)
-ConstructorIo.trackQuizResultClick("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10, null);
-// Track when quiz results are loaded into view (quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount, actionClass)
-ConstructorIo.trackQuizResultLoad("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, 1, 10, null)
-// Track when a quiz result is converted on (quizId, quizVersionId, quizSessionId, displayName, type, isCustomType ,customerId, variationId, itemName, sectionName, revenue, actionClass)
-ConstructorIo.trackQuizConversion("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, null, "shirt-a", "shirt-a--reg", "White shirt", null, "129.99", null)
+// Track when a quiz result is clicked (quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, numResultsPerPage, resultPage, resultCount) 
+ConstructorIo.trackQuizResultClick("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10);
+// Track when quiz results are loaded into view (quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount)
+ConstructorIo.trackQuizResultLoad("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, 1, 10)
+// Track when a quiz result is converted on (quizId, quizVersionId, quizSessionId, displayName, type, isCustomType ,customerId, variationId, itemName, sectionName, revenue)
+ConstructorIo.trackQuizConversion("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, null, "shirt-a", "shirt-a--reg", "White shirt", null, "129.99")
 ```
 
 ### Conversion Events
