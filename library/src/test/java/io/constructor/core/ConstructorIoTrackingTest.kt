@@ -63,7 +63,7 @@ internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
         }
     }
 
-    splitArr.add(stringSum);
+    splitArr.add(stringSum)
 
     return splitArr.associate {
         val (key, value) = it.split(":", ignoreCase = true, limit = 2)
@@ -859,6 +859,229 @@ class ConstructorIoTrackingTest {
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
+    }
+
+    @Test
+    fun trackQuizResultClick() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 10, 1, 10).test();
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("1", requestBody["result_page"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("10", requestBody["num_results_per_page"])
+        assertEquals("10", requestBody["result_position_on_page"])
+        assertEquals("shirt-a", requestBody["item_id"])
+        assertEquals("White shirt", requestBody["item_name"])
+        assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizResultClickWithSectionAndResultID() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "123", 10, 10, 1, 10).test();
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_click?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("1", requestBody["result_page"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("10", requestBody["num_results_per_page"])
+        assertEquals("10", requestBody["result_position_on_page"])
+        assertEquals("shirt-a", requestBody["item_id"])
+        assertEquals("White shirt", requestBody["item_name"])
+        assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assertEquals("123", requestBody["result_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizResultClick500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 10, 1, 10).test();
+        observer.assertError{ true }
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("1", requestBody["result_page"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("10", requestBody["num_results_per_page"])
+        assertEquals("10", requestBody["result_position_on_page"])
+        assertEquals("shirt-a", requestBody["item_id"])
+        assertEquals("White shirt", requestBody["item_name"])
+        assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizResultClickTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 10, 1, 10).test();
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
+    }
+
+    @Test
+    fun trackQuizConversion() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizConversionInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, null, "shirt-a", "shirt-a--reg", "White shirt", null, "129.99").test();
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_conversion?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("shirt-a", requestBody["item_id"])
+        assertEquals("White shirt", requestBody["item_name"])
+        assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assertEquals("129.99", requestBody["revenue"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizConversionWithAllOptionalParameters() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizConversionInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "quizConversion", "quizConversion", true, "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "129.99").test();
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_conversion?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("shirt-a", requestBody["item_id"])
+        assertEquals("White shirt", requestBody["item_name"])
+        assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assertEquals("129.99", requestBody["revenue"])
+        assertEquals("quizConversion", requestBody["display_name"])
+        assertEquals("quizConversion", requestBody["type"])
+        assertEquals("true", requestBody["is_custom_type"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizConversion500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        val observer = ConstructorIo.trackQuizConversionInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "quizConversion", "quizConversion", true, "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "129.99").test();
+        observer.assertError{ true }
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_conversion?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("shirt-a", requestBody["item_id"])
+        assertEquals("White shirt", requestBody["item_name"])
+        assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assertEquals("129.99", requestBody["revenue"])
+        assertEquals("quizConversion", requestBody["display_name"])
+        assertEquals("quizConversion", requestBody["type"])
+        assertEquals("true", requestBody["is_custom_type"])
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizConversionTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizConversionInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "quizConversion", "quizConversion", true, "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "129.99").test();
+        observer.assertError(SocketTimeoutException::class.java)
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
+    }
+
+    @Test
+    fun trackQuizResultLoad() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultLoadInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, 1, 10).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("1", requestBody["result_page"])
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizResultLoadWithAllOptionalParameters() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultLoadInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "Search Suggestions", "123", 1, 10).test();
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_load?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("1", requestBody["result_page"])
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("123", requestBody["result_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizResultLoad500() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        val observer = ConstructorIo.trackQuizResultLoadInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "Search Suggestions", "123", 1, 10).test();
+        observer.assertError{ true }
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_load?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.22.4&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("1", requestBody["result_page"])
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("123", requestBody["result_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizResultLoadTimeout() {
+        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
+        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultLoadInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "Search Suggestions", "123", 1, 10).test();
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)
