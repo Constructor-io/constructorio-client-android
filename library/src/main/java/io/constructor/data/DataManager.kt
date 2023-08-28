@@ -7,8 +7,7 @@ import io.constructor.data.model.browse.*
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
-import io.constructor.data.model.quiz.QuizQuestionResponse
-import io.constructor.data.model.quiz.QuizResultsResponse
+import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
@@ -299,6 +298,18 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackRecommendationResultsView(recommendationResultViewRequestBody: RecommendationResultViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackRecommendationResultsView(recommendationResultViewRequestBody, params.toMap())
+    }
+
+    fun trackQuizResultClick(quizResultClickRequestBody: QuizResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackQuizResultClick(quizResultClickRequestBody, params.toMap())
+    }
+
+    fun trackQuizResultLoad(quizResultLoadRequestBody: QuizResultLoadRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackQuizResultLoad(quizResultLoadRequestBody, params.toMap())
+    }
+
+    fun trackQuizConversion(quizConversionRequestBody: QuizConversionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackQuizConversion(quizConversionRequestBody, params.toMap())
     }
 
     fun getQuizNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizQuestionResponse>> {

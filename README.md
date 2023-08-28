@@ -9,7 +9,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.24.0) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.25.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 
@@ -499,10 +499,12 @@ The Android Client sends behavioral events to [Constructor.io](http://constructo
 Three types of these events exist:
 
 1. **General Events** are sent as needed when an instance of the Client is created or initialized
-1. **Autocomplete Events** measure user interaction with autocomplete results
-1. **Search Events** measure user interaction with search results
-1. **Browse Events** measure user interaction with browse results
-1. **Conversion Events** measure user events like `add to cart` or `purchase`
+2. **Autocomplete Events** measure user interaction with autocomplete results
+3. **Search Events** measure user interaction with search results
+4. **Browse Events** measure user interaction with browse results
+4. **Recommendation Events** measure user interaction with recommendation results
+5. **Quiz Events** measure user interaction with quiz results
+6. **Conversion Events** measure user events like `add to cart` or `purchase`
 
 ### Autocomplete Events
 
@@ -553,6 +555,17 @@ ConstructorIo.trackRecommendationResultClick("Best_Sellers", "User Featured", "7
 
 // Track when recommendation results are loaded into view (podId, numResultsViewed, resultPage, resultCount, resultId, sectionName)
 ConstructorIo.trackRecommendationResultsView("Best_Sellers", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
+```
+
+### Quiz Events
+
+```kotlin
+// Track when a quiz result is clicked (quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, numResultsPerPage, resultPage, resultCount) 
+ConstructorIo.trackQuizResultClick("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10);
+// Track when quiz results are loaded into view (quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount)
+ConstructorIo.trackQuizResultLoad("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, 1, 10)
+// Track when a quiz result is converted on (quizId, quizVersionId, quizSessionId, displayName, type, isCustomType ,customerId, variationId, itemName, sectionName, revenue)
+ConstructorIo.trackQuizConversion("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, null, "shirt-a", "shirt-a--reg", "White shirt", null, "129.99")
 ```
 
 ### Conversion Events
