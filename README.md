@@ -61,6 +61,9 @@ var ConstructorIoConfig(
 
 // Create the client instance
 ConstructorIo.init(this, config)
+
+// The test cells can be edited after creating the client instance
+constructorIo.testCells = listOf("constructorio_test" to "control_1")
 ```
 
 ## 6. Request Autocomplete Results
