@@ -49,7 +49,24 @@ var constructorSessionId = ConstructorIo.getSessionId()
 
 In most cases, you will want to store those parameters as cookies preferably as **ConstructorioID_client_id** and **ConstructorioID_session_id** to be sent with your requests to your backend servers.
 
-## 5. Request Autocomplete Results
+## 5. Setting test cell information for A/B tests
+When A/B testing, it is important to specify which cell the user is being assigned to. Information about the test cell can be set through the `ConstructorIoConfig` object.
+
+```kotlin
+var ConstructorIoConfig(
+  apiKey = "YOUR API KEY",
+  serviceUrl = "ac.cnstrc.com", // default
+  testCells = listOf("constructorio_test" to "control_1")
+)
+
+// Create the client instance
+ConstructorIo.init(this, config)
+
+// The test cells can be edited after creating the client instance
+constructorIo.testCells = listOf("constructorio_test" to "control_1")
+```
+
+## 6. Request Autocomplete Results
 
 ```kotlin
 // To specify the number of results you want to have returned from each section, you will need to
@@ -122,7 +139,7 @@ val autocompleteRequest = AutocompleteRequest.build("potato") {
 ConstructorIo.getAutocompleteResults(autocompleteRequest)
 ```
 
-## 6. Request Search Results
+## 7. Request Search Results
 
 ```kotlin
 var page = 1
@@ -190,7 +207,7 @@ val searchRequest = SearchRequest.build("potato") {
 ConstructorIo.getSearchResults(searchRequest)
 ```
 
-## 7. Request Browse Results
+## 8. Request Browse Results
 
 ```kotlin
 var page = 1
@@ -234,7 +251,7 @@ runBlocking {
 }
 ```
 
-## 7.1 Request Browse Items Results
+## 8.1 Request Browse Items Results
 
 ```kotlin
 var itemIds = listOf("item1", "item2")
@@ -294,7 +311,7 @@ val browseRequest = BrowseRequest.build("group_id", "123") {
 ConstructorIo.getBrowseResults(browseRequest)
 ```
 
-## 8. Request Recommendation Results
+## 9. Request Recommendation Results
 
 ```kotlin
 var numResults = 6
@@ -350,7 +367,7 @@ val recommendationsRequest = RecommendationsRequest.build("product_detail_page")
 ConstructorIo.getRecommendationResults(recommendationsRequest)
 ```
 
-## 9. Request Quiz Next Question
+## 10. Request Quiz Next Question
 
 ```kotlin
 val quizId = "quiz-id-1"
@@ -414,7 +431,7 @@ val quizRequest = QuizRequest.build("quiz-id-1") {
 ConstructorIo.getQuizNextQuestion(quizRequest)
 ```
 
-## 10. Request Quiz Results
+## 11. Request Quiz Results
 
 ```kotlin
 val quizId = "quiz-id-1"
@@ -478,7 +495,7 @@ val quizRequest = QuizRequest.build("quiz-id-1") {
 ConstructorIo.getQuizResults(quizRequest)
 ```
 
-## 11. Instrument Behavioral Events
+## 12. Instrument Behavioral Events
 
 The Android Client sends behavioral events to [Constructor.io](http://constructor.io/) in order to continuously learn and improve results for future Autosuggest and Search requests.  The Client only sends events in response to being called by the consuming app or in response to user interaction . For example, if the consuming app never calls the SDK code, no events will be sent.  Besides the explicitly passed in event parameters, all user events contain a GUID based user ID that the client sets to identify the user as well as a session ID.
 
@@ -548,8 +565,10 @@ ConstructorIo.trackRecommendationResultsView("Best_Sellers", 4, 1, 4, "179b8a0e-
 ```kotlin
 // Track when a quiz result is clicked (quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, numResultsPerPage, resultPage, resultCount) 
 ConstructorIo.trackQuizResultClick("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 1, 10);
+
 // Track when quiz results are loaded into view (quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount)
 ConstructorIo.trackQuizResultLoad("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, 1, 10)
+
 // Track when a quiz result is converted on (quizId, quizVersionId, quizSessionId, displayName, type, isCustomType ,customerId, variationId, itemName, sectionName, revenue)
 ConstructorIo.trackQuizConversion("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", null, null, null, "shirt-a", "shirt-a--reg", "White shirt", null, "129.99")
 ```
