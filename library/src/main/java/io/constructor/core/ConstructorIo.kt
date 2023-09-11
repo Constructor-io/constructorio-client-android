@@ -12,6 +12,7 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
 import io.constructor.data.model.common.ResultGroup
+import io.constructor.data.model.common.TrackingItem
 import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseItem
@@ -1549,6 +1550,25 @@ object ConstructorIo {
      *
      * Example:
      * ```
+     * ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", arrayhOf("123", "234"), 674)
+     * ```
+     * @param filterName the name of the primary filter, i.e. "Aisle"
+     * @param filterValue the value of the primary filter, i.e. "Produce"
+     * @param itemIds the item ids of the displayed items
+     * @param resultCount the number of results for that filter name/value pair
+     */
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, itemIds: Array<String>, resultCount: Int, sectionName: String? = null, url: String = "Not Available") {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, itemIds, resultCount, sectionName, url)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+                t -> e("Browse Results Loaded error: ${t.message}")
+        }))
+    }
+
+    /**
+     * Tracks browse result loaded (a.k.a. browse results viewed) events.
+     *
+     * Example:
+     * ```
      * ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", 674)
      * ```
      * @param filterName the name of the primary filter, i.e. "Aisle"
@@ -1556,17 +1576,20 @@ object ConstructorIo {
      * @param resultCount the number of results for that filter name/value pair
      */
     fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, sectionName: String? = null, url: String = "Not Available") {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, resultCount, sectionName, url)
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, null, resultCount, sectionName, url)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, resultCount: Int, sectionName: String? = null, url: String = "Not Available"): Completable {
+
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available"): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
+        val items = itemIds?.map{ item -> TrackingItem(item, null)}
         val browseResultLoadRequestBody = BrowseResultLoadRequestBody(
                 filterName,
                 filterValue,
+                items,
                 resultCount,
                 url,
                 BuildConfig.CLIENT_VERSION,
