@@ -1550,7 +1550,7 @@ object ConstructorIo {
      *
      * Example:
      * ```
-     * ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", arrayhOf("123", "234"), 674)
+     * ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", arrayOf("123", "234"), 674)
      * ```
      * @param filterName the name of the primary filter, i.e. "Aisle"
      * @param filterValue the value of the primary filter, i.e. "Produce"
