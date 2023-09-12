@@ -542,6 +542,10 @@ ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "RE
 // Track when browse results are loaded into view (filterName, filterValue, resultCount)
 ConstructorIo.trackBrowseResultsLoaded("group_id", "Snacks", 674)
 
+// v2.25.2+ only
+// Track when browse results are loaded into view (filterName, filterValue, itemIds, resultCount)
+ConstructorIo.trackBrowseResultsLoaded("group_id", "Snacks", arrayOf("1234", "2345"), 674)
+
 // Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultId)
 ConstructorIo.trackBrowseResultClick("group_id", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 
