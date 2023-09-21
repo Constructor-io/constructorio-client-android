@@ -189,7 +189,18 @@ object ConstructorIo {
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FIELD).urlEncode() to hiddenField.urlEncode())
         }
         variationsMap?.let {
-            val variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+            var filterBy: String? = null
+
+            // Due to encoding issue, must remove the stringified filter_by field and add afterwards
+            if (variationsMap.filterBy !== null) {
+                filterBy = variationsMap.filterBy
+                variationsMap.filterBy = null
+            }
+
+            var variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
+            if (filterBy !== null) {
+                variationsMapJSONString = variationsMapJSONString.replace(Regex("}$"), ",\"${Constants.QueryConstants.FILTER_BY}\":$filterBy}")
+            }
 
             encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
         }

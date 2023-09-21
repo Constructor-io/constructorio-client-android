@@ -55,6 +55,7 @@ class Constants {
         const val TERM = "term"
         const val VARIATIONS_MAP = "variations_map"
         const val GROUP_BY = "group_by"
+        const val FILTER_BY = "filter_by"
         const val QUIZ_VERSION_ID="quiz_version_id"
         const val QUIZ_SESSION_ID="quiz_session_id"
         const val ANSWERS = "a"
