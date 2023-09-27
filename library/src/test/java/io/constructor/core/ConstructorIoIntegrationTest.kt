@@ -204,14 +204,17 @@ class ConstructorIoIntegrationTest {
                     "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
                 ),
                 groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+                filterBy = """{"and":[{"not":{"field":"data.brand","value":"Best Brand"}}]}"""
             )
             val searchResults = constructorIo.getSearchResultsCRT("jacket", variationsMap = variationsMap)
             val returnedVariationsMap = searchResults?.response?.results!![0].variationsMap as? List<*>
+            val requestedVariationsMap = searchResults.request?.get("variations_map").toString()
             assertTrue(searchResults.resultId !== null)
             assertTrue(searchResults.response!!.results!!.isNotEmpty())
             assertTrue(searchResults.response!!.filterSortOptions!!.isNotEmpty())
             assertTrue(searchResults.response!!.resultCount!! > 0)
             assertTrue(returnedVariationsMap!!.isNotEmpty())
+            assertTrue(requestedVariationsMap.indexOf("filter_by") > -1)
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -321,15 +324,18 @@ class ConstructorIoIntegrationTest {
                     "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
                 ),
                 groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+                filterBy = """{"and":[{"not":{"field":"data.brand","value":"Best Brand"}}]}"""
             )
             val browseResults = constructorIo.getBrowseResultsCRT("Brand", "XYZ", variationsMap = variationsMap)
             val returnedVariationsMap = browseResults?.response?.results!![0].variationsMap as? List<*>
+            val requestedVariationsMap = browseResults.request?.get("variations_map").toString()
             assertTrue(browseResults.resultId !== null)
             assertTrue(browseResults.response!!.facets!!.isNotEmpty())
             assertTrue(browseResults.response!!.groups!!.isNotEmpty())
             assertTrue(browseResults.response!!.filterSortOptions!!.isNotEmpty())
             assertTrue(browseResults.response!!.resultCount > 0)
             assertTrue(returnedVariationsMap!!.isNotEmpty())
+            assertTrue(requestedVariationsMap.indexOf("filter_by") > -1)
         }
         Thread.sleep(timeBetweenTests)
     }
@@ -388,7 +394,8 @@ class ConstructorIoIntegrationTest {
             values = mapOf(
                 "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
                 "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
-            )
+            ),
+            filterBy = """{"and":[{"not":{"field":"data.brand","value":"Best Brand"}}]}"""
         )
         val request = BrowseItemsRequest.Builder(listOf("10001")).setVariationsMap(variationsMap).build()
         val observer = constructorIo.getBrowseItemsResults(request).test()
@@ -397,6 +404,7 @@ class ConstructorIoIntegrationTest {
 
         val browseResponse = observer.values()[0].get()
         val returnedVariationsMap = browseResponse?.response?.results!![0].variationsMap as? Map<*, *>
+        val requestedVariationsMap = browseResponse.request?.get("variations_map").toString()
         assertTrue(browseResponse?.resultId !== null)
         assertTrue(browseResponse?.response?.results!!.isNotEmpty())
         assertTrue(browseResponse?.response?.facets!!.isNotEmpty())
@@ -404,6 +412,7 @@ class ConstructorIoIntegrationTest {
         assertTrue(browseResponse?.response?.filterSortOptions!!.isNotEmpty())
         assertTrue(browseResponse?.response?.resultCount!! > 0)
         assertTrue(returnedVariationsMap!!.isNotEmpty())
+        assertTrue(requestedVariationsMap.indexOf("filter_by") > -1)
 
         Thread.sleep(timeBetweenTests)
     }
@@ -1320,6 +1329,7 @@ class ConstructorIoIntegrationTest {
                     "size" to mapOf("aggregation" to "first", "field" to "data.facets.size"),
             ),
             groupBy = listOf(mapOf("name" to "variation", "field" to "data.variation_id")),
+            filterBy = """{"and":[{"not":{"field":"data.brand","value":"Best Brand"}}]}"""
         )
         val request = SearchRequest.Builder("jacket").setVariationsMap(variationsMap).build()
         val observer = constructorIo.getSearchResults(request).test()
@@ -1328,11 +1338,13 @@ class ConstructorIoIntegrationTest {
 
         val searchResponse = observer.values()[0].get()
         val returnedVariationsMap = searchResponse?.response?.results!![0].variationsMap as? List<*>
+        val requestedVariationsMap = searchResponse.request?.get("variations_map").toString()
         assertTrue(searchResponse?.resultId !== null)
         assertTrue(searchResponse?.response?.results!!.isNotEmpty())
         assertTrue(searchResponse?.response?.filterSortOptions!!.isNotEmpty())
         assertTrue(searchResponse?.response?.resultCount!! > 0)
         assertTrue(returnedVariationsMap!!.isNotEmpty())
+        assertTrue(requestedVariationsMap.indexOf("filter_by") > -1)
 
         Thread.sleep(timeBetweenTests)
     }

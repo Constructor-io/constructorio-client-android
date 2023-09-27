@@ -12,4 +12,5 @@ data class VariationsMap constructor(
     @Json(name = "dtype") val dtype: String,
     @Json(name = "values") val values: Map<String, Map<String, String>>,
     @Json(name = "group_by") val groupBy: List<Map<String, String>>? = null,
-) : Serializable
+    @Json(name = "filter_by") var filterBy: String? = null,
+    ) : Serializable

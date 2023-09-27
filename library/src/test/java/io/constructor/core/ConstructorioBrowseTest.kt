@@ -323,7 +323,8 @@ class ConstructorIoBrowseTest {
                 "Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"),
                 "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
             ),
-            groupBy = listOf(mapOf("name" to "Country", "field" to "data.facets.Country"))
+            groupBy = listOf(mapOf("name" to "Country", "field" to "data.facets.Country")),
+            filterBy = """{"and":[{"field":"data.brand","value":"Best Brand"}]}"""
         )
         val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
             .setVariationsMap(variationsMap)
@@ -333,7 +334,7 @@ class ConstructorIoBrowseTest {
         assertThat(request.requestUrl!!.encodedPath).isEqualTo("/browse/group_id/Beverages")
         with(request.requestUrl!!) {
             val queryParams = mapOf(
-                "variations_map" to """{"dtype":"array","values":{"Price":{"aggregation":"min","field":"data.facets.price"},"Country":{"aggregation":"all","field":"data.facets.country"}},"group_by":[{"name":"Country","field":"data.facets.Country"}]}""",
+                "variations_map" to """{"dtype":"array","values":{"Price":{"aggregation":"min","field":"data.facets.price"},"Country":{"aggregation":"all","field":"data.facets.country"}},"group_by":[{"name":"Country","field":"data.facets.Country"}],"filter_by":{"and":[{"field":"data.brand","value":"Best Brand"}]}}""",
                 "key" to "silver-key",
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",
