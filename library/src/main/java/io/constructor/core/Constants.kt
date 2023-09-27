@@ -37,6 +37,7 @@ class Constants {
         const val SORT_BY = "sort_by"
         const val SORT_ORDER = "sort_order"
         const val FILTER_FACET = "filters[%s]"
+        const val SECTION_FILTER_FACET = "filters[%s][%s]"
         const val FMT_OPTIONS = "fmt_options[%s]"
         const val SHOW_HIDDEN_FACETS = "show_hidden_facets"
         const val SHOW_PROTECTED_FACETS = "show_protected_facets"

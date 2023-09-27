@@ -259,12 +259,21 @@ object ConstructorIo {
      * @param groupId category facet used to refine results
      * @param hiddenFields show fields that are hidden by default
      * @param variationsMap specify which attributes within variations should be returned
+     * @param sectionFacets specify which attributes within variations should be returned
      */
-    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<AutocompleteResponse>> {
+    fun getAutocompleteResults(term: String, facets: List<Pair<String, List<String>>>? = null, groupId: Int? = null, hiddenFields: List<String>? = null, variationsMap: VariationsMap? = null, sectionFacets: Map<String, List<Pair<String, List<String>>>>? = null): Observable<ConstructorData<AutocompleteResponse>> {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupIdInt = groupId, facets = facets, hiddenFields = hiddenFields, variationsMap = variationsMap)
 
         configMemoryHolder.autocompleteResultCount?.entries?.forEach {
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+it.key, it.value.toString()))
+        }
+
+        sectionFacets?.toList()?.forEach { section ->
+            section.second.forEach { facet ->
+                facet.second.forEach {
+                    encodedParams.add(Constants.QueryConstants.SECTION_FILTER_FACET.format(section.first, facet.first).urlEncode() to it.urlEncode())
+                }
+            }
         }
 
         return dataManager.getAutocompleteResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())

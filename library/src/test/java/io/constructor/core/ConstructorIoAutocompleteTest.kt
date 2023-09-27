@@ -92,6 +92,29 @@ class ConstructorIoAutocompleteTest {
     }
 
     @Test
+    fun getAutocompleteResultsWithSectionFacetFilters() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val facet = hashMapOf("storeLocation" to listOf("CA"))
+        val sectionFacets = mapOf(
+            "Search Suggestions" to listOf("storeLocation" to listOf("US")),
+            "Products" to listOf("brand" to listOf("Top Brand"))
+        )
+        val observer =
+            constructorIo.getAutocompleteResults("titanic", facet?.map { it.key to it.value }, sectionFacets = sectionFacets)
+                .test()
+        observer.assertComplete().assertValue {
+            var suggestions = it.get()!!.sections?.get("Search Suggestions");
+            suggestions?.isNotEmpty()!! && suggestions.size == 5
+        }
+        val request = mockServer.takeRequest()
+        val path =
+            "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&filters%5BSearch%20Suggestions%5D%5BstoreLocation%5D=US&filters%5BProducts%5D%5Bbrand%5D=Top%20Brand&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getAutocompleteResultsWithGroupIdFilter() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
