@@ -467,8 +467,9 @@ $dokka.location:io.constructor.data.model.common/TrackingItem/TrackingItem/#kotl
 $dokka.location:io.constructor.data.model.common/TrackingItem/itemId/#/PointingToDeclaration/library/io.constructor.data.model.common/-tracking-item/item-id.html
 $dokka.location:io.constructor.data.model.common/TrackingItem/variationId/#/PointingToDeclaration/library/io.constructor.data.model.common/-tracking-item/variation-id.html
 $dokka.location:io.constructor.data.model.common/VariationsMap///PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/index.html
-$dokka.location:io.constructor.data.model.common/VariationsMap/VariationsMap/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.collections.Map[kotlin.String,kotlin.String]]#kotlin.collections.List[kotlin.collections.Map[kotlin.String,kotlin.String]]?/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/-variations-map.html
+$dokka.location:io.constructor.data.model.common/VariationsMap/VariationsMap/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.collections.Map[kotlin.String,kotlin.String]]#kotlin.collections.List[kotlin.collections.Map[kotlin.String,kotlin.String]]?#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/-variations-map.html
 $dokka.location:io.constructor.data.model.common/VariationsMap/dtype/#/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/dtype.html
+$dokka.location:io.constructor.data.model.common/VariationsMap/filterBy/#/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/filter-by.html
 $dokka.location:io.constructor.data.model.common/VariationsMap/groupBy/#/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/group-by.html
 $dokka.location:io.constructor.data.model.common/VariationsMap/values/#/PointingToDeclaration/library/io.constructor.data.model.common/-variations-map/values.html
 $dokka.location:io.constructor.data.model.quiz////PointingToDeclaration/library/io.constructor.data.model.quiz/index.html
