@@ -9,6 +9,10 @@ class AutocompleteRequestTest {
         "Brand" to listOf("XYZ", "123"),
         "group_id" to listOf("123"),
     )
+    private val sectionFilters = mapOf(
+        "Search Suggestions" to listOf("Brand" to listOf("XYZ", "123")),
+        "Products" to listOf("availability" to listOf("ABC", "987")),
+    )
     private val numResultsPerSection = mapOf(
         "Products" to 5,
         "Search Suggestions" to 8,
@@ -28,6 +32,16 @@ class AutocompleteRequestTest {
             .setFilters(filters)
             .build()
         assertEquals(request.filters, filters)
+    }
+
+    @Test
+    fun autocompleteRequestWithSectionFiltersUsingBuilder() {
+        val request = AutocompleteRequest.Builder(query)
+            .setFilters(filters)
+            .setSectionFilters(sectionFilters)
+            .build()
+        assertEquals(request.filters, filters)
+        assertEquals(request.sectionFilters, sectionFilters)
     }
 
     @Test
