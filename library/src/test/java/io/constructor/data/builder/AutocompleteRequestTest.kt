@@ -10,8 +10,8 @@ class AutocompleteRequestTest {
         "group_id" to listOf("123"),
     )
     private val sectionFilters = mapOf(
-        "Search Suggestions" to listOf("Brand" to listOf("XYZ", "123")),
-        "Products" to listOf("availability" to listOf("ABC", "987")),
+        "Search Suggestions" to mapOf("Brand" to listOf("XYZ", "123")),
+        "Products" to mapOf("availability" to listOf("ABC", "987")),
     )
     private val numResultsPerSection = mapOf(
         "Products" to 5,

@@ -343,7 +343,17 @@ object ConstructorIo {
      * @param request the autocomplete request object
      */
     fun getAutocompleteResults(request: AutocompleteRequest): Observable<ConstructorData<AutocompleteResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), hiddenFields = request.hiddenFields, variationsMap = request.variationsMap, numResultsPerSection = request.numResultsPerSection, sectionFacets = request.sectionFilters)
+        var listSectionFilters: Map<String, List<Pair<String, List<String>>>>? = null
+
+        if (request.sectionFilters !== null) {
+            listSectionFilters = mapOf()
+
+            request.sectionFilters.forEach {
+                listSectionFilters.plus(it.key to it.value.toList())
+            }
+        }
+
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), hiddenFields = request.hiddenFields, variationsMap = request.variationsMap, numResultsPerSection = request.numResultsPerSection, sectionFacets = listSectionFilters)
 
         return dataManager.getAutocompleteResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }

@@ -11,7 +11,7 @@ class AutocompleteRequest (
     val numResultsPerSection: Map<String, Int>? = null,
     val hiddenFields: List<String>? = null,
     val variationsMap: VariationsMap? = null,
-    val sectionFilters: Map<String, List<Pair<String, List<String>>>>? = null
+    val sectionFilters: Map<String, Map<String, List<String>>>? = null
 ) {
     private constructor(builder: Builder) : this(
         builder.term,
@@ -33,13 +33,13 @@ class AutocompleteRequest (
         var numResultsPerSection: Map<String, Int>? = null
         var hiddenFields: List<String>? = null
         var variationsMap: VariationsMap? = null
-        var sectionFilters: Map<String, List<Pair<String, List<String>>>>? = null
+        var sectionFilters: Map<String, Map<String, List<String>>>? = null
 
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
         fun setNumResultsPerSection(numResultsPerSection: Map<String, Int>): Builder = apply { this.numResultsPerSection = numResultsPerSection }
         fun setHiddenFields(hiddenFields: List<String>): Builder = apply { this.hiddenFields = hiddenFields }
         fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
-        fun setSectionFilters(sectionFilters: Map<String, List<Pair<String, List<String>>>>?): Builder = apply { this.sectionFilters = sectionFilters }
+        fun setSectionFilters(sectionFilters: Map<String, Map<String, List<String>>>?): Builder = apply { this.sectionFilters = sectionFilters }
         fun build(): AutocompleteRequest = AutocompleteRequest(this)
     }
 }
