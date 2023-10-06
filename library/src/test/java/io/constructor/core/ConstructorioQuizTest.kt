@@ -71,7 +71,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/next?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -86,7 +86,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/next?quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -101,7 +101,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?quiz_session_id=31f6bdae-6f1d-482f-b37f-f7a9e346973a&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/next?quiz_session_id=31f6bdae-6f1d-482f-b37f-f7a9e346973a&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -116,7 +116,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/next?section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -135,7 +135,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -154,7 +154,7 @@ class ConstructorioQuizTest {
             quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -173,7 +173,7 @@ class ConstructorioQuizTest {
             quizVersionId == "11db5ac7-67e1-4000-9000-414d8425cab3"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -192,7 +192,7 @@ class ConstructorioQuizTest {
             quizVersionId == "11db5ac7-67e1-4000-9000-414d8425cab3"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&quiz_session_id=31f6bdae-6f1d-482f-b37f-f7a9e346973a&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/results?a=1&a=2%2C3&quiz_session_id=31f6bdae-6f1d-482f-b37f-f7a9e346973a&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -211,7 +211,7 @@ class ConstructorioQuizTest {
             quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/results?section=Products&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/results?section=Products&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -230,7 +230,7 @@ class ConstructorioQuizTest {
             quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/results?page=2&num_results_per_page=30&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/results?page=2&num_results_per_page=30&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -249,7 +249,7 @@ class ConstructorioQuizTest {
             quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/results?filters%5BBrand%5D=XYZ&filters%5BBrand%5D=123&filters%5Bgroup_id%5D=123&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/results?filters%5BBrand%5D=XYZ&filters%5BBrand%5D=123&filters%5Bgroup_id%5D=123&a=1&a=2%2C3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -273,7 +273,7 @@ class ConstructorioQuizTest {
             quizQuestionId !== null
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/next?a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&section=Products&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -297,7 +297,7 @@ class ConstructorioQuizTest {
             quizId == "test-quiz"
         }
         val request = mockServer.takeRequest()
-        val path = "/v1/quizzes/test-quiz/results?section=Products&a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.25.3&_dt="
+        val path = "/v1/quizzes/test-quiz/results?section=Products&a=1&a=2%2C3&quiz_version_id=11db5ac7-67e1-4000-9000-414d8425cab3&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.26.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 }
