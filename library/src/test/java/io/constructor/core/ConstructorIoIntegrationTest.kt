@@ -78,6 +78,18 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getAutocompleteResultsWithSectionFiltersAgainstRealResponse() {
+        val sectionFilters = mapOf(
+            "Search Suggestions" to listOf("Brand" to listOf("XYZ", "123")),
+            "Products" to listOf("availability" to listOf("ABC", "987")),
+        )
+        val observer =
+            constructorIo.getAutocompleteResults("item", sectionFacets = sectionFilters).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getAutocompleteResultsCRTAgainstRealResponse() {
         runBlocking {
             val autocompleteResults = constructorIo.getAutocompleteResultsCRT("item")
@@ -93,6 +105,19 @@ class ConstructorIoIntegrationTest {
         runBlocking {
             val facet = hashMapOf("Brand" to listOf("XYZ"))
             val autocompleteResults = constructorIo.getAutocompleteResultsCRT("item", facet.map { it.key to it.value })
+            assertTrue(autocompleteResults.sections!!.isNotEmpty())
+            assertTrue(autocompleteResults.resultId!!.isNotEmpty())
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getAutocompleteResultsCRTWithSectionFiltersAgainstRealResponse() {
+        runBlocking {
+            val sectionFilters = mapOf(
+                "Products" to listOf("Brand" to listOf("XYZ")),
+            )
+            val autocompleteResults = constructorIo.getAutocompleteResultsCRT("item", sectionFacets = sectionFilters)
             assertTrue(autocompleteResults.sections!!.isNotEmpty())
             assertTrue(autocompleteResults.resultId!!.isNotEmpty())
         }
