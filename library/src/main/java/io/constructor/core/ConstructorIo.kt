@@ -200,7 +200,7 @@ object ConstructorIo {
 
             var variationsMapJSONString = jsonAdapter.toJson(variationsMap).replace("groupBy", Constants.QueryConstants.GROUP_BY)
             if (filterBy !== null) {
-                variationsMapJSONString = variationsMapJSONString.replace(Regex("}$"), ",\"${Constants.QueryConstants.FILTER_BY}\":$filterBy}")
+                variationsMapJSONString = variationsMapJSONString.replace(Regex("\\}$"), ",\"${Constants.QueryConstants.FILTER_BY}\":$filterBy}")
             }
 
             encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
