@@ -204,6 +204,7 @@ object ConstructorIo {
             }
 
             encodedParams.add(Constants.QueryConstants.VARIATIONS_MAP.urlEncode() to variationsMapJSONString.urlEncode())
+            variationsMap.filterBy = filterBy
         }
         numResultsPerSection?.forEach { section ->
             encodedParams.add(Pair(Constants.QueryConstants.NUM_RESULTS+section.key, section.value.toString()))
