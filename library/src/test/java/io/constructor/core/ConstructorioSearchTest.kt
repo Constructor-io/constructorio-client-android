@@ -319,6 +319,7 @@ class ConstructorIoSearchTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("search_response.json"))
         mockServer.enqueue(mockResponse)
+        val filterBy = """{"and":[{"field":"data.brand","value":"Best Brand"}]}"""
         val variationsMap = VariationsMap(
             dtype = "array",
             values = mapOf(
@@ -326,7 +327,7 @@ class ConstructorIoSearchTest {
                 "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
             ),
             groupBy = listOf(mapOf("name" to "Country", "field" to "data.facets.Country")),
-            filterBy = """{"and":[{"field":"data.brand","value":"Best Brand"}]}"""
+            filterBy = filterBy
         )
         val searchRequest = SearchRequest.Builder("bbq")
             .setVariationsMap(variationsMap)
@@ -334,6 +335,7 @@ class ConstructorIoSearchTest {
         val observer = constructorIo.getSearchResults(searchRequest).test()
         val request = mockServer.takeRequest()
 
+        assertThat(variationsMap.filterBy).isEqualTo(filterBy)
         assertThat(request.requestUrl!!.encodedPath).isEqualTo("/search/bbq")
         with(request.requestUrl!!) {
             val queryParams = mapOf(

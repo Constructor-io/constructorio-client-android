@@ -317,6 +317,7 @@ class ConstructorIoBrowseTest {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("browse_response.json"))
         mockServer.enqueue(mockResponse)
+        val filterBy = """{"and":[{"field":"data.brand","value":"Best Brand"}]}"""
         val variationsMap = VariationsMap(
             dtype = "array",
             values = mapOf(
@@ -324,13 +325,15 @@ class ConstructorIoBrowseTest {
                 "Country" to mapOf("aggregation" to "all", "field" to "data.facets.country")
             ),
             groupBy = listOf(mapOf("name" to "Country", "field" to "data.facets.Country")),
-            filterBy = """{"and":[{"field":"data.brand","value":"Best Brand"}]}"""
+            filterBy = filterBy
         )
         val browseRequest = BrowseRequest.Builder("group_id", "Beverages")
             .setVariationsMap(variationsMap)
             .build()
         val observer = constructorIo.getBrowseResults(browseRequest).test()
         val request = mockServer.takeRequest()
+
+        assertThat(variationsMap.filterBy).isEqualTo(filterBy)
         assertThat(request.requestUrl!!.encodedPath).isEqualTo("/browse/group_id/Beverages")
         with(request.requestUrl!!) {
             val queryParams = mapOf(
