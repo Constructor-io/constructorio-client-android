@@ -83,6 +83,7 @@ var variationsMap: VariationsMap = VariationsMap(
     "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
   ),
   dtype = "array",
+  filterBy = """{"and":[{"field":"data.brand","value":"Best Brand"}]}""",
 )
 
 // Using RxJava
@@ -154,6 +155,7 @@ var variationsMap: VariationsMap = VariationsMap(
     "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
   ),
   dtype = "array",
+  """{"and":[{"field":"data.brand","value":"Best Brand"}]}""",
 )
 var preFilterExpression = """{ "and": [ { "name": "Color", "value": "green" } ] }"""
 
@@ -223,6 +225,7 @@ var variationsMap: VariationsMap = VariationsMap(
     "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
   ),
   dtype = "array",
+  """{"and":[{"field":"data.brand","value":"Best Brand"}]}"""
 )
 var preFilterExpression = """{ "and": [ { "name": "Color", "value": "green" } ] }"""
 
@@ -325,6 +328,7 @@ var variationsMap: VariationsMap = VariationsMap(
     "max_price" to mapOf("aggregation" to "max", "field" to "data.price"),
   ),
   dtype = "array",
+  """{"and":[{"field":"data.brand","value":"Best Brand"}]}""",
 )
 
 // Using RxJava
