@@ -9,6 +9,7 @@ import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
 import io.mockk.mockk
+import junit.framework.TestCase.assertTrue
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
@@ -19,7 +20,6 @@ import java.net.SocketTimeoutException
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
-
 
 internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
     val requestBodyString = request.body.readUtf8().drop(1).dropLast(1).replace("\"", "")
@@ -81,6 +81,61 @@ class ConstructorIoTrackingTest {
     private val ctx = mockk<Context>()
     private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
+
+    var emailPii = listOf(
+            "test@test.com",
+            "test-100@test.com",
+            "test.100@test.com",
+            "test@test.com",
+            "test+123@test.info",
+            "test-100@test.net",
+            "test.100@test.com.au",
+            "test@test.io",
+            "test@test.com.com",
+            "test+100@test.com",
+            "test-100@test-test.io"
+    )
+    var phonePii = listOf(
+            "+12363334011",
+            "+1 236 333 4011",
+            "(236)2228542",
+            "(236) 222 8542",
+            "(236)222-8542",
+            "(236) 222-8542",
+            "+420736447763",
+            "+420 736 447 763"
+    )
+    var creditCardPii = listOf(
+            // Sources of example card numbers:
+            // - https://support.bluesnap.com/docs/test-credit-card-numbers
+            // - https://www.paypalobjects.com/en_GB/vhelp/paypalmanager_help/credit_card_numbers.htm
+            "4155279860457", // Visa
+            "4222222222222", // Visa
+            "4263982640269299", // Visa
+            "4917484589897107", // Visa
+            "4001919257537193", // Visa
+            "4007702835532454", // Visa
+            "4111111111111111", // Visa
+            "4012888888881881", // Visa
+            "5425233430109903", // MasterCard
+            "2222420000001113", // MasterCard
+            "2223000048410010", // MasterCard
+            "5555555555554444", // MasterCard
+            "5105105105105100", // MasterCard
+            "374245455400126", // American Express
+            "378282246310005", // American Express
+            "371449635398431", // American Express
+            "378734493671000", // American Express
+            "6011556448578945", // Discover
+            "6011000991300009", // Discover
+            "6011111111111117", // Discover
+            "6011000990139424", // Discover
+            "3566000020000410", // JCB
+            "3530111333300000", // JCB
+            "3566002020360505", // JCB
+            "30569309025904", // Diners Club
+            "38520000023237", // Diners Club
+    )
 
     @Before
     fun setup() {
@@ -1104,5 +1159,12 @@ class ConstructorIoTrackingTest {
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)
+    }
+
+    @Test
+    fun parametersIncludePIIWithNoPiiShouldReturnFalse() {
+        assertTrue(ConstructorIo.parametersIncludePii(emailPii))
+        assertTrue(ConstructorIo.parametersIncludePii(creditCardPii))
+        assertTrue(ConstructorIo.parametersIncludePii(phonePii))
     }
 }
