@@ -1347,7 +1347,6 @@ object ConstructorIo {
     }
     internal fun trackInputFocusInternal(term: String?): Completable {
         if (parametersIncludePii(listOf(term))) {
-            print("Contains pii")
             return Completable.complete()
         }
 
