@@ -162,8 +162,8 @@ class ConstructorIoTrackingTest {
     
     var notCreditCardPii = listOf(
             "1025",
-            "4155279860457", // edge case that we just pass as valid. if we were to account for it, we would be filtering out SKUs as well https://linear.app/constructor/issue/PSL-2775/core-tracker-exclude-13-digit-visa-cards-from-the-credit-card-regex
-            "4222222222222", // edge case that we just pass as valid. if we were to account for it, we would be filtering out SKUs as well  https://linear.app/constructor/issue/PSL-2775/core-tracker-exclude-13-digit-visa-cards-from-the-credit-card-regex
+            "4155279860457",
+            "4222222222222",
             "6155279860457",
             "1234567890",
             "12345678901",
