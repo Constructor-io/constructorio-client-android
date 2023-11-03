@@ -9,6 +9,7 @@ import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
 import io.mockk.mockk
+import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -133,6 +134,51 @@ class ConstructorIoTrackingTest {
             "3566002020360505", // JCB
             "30569309025904", // Diners Club
             "38520000023237", // Diners Club
+    )
+
+    var notEmailPii = listOf(
+            "test",
+            "test @test.io",
+            "test@.com.my",
+            "test123@gmail.a",
+            "test123@.com",
+            "test123@.com.com",
+            "test()*@gmail.com",
+            "test@%*.com",
+            "test@test1@gmail.com",
+            "test@test1",
+    )
+
+    var notPhonePii = listOf(
+            "123",
+            "123 456 789",
+            "236 222 5432",
+            "2362225432",
+            "736447763",
+            "736 447 763",
+            "236456789012",
+            "2364567890123",
+    )
+    
+    var notCreditCardPii = listOf(
+            "1025",
+            "4155279860457", // edge case that we just pass as valid. if we were to account for it, we would be filtering out SKUs as well https://linear.app/constructor/issue/PSL-2775/core-tracker-exclude-13-digit-visa-cards-from-the-credit-card-regex
+            "4222222222222", // edge case that we just pass as valid. if we were to account for it, we would be filtering out SKUs as well  https://linear.app/constructor/issue/PSL-2775/core-tracker-exclude-13-digit-visa-cards-from-the-credit-card-regex
+            "6155279860457",
+            "1234567890",
+            "12345678901",
+            "123456789012",
+            "1234567890123",
+            "1234567890145",
+            "12345678901678",
+            "1234567890167890",
+            "12345678901678901",
+            "123456789016789012",
+            "1234567890167890123",
+            "12345678901678901234",
+            "123456789016789012345",
+            "12345678901678901234567",
+            "123456789016789012345678",
     )
 
     @Before
@@ -1164,5 +1210,12 @@ class ConstructorIoTrackingTest {
         assertTrue(ConstructorIo.parametersIncludePii(emailPii))
         assertTrue(ConstructorIo.parametersIncludePii(creditCardPii))
         assertTrue(ConstructorIo.parametersIncludePii(phonePii))
+    }
+
+    @Test
+    fun parametersWithoutPIIWithNoPiiShouldReturnFalse() {
+        assertFalse(ConstructorIo.parametersIncludePii(notEmailPii))
+        assertFalse(ConstructorIo.parametersIncludePii(notCreditCardPii))
+        assertFalse(ConstructorIo.parametersIncludePii(notPhonePii))
     }
 }
