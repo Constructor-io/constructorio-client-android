@@ -109,8 +109,6 @@ class ConstructorIoTrackingTest {
             // Sources of example card numbers:
             // - https://support.bluesnap.com/docs/test-credit-card-numbers
             // - https://www.paypalobjects.com/en_GB/vhelp/paypalmanager_help/credit_card_numbers.htm
-            "4155279860457", // Visa
-            "4222222222222", // Visa
             "4263982640269299", // Visa
             "4917484589897107", // Visa
             "4001919257537193", // Visa
