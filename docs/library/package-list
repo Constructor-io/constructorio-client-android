@@ -524,8 +524,7 @@ $dokka.location:io.constructor.data.model.quiz/QuizQuestion/options/#/PointingTo
 $dokka.location:io.constructor.data.model.quiz/QuizQuestion/title/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/title.html
 $dokka.location:io.constructor.data.model.quiz/QuizQuestion/type/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question/type.html
 $dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse///PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/index.html
-$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/QuizQuestionResponse/#io.constructor.data.model.quiz.QuizQuestion?#kotlin.String?#kotlin.String?#kotlin.Boolean?#kotlin.String#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/-quiz-question-response.html
-$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/isLastQuestion/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/is-last-question.html
+$dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/QuizQuestionResponse/#io.constructor.data.model.quiz.QuizQuestion?#kotlin.String?#kotlin.String?#kotlin.String#kotlin.String?/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/-quiz-question-response.html
 $dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/nextQuestion/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/next-question.html
 $dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/quizId/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/quiz-id.html
 $dokka.location:io.constructor.data.model.quiz/QuizQuestionResponse/quizSessionId/#/PointingToDeclaration/library/io.constructor.data.model.quiz/-quiz-question-response/quiz-session-id.html
