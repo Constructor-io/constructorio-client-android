@@ -127,9 +127,23 @@ object ConstructorIo {
     fun getSessionId() = preferenceHelper.getSessionId()
 
     /**
+     *  Sets the sessionId
+     */
+    fun setSessionId(sessionId: Int) {
+        preferenceHelper.setSessionId(sessionId);
+    }
+
+    /**
      * Returns the current client identifier (a random GUID assigned to the app running on the device)
      */
     fun getClientId() = preferenceHelper.id
+
+    /**
+     *  Sets the clientId
+     */
+    fun setClientId(clientId: String) {
+        preferenceHelper.id = clientId;
+    }
 
     internal fun testInit(context: Context?, constructorIoConfig: ConstructorIoConfig, dataManager: DataManager, preferenceHelper: PreferencesHelper, configMemoryHolder: ConfigMemoryHolder) {
         if (context == null) {
