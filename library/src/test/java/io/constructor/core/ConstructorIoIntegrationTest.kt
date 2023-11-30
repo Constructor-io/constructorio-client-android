@@ -1058,13 +1058,14 @@ class ConstructorIoIntegrationTest {
     @Test
     fun getRecommendationResultsAgainstRealResponse() {
         val facet = hashMapOf("Brand" to listOf("XYZ"))
-        val observer = constructorIo.getRecommendationResults("home_page_1", facet.map { it.key to it.value }).test()
+        val observer = constructorIo.getRecommendationResults("home_page_1", facet.map { it.key to it.value }, 50).test()
         observer.assertComplete()
         observer.assertNoErrors()
 
         val recommendationResponse = observer.values()[0].get()
         assertTrue(recommendationResponse?.resultId !== null)
         assertTrue(recommendationResponse?.request!!.isNotEmpty())
+        assertTrue(recommendationResponse?.request!!.get("num_results") == 50.0)
         assertTrue(recommendationResponse?.response?.pod !== null)
         assertTrue(recommendationResponse?.response?.results !== null)
         assertTrue(recommendationResponse?.response?.resultCount!! >= 0)
