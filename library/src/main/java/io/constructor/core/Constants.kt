@@ -50,7 +50,7 @@ class Constants {
         const val FILTER_VALUE = "filter_value"
         const val RESULT_POSITION_ON_PAGE = "result_position_on_page"
         const val RESULT_COUNT = "result_count"
-        const val NUM_RESULT = "num_result"
+        const val NUM_RESULT = "num_results"
         const val ITEM_ID = "item_id"
         const val IDS = "ids"
         const val TERM = "term"
