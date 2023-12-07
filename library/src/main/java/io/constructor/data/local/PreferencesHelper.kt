@@ -62,6 +62,10 @@ constructor(@ConstructorSdk val preferences: SharedPreferences) {
         return preferences.getInt(SESSION_ID, 1)
     }
 
+    fun setSessionId(sessionId: Int) {
+        preferences.edit().putInt(SESSION_ID, sessionId).apply()
+    }
+
     internal fun resetSession(sessionIncrementAction: ((String) -> Unit)?): Int {
         val sessionId = 1
         preferences.edit().putInt(SESSION_ID, sessionId).apply()

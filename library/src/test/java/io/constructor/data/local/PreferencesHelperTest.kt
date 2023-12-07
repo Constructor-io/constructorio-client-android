@@ -58,6 +58,12 @@ class PreferencesHelperTest {
     }
 
     @Test
+    fun saveAndRetrieveSessionId() {
+        preferencesHelper.setSessionId(123);
+        assertEquals(123, preferencesHelper.getSessionId())
+    }
+
+    @Test
     fun getSessionIdAfter30Minutes() {
         preferencesHelper.resetSession(null)
         val currentTime = System.currentTimeMillis()
