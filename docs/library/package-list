@@ -35,6 +35,8 @@ $dokka.location:io.constructor.core/ConstructorIo/getSearchResultsCRT/#kotlin.St
 $dokka.location:io.constructor.core/ConstructorIo/getSessionId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/get-session-id.html
 $dokka.location:io.constructor.core/ConstructorIo/init/#android.content.Context?#io.constructor.core.ConstructorIoConfig/PointingToDeclaration/library/io.constructor.core/-constructor-io/init.html
 $dokka.location:io.constructor.core/ConstructorIo/segments/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/segments.html
+$dokka.location:io.constructor.core/ConstructorIo/setClientId/#kotlin.String/PointingToDeclaration/library/io.constructor.core/-constructor-io/set-client-id.html
+$dokka.location:io.constructor.core/ConstructorIo/setSessionId/#kotlin.Int/PointingToDeclaration/library/io.constructor.core/-constructor-io/set-session-id.html
 $dokka.location:io.constructor.core/ConstructorIo/testCells/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/test-cells.html
 $dokka.location:io.constructor.core/ConstructorIo/trackAutocompleteSelect/#kotlin.String#kotlin.String#kotlin.String#io.constructor.data.model.common.ResultGroup?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-autocomplete-select.html
 $dokka.location:io.constructor.core/ConstructorIo/trackBrowseResultClick/#kotlin.String#kotlin.String#kotlin.String#kotlin.Int#kotlin.String?#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-browse-result-click.html
