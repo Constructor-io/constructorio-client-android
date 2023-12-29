@@ -83,104 +83,6 @@ class ConstructorIoTrackingTest {
     private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
 
-    var emailPii = listOf(
-            "test@test.com",
-            "test-100@test.com",
-            "test.100@test.com",
-            "test@test.com",
-            "test+123@test.info",
-            "test-100@test.net",
-            "test.100@test.com.au",
-            "test@test.io",
-            "test@test.com.com",
-            "test+100@test.com",
-            "test-100@test-test.io"
-    )
-    var phonePii = listOf(
-            "+12363334011",
-            "+1 236 333 4011",
-            "(236)2228542",
-            "(236) 222 8542",
-            "(236)222-8542",
-            "(236) 222-8542",
-            "+420736447763",
-            "+420 736 447 763"
-    )
-    var creditCardPii = listOf(
-            // Sources of example card numbers:
-            // - https://support.bluesnap.com/docs/test-credit-card-numbers
-            // - https://www.paypalobjects.com/en_GB/vhelp/paypalmanager_help/credit_card_numbers.htm
-            "4263982640269299", // Visa
-            "4917484589897107", // Visa
-            "4001919257537193", // Visa
-            "4007702835532454", // Visa
-            "4111111111111111", // Visa
-            "4012888888881881", // Visa
-            "5425233430109903", // MasterCard
-            "2222420000001113", // MasterCard
-            "2223000048410010", // MasterCard
-            "5555555555554444", // MasterCard
-            "5105105105105100", // MasterCard
-            "374245455400126", // American Express
-            "378282246310005", // American Express
-            "371449635398431", // American Express
-            "378734493671000", // American Express
-            "6011556448578945", // Discover
-            "6011000991300009", // Discover
-            "6011111111111117", // Discover
-            "6011000990139424", // Discover
-            "3566000020000410", // JCB
-            "3530111333300000", // JCB
-            "3566002020360505", // JCB
-            "30569309025904", // Diners Club
-            "38520000023237", // Diners Club
-    )
-
-    var notEmailPii = listOf(
-            "test",
-            "test @test.io",
-            "test@.com.my",
-            "test123@gmail.a",
-            "test123@.com",
-            "test123@.com.com",
-            "test()*@gmail.com",
-            "test@%*.com",
-            "test@test1@gmail.com",
-            "test@test1",
-    )
-
-    var notPhonePii = listOf(
-            "123",
-            "123 456 789",
-            "236 222 5432",
-            "2362225432",
-            "736447763",
-            "736 447 763",
-            "236456789012",
-            "2364567890123",
-    )
-    
-    var notCreditCardPii = listOf(
-            "1025",
-            "4155279860457",
-            "4222222222222",
-            "6155279860457",
-            "1234567890",
-            "12345678901",
-            "123456789012",
-            "1234567890123",
-            "1234567890145",
-            "12345678901678",
-            "1234567890167890",
-            "12345678901678901",
-            "123456789016789012",
-            "1234567890167890123",
-            "12345678901678901234",
-            "123456789016789012345",
-            "12345678901678901234567",
-            "123456789016789012345678",
-    )
-
     @Before
     fun setup() {
         mockServer = MockWebServer()
@@ -1206,16 +1108,28 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
-    fun parametersIncludePIIWithNoPiiShouldReturnFalse() {
-        assertTrue(ConstructorIo.parametersIncludePii(emailPii))
-        assertTrue(ConstructorIo.parametersIncludePii(creditCardPii))
-        assertTrue(ConstructorIo.parametersIncludePii(phonePii))
+    fun behavioral_actionEndpointWithPiiShouldBeOmitted() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultLoadInternal("test@gmail.com", "+1 236 333 4011", "4263982640269299", null, null, 1, 10).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.26.2&_dt="
+        assertEquals("<email_omitted>", requestBody["quiz_id"])
+        assertEquals("<phone_omitted>", requestBody["quiz_version_id"])
+        assertEquals("<credit_omitted>", requestBody["quiz_session_id"])
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
-    fun parametersWithoutPIIWithNoPiiShouldReturnFalse() {
-        assertFalse(ConstructorIo.parametersIncludePii(notEmailPii))
-        assertFalse(ConstructorIo.parametersIncludePii(notCreditCardPii))
-        assertFalse(ConstructorIo.parametersIncludePii(notPhonePii))
+    fun behaviorEndpointWithPiiShouldBeOmitted() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackSearchResultsLoadedInternal("test@gmail.com", 10, arrayOf("+1 909 559 4343")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/behavior?term=%3Cemail_omitted%3E&num_results=10&customer_ids=%3Cphone_omitted%3E&action=search-results&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.26.2&_dt="
+        assert(request.path!!.startsWith(path))
     }
 }

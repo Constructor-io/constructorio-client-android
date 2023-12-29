@@ -148,31 +148,6 @@ object ConstructorIo {
         preferenceHelper.getSessionId(sessionIncrementHandler)
     }
 
-    private fun stringIncludesPii(query: String?): Boolean {
-        val emailRegex = Regex("^[\\w\\-+\\\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
-        val phoneRegex = Regex("^(?:\\+\\d{11,12}|\\+\\d{1,3}\\s\\d{3}\\s\\d{3}\\s\\d{3,4}|\\(\\d{3}\\)\\d{7}|\\(\\d{3}\\)\\s\\d{3}\\s\\d{4}|\\(\\d{3}\\)\\d{3}-\\d{4}|\\(\\d{3}\\)\\s\\d{3}-\\d{4})\$")
-        val creditCardRegex = Regex("^(?:4[0-9]{15}|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\\d{3})\\d{11})\$")
-        val regexExpressions = listOf(emailRegex, phoneRegex, creditCardRegex)
-
-        for (expression in regexExpressions) {
-            if (query?.let { expression.matches(it) } == true) {
-                return true
-            }
-        }
-
-        return false
-    }
-
-    internal fun parametersIncludePii(parameters: List<String?>): Boolean {
-        for (parameter in parameters) {
-            if (stringIncludesPii(parameter)) {
-                return true
-            }
-        }
-
-        return false
-    }
-
     private fun getEncodedParams(
         groupIdInt: Int? = null,
         groupId: String? = null,
@@ -1165,10 +1140,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null): Completable {
-        if (parametersIncludePii(listOf(itemName, customerId, variationId))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizResultClickRequestBody = QuizResultClickRequestBody(
@@ -1221,10 +1192,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackQuizResultLoadInternal(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, url: String = "Not Available"): Completable {
-        if (parametersIncludePii(listOf(quizVersionId, quizSessionId, url))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizResultLoadRequestBody = QuizResultLoadRequestBody(
@@ -1277,10 +1244,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackQuizConversionInternal(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null): Completable {
-        if (parametersIncludePii(listOf(displayName, customerId, variationId, itemName, quizVersionId, quizSessionId))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizConversionRequestBody = QuizConversionRequestBody(
@@ -1346,10 +1309,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackInputFocusInternal(term: String?): Completable {
-        if (parametersIncludePii(listOf(term))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         return dataManager.trackInputFocus(term, arrayOf(
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_INPUT_FOCUS
@@ -1378,10 +1337,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null): Completable {
-        if (parametersIncludePii(listOf(searchTerm, originalQuery))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName, resultId = resultID)
 
@@ -1412,10 +1367,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?): Completable {
-        if (parametersIncludePii(listOf(searchTerm, originalQuery))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName)
 
@@ -1443,10 +1394,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null): Completable {
-        if (parametersIncludePii(listOf(term))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         return dataManager.trackSearchResultsLoaded(term, resultCount, customerIds, arrayOf(
                 Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS
@@ -1496,9 +1443,6 @@ object ConstructorIo {
     }
 
     internal fun trackSearchResultClickInternal(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
-        if (parametersIncludePii(listOf(itemName, customerId, variationId, searchTerm))) {
-            return Completable.complete()
-        }
 
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(resultId = resultID)
@@ -1551,10 +1495,6 @@ object ConstructorIo {
     }
 
     internal fun trackConversionInternal(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null): Completable {
-        if (parametersIncludePii(listOf(itemName, customerId, variationId, searchTerm))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val conversionRequestBody = ConversionRequestBody(
@@ -1616,10 +1556,6 @@ object ConstructorIo {
     }
 
     internal fun trackPurchaseInternal(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
-        if (parametersIncludePii(listOf(orderID))) {
-            return Completable.complete()
-        }
-
         var itemsCopy: MutableList<PurchaseItem> = ArrayList()
         for (item in items) {
             repeat(item.quantity) { itemsCopy.add(item) }
@@ -1682,10 +1618,6 @@ object ConstructorIo {
     }
 
     internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available"): Completable {
-        if (parametersIncludePii(listOf(filterName, filterValue, url))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val items = itemIds?.map{ item -> TrackingItem(item, null)}
@@ -1756,10 +1688,6 @@ object ConstructorIo {
     }
 
     internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
-        if (parametersIncludePii(listOf(filterName, filterValue, customerId, variationId))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultClickRequestBody = BrowseResultClickRequestBody(
@@ -1808,9 +1736,6 @@ object ConstructorIo {
     }
 
     internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
-        if (parametersIncludePii(listOf(itemName, customerId, variationId, url))) {
-            return Completable.complete()
-        }
 
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
@@ -1856,10 +1781,6 @@ object ConstructorIo {
     }
 
     internal fun trackGenericResultClickInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null): Completable {
-        if (parametersIncludePii(listOf(itemName, customerId, variationId))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val genericResultClickRequestBody = GenericResultClickRequestBody(
@@ -2001,10 +1922,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null): Completable {
-        if (parametersIncludePii(listOf(podId, customerId, variationId))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val recommendationsResultClickRequestBody = RecommendationResultClickRequestBody(
@@ -2055,10 +1972,6 @@ object ConstructorIo {
         }))
     }
     internal fun trackRecommendationResultsViewInternal(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
-        if (parametersIncludePii(listOf(podId, url))) {
-            return Completable.complete()
-        }
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val recommendationResultViewRequestBody = RecommendationResultViewRequestBody(
