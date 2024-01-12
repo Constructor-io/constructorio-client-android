@@ -1443,7 +1443,6 @@ object ConstructorIo {
     }
 
     internal fun trackSearchResultClickInternal(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(resultId = resultID)
         val sName = sectionName ?: preferenceHelper.defaultItemSection
@@ -1736,7 +1735,6 @@ object ConstructorIo {
     }
 
     internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
-
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val itemDetailLoadRequestBody = ItemDetailLoadRequestBody(
