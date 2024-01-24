@@ -1108,21 +1108,6 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
-    fun behavioral_actionEndpointWithPiiShouldBeOmitted() {
-        val mockResponse = MockResponse().setResponseCode(204)
-        mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackQuizResultLoadInternal("test@gmail.com", "+1 236 333 4011", "4263982640269299", null, null, 1, 10).test()
-        observer.assertComplete()
-        val request = mockServer.takeRequest()
-        val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/quiz_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.26.2&_dt="
-        assertEquals("<email_omitted>", requestBody["quiz_id"])
-        assertEquals("<phone_omitted>", requestBody["quiz_version_id"])
-        assertEquals("<credit_omitted>", requestBody["quiz_session_id"])
-        assert(request.path!!.startsWith(path))
-    }
-
-    @Test
     fun behaviorEndpointWithPiiShouldBeOmitted() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
