@@ -7,10 +7,7 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.remote.ApiPaths
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import org.json.JSONObject
 
 /**
  * @suppress
@@ -20,13 +17,6 @@ class RequestInterceptor(
     private val preferencesHelper: PreferencesHelper,
     private val configMemoryHolder: ConfigMemoryHolder
 ) : Interceptor {
-    private fun RequestBody?.bodyToString(): String {
-        if (this == null) return ""
-        val buffer = okio.Buffer()
-        writeTo(buffer)
-        return buffer.readUtf8()
-    }
-
     private fun redactPii(query: String): String {
         val emailRegex = Regex("^[\\w\\-+\\\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
         val phoneRegex = Regex("^(?:\\+\\d{11,12}|\\+\\d{1,3}\\s\\d{3}\\s\\d{3}\\s\\d{3,4}|\\(\\d{3}\\)\\d{7}|\\(\\d{3}\\)\\s\\d{3}\\s\\d{4}|\\(\\d{3}\\)\\d{3}-\\d{4}|\\(\\d{3}\\)\\s\\d{3}-\\d{4})\$")
@@ -44,23 +34,6 @@ class RequestInterceptor(
             return creditCardRegex.replace(query, "<credit_omitted>")
         }
         return query
-    }
-
-    private fun getRedactedJsonBody (body: RequestBody): RequestBody {
-            val bodyJson = body.bodyToString()
-            val jsonObj = JSONObject(bodyJson)
-            val redactedJsonObj = JSONObject()
-
-            jsonObj.keys().forEach{
-                key ->
-                if (jsonObj.get(key) is String) {
-                    redactedJsonObj.put(key, redactPii(jsonObj.get(key) as String))
-                } else {
-                    redactedJsonObj.put(key, jsonObj.get(key))
-                }
-            }
-
-            return redactedJsonObj.toString().toRequestBody(body.contentType());
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
