@@ -86,12 +86,6 @@ class RequestInterceptor(
                     }
                 }
             }
-
-            /* Redact Body Parameters */
-            if (request.body != null) {
-                val redactedBody = getRedactedJsonBody(request.body!!);
-                newRequestBuilder.post(redactedBody);
-            }
         }
 
         /* Add Session and Identity Parameters */
