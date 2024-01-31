@@ -5,7 +5,8 @@ package io.constructor.data.remote
  */
 object ApiPaths {
     const val URL_BEHAVIORAL_V1_PREFIX = "/behavior"
-    const val URL_BEHAVIORAL_V2_PREFIX = "/v2/behavioral_action";
+    const val URL_BEHAVIORAL_V2_PREFIX = "/v2/behavioral_action"
+    const val URL_BEHAVIORAL_SEARCH_REGEX = "/autocomplete/.*/(search|select|click_through)$"
     const val URL_AUTOCOMPLETE = "autocomplete/%s"
     const val URL_AUTOCOMPLETE_SELECT_EVENT = "autocomplete/{term}/select"
     const val URL_SEARCH_SUBMIT_EVENT = "autocomplete/{term}/search"

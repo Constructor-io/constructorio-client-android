@@ -18,19 +18,19 @@ class RequestInterceptor(
     private val configMemoryHolder: ConfigMemoryHolder
 ) : Interceptor {
     private fun redactPii(query: String): String {
-        val emailRegex = Regex("^[\\w\\-+\\\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
+        val emailRegex = Regex("[\\w\\-+\\\\.]+@([\\w-]+\\.)+[\\w-]{2,4}")
         val phoneRegex = Regex("^(?:\\+\\d{11,12}|\\+\\d{1,3}\\s\\d{3}\\s\\d{3}\\s\\d{3,4}|\\(\\d{3}\\)\\d{7}|\\(\\d{3}\\)\\s\\d{3}\\s\\d{4}|\\(\\d{3}\\)\\d{3}-\\d{4}|\\(\\d{3}\\)\\s\\d{3}-\\d{4})\$")
         val creditCardRegex = Regex("^(?:4[0-9]{15}|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\\d{3})\\d{11})\$")
 
-        if (query.let { emailRegex.matches(it) }) {
+        if (query.let { emailRegex.containsMatchIn(it) }) {
             return emailRegex.replace(query, "<email_omitted>")
         }
 
-        if (query.let { phoneRegex.matches(it) }) {
+        if (query.let { phoneRegex.containsMatchIn(it) }) {
             return phoneRegex.replace(query, "<phone_omitted>")
         }
 
-        if (query.let { creditCardRegex.matches(it) }) {
+        if (query.let { creditCardRegex.containsMatchIn(it) }) {
             return creditCardRegex.replace(query, "<credit_omitted>")
         }
         return query
@@ -38,13 +38,13 @@ class RequestInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val ignoreDtPaths = listOf(ApiPaths.URL_BROWSE_GROUPS, ApiPaths.URL_BROWSE_FACETS, ApiPaths.URL_BROWSE_FACET_OPTIONS);
-        val behavioralEndpointPaths = listOf(ApiPaths.URL_BEHAVIORAL_V1_PREFIX, ApiPaths.URL_BEHAVIORAL_V2_PREFIX )
+        val behavioralEndpointPaths = listOf(ApiPaths.URL_BEHAVIORAL_V1_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_V2_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_SEARCH_REGEX.toRegex() )
         val request = chain.request()
         var builder = request.url.newBuilder();
         val newRequestBuilder = request.newBuilder()
 
         /* Re-add, Redact url query parameters for /behavior, /v2/behavioral_action */
-        if (behavioralEndpointPaths.any{request.url.encodedPath.startsWith(it)} ) {
+        if (behavioralEndpointPaths.any{request.url.encodedPath.matches(it)} ) {
             builder = HttpUrl.Builder()
                     .scheme(request.url.scheme)
                     .port(request.url.port)
