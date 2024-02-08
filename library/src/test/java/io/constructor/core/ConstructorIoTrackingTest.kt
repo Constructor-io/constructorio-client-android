@@ -9,8 +9,6 @@ import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.TestCase.assertFalse
-import junit.framework.TestCase.assertTrue
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
@@ -18,6 +16,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.net.SocketTimeoutException
+import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -1211,26 +1210,32 @@ class ConstructorIoTrackingTest {
 
         for (email in emailPii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchResultsLoadedInternal(email, 10).test()
+            val observer = ConstructorIo.trackSearchSubmitInternal(email, email, null).test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
-            assert(request.path!!.contains(Regex("email_omitted")))
+            val decodedPath = URLDecoder.decode(request.path, "UTF-8");
+            assert(Regex("email_omitted").findAll(decodedPath).count() === 2)
+            assert(!decodedPath!!.contains(Regex(email)))
         }
 
         for (card in creditCardPii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchResultsLoadedInternal(card, 10).test()
+            val observer = ConstructorIo.trackSearchSubmitInternal(card, card, null).test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
-            assert(request.path!!.contains(Regex("credit_omitted")))
+            val decodedPath = URLDecoder.decode(request.path, "UTF-8");
+            assert(Regex("credit_omitted").findAll(decodedPath).count() === 2)
+            assert(!decodedPath!!.contains(card))
         }
 
         for (phone in phonePii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchResultsLoadedInternal(phone, 10).test()
+            val observer = ConstructorIo.trackSearchSubmitInternal(phone, phone, null).test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
-            assert(request.path!!.contains(Regex("phone_omitted")))
+            val decodedPath = URLDecoder.decode(request.path, "UTF-8");
+            assert(Regex("phone_omitted").findAll(decodedPath).count() === 2)
+            assert(!decodedPath!!.contains(phone))
         }
     }
 
@@ -1240,10 +1245,11 @@ class ConstructorIoTrackingTest {
 
         for (query in invalidPii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchResultsLoadedInternal(query, 10).test()
+            val observer = ConstructorIo.trackSearchSubmitInternal(query, query, null).test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
             assert(request.path!!.contains(URLEncoder.encode(query, "UTF-8").replace("+", "%20")))
+            assert(!request.path!!.contains("omitted"))
         }
     }
 }

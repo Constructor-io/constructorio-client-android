@@ -36,6 +36,14 @@ class RequestInterceptor(
         return query
     }
 
+    private fun redactPathSegments(pathSegments: List<String>): String {
+        var redactedPath = pathSegments.map {
+            redactPii(it)
+        }
+
+        return redactedPath.joinToString("/")
+    }
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val ignoreDtPaths = listOf(ApiPaths.URL_BROWSE_GROUPS, ApiPaths.URL_BROWSE_FACETS, ApiPaths.URL_BROWSE_FACET_OPTIONS);
         val behavioralEndpointPaths = listOf(ApiPaths.URL_BEHAVIORAL_V1_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_V2_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_SEARCH_REGEX.toRegex() )
@@ -49,7 +57,8 @@ class RequestInterceptor(
                     .scheme(request.url.scheme)
                     .port(request.url.port)
                     .host(request.url.host)
-                    .encodedPath(request.url.encodedPath);
+                    .addPathSegments(redactPathSegments(request.url.pathSegments));
+
             request.url.queryParameterNames.forEach{
                 name ->
                 request.url.queryParameterValues(name).forEach{
