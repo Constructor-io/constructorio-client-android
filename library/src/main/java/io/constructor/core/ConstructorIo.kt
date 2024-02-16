@@ -1429,6 +1429,7 @@ object ConstructorIo {
     */
     fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
         var completable = trackSearchResultClickInternal(itemName, customerId, null, searchTerm, sectionName, resultID)
+
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Result Click error: ${t.message}")
         }))
