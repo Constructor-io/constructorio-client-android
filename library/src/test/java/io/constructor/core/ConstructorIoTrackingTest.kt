@@ -196,6 +196,7 @@ class ConstructorIoTrackingTest {
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
 
         every { configMemoryHolder.autocompleteResultCount } returns null
+        every { configMemoryHolder.defaultAnalyticsTags } returns mapOf("appVersion" to "123", "appPlatform" to "Android")
         every { configMemoryHolder.userId } returns "player-three"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
@@ -509,6 +510,26 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackConversionWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997","RED",89.00, "test", null, null, mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        val requestBody = getRequestBody(request)
+
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("titanic replica", requestBody["item_name"])
+        assertEquals("RED", requestBody["variation_id"])
+        assertEquals("89.00", requestBody["revenue"])
+        assertEquals("Products", requestBody["section"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackConversion500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -585,6 +606,23 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackPurchaseWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackPurchaseInternal(arrayOf(PurchaseItem("TIT-REP-1997", "RED"), PurchaseItem("QE2-REP-1969")), 12.99, "ORD-1312343", null, mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/purchase?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("[{item_id:TIT-REP-1997,variation_id:RED},{item_id:QE2-REP-1969}]", requestBody["items"])
+        assertEquals("ORD-1312343", requestBody["order_id"])
+        assertEquals("12.99", requestBody["revenue"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackPurchase500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -640,6 +678,24 @@ class ConstructorIoTrackingTest {
         assertEquals("Movies", requestBody["filter_value"])
         assertEquals("10", requestBody["result_count"])
         assertEquals(null, requestBody["items"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultLoadedWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, 10, null, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals(null, requestBody["items"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -704,6 +760,26 @@ class ConstructorIoTrackingTest {
         assertEquals("4", requestBody["result_position_on_page"])
         assertEquals(null, requestBody["variation_id"])
         assertEquals("123456", requestBody["result_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultClickWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultClickInternal("group_id", "Movies","TIT-REP-1997", null,4, "Products", "123456", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/browse_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("4", requestBody["result_position_on_page"])
+        assertEquals(null, requestBody["variation_id"])
+        assertEquals("123456", requestBody["result_id"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -790,6 +866,25 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackItemDetailLoadedWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackItemDetailLoadedInternal("pencil", "123", "456", "Products", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/item_detail_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("pencil", requestBody["item_name"])
+        assertEquals("123", requestBody["item_id"])
+        assertEquals("456", requestBody["variation_id"])
+        assertEquals("Products", requestBody["section"])
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackItemDetailLoaded500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -836,6 +931,24 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackGenericResultClickWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackGenericResultClickInternal("pencil", "123", "456", "Products", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("pencil", requestBody["item_name"])
+        assertEquals("123", requestBody["item_id"])
+        assertEquals("456", requestBody["variation_id"])
+        assertEquals("Products", requestBody["section"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackGenericResultClick500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -875,6 +988,23 @@ class ConstructorIoTrackingTest {
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("User Featured", requestBody["strategy_id"])
         assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultClickWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("User Featured", requestBody["strategy_id"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -933,6 +1063,22 @@ class ConstructorIoTrackingTest {
         val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -1000,6 +1146,30 @@ class ConstructorIoTrackingTest {
         assertEquals("shirt-a", requestBody["item_id"])
         assertEquals("White shirt", requestBody["item_name"])
         assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackQuizResultClickWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackQuizResultClickInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "shirt-a", "shirt-a--reg", "White shirt", null, null, 10, 10, 1, 10, mapOf("test" to "test1", "appVersion" to "150")).test();
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/quiz_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.28.0&_dt="
+        assertEquals("coffee-quiz", requestBody["quiz_id"])
+        assertEquals("23AECMA-1EFKCI", requestBody["quiz_version_id"])
+        assertEquals("34NCUIEI-214CDN", requestBody["quiz_session_id"])
+        assertEquals("1", requestBody["result_page"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("10", requestBody["num_results_per_page"])
+        assertEquals("10", requestBody["result_position_on_page"])
+        assertEquals("shirt-a", requestBody["item_id"])
+        assertEquals("White shirt", requestBody["item_name"])
+        assertEquals("shirt-a--reg", requestBody["variation_id"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -1084,7 +1254,7 @@ class ConstructorIoTrackingTest {
     fun trackQuizConversionWithAllOptionalParameters() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackQuizConversionInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "quizConversion", "quizConversion", true, "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "129.99").test();
+        val observer = ConstructorIo.trackQuizConversionInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "quizConversion", "quizConversion", true, "shirt-a", "shirt-a--reg", "White shirt", "Search Suggestions", "129.99", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test();
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -1099,6 +1269,7 @@ class ConstructorIoTrackingTest {
         assertEquals("quizConversion", requestBody["display_name"])
         assertEquals("quizConversion", requestBody["type"])
         assertEquals("true", requestBody["is_custom_type"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -1158,7 +1329,7 @@ class ConstructorIoTrackingTest {
     fun trackQuizResultLoadWithAllOptionalParameters() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackQuizResultLoadInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "Search Suggestions", "123", 1, 10).test();
+        val observer = ConstructorIo.trackQuizResultLoadInternal("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214CDN", "Search Suggestions", "123", 1, 10, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test();
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -1169,6 +1340,7 @@ class ConstructorIoTrackingTest {
         assertEquals("10", requestBody["result_count"])
         assertEquals("1", requestBody["result_page"])
         assertEquals("Not Available", requestBody["url"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("123", requestBody["result_id"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))

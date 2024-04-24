@@ -79,6 +79,15 @@ object ConstructorIo {
             configMemoryHolder.segments = value
         }
 
+    /**
+     *  Sets the default analytics tags param
+     */
+    var defaultAnalyticsTags: Map<String, String>?
+        get() = configMemoryHolder.defaultAnalyticsTags
+        set(value) {
+            configMemoryHolder.defaultAnalyticsTags = defaultAnalyticsTags
+        }
+
     internal val component: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(context))
@@ -105,6 +114,7 @@ object ConstructorIo {
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
         configMemoryHolder.segments = constructorIoConfig.segments
+        configMemoryHolder.defaultAnalyticsTags = constructorIoConfig.defaultAnalyticsTags
 
         preferenceHelper = component.preferenceHelper()
         preferenceHelper.apiKey = constructorIoConfig.apiKey
@@ -260,6 +270,16 @@ object ConstructorIo {
         }
 
         return encodedParams
+    }
+
+    private fun mergeAnalyticsTags(defaultAnalyticsTags: Map<String, String>?, analyticsTags: Map<String, String>?): Map<String, String>? {
+        if (analyticsTags.isNullOrEmpty()) {
+            return defaultAnalyticsTags
+        } else if (!defaultAnalyticsTags.isNullOrEmpty()) {
+            return defaultAnalyticsTags + analyticsTags
+        }
+
+        return analyticsTags
     }
 
     /**
@@ -1146,14 +1166,15 @@ object ConstructorIo {
      * @param numResultsPerPage The count of quiz results on each page
      * @param resultPage The current page that quiz result is on
      * @param resultCount The total number of quiz results
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null,resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null) {
-        var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, resultPositionOnPage, numResultsPerPage, resultPage, resultCount)
+    fun trackQuizResultClick(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null,resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackQuizResultClickInternal(quizId, quizVersionId, quizSessionId, customerId, variationId, itemName, sectionName, resultId, resultPositionOnPage, numResultsPerPage, resultPage, resultCount, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Quiz Result Click error: ${t.message}")
         }))
     }
-    internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null): Completable {
+    internal fun trackQuizResultClickInternal(quizId: String, quizVersionId: String, quizSessionId: String, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, resultId: String? = null, resultPositionOnPage: Int? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizResultClickRequestBody = QuizResultClickRequestBody(
@@ -1174,7 +1195,8 @@ object ConstructorIo {
             preferenceHelper.apiKey,
             configMemoryHolder.userId,
             configMemoryHolder.segments,
-            true,
+            mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+    true,
             section,
             System.currentTimeMillis()
         )
@@ -1198,14 +1220,15 @@ object ConstructorIo {
      * @param resultId The result ID of the quiz response that the selection came from
      * @param resultPage The current page that quiz result is on
      * @param resultCount The total number of quiz results
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackQuizResultLoad(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, url: String = "Not Available") {
-        var completable = trackQuizResultLoadInternal(quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount, url)
+    fun trackQuizResultLoad(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
+        var completable = trackQuizResultLoadInternal(quizId, quizVersionId, quizSessionId, sectionName, resultId, resultPage, resultCount, url, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Quiz Result Load error: ${t.message}")
         }))
     }
-    internal fun trackQuizResultLoadInternal(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, url: String = "Not Available"): Completable {
+    internal fun trackQuizResultLoadInternal(quizId: String, quizVersionId: String, quizSessionId: String, sectionName: String? = null, resultId: String? = null, resultPage: Int? = null, resultCount: Int? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizResultLoadRequestBody = QuizResultLoadRequestBody(
@@ -1222,7 +1245,8 @@ object ConstructorIo {
             preferenceHelper.apiKey,
             configMemoryHolder.userId,
             configMemoryHolder.segments,
-            true,
+            mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+    true,
             section,
             System.currentTimeMillis()
         )
@@ -1250,14 +1274,15 @@ object ConstructorIo {
      * @param itemName The item name of the clicked item i.e "Jacket Denim"
      * @param sectionName The section that the results came from, i.e. "Products"
      * @param revenue The revenue of the item converted
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackQuizConversion(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null) {
-        var completable = trackQuizConversionInternal(quizId, quizVersionId, quizSessionId, displayName, type, isCustomType, customerId, variationId, itemName, sectionName, revenue)
+    fun trackQuizConversion(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackQuizConversionInternal(quizId, quizVersionId, quizSessionId, displayName, type, isCustomType, customerId, variationId, itemName, sectionName, revenue, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Quiz Conversion error: ${t.message}")
         }))
     }
-    internal fun trackQuizConversionInternal(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null): Completable {
+    internal fun trackQuizConversionInternal(quizId: String, quizVersionId: String, quizSessionId: String, displayName: String? = null, type: String? = null, isCustomType: Boolean? = null, customerId: String, variationId: String? = null, itemName: String? = null, sectionName: String? = null, revenue: String? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val quizConversionRequestBody = QuizConversionRequestBody(
@@ -1277,7 +1302,8 @@ object ConstructorIo {
             preferenceHelper.apiKey,
             configMemoryHolder.userId,
             configMemoryHolder.segments,
-            true,
+            mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+    true,
             section,
             System.currentTimeMillis()
         )
@@ -1478,9 +1504,10 @@ object ConstructorIo {
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param conversionType the type of conversion, i.e. "add_to_cart"
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null) {
-        var completable = trackConversionInternal(itemName, customerId, null, revenue, searchTerm, sectionName, conversionType)
+    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackConversionInternal(itemName, customerId, null, revenue, searchTerm, sectionName, conversionType, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Conversion error: ${t.message}")
         }))
@@ -1499,15 +1526,16 @@ object ConstructorIo {
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param conversionType the type of conversion, i.e. "add_to_cart"
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackConversion(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null) {
-        var completable = trackConversionInternal(itemName, customerId, variationId, revenue, searchTerm, sectionName, conversionType)
+    fun trackConversion(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackConversionInternal(itemName, customerId, variationId, revenue, searchTerm, sectionName, conversionType, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Conversion error: ${t.message}")
         }))
     }
 
-    internal fun trackConversionInternal(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null): Completable {
+    internal fun trackConversionInternal(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val conversionRequestBody = ConversionRequestBody(
@@ -1523,6 +1551,7 @@ object ConstructorIo {
                 preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 section,
                 System.currentTimeMillis()
@@ -1541,10 +1570,11 @@ object ConstructorIo {
      * @param customerIds the identifiers of the purchased items
      * @param revenue the revenue of the purchase event
      * @param orderID the identifier of the order
+     * @param analyticsTags Additional analytics tags to pass
     */
-    fun trackPurchase(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null) {
+    fun trackPurchase(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null, analyticsTags: Map<String, String>? = null) {
         val items = customerIds.map { item -> PurchaseItem(item) }
-        var completable = trackPurchaseInternal(items.toTypedArray(), revenue, orderID, sectionName)
+        var completable = trackPurchaseInternal(items.toTypedArray(), revenue, orderID, sectionName, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Purchase error: ${t.message}")
         }))
@@ -1560,15 +1590,16 @@ object ConstructorIo {
      * @param items the purchased items
      * @param revenue the revenue of the purchase event
      * @param orderID the identifier of the order
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackPurchase(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null) {
-        var completable = trackPurchaseInternal(items, revenue, orderID, sectionName)
+    fun trackPurchase(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackPurchaseInternal(items, revenue, orderID, sectionName, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Purchase error: ${t.message}")
         }))
     }
 
-    internal fun trackPurchaseInternal(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null): Completable {
+    internal fun trackPurchaseInternal(items: Array<PurchaseItem>, revenue: Double?, orderID: String, sectionName: String? = null, analyticsTags: Map<String, String>? = null): Completable {
         var itemsCopy: MutableList<PurchaseItem> = ArrayList()
         for (item in items) {
             repeat(item.quantity) { itemsCopy.add(item) }
@@ -1585,6 +1616,7 @@ object ConstructorIo {
                 preferenceHelper.getSessionId(),
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 preferenceHelper.apiKey,
                 true,
                 System.currentTimeMillis()
@@ -1604,9 +1636,10 @@ object ConstructorIo {
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param itemIds the item ids of the displayed items
      * @param resultCount the number of results for that filter name/value pair
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, itemIds: Array<String>, resultCount: Int, sectionName: String? = null, url: String = "Not Available") {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, itemIds, resultCount, sectionName, url)
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, itemIds: Array<String>, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, itemIds, resultCount, sectionName, url, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Browse Results Loaded error: ${t.message}")
         }))
@@ -1622,15 +1655,16 @@ object ConstructorIo {
      * @param filterName the name of the primary filter, i.e. "Aisle"
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param resultCount the number of results for that filter name/value pair
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, sectionName: String? = null, url: String = "Not Available") {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, null, resultCount, sectionName, url)
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, null, resultCount, sectionName, url, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
 
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available"): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val items = itemIds?.map{ item -> TrackingItem(item, null)}
@@ -1646,6 +1680,7 @@ object ConstructorIo {
                 preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 section,
                 System.currentTimeMillis()
@@ -1671,8 +1706,8 @@ object ConstructorIo {
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the browse response that the selection came from
      */
-    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null) {
-        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, null, resultPositionOnPage, sectionName, resultID)
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, null, resultPositionOnPage, sectionName, resultID, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Result Click error: ${t.message}")
         }))
@@ -1692,15 +1727,16 @@ object ConstructorIo {
      * @param resultPositionOnPage the position of the clicked item on the page i.e. 4
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the browse response that the selection came from
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, variationId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null) {
-        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, variationId, resultPositionOnPage, sectionName, resultID)
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, variationId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, variationId, resultPositionOnPage, sectionName, resultID, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Result Click error: ${t.message}")
         }))
     }
 
-    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null): Completable {
+    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultClickRequestBody = BrowseResultClickRequestBody(
@@ -1715,6 +1751,7 @@ object ConstructorIo {
                 preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 section,
                 System.currentTimeMillis(),
@@ -1740,15 +1777,16 @@ object ConstructorIo {
      * @param variationId the variationId of the item loaded
      * @param sectionName section of the item loaded
      * @param url the url of the item
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackItemDetailLoaded(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available") {
-        var completable = trackItemDetailLoadedInternal(itemName, customerId, variationId, sectionName, url)
+    fun trackItemDetailLoaded(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
+        var completable = trackItemDetailLoadedInternal(itemName, customerId, variationId, sectionName, url, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Item Detail Loaded error: ${t.message}")
         }))
     }
 
-    internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
+    internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val itemDetailLoadRequestBody = ItemDetailLoadRequestBody(
@@ -1762,6 +1800,7 @@ object ConstructorIo {
                 preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 section,
                 System.currentTimeMillis()
@@ -1784,15 +1823,16 @@ object ConstructorIo {
      * @param customerId the id of the item clicked
      * @param variationId the variationId of the item clicked
      * @param sectionName section of the item clicked
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackGenericResultClick(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null) {
-        var completable = trackGenericResultClickInternal(itemName, customerId, variationId, sectionName)
+    fun trackGenericResultClick(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackGenericResultClickInternal(itemName, customerId, variationId, sectionName, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Generic Result Click error: ${t.message}")
         }))
     }
 
-    internal fun trackGenericResultClickInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null): Completable {
+    internal fun trackGenericResultClickInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, analyticsTags: Map<String, String>? = null) : Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val genericResultClickRequestBody = GenericResultClickRequestBody(
@@ -1805,7 +1845,8 @@ object ConstructorIo {
                 preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
-                true,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+            true,
                 section,
                 System.currentTimeMillis()
         )
@@ -1926,14 +1967,15 @@ object ConstructorIo {
      * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
      * @param resultPositionOnPage The position of the recommendation result that was clicked on
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackRecommendationResultClick(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null) {
-        var completable = trackRecommendationResultClickInternal(podId, strategyId, customerId, variationId, sectionName, resultId, numResultsPerPage, resultPage, resultCount, resultPositionOnPage)
+    fun trackRecommendationResultClick(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackRecommendationResultClickInternal(podId, strategyId, customerId, variationId, sectionName, resultId, numResultsPerPage, resultPage, resultCount, resultPositionOnPage, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Recommendation Result Click error: ${t.message}")
         }))
     }
-    internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null): Completable {
+    internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val recommendationsResultClickRequestBody = RecommendationResultClickRequestBody(
@@ -1952,6 +1994,7 @@ object ConstructorIo {
                 preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 section,
                 System.currentTimeMillis()
@@ -1976,14 +2019,15 @@ object ConstructorIo {
      * @param resultCount The total number of recommendation results
      * @param resultId The result ID of the recommendation response that the selection came from
      * @param sectionName The section that the results came from, i.e. "Products"
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackRecommendationResultsView(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available") {
-        var completable = trackRecommendationResultsViewInternal(podId, numResultsViewed, resultPage, resultCount, resultId, sectionName, url)
+    fun trackRecommendationResultsView(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
+        var completable = trackRecommendationResultsViewInternal(podId, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Recommendation Results View error: ${t.message}")
         }))
     }
-    internal fun trackRecommendationResultsViewInternal(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available"): Completable {
+    internal fun trackRecommendationResultsViewInternal(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val recommendationResultViewRequestBody = RecommendationResultViewRequestBody(
@@ -1999,6 +2043,7 @@ object ConstructorIo {
                 preferenceHelper.apiKey,
                 configMemoryHolder.userId,
                 configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 section,
                 System.currentTimeMillis()
