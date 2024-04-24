@@ -1705,6 +1705,7 @@ object ConstructorIo {
      * @param resultPositionOnPage the position of the clicked item on the page i.e. 4
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the browse response that the selection came from
+     * @param analyticsTags Additional analytics tags to pass
      */
     fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null) {
         var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, null, resultPositionOnPage, sectionName, resultID, analyticsTags)
