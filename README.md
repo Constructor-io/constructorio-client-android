@@ -584,11 +584,11 @@ ConstructorIo.trackQuizConversion("coffee-quiz", "23AECMA-1EFKCI", "34NCUIEI-214
 ### Conversion Events
 
 ```kotlin
-// Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, revenue, searchTerm, section, conversionType)
+// Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, revenue, searchTerm, section, conversionType, isCustomType, displayName)
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", 12.99, "tooth", "Products", "add_to_cart")
 
 // v2.18.4+ only
-// Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, variationId, revenue, searchTerm, section, conversionType)
+// Track when an item converts (a.k.a. is added to cart) regardless of the user journey that led to adding to cart (itemName, customerId, variationId, revenue, searchTerm, section, conversionType, isCustomType, displayName)
 ConstructorIo.trackConversion("Fashionable Toothpicks", "1234567-AB", "RED", 12.99, "tooth", "Products", "add_to_cart")
 
 // Track when items are purchased (customerIds, revenue, orderId)
