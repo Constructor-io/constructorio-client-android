@@ -1504,10 +1504,12 @@ object ConstructorIo {
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param conversionType the type of conversion, i.e. "add_to_cart"
+     * @param isCustomType if the conversion is custom (required for displayName)
+     * @param displayName display name of custom conversion type (required for isCustomType)
      * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, analyticsTags: Map<String, String>? = null) {
-        var completable = trackConversionInternal(itemName, customerId, null, revenue, searchTerm, sectionName, conversionType, analyticsTags)
+    fun trackConversion(itemName: String, customerId: String, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, isCustomType: Boolean? = null, displayName: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackConversionInternal(itemName, customerId, null, revenue, searchTerm, sectionName, conversionType, isCustomType, displayName, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Conversion error: ${t.message}")
         }))
@@ -1526,16 +1528,18 @@ object ConstructorIo {
      * @param searchTerm the search term that lead to the event (if adding to cart in a search flow)
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param conversionType the type of conversion, i.e. "add_to_cart"
+     * @param isCustomType if the conversion is custom (required for displayName)
+     * @param displayName display name of custom conversion type (required for isCustomType)
      * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackConversion(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, analyticsTags: Map<String, String>? = null) {
-        var completable = trackConversionInternal(itemName, customerId, variationId, revenue, searchTerm, sectionName, conversionType, analyticsTags)
+    fun trackConversion(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, isCustomType: Boolean? = null, displayName: String? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackConversionInternal(itemName, customerId, variationId, revenue, searchTerm, sectionName, conversionType, isCustomType, displayName, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Conversion error: ${t.message}")
         }))
     }
 
-    internal fun trackConversionInternal(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+    internal fun trackConversionInternal(itemName: String, customerId: String, variationId: String?, revenue: Double?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, conversionType: String? = null, isCustomType: Boolean? = null, displayName: String? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val conversionRequestBody = ConversionRequestBody(
@@ -1545,6 +1549,8 @@ object ConstructorIo {
                 itemName,
                 String.format("%.2f", revenue),
                 conversionType,
+                isCustomType,
+                displayName,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),

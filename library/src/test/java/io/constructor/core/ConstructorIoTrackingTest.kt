@@ -510,10 +510,51 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackConversionWithCustomConversionType() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", null,89.00, "titanic", "Products", "add_to_loves", true, "Add to Loves").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.29.0&_dt="
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("titanic replica", requestBody["item_name"])
+        assertEquals("add_to_loves", requestBody["type"])
+        assertEquals("89.00", requestBody["revenue"])
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("Products", requestBody["section"])
+        assertEquals("true", requestBody["is_custom_type"])
+        assertEquals("Add to Loves", requestBody["display_name"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackConversionWithCustomConversionTypeAndNoDisplayName() {
+        val mockResponse = MockResponse().setResponseCode(500)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997", null,89.00, "titanic", "Products", "add_to_loves", true).test()
+        observer.assertError { true }
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.29.0&_dt="
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("titanic replica", requestBody["item_name"])
+        assertEquals("add_to_loves", requestBody["type"])
+        assertEquals("89.00", requestBody["revenue"])
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("Products", requestBody["section"])
+        assertEquals("true", requestBody["is_custom_type"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackConversionWithAnalyticsTags() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997","RED",89.00, "test", null, null, mapOf("test" to "test1", "appVersion" to "150")).test()
+        val observer = ConstructorIo.trackConversionInternal("titanic replica", "TIT-REP-1997","RED",89.00, "test", null, null, null, null, mapOf("test" to "test1", "appVersion" to "150")).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/conversion?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.29.0&_dt="

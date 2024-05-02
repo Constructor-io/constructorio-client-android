@@ -999,6 +999,21 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun trackConversionWithConversionCustomTypeAgainstRealResponse() {
+        val observer = constructorIo.trackConversionInternal(
+                "Boneless Pork Shoulder Roast",
+                "prrst_shldr_bls",
+                null,
+                1.99,
+                conversionType = "add_to_loves",
+                isCustomType = true,
+                displayName = "Add to Loves"
+        ).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackPurchaseAgainstRealResponse() {
         val observer = constructorIo.trackPurchaseInternal(
             arrayOf(PurchaseItem("prrst_shldr_bls"), PurchaseItem("prrst_crwn")),
