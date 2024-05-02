@@ -43,6 +43,7 @@ class ConstructorIoIntegrationTest {
         every { preferencesHelper.getSessionId(any(), any()) } returns 67
 
         every { configMemoryHolder.autocompleteResultCount } returns null
+        every { configMemoryHolder.defaultAnalyticsTags } returns mapOf("appVersion" to "123", "appPlatform" to "Android")
         every { configMemoryHolder.userId } returns "player-three"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()

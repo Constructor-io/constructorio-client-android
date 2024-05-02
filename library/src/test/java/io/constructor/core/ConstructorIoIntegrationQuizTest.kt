@@ -43,6 +43,7 @@ class ConstructorIoIntegrationQuizTest {
 
         every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-three"
+        every { configMemoryHolder.defaultAnalyticsTags } returns mapOf("appVersion" to "123", "appPlatform" to "Android")
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
 

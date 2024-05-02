@@ -18,6 +18,7 @@ data class PurchaseRequestBody(
         @Json(name = "s") val s: Int?,
         @Json(name = "ui") val ui: String?,
         @Json(name = "us") val us: List<String?>,
+        @Json(name = "analytics_tags") val analyticsTags: Map<String, String>?,
         @Json(name = "key") val key: String?,
         @Json(name= "beacon") val beacon: Boolean?,
         @Json(name= "_dt") val _dt: Long?

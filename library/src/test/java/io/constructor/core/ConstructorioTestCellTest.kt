@@ -45,6 +45,7 @@ class ConstructorioTestCellTest {
 
         every { configMemoryHolder.autocompleteResultCount } returns null
         every { configMemoryHolder.userId } returns "player-two"
+        every { configMemoryHolder.defaultAnalyticsTags } returns mapOf("appVersion" to "123", "appPlatform" to "Android")
         every { configMemoryHolder.testCellParams } returns listOf("cellone" to "vanilla", "celltwo" to "whipped-cream")
         every { configMemoryHolder.segments } returns  emptyList()
 

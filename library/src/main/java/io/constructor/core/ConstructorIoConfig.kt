@@ -12,6 +12,7 @@ import io.constructor.BuildConfig
  *  @property testCells Test cell name/value pairs if A/B testing
  *  @property servicePort The port to use (for testing purposes only, defaults to 443)
  *  @property serviceScheme The scheme to use (for testing purposes only, defaults to HTTPS)
+ *  @property defaultAnalyticsTags Additional analytics tags to pass. Will be merged with analytics tags passed on the request level
  */
 data class ConstructorIoConfig(
         val apiKey: String,
@@ -22,5 +23,6 @@ data class ConstructorIoConfig(
         val autocompleteResultCount: Map<String, Int> = mapOf(Constants.QueryValues.SEARCH_SUGGESTIONS to 10, Constants.QueryValues.PRODUCTS to 0),
         val defaultItemSection: String = BuildConfig.DEFAULT_ITEM_SECTION,
         val servicePort: Int = BuildConfig.SERVICE_PORT,
-        val serviceScheme: String = BuildConfig.SERVICE_SCHEME
+        val serviceScheme: String = BuildConfig.SERVICE_SCHEME,
+        val defaultAnalyticsTags: Map<String, String> = emptyMap()
 )
