@@ -195,13 +195,52 @@ class ConstructorIoRecommendationsTest {
         assertThat(request.requestUrl!!.encodedPath).isEqualTo("/recommendations/v1/pods/titanic")
         with(request.requestUrl!!) {
             val queryParams = mapOf(
-                "variations_map" to """{"dtype":"array","values":{"Price":{"aggregation":"min","field":"data.facets.price"},"Country":{"aggregation":"all","field":"data.facets.country"}},"group_by":[{"name":"Country","field":"data.facets.Country"}]}""",
-                "key" to "golden-key",
-                "i" to "guido-the-guid",
-                "ui" to "player-one",
-                "s" to "79",
-                "c" to "cioand-2.30.0",
-                "_dt" to "1"
+                    "variations_map" to """{"dtype":"array","values":{"Price":{"aggregation":"min","field":"data.facets.price"},"Country":{"aggregation":"all","field":"data.facets.country"}},"group_by":[{"name":"Country","field":"data.facets.Country"}]}""",
+                    "key" to "golden-key",
+                    "i" to "guido-the-guid",
+                    "ui" to "player-one",
+                    "s" to "79",
+                    "c" to "cioand-2.30.0",
+                    "_dt" to "1"
+            )
+            assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
+
+            queryParams.forEach { (key, value) ->
+                if (key == "_dt") {
+                    assertThat(queryParameter(key)).containsOnlyDigits()
+                } else {
+                    assertThat(queryParameter(key)).isEqualTo(value)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun getRecommendationResultsWithPreFilterExpressionUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        mockServer.enqueue(mockResponse)
+        val preFilterExpression = """{"and":[{"name":"Country","value":"US"}]}"""
+        val recommendationsRequest = RecommendationsRequest.Builder("titanic")
+                .setPreFilterExpression(preFilterExpression)
+                .build()
+        val observer = constructorIo.getRecommendationResults(recommendationsRequest).test()
+        observer.assertComplete().assertValue {
+            var recommendationResponse = it.get()
+            recommendationResponse?.response?.results?.isNotEmpty()!!
+        }
+        observer.assertNoErrors()
+
+        val request = mockServer.takeRequest()
+        assertThat(request.requestUrl!!.encodedPath).isEqualTo("/recommendations/v1/pods/titanic")
+        with(request.requestUrl!!) {
+            val queryParams = mapOf(
+                    "pre_filter_expression" to preFilterExpression,
+                    "key" to "golden-key",
+                    "i" to "guido-the-guid",
+                    "ui" to "player-one",
+                    "s" to "79",
+                    "c" to "cioand-2.30.0",
+                    "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
 
