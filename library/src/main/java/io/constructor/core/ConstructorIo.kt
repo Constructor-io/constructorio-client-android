@@ -1887,9 +1887,10 @@ object ConstructorIo {
      * @param itemId: The item id to retrieve recommendations (strategy specific)
      * @param term: The term to use to refine results (strategy specific)
      * @param variationsMap specify which attributes within variations should be returned
+     * @param preFilterExpression faceting expression to scope results
      */
-    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap)
+    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): Observable<ConstructorData<RecommendationsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
 
         return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
     }
@@ -1917,9 +1918,10 @@ object ConstructorIo {
      * @param itemId: The item id to retrieve recommendations (strategy specific)
      * @param term: The term to use to refine results (strategy specific)
      * @param variationsMap specify which attributes within variations should be returned
+     * @param preFilterExpression faceting expression to scope results
      */
-    suspend fun getRecommendationResultsCRT(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null): RecommendationsResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap)
+    suspend fun getRecommendationResultsCRT(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): RecommendationsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
 
         return dataManager.getRecommendationResultsCRT(podId, encodedParams = encodedParams.toTypedArray())
     }
@@ -1950,9 +1952,11 @@ object ConstructorIo {
      * @param term the term to use to refine results (strategy specific)
      * @param numResults the number of results to return
      * @param section the section the results will come from, i.e. "Products"
+     * @param variationsMap specify which attributes within variations should be returned
+     * @param preFilterExpression faceting expression to scope results
      */
     fun getRecommendationResults(request: RecommendationsRequest): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section, variationsMap = request.variationsMap )
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression)
 
         return dataManager.getRecommendationResults(request.podId, encodedParams = encodedParams.toTypedArray())
     }

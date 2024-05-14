@@ -1124,6 +1124,19 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getRecommendationResultsCRTWithPreFilterExpressionAgainstRealResponse() {
+        runBlocking {
+            val preFilterExpression = """{"and":[{"name":"Color","value":"green"}]}"""
+            val recommendationResults = constructorIo.getRecommendationResultsCRT("home_page_1", preFilterExpression = preFilterExpression)
+            assertTrue(recommendationResults.resultId !== null)
+            assertTrue(recommendationResults.response!!.results!!.isNotEmpty())
+            assertTrue(recommendationResults.response!!.resultCount!! > 0)
+            assertNotNull(recommendationResults.request!!["pre_filter_expression"])
+        }
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackRecommendationResultClickAgainstRealResponse() {
         val observer = constructorIo.trackRecommendationResultClickInternal(
             "home_page_1",

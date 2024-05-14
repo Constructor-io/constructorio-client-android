@@ -330,9 +330,11 @@ var variationsMap: VariationsMap = VariationsMap(
   dtype = "array",
   """{"and":[{"field":"data.brand","value":"Best Brand"}]}""",
 )
+var preFilterExpression = """{ "and": [ { "name": "Color", "value": "green" } ] }"""
+
 
 // Using RxJava
-ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults, variationsMap = variationsMap)
+ConstructorIo.getRecommendationResults(podId, selectedFacets?.map { it.key to it.value }, numResults, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 .subscribe {
   it.onValue {

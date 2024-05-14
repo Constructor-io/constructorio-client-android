@@ -13,6 +13,7 @@ class RecommendationsRequest (
     val numResults: Int? = null,
     val section: String? = null,
     val variationsMap: VariationsMap? = null,
+    val preFilterExpression: String? = null,
 ) {
     private constructor(builder: Builder) : this(
         builder.podId,
@@ -22,6 +23,7 @@ class RecommendationsRequest (
         builder.numResults,
         builder.section,
         builder.variationsMap,
+        builder.preFilterExpression,
     )
 
     companion object {
@@ -37,6 +39,7 @@ class RecommendationsRequest (
         var term: String? = null
         var section: String? = null
         var variationsMap: VariationsMap? = null
+        var preFilterExpression: String? = null
 
         fun setFilters(facets: Map<String, List<String>>): Builder = apply { this.filters = facets }
         fun setItemIds(itemIds: List<String>): Builder = apply { this.itemIds = itemIds }
@@ -44,6 +47,7 @@ class RecommendationsRequest (
         fun setNumResults(numResults: Int): Builder = apply { this.numResults = numResults }
         fun setSection(section: String): Builder = apply { this.section = section }
         fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
+        fun setPreFilterExpression(preFilterExpression: String): Builder = apply { this.preFilterExpression = preFilterExpression }
         fun build(): RecommendationsRequest = RecommendationsRequest(this)
     }
 }
