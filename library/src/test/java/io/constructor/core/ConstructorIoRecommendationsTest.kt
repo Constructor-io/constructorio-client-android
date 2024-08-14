@@ -253,4 +253,49 @@ class ConstructorIoRecommendationsTest {
             }
         }
     }
+
+    @Test
+    fun getRecommendationResultsWithHiddenFieldsUsingBuilder() {
+        val mockResponse = MockResponse().setResponseCode(200).setBody(TestDataLoader.loadAsString("recommendation_response.json"))
+        mockServer.enqueue(mockResponse)
+        val hiddenFields = listOf("hiddenField1", "hiddenField2")
+        val recommendationsRequest = RecommendationsRequest.Builder("titanic")
+        .setHiddenFields(hiddenFields)
+        .build()
+
+        val observer = constructorIo.getRecommendationResults(recommendationsRequest).test()
+
+        observer.assertComplete().assertValue {
+            var recommendationResponse = it.get()
+            recommendationResponse?.response?.results?.isNotEmpty()!!
+        }
+        observer.assertNoErrors()
+
+        val request = mockServer.takeRequest()
+                assertThat(request.requestUrl!!.encodedPath).isEqualTo("/recommendations/v1/pods/titanic")
+        with(request.requestUrl!!) {
+            val queryParams = mapOf(
+                    "fmt_options[hidden_fields]" to hiddenFields,
+                    "key" to "golden-key",
+                    "i" to "guido-the-guid",
+                    "ui" to "player-one",
+                    "s" to "79",
+                    "c" to "cioand-2.31.1",
+                    "_dt" to "1"
+            )
+            assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
+
+            queryParams.forEach { (key, value) ->
+                if (key == "fmt_options[hidden_fields]") {
+                    assertThat(queryParameterValues(key)).containsExactlyInAnyOrderElementsOf(
+                        hiddenFields
+                    )
+                } else if (key == "_dt") {
+                    assertThat(queryParameter(key)).containsOnlyDigits()
+                } else {
+                    assertThat(queryParameter(key)).isEqualTo(value)
+                }
+            }
+        }
+    }
 }

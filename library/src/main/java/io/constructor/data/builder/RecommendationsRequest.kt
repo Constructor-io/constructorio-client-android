@@ -12,6 +12,7 @@ class RecommendationsRequest (
     val term: String? = null,
     val numResults: Int? = null,
     val section: String? = null,
+    val hiddenFields: List<String>? = null,
     val variationsMap: VariationsMap? = null,
     val preFilterExpression: String? = null,
 ) {
@@ -22,6 +23,7 @@ class RecommendationsRequest (
         builder.term,
         builder.numResults,
         builder.section,
+        builder.hiddenFields,
         builder.variationsMap,
         builder.preFilterExpression,
     )
@@ -38,6 +40,7 @@ class RecommendationsRequest (
         var itemIds: List<String>? = null
         var term: String? = null
         var section: String? = null
+        var hiddenFields: List<String>? = null
         var variationsMap: VariationsMap? = null
         var preFilterExpression: String? = null
 
@@ -46,6 +49,7 @@ class RecommendationsRequest (
         fun setTerm(term: String): Builder = apply { this.term = term }
         fun setNumResults(numResults: Int): Builder = apply { this.numResults = numResults }
         fun setSection(section: String): Builder = apply { this.section = section }
+        fun setHiddenFields(hiddenFields: List<String>): Builder = apply { this.hiddenFields = hiddenFields }
         fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
         fun setPreFilterExpression(preFilterExpression: String): Builder = apply { this.preFilterExpression = preFilterExpression }
         fun build(): RecommendationsRequest = RecommendationsRequest(this)
