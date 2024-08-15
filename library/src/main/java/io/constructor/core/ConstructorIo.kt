@@ -1888,9 +1888,10 @@ object ConstructorIo {
      * @param term: The term to use to refine results (strategy specific)
      * @param variationsMap specify which attributes within variations should be returned
      * @param preFilterExpression faceting expression to scope results
+     * @param hiddenFields show fields that are hidden by default
      */
-    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
+    fun getRecommendationResults(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null, hiddenFields: List<String>? = null): Observable<ConstructorData<RecommendationsResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap, preFilterExpression = preFilterExpression, hiddenFields = hiddenFields)
 
         return dataManager.getRecommendationResults(podId, encodedParams = encodedParams.toTypedArray())
     }
@@ -1920,8 +1921,8 @@ object ConstructorIo {
      * @param variationsMap specify which attributes within variations should be returned
      * @param preFilterExpression faceting expression to scope results
      */
-    suspend fun getRecommendationResultsCRT(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): RecommendationsResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
+    suspend fun getRecommendationResultsCRT(podId: String, facets: List<Pair<String, List<String>>>? = null, numResults: Int? = null, sectionName: String? = null, itemId: String? = null, term: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null, hiddenFields: List<String>? = null): RecommendationsResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(numResults = numResults, sectionName = sectionName, itemId = itemId, term = term, facets = facets, variationsMap = variationsMap, preFilterExpression = preFilterExpression, hiddenFields = hiddenFields)
 
         return dataManager.getRecommendationResultsCRT(podId, encodedParams = encodedParams.toTypedArray())
     }
@@ -1956,7 +1957,7 @@ object ConstructorIo {
      * @param preFilterExpression faceting expression to scope results
      */
     fun getRecommendationResults(request: RecommendationsRequest): Observable<ConstructorData<RecommendationsResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression)
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression, hiddenFields = request.hiddenFields)
 
         return dataManager.getRecommendationResults(request.podId, encodedParams = encodedParams.toTypedArray())
     }
