@@ -13,6 +13,7 @@ object ApiPaths {
     const val URL_SESSION_START_EVENT = "behavior"
     const val URL_CONVERSION_EVENT = "v2/behavioral_action/conversion"
     const val URL_SEARCH_RESULT_CLICK_EVENT = "autocomplete/{term}/click_through"
+    const val URL_SEARCH_RESULT_LOAD_EVENT = "v2/behavioral_action/search_result_load"
     const val URL_BEHAVIOR = "behavior"
     const val URL_PURCHASE = "v2/behavioral_action/purchase"
     const val URL_SEARCH = "search/%s"

@@ -974,6 +974,13 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun trackSearchResultsLoadedAgainstRealResponse() {
+        val observer = constructorIo.trackSearchResultsLoadedInternal("titanic", 10, arrayOf("123", "234")).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackConversionAgainstRealResponse() {
         val observer = constructorIo.trackConversionInternal(
             "Boneless Pork Shoulder Roast",
