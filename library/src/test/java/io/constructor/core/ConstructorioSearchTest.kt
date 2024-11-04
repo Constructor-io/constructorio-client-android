@@ -280,6 +280,22 @@ class ConstructorIoSearchTest {
     }
 
     @Test
+    fun getSearchResultsWithFmtOptions() {
+        val mockResponse = MockResponse().setResponseCode(200)
+                .setBody(TestDataLoader.loadAsString("search_response.json"))
+        mockServer.enqueue(mockResponse)
+        val fmtOptions = mapOf("groups_start" to 5, "groups_sort_order" to "ascending", "fields" to listOf("test", "test2"))
+        val observer = constructorIo.getSearchResults(
+                term = "bbq",
+                fmtOptions = fmtOptions,
+        ).test()
+        val request = mockServer.takeRequest()
+        val path =
+                "/search/bbq?fmt_options%5Bgroups_start%5D=5&fmt_options%5Bgroups_sort_order%5D=ascending&fmt_options%5Bfields%5D=test&fmt_options%5Bfields%5D=test2&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.32.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun getSearchResultsWithFiltersUsingBuilder() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("search_response.json"))

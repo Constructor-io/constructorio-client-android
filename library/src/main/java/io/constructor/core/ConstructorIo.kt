@@ -199,7 +199,8 @@ object ConstructorIo {
         groupsMaxDepth: Int? = null,
         groupIdFilter: String? = null,
         preFilterExpression: String? = null,
-        sectionFacets: Map<String, List<Pair<String, List<String>>>>? = null
+        sectionFacets: Map<String, List<Pair<String, List<String>>>>? = null,
+        fmtOptions: Map<String, Any>? = null
     ): ArrayList<Pair<String, String>> {
 
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
@@ -241,6 +242,25 @@ object ConstructorIo {
         sectionName?.let { encodedParams.add(Constants.QueryConstants.SECTION.urlEncode() to sectionName.toString().urlEncode()) }
         hiddenFacets?.forEach { hiddenFacet ->
             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.HIDDEN_FACET).urlEncode() to hiddenFacet.urlEncode())
+        }
+        fmtOptions?.forEach { (key, value) ->
+            when (value) {
+                is List<*> -> {
+                    value.forEach{ fmtOptionsValue ->
+                        if (fmtOptionsValue is String) {
+                            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to fmtOptionsValue.urlEncode())
+                        } else if (fmtOptionsValue is Number) {
+                            encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to fmtOptionsValue.toString())
+                        }
+                    }
+                }
+                is String -> {
+                    encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to value.urlEncode())
+                }
+                is Number -> {
+                    encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to value.toString())
+                }
+            }
         }
         showHiddenFacets?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.SHOW_HIDDEN_FACETS).urlEncode() to showHiddenFacets.toString().urlEncode()) }
         groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
@@ -422,9 +442,10 @@ object ConstructorIo {
      * @param groupsSortOrder the sort order for groups
      * @param variationsMap specify which attributes within variations should be returned
      * @param preFilterExpression faceting expression to scope results
+     * @param fmtOptions additional format options to pass
      */
-    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): Observable<ConstructorData<SearchResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
+    fun getSearchResults(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null, fmtOptions: Map<String, Any>? = null): Observable<ConstructorData<SearchResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression, fmtOptions = fmtOptions)
 
         return dataManager.getSearchResults(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -460,9 +481,10 @@ object ConstructorIo {
      * @param groupsSortOrder the sort order for groups
      * @param variationsMap specify which attributes within variations should be returned
      * @param preFilterExpression faceting expression to scope results
+     * @param fmtOptions additional format options to pass
      */
-    suspend fun getSearchResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): SearchResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
+    suspend fun getSearchResultsCRT(term: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null, fmtOptions: Map<String, Any>? = null): SearchResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression, fmtOptions = fmtOptions)
 
         return dataManager.getSearchResultsCRT(term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -496,7 +518,7 @@ object ConstructorIo {
      * @param request the search request object
      */
     fun getSearchResults(request: SearchRequest): Observable<ConstructorData<SearchResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression)
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression, fmtOptions = request.fmtOptions)
 
         return dataManager.getSearchResults(request.term.urlEncode(), encodedParams = encodedParams.toTypedArray())
     }
@@ -532,9 +554,10 @@ object ConstructorIo {
      * @param groupsSortOrder the sort order for groups
      * @param variationsMap specify which attributes within variations should be returned
      * @param preFilterExpression faceting expression to scope results
+     * @param fmtOptions additional format options to pass
      */
-    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): Observable<ConstructorData<BrowseResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
+    fun getBrowseResults(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null, fmtOptions: Map<String, Any>? = null): Observable<ConstructorData<BrowseResponse>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression, fmtOptions = fmtOptions)
 
         return dataManager.getBrowseResults(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
@@ -568,7 +591,7 @@ object ConstructorIo {
      * @param request the browse request object
      */
     fun getBrowseResults(request: BrowseRequest): Observable<ConstructorData<BrowseResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression)
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression, fmtOptions = request.fmtOptions)
 
         return dataManager.getBrowseResults(request.filterName, request.filterValue, encodedParams = encodedParams.toTypedArray())
     }
@@ -605,9 +628,10 @@ object ConstructorIo {
      * @param groupsSortOrder the sort order for groups
      * @param variationsMap specify which attributes within variations should be returned
      * @param preFilterExpression faceting expression to scope results
+     * @param fmtOptions additional format options to pass
      */
-    suspend fun getBrowseResultsCRT(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): BrowseResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
+    suspend fun getBrowseResultsCRT(filterName: String, filterValue: String, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null, fmtOptions: Map<String, Any>? = null): BrowseResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression, fmtOptions = fmtOptions)
 
         return dataManager.getBrowseResultsCRT(filterName, filterValue, encodedParams = encodedParams.toTypedArray())
     }
@@ -890,9 +914,10 @@ object ConstructorIo {
      * @param groupsSortOrder the sort order for groups
      * @param variationsMap specify which attributes within variations should be returned
      * @param preFilterExpression faceting expression to scope results
+     * @param fmtOptions additional format options to pass
      */
-    suspend fun getBrowseItemsResultsCRT(itemIds: List<String>, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null): BrowseResponse {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, ids = itemIds, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression)
+    suspend fun getBrowseItemsResultsCRT(itemIds: List<String>, facets: List<Pair<String, List<String>>>? = null, page: Int? = null, perPage: Int? = null, groupId: Int? = null, sortBy: String? = null, sortOrder: String? = null, sectionName: String? = null, hiddenFields: List<String>? = null, hiddenFacets: List<String>? = null, groupsSortBy: String? = null, groupsSortOrder: String? = null, variationsMap: VariationsMap? = null, preFilterExpression: String? = null, fmtOptions: Map<String, Any>? = null): BrowseResponse {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = facets, page = page, perPage = perPage, groupIdInt = groupId, sortBy = sortBy, sortOrder = sortOrder, sectionName = sectionName, hiddenFields = hiddenFields, hiddenFacets = hiddenFacets, ids = itemIds, groupsSortBy = groupsSortBy, groupsSortOrder = groupsSortOrder, variationsMap = variationsMap, preFilterExpression = preFilterExpression, fmtOptions = fmtOptions)
 
         return dataManager.getBrowseItemsResultsCRT(encodedParams = encodedParams.toTypedArray())
     }
@@ -926,7 +951,7 @@ object ConstructorIo {
      * @param request the browse request object
      */
     fun getBrowseItemsResults(request: BrowseItemsRequest): Observable<ConstructorData<BrowseResponse>> {
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, ids = request.ids, preFilterExpression = request.preFilterExpression)
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), page = request.page, perPage = request.perPage, sortBy = request.sortBy, sortOrder = request.sortOrder, sectionName = request.section, hiddenFields = request.hiddenFields, hiddenFacets = request.hiddenFacets, groupsSortBy = request.groupsSortBy, groupsSortOrder = request.groupsSortOrder, variationsMap = request.variationsMap, ids = request.ids, preFilterExpression = request.preFilterExpression, fmtOptions = request.fmtOptions)
 
         return dataManager.getBrowseItemsResults(encodedParams = encodedParams.toTypedArray())
     }
