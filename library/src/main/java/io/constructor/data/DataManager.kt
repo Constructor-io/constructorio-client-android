@@ -11,7 +11,7 @@ import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
-import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
@@ -108,8 +108,8 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackSearchResultClick(term, itemName, customerId, variationId, params.toMap(), encodedParams.toMap())
     }
 
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, params: Array<Pair<String, String>>): Completable {
-        return constructorApi.trackSearchResultsLoaded(term, resultCount, customerIds?.take(60)?.joinToString(","), params.toMap())
+    fun trackSearchResultsLoaded(searchResultLoadRequestBody: SearchResultLoadRequestBody, params: Array<Pair<String, String>>): Completable {
+        return constructorApi.trackSearchResultsLoaded(searchResultLoadRequestBody, params.toMap())
     }
 
     fun trackInputFocus(term: String?, params: Array<Pair<String, String>>): Completable {

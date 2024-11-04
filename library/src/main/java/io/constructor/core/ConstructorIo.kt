@@ -21,7 +21,7 @@ import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
-import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.injection.component.AppComponent
@@ -1426,18 +1426,38 @@ object ConstructorIo {
      * @param term the term that results are displayed for, i.e. "Pumpkin"
      * @param resultCount the number of results for that term
      * @param customerIds the customerIds of shown items
+     * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null) {
-        var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds)
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null) {
+        var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Results Loaded error: ${t.message}")
         }))
     }
-    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null): Completable {
+    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        return dataManager.trackSearchResultsLoaded(term, resultCount, customerIds, arrayOf(
-                Constants.QueryConstants.ACTION to Constants.QueryValues.EVENT_SEARCH_RESULTS
-        ))
+        val items = customerIds?.map{ item -> TrackingItem(item, null)}
+        val searchResultLoadRequestBody = SearchResultLoadRequestBody(
+                term,
+                items,
+                resultCount,
+                "Not Available",
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                true,
+                preferenceHelper.defaultItemSection,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackSearchResultsLoaded(
+                searchResultLoadRequestBody,
+                arrayOf()
+        )
     }
 
     /**
