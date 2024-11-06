@@ -1225,6 +1225,23 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun getSearchResultsWithFmtOptionsAgainstRealResponse() {
+        val observer = constructorIo.getSearchResults(
+                term = "item1",
+                fmtOptions = mapOf("groups_sort_order" to "ascending", "groups_sort_by" to "value", "groups_start" to "group_id:Brands", "fields" to listOf("test", "test2"))
+        ).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val searchResponse = observer.values()[0].get()
+        assertTrue(searchResponse?.resultId !== null)
+        assertTrue(searchResponse?.response?.groups!!.isNotEmpty())
+        assertEquals(searchResponse?.response?.groups?.get(0)?.displayName, "Brands")
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun getSearchResultsWithGroupsSortValueDescendingAgainstRealResponse() {
         val observer = constructorIo.getSearchResults(
             term = "item1",
@@ -1617,6 +1634,24 @@ class ConstructorIoIntegrationTest {
         assertTrue(recommendationResponse?.response?.results !== null)
         assertTrue(recommendationResponse?.response?.resultCount!! >= 0)
         assertTrue(returnedVariationsMap!!.isNotEmpty())
+
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun getBrowseResultsWithFmtOptionsAgainstRealResponse() {
+        val observer = constructorIo.getBrowseResults(
+                filterName = "Brand",
+                filterValue = "XYZ",
+                fmtOptions = mapOf("groups_sort_order" to "ascending", "groups_sort_by" to "value", "groups_start" to "group_id:Brands", "fields" to listOf("test", "test2"))
+        ).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val browseResponse = observer.values()[0].get()
+        assertTrue(browseResponse?.resultId !== null)
+        assertTrue(browseResponse?.response?.groups!!.isNotEmpty())
+        assertEquals(browseResponse?.response?.groups?.get(0)?.displayName, "Brands")
 
         Thread.sleep(timeBetweenTests)
     }
