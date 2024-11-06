@@ -231,13 +231,13 @@ class ConstructorIoBrowseItemsTest {
         val mockResponse = MockResponse().setResponseCode(200)
                 .setBody(TestDataLoader.loadAsString("browse_response.json"))
         mockServer.enqueue(mockResponse)
-        val fmtOptions = mapOf("groups_start" to 5, "groups_sort_order" to "ascending", "fields" to listOf("test", "test2"))
+        val fmtOptions = mapOf("groups_start" to 5,"show_hidden_facets" to false, "groups_sort_order" to "ascending", "fields" to listOf(false, "test2"))
         val browseItemsRequest = BrowseItemsRequest.Builder(ids)
                 .setFmtOptions(fmtOptions)
                 .build()
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
-        val path = "/browse/items?fmt_options%5Bgroups_start%5D=5&fmt_options%5Bgroups_sort_order%5D=ascending&fmt_options%5Bfields%5D=test&fmt_options%5Bfields%5D=test2&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.32.0&_dt="
+        val path = "/browse/items?fmt_options%5Bgroups_start%5D=5&fmt_options%5Bshow_hidden_facets%5D=false&fmt_options%5Bgroups_sort_order%5D=ascending&fmt_options%5Bfields%5D=false&fmt_options%5Bfields%5D=test2&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.32.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 

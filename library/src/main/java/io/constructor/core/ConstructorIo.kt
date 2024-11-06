@@ -249,7 +249,7 @@ object ConstructorIo {
                     value.forEach{ fmtOptionsValue ->
                         if (fmtOptionsValue is String) {
                             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to fmtOptionsValue.urlEncode())
-                        } else if (fmtOptionsValue is Number) {
+                        } else if (fmtOptionsValue is Number || fmtOptionsValue is Boolean) {
                             encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to fmtOptionsValue.toString())
                         }
                     }
@@ -257,7 +257,7 @@ object ConstructorIo {
                 is String -> {
                     encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to value.urlEncode())
                 }
-                is Number -> {
+                is Number, is Boolean -> {
                     encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(key).urlEncode() to value.toString())
                 }
             }
