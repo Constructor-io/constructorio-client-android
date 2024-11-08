@@ -971,8 +971,8 @@ object ConstructorIo {
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
-     * @param quizVersionId version identifier for the quiz. version ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning](https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning)
-     * @param quizSessionId session identifier for the quiz. session ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions](https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions)
+     * @param quizVersionId version identifier for the quiz. version ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.com/reference/configuration-quizzes](https://docs.constructor.com/reference/configuration-quizzes)
+     * @param quizSessionId session identifier for the quiz. session ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.com/reference/configuration-quizzes](https://docs.constructor.com/reference/configuration-quizzes)
      * @param sectionName the section the quiz and results come from. defaults to "Products"
      */
     fun getQuizNextQuestion(quizId: String, answers: List<List<String>>? = null, quizVersionId: String? = null, quizSessionId: String? = null, sectionName: String? = null): Observable<ConstructorData<QuizQuestionResponse>> {
@@ -1072,8 +1072,8 @@ object ConstructorIo {
      * ```
      * @param quizId id of the quiz you want to retrieve
      * @param answers list of answers to send
-     * @param quizVersionId version identifier for the quiz. version ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning](https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning)
-     * @param quizSessionId session identifier for the quiz. session ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions](https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions)
+     * @param quizVersionId version identifier for the quiz. version ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.com/reference/configuration-quizzes](https://docs.constructor.com/reference/configuration-quizzes)
+     * @param quizSessionId session identifier for the quiz. session ID will be returned with the first request and it should be passed with subsequent requests. more information can be found: [https://docs.constructor.com/reference/configuration-quizzes](https://docs.constructor.com/reference/configuration-quizzes)
      * @param sectionName the section the quiz and results come from. defaults to "Products"
      * @param filters additional filters used to refine results
      * @param page the page number of the results
