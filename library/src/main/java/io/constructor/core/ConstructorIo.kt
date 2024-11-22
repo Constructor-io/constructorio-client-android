@@ -2048,7 +2048,7 @@ object ConstructorIo {
      *
      * Example:
      * ```
-     * ConstructorIo.trackRecommendationResultsView("Best_Sellers", "User Featured", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
+     * ConstructorIo.trackRecommendationResultsView("Best_Sellers", arrayOf("123", "234"), 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
      * ```
      * @param podId The pod id
      * @param itemIds the item ids of the dislayed items
@@ -2071,7 +2071,7 @@ object ConstructorIo {
      *
      * Example:
      * ```
-     * ConstructorIo.trackRecommendationResultsView("Best_Sellers", "User Featured", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
+     * ConstructorIo.trackRecommendationResultsView("Best_Sellers", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
      * ```
      * @param podId The pod id
      * @param numResultsViewed The count of recommendation results being viewed
