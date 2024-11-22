@@ -568,6 +568,10 @@ ConstructorIo.trackRecommendationResultClick("Best_Sellers", "User Featured", "7
 
 // Track when recommendation results are loaded into view (podId, numResultsViewed, resultPage, resultCount, resultId, sectionName)
 ConstructorIo.trackRecommendationResultsView("Best_Sellers", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
+
+// v2.34.0+ only
+// Track when recommendation results are loaded into view (podId, itemIds, numResultsViewed, resultPage, resultCount, resultId, sectionName)
+ConstructorIo.trackRecommendationResultsView("Best_Sellers", arrayOf("1234", "2345"), 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
 ```
 
 ### Quiz Events

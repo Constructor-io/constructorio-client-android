@@ -173,7 +173,7 @@ class ConstructorioSegmentsTest {
     fun trackRecommendationResultsView() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null,4).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.33.0&_dt="

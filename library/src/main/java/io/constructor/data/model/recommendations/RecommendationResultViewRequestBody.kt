@@ -8,6 +8,7 @@ import java.io.Serializable
 @JsonClass(generateAdapter = true)
 data class RecommendationResultViewRequestBody(
         @Json(name = "pod_id") val podId: String,
+        @Json(name = "items") val items: List<TrackingItem>?,
         @Json(name = "num_results_viewed") val numResultsViewed: Int,
         @Json(name = "result_page") val resultPage: Int?,
         @Json(name = "result_count") val resultCount: Int?,
