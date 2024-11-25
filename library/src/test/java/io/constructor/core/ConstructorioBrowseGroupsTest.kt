@@ -71,7 +71,7 @@ class ConstructorioBrowseGroupsTest {
 
         val request = mockServer.takeRequest()
         val path =
-                "/browse/groups?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.33.0"
+                "/browse/groups?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.0"
         assert(request.path!!.startsWith(path))
     }
 
@@ -125,7 +125,7 @@ class ConstructorioBrowseGroupsTest {
 
         val request = mockServer.takeRequest()
         val path =
-               "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.33.0"
+               "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.0"
         assert(request.path!!.startsWith(path))
     }
 
@@ -141,7 +141,7 @@ class ConstructorioBrowseGroupsTest {
         val observer = constructorIo.getBrowseGroups(browseGroupsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-                "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.33.0"
+                "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.0"
         assert(request.path!!.startsWith(path))
     }
 }
