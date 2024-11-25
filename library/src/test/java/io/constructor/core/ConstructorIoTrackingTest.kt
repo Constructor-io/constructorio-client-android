@@ -1097,7 +1097,7 @@ class ConstructorIoTrackingTest {
     fun trackRecommendationResultsView() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -1112,7 +1112,7 @@ class ConstructorIoTrackingTest {
     fun trackRecommendationResultsViewWithAnalyticsTags() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null,4, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -1125,10 +1125,28 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackRecommendationResultsViewWithItems() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf("123", "234")
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", items,4, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.33.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackRecommendationResultsViewWithSectionAndResultID() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4, 1, 4, "3467632", "Search Suggestions").test()
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, 1, 4, "3467632", "Search Suggestions").test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -1146,7 +1164,7 @@ class ConstructorIoTrackingTest {
     fun trackRecommendationResultsView500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -1162,7 +1180,7 @@ class ConstructorIoTrackingTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", 4).test()
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4).test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)

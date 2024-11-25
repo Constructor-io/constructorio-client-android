@@ -1149,7 +1149,7 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun trackRecommendationResultsViewAgainstRealResponse() {
-        val observer = constructorIo.trackRecommendationResultsViewInternal("home_page_1", 4).test()
+        val observer = constructorIo.trackRecommendationResultsViewInternal("home_page_1", arrayOf("123", "234"), 4).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
