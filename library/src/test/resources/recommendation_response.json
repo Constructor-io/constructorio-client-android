@@ -37,6 +37,9 @@
         "url": "/"
       },
       "is_slotted": false,
+      "strategy": {
+        "id": "bestsellers"
+      },
       "matched_terms": [],
       "value": "LaCroix Sparkling Water Pure Cans - 12-12 Fl. Oz."
     }, {

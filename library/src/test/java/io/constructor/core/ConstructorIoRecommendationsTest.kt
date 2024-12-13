@@ -72,6 +72,7 @@ class ConstructorIoRecommendationsTest {
         assertEquals(recommendationResponse?.response?.results!![0].data.id, "960189161")
         assertEquals(recommendationResponse?.response?.results!![0].data.imageUrl, "https://d17bbgoo3npfov.cloudfront.net/images/farmstand-960189161.png")
         assertEquals(recommendationResponse?.response?.results!![0].data.metadata?.get("price"), 1.11)
+        assertEquals(recommendationResponse?.response?.results!![0].strategy?.id, "bestsellers")
         assertEquals(recommendationResponse?.response?.resultCount, 225)
 
         val request = mockServer.takeRequest()
