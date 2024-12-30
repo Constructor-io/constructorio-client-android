@@ -77,7 +77,7 @@ class ConstructorioBrowseFacetOptionsTest {
 
         val request = mockServer.takeRequest()
         val path =
-                "/browse/facet_options?facet_name=brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.0"
+                "/browse/facet_options?facet_name=brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.1"
         assert(request.path!!.startsWith(path))
     }
 
@@ -131,7 +131,7 @@ class ConstructorioBrowseFacetOptionsTest {
 
         val request = mockServer.takeRequest()
         val path =
-                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.0"
+                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.1"
         assert(request.path!!.startsWith(path))
     }
 
@@ -146,7 +146,7 @@ class ConstructorioBrowseFacetOptionsTest {
         val observer = constructorIo.getBrowseFacetOptions(browseFacetOptionsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.0"
+                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.34.1"
         assert(request.path!!.startsWith(path))
     }
 }
