@@ -9,7 +9,7 @@ import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
-import io.constructor.data.model.search.SearchResponse
+import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -53,10 +53,8 @@ interface ConstructorApi {
                                @QueryMap params: Map<String, String>,
                                @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_BEHAVIOR)
-    fun trackSearchResultsLoaded(@Query("term") term: String,
-                                 @Query("num_results") resultCount: Int,
-                                 @Query("customer_ids") customerIds: String?,
+    @POST(ApiPaths.URL_SEARCH_RESULT_LOAD_EVENT)
+    fun trackSearchResultsLoaded(@Body searchRequestBody: SearchResultLoadRequestBody,
                                  @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_BEHAVIOR)

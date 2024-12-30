@@ -120,7 +120,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/behavior?term=titanic&num_results=10&action=search-results&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.34.1&_dt="
+        val path = "/v2/behavioral_action/search_result_load?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.34.1&_dt="
         assert(request.path!!.startsWith(path))
     }
 
