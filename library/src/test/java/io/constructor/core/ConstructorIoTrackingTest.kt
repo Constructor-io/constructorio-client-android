@@ -395,7 +395,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.32.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.34.1&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals(null, requestBody["items"])
