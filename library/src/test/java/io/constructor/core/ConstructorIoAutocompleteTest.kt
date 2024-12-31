@@ -68,7 +68,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -87,7 +87,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -110,7 +110,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&filters%5BSearch%20Suggestions%5D%5BstoreLocation%5D=US&filters%5BProducts%5D%5Bbrand%5D=Top%20Brand&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&filters%5BSearch%20Suggestions%5D%5BstoreLocation%5D=US&filters%5BProducts%5D%5Bbrand%5D=Top%20Brand&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -126,7 +126,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?filters%5Bgroup_id%5D=101&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?filters%5Bgroup_id%5D=101&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -140,7 +140,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -156,7 +156,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -172,7 +172,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -189,7 +189,7 @@ class ConstructorIoAutocompleteTest {
         ).test()
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/bbq?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/bbq?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -201,7 +201,7 @@ class ConstructorIoAutocompleteTest {
         val observer = constructorIo.getAutocompleteResults("2% cheese").test()
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/2%25%20cheese?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/2%25%20cheese?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -224,7 +224,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&filters%5Bgroup_id%5D=101&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?filters%5BstoreLocation%5D=CA&filters%5Bgroup_id%5D=101&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -247,7 +247,7 @@ class ConstructorIoAutocompleteTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/autocomplete/titanic?num_results_Products=5&num_results_Search%20Suggestions=10&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+            "/autocomplete/titanic?num_results_Products=5&num_results_Search%20Suggestions=10&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -281,7 +281,7 @@ class ConstructorIoAutocompleteTest {
                 "i" to "guido-the-guid",
                 "ui" to "player-one",
                 "s" to "79",
-                "c" to "cioand-2.34.1",
+                "c" to "cioand-2.35.0",
                 "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)

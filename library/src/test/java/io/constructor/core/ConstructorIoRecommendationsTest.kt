@@ -76,7 +76,7 @@ class ConstructorIoRecommendationsTest {
         assertEquals(recommendationResponse?.response?.resultCount, 225)
 
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -89,7 +89,7 @@ class ConstructorIoRecommendationsTest {
             it.networkError
         }
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -103,7 +103,7 @@ class ConstructorIoRecommendationsTest {
             it.isError
         }
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -120,7 +120,7 @@ class ConstructorIoRecommendationsTest {
         assertEquals(recommendationResponse?.response?.resultCount, 0)
 
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -142,7 +142,7 @@ class ConstructorIoRecommendationsTest {
         assertEquals(recommendationResponse?.response?.resultCount, 225)
 
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -166,7 +166,7 @@ class ConstructorIoRecommendationsTest {
         assertEquals(recommendationResponse?.response?.resultCount, 225)
 
         val request = mockServer.takeRequest()
-        val path = "/recommendations/v1/pods/titanic?item_id=item_id_1&item_id=item_id_2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.34.1&_dt="
+        val path = "/recommendations/v1/pods/titanic?item_id=item_id_1&item_id=item_id_2&key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -201,7 +201,7 @@ class ConstructorIoRecommendationsTest {
                     "i" to "guido-the-guid",
                     "ui" to "player-one",
                     "s" to "79",
-                    "c" to "cioand-2.34.1",
+                    "c" to "cioand-2.35.0",
                     "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
@@ -240,7 +240,7 @@ class ConstructorIoRecommendationsTest {
                     "i" to "guido-the-guid",
                     "ui" to "player-one",
                     "s" to "79",
-                    "c" to "cioand-2.34.1",
+                    "c" to "cioand-2.35.0",
                     "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)
@@ -281,7 +281,7 @@ class ConstructorIoRecommendationsTest {
                     "i" to "guido-the-guid",
                     "ui" to "player-one",
                     "s" to "79",
-                    "c" to "cioand-2.34.1",
+                    "c" to "cioand-2.35.0",
                     "_dt" to "1"
             )
             assertThat(queryParameterNames).containsExactlyInAnyOrderElementsOf(queryParams.keys)

@@ -9,7 +9,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.34.1) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.35.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 
@@ -569,7 +569,7 @@ ConstructorIo.trackRecommendationResultClick("Best_Sellers", "User Featured", "7
 // Track when recommendation results are loaded into view (podId, numResultsViewed, resultPage, resultCount, resultId, sectionName)
 ConstructorIo.trackRecommendationResultsView("Best_Sellers", 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
 
-// v2.34.1+ only
+// v2.34.0+ only
 // Track when recommendation results are loaded into view (podId, itemIds, numResultsViewed, resultPage, resultCount, resultId, sectionName)
 ConstructorIo.trackRecommendationResultsView("Best_Sellers", arrayOf("1234", "2345"), 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
 ```
