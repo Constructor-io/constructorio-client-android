@@ -5,6 +5,7 @@ import io.constructor.data.builder.*
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.VariationsMap
+import io.constructor.data.model.common.TrackingItem
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
@@ -29,6 +30,8 @@ class ConstructorIoIntegrationTest {
     private val preferencesHelper = mockk<PreferencesHelper>()
     private val configMemoryHolder = mockk<ConfigMemoryHolder>()
     private val timeBetweenTests = 2000.toLong()
+    private val testCampaignId = "cmp123"
+    private val testCampaignOwner = "desktop"
 
     @Before
     fun setup() {
@@ -974,8 +977,35 @@ class ConstructorIoIntegrationTest {
     }
 
     @Test
+    fun trackSearchResultClickWithCampaignParamsAgainstRealResponse() {
+        val observer = constructorIo.trackSearchResultClickInternal(
+            "Boneless Pork Shoulder Roast",
+            "prrst_shldr_bls",
+            null,
+            "pork",
+            null,
+            null,
+            testCampaignId,
+            testCampaignOwner
+        ).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
     fun trackSearchResultsLoadedAgainstRealResponse() {
         val observer = constructorIo.trackSearchResultsLoadedInternal("titanic", 10, arrayOf("123", "234")).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackSearchResultsLoadedWithCampaignParamsAgainstRealResponse() {
+        val items = arrayOf(
+            TrackingItem("123", null, testCampaignId, testCampaignOwner),
+            TrackingItem("234", null, testCampaignId, testCampaignOwner),
+        )
+        val observer = constructorIo.trackSearchResultsLoadedInternal("titanic", 10, items = items).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -1034,7 +1064,18 @@ class ConstructorIoIntegrationTest {
 
     @Test
     fun trackBrowseResultsLoadedAgainstRealResponse() {
-        val observer = constructorIo.trackBrowseResultsLoadedInternal("group_ids", "544", arrayOf("123", "234"), 10).test()
+        val observer = constructorIo.trackBrowseResultsLoadedInternal("group_ids", "544", arrayOf("123", "234"), null, 10).test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackBrowseResultsLoadedWithCampaignParamsAgainstRealResponse() {
+        val items = arrayOf(
+            TrackingItem("123", null, testCampaignId, testCampaignOwner),
+            TrackingItem("234", null, testCampaignId, testCampaignOwner),
+        )
+        val observer = constructorIo.trackBrowseResultsLoadedInternal("group_ids", "544", items = items, resultCount = 10).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }
@@ -1053,6 +1094,23 @@ class ConstructorIoIntegrationTest {
         val observer =
                 constructorIo.trackBrowseResultClickInternal("group_ids", "544", "prrst_shldr_bls",null,5, "Products", "123")
                         .test()
+        observer.assertComplete()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackBrowseResultClickWithCampaignParamsAgainstRealResponse() {
+        val observer = constructorIo.trackBrowseResultClickInternal(
+            "group_ids",
+            "544",
+            "prrst_shldr_bls",
+            null,
+            5,
+            "Products",
+            null,
+            testCampaignId,
+            testCampaignOwner
+        ).test()
         observer.assertComplete()
         Thread.sleep(timeBetweenTests)
     }

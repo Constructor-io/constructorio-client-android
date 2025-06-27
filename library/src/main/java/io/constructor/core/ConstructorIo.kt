@@ -200,7 +200,9 @@ object ConstructorIo {
         groupIdFilter: String? = null,
         preFilterExpression: String? = null,
         sectionFacets: Map<String, List<Pair<String, List<String>>>>? = null,
-        fmtOptions: Map<String, Any>? = null
+        fmtOptions: Map<String, Any>? = null,
+        slCampaignId: String? = null,
+        slCampaignOwner: String? = null
     ): ArrayList<Pair<String, String>> {
 
         val encodedParams: ArrayList<Pair<String, String>> = arrayListOf()
@@ -263,6 +265,8 @@ object ConstructorIo {
             }
         }
         showHiddenFacets?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.SHOW_HIDDEN_FACETS).urlEncode() to showHiddenFacets.toString().urlEncode()) }
+    slCampaignId?.let { encodedParams.add("sl_campaign_id".urlEncode() to it.urlEncode()) }
+    slCampaignOwner?.let { encodedParams.add("sl_campaign_owner".urlEncode() to it.urlEncode()) }
         groupsSortBy?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_BY).urlEncode() to groupsSortBy.urlEncode()) }
         groupsSortOrder?.let { encodedParams.add(Constants.QueryConstants.FMT_OPTIONS.format(Constants.QueryConstants.GROUPS_SORT_ORDER).urlEncode() to groupsSortOrder.urlEncode()) }
         resultId?.let { encodedParams.add(Constants.QueryConstants.RESULT_ID.urlEncode() to it.urlEncode()) }
@@ -1442,6 +1446,7 @@ object ConstructorIo {
     }
 
     /**
+     * @deprecated Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.
      * Tracks search results loaded (a.k.a. search results viewed) events.
      *
      * Example:
@@ -1454,17 +1459,37 @@ object ConstructorIo {
      * @param analyticsTags Additional analytics tags to pass
      */
     fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null) {
-        var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds, analyticsTags)
-        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
-            t -> e("Search Results Loaded error: ${t.message}")
-        }))
+        var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds = customerIds, analyticsTags = analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
-    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null): Completable {
+
+    /**
+     * Tracks search results loaded (a.k.a. search results viewed) events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf(TrackingItem("1234", "2345", "camp1234", "owner-A"))
+     * ```
+     * @param term the term that results are displayed for, i.e. "Pumpkin"
+     * @param resultCount the number of results for that term
+     * @param items the list of items shown
+     * @param analyticsTags Additional analytics tags to pass
+     */
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>? = null) {
+        var completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
+    }
+
+    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null, items: Array<TrackingItem>? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val items = customerIds?.map{ item -> TrackingItem(item, null)}
+        val itemsList: List<TrackingItem>? = when {
+            items != null -> items.toList()
+            customerIds != null -> customerIds.map { id -> TrackingItem(id, null, null, null) }
+            else -> null
+        }
         val searchResultLoadRequestBody = SearchResultLoadRequestBody(
                 term,
-                items,
+                itemsList,
                 resultCount,
                 "Not Available",
                 BuildConfig.CLIENT_VERSION,
@@ -1497,7 +1522,7 @@ object ConstructorIo {
      * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the search response that the click came from
-    */
+   */
     fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
         var completable = trackSearchResultClickInternal(itemName, customerId, null, searchTerm, sectionName, resultID)
 
@@ -1527,9 +1552,9 @@ object ConstructorIo {
         }))
     }
 
-    internal fun trackSearchResultClickInternal(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null): Completable {
+    internal fun trackSearchResultClickInternal(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null, slCampaignId: String? = null, slCampaignOwner: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(resultId = resultID)
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(resultId = resultID, slCampaignId = slCampaignId, slCampaignOwner = slCampaignOwner)
         val sName = sectionName ?: preferenceHelper.defaultItemSection
         return dataManager.trackSearchResultClick(itemName, customerId, variationId, searchTerm, arrayOf(
                 Constants.QueryConstants.SECTION to sName
@@ -1622,7 +1647,7 @@ object ConstructorIo {
      * @param revenue the revenue of the purchase event
      * @param orderID the identifier of the order
      * @param analyticsTags Additional analytics tags to pass
-    */
+   */
     fun trackPurchase(customerIds: Array<String>, revenue: Double?, orderID: String, sectionName: String? = null, analyticsTags: Map<String, String>? = null) {
         val items = customerIds.map { item -> PurchaseItem(item) }
         var completable = trackPurchaseInternal(items.toTypedArray(), revenue, orderID, sectionName, analyticsTags)
@@ -1677,6 +1702,7 @@ object ConstructorIo {
     }
 
     /**
+     * @deprecated Prefer [trackBrowseResultsLoaded] with an array of [TrackingItem] in place of an array of strings for itemIds.
      * Tracks browse result loaded (a.k.a. browse results viewed) events.
      *
      * Example:
@@ -1690,10 +1716,26 @@ object ConstructorIo {
      * @param analyticsTags Additional analytics tags to pass
      */
     fun trackBrowseResultsLoaded(filterName: String, filterValue: String, itemIds: Array<String>, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, itemIds, resultCount, sectionName, url, analyticsTags)
-        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
-                t -> e("Browse Results Loaded error: ${t.message}")
-        }))
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, itemIds = itemIds, resultCount = resultCount, sectionName = sectionName, url = url, analyticsTags = analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Browse Results Loaded error: ${t.message}") }))
+    }
+
+    /**
+     * Tracks browse result loaded (a.k.a. browse results viewed) events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackBrowseResultsLoaded("Category", "Snacks", arrayOf(TrackingItem("1234", "2345", "camp1234", "owner-A")), 674)
+     * ```
+     * @param filterName the name of the primary filter, i.e. "Aisle"
+     * @param filterValue the value of the primary filter, i.e. "Produce"
+     * @param items the list of the displayed items
+     * @param resultCount the number of results for that filter name/value pair
+     * @param analyticsTags Additional analytics tags to pass
+     */
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, items: Array<TrackingItem>, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, items = items, resultCount = resultCount, sectionName = sectionName, url = url, analyticsTags = analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Browse Results Loaded error: ${t.message}") }))
     }
 
     /**
@@ -1709,20 +1751,24 @@ object ConstructorIo {
      * @param analyticsTags Additional analytics tags to pass
      */
     fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, null, resultCount, sectionName, url, analyticsTags)
+        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, null, null, resultCount, sectionName, url, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Results Loaded error: ${t.message}")
         }))
     }
 
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, items: Array<TrackingItem>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
-        val items = itemIds?.map{ item -> TrackingItem(item, null)}
+        val itemsList: List<TrackingItem>? = when {
+            items != null -> items.toList()
+            itemIds != null -> itemIds.map { id -> TrackingItem(id, null, null, null) }
+            else -> null
+        }
         val browseResultLoadRequestBody = BrowseResultLoadRequestBody(
                 filterName,
                 filterValue,
-                items,
+                itemsList,
                 resultCount,
                 url,
                 BuildConfig.CLIENT_VERSION,
@@ -1757,9 +1803,11 @@ object ConstructorIo {
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the browse response that the selection came from
      * @param analyticsTags Additional analytics tags to pass
+     * @param slCampaignId The campaign id of the clicked item
+     * @param slCampaignOwner The campaign owner of the clicked item
      */
-    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null) {
-        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, null, resultPositionOnPage, sectionName, resultID, analyticsTags)
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null, slCampaignId: String? = null, slCampaignOwner: String? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, null, resultPositionOnPage, sectionName, resultID, slCampaignId, slCampaignOwner, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Result Click error: ${t.message}")
         }))
@@ -1780,15 +1828,17 @@ object ConstructorIo {
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the browse response that the selection came from
      * @param analyticsTags Additional analytics tags to pass
+     * @param slCampaignId The campaign id of the clicked item
+     * @param slCampaignOwner The campaign owner of the clicked item
      */
-    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, variationId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null) {
-        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, variationId, resultPositionOnPage, sectionName, resultID, analyticsTags)
+    fun trackBrowseResultClick(filterName: String, filterValue: String, customerId: String, variationId: String, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null, slCampaignId: String? = null, slCampaignOwner: String? = null) {
+        var completable = trackBrowseResultClickInternal(filterName, filterValue, customerId, variationId, resultPositionOnPage, sectionName, resultID, slCampaignId, slCampaignOwner, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Browse Result Click error: ${t.message}")
         }))
     }
 
-    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+    internal fun trackBrowseResultClickInternal(filterName: String, filterValue: String, customerId: String, variationId: String? = null, resultPositionOnPage: Int, sectionName: String? = null, resultID: String? = null, slCampaignId: String? = null, slCampaignOwner: String? = null, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val browseResultClickRequestBody = BrowseResultClickRequestBody(
@@ -1808,6 +1858,8 @@ object ConstructorIo {
                 section,
                 System.currentTimeMillis(),
                 resultID,
+                slCampaignId,
+                slCampaignOwner,
         )
 
         return dataManager.trackBrowseResultClick(
@@ -2110,7 +2162,7 @@ object ConstructorIo {
     internal fun trackRecommendationResultsViewInternal(podId: String, itemIds: Array<String>? = null, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
-        val items = itemIds?.map{ item -> TrackingItem(item, null)}
+        val items = itemIds?.map{ item -> TrackingItem(item, null, null, null)}
         val recommendationResultViewRequestBody = RecommendationResultViewRequestBody(
                 podId,
                 items,

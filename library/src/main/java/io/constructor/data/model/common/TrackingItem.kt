@@ -11,4 +11,6 @@ import java.io.Serializable
 data class TrackingItem(
     @Json(name = "item_id") val itemId: String?,
     @Json(name = "variation_id") val variationId: String?,
+    @Json(name = "sl_campaign_id") val slCampaignId: String?,
+    @Json(name = "sl_campaign_owner") val slCampaignOwner: String?,
 ) : Serializable
