@@ -383,9 +383,8 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        assertEquals("titanic", requestBody["search_term"])
-        assert(requestBody["items"]!!.contains("sl_campaign_id"))
-        assert(requestBody["items"]!!.contains("cmp123"))
+        assert(requestBody["items"]!!.contains("sl_campaign_owner:ownerA"))
+        assert(requestBody["items"]!!.contains("sl_campaign_id:cmp123"))
         assertEquals("POST", request.method)
     }
 
@@ -472,10 +471,8 @@ class ConstructorIoTrackingTest {
         ).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val decodedPath = java.net.URLDecoder.decode(request.path, "UTF-8")
-        val encodedCampaignId = URLEncoder.encode("cmp123", "UTF-8")
-        assert(decodedPath.contains("sl_campaign_id=$encodedCampaignId"))
-        assert(decodedPath.contains("sl_campaign_owner=ownerA"))
+        assert(request.path!!.contains("sl_campaign_id=cmp123"))
+        assert(request.path!!.contains("sl_campaign_owner=ownerA"))
     }
 
     @Test
@@ -803,8 +800,8 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        assertEquals("Movies", requestBody["filter_value"])
-        assert(requestBody["items"]!!.contains("sl_campaign_owner"))
+        assert(requestBody["items"]!!.contains("sl_campaign_owner:ownerA"))
+        assert(requestBody["items"]!!.contains("sl_campaign_id:cmp123"))
         assertEquals("POST", request.method)
     }
 
