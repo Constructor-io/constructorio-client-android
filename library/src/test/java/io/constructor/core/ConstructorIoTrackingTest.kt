@@ -5,6 +5,7 @@ import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.purchase.PurchaseItem
+import io.constructor.data.model.common.TrackingItem
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -371,6 +372,23 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackSearchResultLoadedWithCampaignItemsArray() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(
+            TrackingItem("123", "RED", "cmp123", "ownerA"),
+            TrackingItem("234", null, "cmp456", "ownerB")
+        )
+        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, null, items).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        assert(requestBody["items"]!!.contains("sl_campaign_owner:ownerA"))
+        assert(requestBody["items"]!!.contains("sl_campaign_id:cmp123"))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
     fun trackSearchResultLoadedWithCustomerIDs() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
@@ -435,6 +453,26 @@ class ConstructorIoTrackingTest {
         val request = mockServer.takeRequest()
         val path = "/autocomplete/titanic/click_through?name=titanic%20replica&customer_id=TIT-REP-1997&section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.35.0&_dt="
         assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchResultClickWithCampaignParams() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackSearchResultClickInternal(
+            "Fancy Item",
+            "123",
+            null,
+            "titanic",
+            "Products",
+            "abc",
+            "cmp123",
+            "ownerA"
+        ).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        assert(request.path!!.contains("sl_campaign_id=cmp123"))
+        assert(request.path!!.contains("sl_campaign_owner=ownerA"))
     }
 
     @Test
@@ -737,7 +775,7 @@ class ConstructorIoTrackingTest {
     fun trackBrowseResultLoaded() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, 10).test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, null, 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -751,10 +789,27 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackBrowseResultLoadedWithCampaignItemsArray() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(
+            TrackingItem("123", null, "cmp123", "ownerA"),
+            TrackingItem("234", null, "cmp456", "ownerB")
+        )
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, items, 10).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        assert(requestBody["items"]!!.contains("sl_campaign_owner:ownerA"))
+        assert(requestBody["items"]!!.contains("sl_campaign_id:cmp123"))
+        assertEquals("POST", request.method)
+    }
+
+    @Test
     fun trackBrowseResultLoadedWithAnalyticsTags() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, 10, null, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, null,10, null, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -773,7 +828,7 @@ class ConstructorIoTrackingTest {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
         val items = arrayOf("123", "234");
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", items, 10).test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", items, null, 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -790,7 +845,7 @@ class ConstructorIoTrackingTest {
     fun trackBrowseResultLoaded500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, 10).test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, null,10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -807,7 +862,7 @@ class ConstructorIoTrackingTest {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, 10).test()
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, null,10).test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
         assertEquals(null, request)
@@ -830,6 +885,28 @@ class ConstructorIoTrackingTest {
         assertEquals("123456", requestBody["result_id"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultClickWithCampaignParams() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultClickInternal(
+            "group_id",
+            "Movies",
+            "123",
+            null,
+            4,
+            "Products",
+            "xyz",
+            "cmp123",
+            "ownerA"
+        ).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        assertEquals("cmp123", requestBody["sl_campaign_id"])
+        assertEquals("ownerA", requestBody["sl_campaign_owner"])
     }
 
     @Test

@@ -26,4 +26,6 @@ data class BrowseResultClickRequestBody(
         @Json(name= "section") val section: String?,
         @Json(name= "_dt") val _dt: Long?,
         @Json(name= "result_id") val resultId: String?,
+        @Json(name = "sl_campaign_id") val slCampaignId: String?,
+        @Json(name = "sl_campaign_owner") val slCampaignOwner: String?,
 ) : Serializable
