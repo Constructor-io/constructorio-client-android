@@ -1522,9 +1522,11 @@ object ConstructorIo {
      * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the search response that the click came from
+     * @param slCampaignId The campaign id of the clicked item
+     * @param slCampaignOwner The campaign owner of the clicked item
    */
-    fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
-        var completable = trackSearchResultClickInternal(itemName, customerId, null, searchTerm, sectionName, resultID)
+    fun trackSearchResultClick(itemName: String, customerId: String, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null, slCampaignId: String? = null, slCampaignOwner: String? = null) {
+        var completable = trackSearchResultClickInternal(itemName, customerId, null, searchTerm, sectionName, resultID, slCampaignId, slCampaignOwner)
 
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Result Click error: ${t.message}")
@@ -1544,9 +1546,11 @@ object ConstructorIo {
      * @param searchTerm the term that results are displayed for, i.e. "Pumpkin"
      * @param sectionName the section that the results came from, i.e. "Products"
      * @param resultID the result ID of the search response that the click came from
+     * @param slCampaignId The campaign id of the clicked item
+     * @param slCampaignOwner The campaign owner of the clicked item
      */
-    fun trackSearchResultClick(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null) {
-        var completable = trackSearchResultClickInternal(itemName, customerId, variationId, searchTerm, sectionName, resultID)
+    fun trackSearchResultClick(itemName: String, customerId: String, variationId: String?, searchTerm: String = Constants.QueryConstants.TERM_UNKNOWN, sectionName: String? = null, resultID: String? = null, slCampaignId: String? = null, slCampaignOwner: String? = null) {
+        var completable = trackSearchResultClickInternal(itemName, customerId, variationId, searchTerm, sectionName, resultID, slCampaignId, slCampaignOwner)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Search Result Click error: ${t.message}")
         }))
