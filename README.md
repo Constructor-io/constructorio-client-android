@@ -548,7 +548,7 @@ Sponsored results can be identified by `is_retail_media = true` label
 // Track when sponsored search results are loaded into view. 
 ConstructorIo.trackSearchResultsLoaded(term = "tooth", resultCount =  789, items = arrayOf(TrackingItem("item-1", "variation-1", "campaign-1", "owner-1"))
 
-// Track when a search result is clicked (itemName, customerId, searchTerm, sectionName, resultId)
+// Track when a sponsored search result is clicked
 ConstructorIo.trackSearchResultClick(itemName = "Fashionable Toothpicks", customerId = "1234567-AB", searchTerm = "tooth", slCampaignId = "campaign-1", slCampaignOwner = "owner-1")
 ```
 
@@ -573,10 +573,10 @@ ConstructorIo.trackBrowseResultClick("group_id", "Snacks", "7654321-BA", "RED", 
 ### Sponsored Browse Events
 Sponsored results can be identified by `is_retail_media = true` label
 ```kotlin
-// Track when browse results are loaded into view
+// Track when sponsored browse results are loaded into view
 ConstructorIo.trackBrowseResultsLoaded(filterName = "group_id", filterValue = "Snacks", items = arrayOf(TrackingItem("item-1", "variation-1", "campaign-1", "owner-1")), resultCount = 674)
 
-// Track when a browse result is clicked
+// Track when a sponsored browse result is clicked
 ConstructorIo.trackBrowseResultClick(filterName = "group_id", filterValue = "Snacks",  customerId = "7654321-BA", "4", slCampaignId = "campaign-1", slCampaignOwner = "owner-1")
 ```
 
