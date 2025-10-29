@@ -82,14 +82,12 @@ class ConstructorIoIntegrationQuizTest {
     @Test
     fun getQuizNextQuestionShouldMatchPassedIdsAgainstRealResponse() {
         val request = QuizRequest.Builder("test-quiz")
-            .setQuizVersionId("e03210db-0cc6-459c-8f17-bf014c4f554d")
             .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
             .build()
-        val observer = constructorIo.getQuizResults(request).test()
+        val observer = constructorIo.getQuizNextQuestion(request).test()
 
         val quizResult = observer.values()[0].get()
         assertEquals("test-quiz", quizResult?.quizId);
-        assertEquals("e03210db-0cc6-459c-8f17-bf014c4f554d", quizResult?.quizVersionId);
         assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
 
         Thread.sleep(timeBetweenTests)
@@ -238,14 +236,12 @@ class ConstructorIoIntegrationQuizTest {
         )
         val request = QuizRequest.Builder("test-quiz")
             .setAnswers(answers)
-            .setQuizVersionId("e03210db-0cc6-459c-8f17-bf014c4f554d")
             .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
             .build()
         val observer = constructorIo.getQuizResults(request).test()
 
         val quizResult = observer.values()[0].get()
         assertEquals("test-quiz", quizResult?.quizId);
-        assertEquals("e03210db-0cc6-459c-8f17-bf014c4f554d", quizResult?.quizVersionId);
         assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
 
         Thread.sleep(timeBetweenTests)
@@ -307,11 +303,10 @@ class ConstructorIoIntegrationQuizTest {
             )
             val quizResult = constructorIo.getQuizResultsCRT("test-quiz",
                 answers,
-                "e03210db-0cc6-459c-8f17-bf014c4f554d",
+                null,
                 "bc48a85d-2f45-4c91-ba3a-dcf655b33831"
             )
             assertEquals("test-quiz", quizResult?.quizId);
-            assertEquals("e03210db-0cc6-459c-8f17-bf014c4f554d", quizResult?.quizVersionId);
             assertEquals("bc48a85d-2f45-4c91-ba3a-dcf655b33831", quizResult?.quizSessionId);
         }
         Thread.sleep(timeBetweenTests)
