@@ -20,7 +20,7 @@
 }
 
 ####-----Model Classes---####
--keep class constructor.io.data.model.** { *; }
+-keep class io.constructor.data.model.** { *; }
 
 ####-----Sample Classes---####
--keep class constructor.io.sample.** { *; }
+-keep class io.constructor.sample.** { *; }
