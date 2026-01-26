@@ -33,7 +33,9 @@ import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 import java.util.*
 
 typealias ConstructorError = ((Throwable) -> Unit)?
@@ -99,6 +101,33 @@ object ConstructorIo {
     }
 
     /**
+     * Sets up a global RxJava error handler to prevent crashes from undeliverable exceptions.
+     * This handles network errors (like SocketTimeoutException) that occur on OkHttp's
+     * background threads after the RxJava subscription can no longer receive them.
+     */
+    private fun setupRxErrorHandler() {
+        RxJavaPlugins.setErrorHandler(createRxErrorHandler())
+    }
+
+    /**
+     * Creates the RxJava error handler function.
+     * Internal for testing purposes.
+     */
+    internal fun createRxErrorHandler(): (Throwable) -> Unit = { throwable ->
+        // Unwrap the exception to get the actual cause
+        val error = throwable.cause ?: throwable
+
+        if (error is IOException || error is InterruptedException) {
+            // Network errors and interruptions are expected in normal operation
+            // Log as warning so crash reporting tools can track frequency
+            e("Non-fatal network error: ${error.message}")
+        } else {
+            // For unexpected errors, log as error level
+            e("Undeliverable exception: ${error.message}")
+        }
+    }
+
+    /**
      *  Initializes the client
      *
      *  @param context the context
@@ -109,6 +138,11 @@ object ConstructorIo {
             throw IllegalStateException("context is null, please init library using ConstructorIo.with(context)")
         }
         this.context = context.applicationContext
+
+        // Setup RxJava error handler to prevent crashes from undeliverable network exceptions
+        if (constructorIoConfig.suppressRxErrors) {
+            setupRxErrorHandler()
+        }
 
         configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
