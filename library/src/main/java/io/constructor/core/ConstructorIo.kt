@@ -140,7 +140,7 @@ object ConstructorIo {
         this.context = context.applicationContext
 
         // Setup RxJava error handler to prevent crashes from undeliverable network exceptions
-        if (constructorIoConfig.suppressRxErrors) {
+        if (constructorIoConfig.suppressNetworkExceptions) {
             setupRxErrorHandler()
         }
 
@@ -149,6 +149,7 @@ object ConstructorIo {
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
         configMemoryHolder.segments = constructorIoConfig.segments
         configMemoryHolder.defaultAnalyticsTags = constructorIoConfig.defaultAnalyticsTags
+        configMemoryHolder.suppressNetworkExceptions = constructorIoConfig.suppressNetworkExceptions
 
         preferenceHelper = component.preferenceHelper()
         preferenceHelper.apiKey = constructorIoConfig.apiKey

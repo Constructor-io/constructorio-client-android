@@ -13,7 +13,7 @@ import io.constructor.BuildConfig
  *  @property servicePort The port to use (for testing purposes only, defaults to 443)
  *  @property serviceScheme The scheme to use (for testing purposes only, defaults to HTTPS)
  *  @property defaultAnalyticsTags Additional analytics tags to pass. Will be merged with analytics tags passed on the request level
- *  @property suppressRxErrors When true, sets up a global RxJava error handler to catch undeliverable network exceptions (e.g., SocketTimeoutException) that would otherwise crash the app. Defaults to false.
+ *  @property suppressNetworkExceptions When true, catches network exceptions (e.g., SocketTimeoutException, IOException) that would otherwise crash the app and handles them gracefully. For tracking/analytics endpoints, failures are silently ignored. For other endpoints, a synthetic error response is returned. Defaults to false.
  */
 data class ConstructorIoConfig(
         val apiKey: String,
@@ -26,5 +26,5 @@ data class ConstructorIoConfig(
         val servicePort: Int = BuildConfig.SERVICE_PORT,
         val serviceScheme: String = BuildConfig.SERVICE_SCHEME,
         val defaultAnalyticsTags: Map<String, String> = emptyMap(),
-        val suppressRxErrors: Boolean = false
+        val suppressNetworkExceptions: Boolean = false
 )

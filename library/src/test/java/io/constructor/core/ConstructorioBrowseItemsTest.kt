@@ -52,6 +52,7 @@ class ConstructorIoBrowseItemsTest {
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
+        every { configMemoryHolder.suppressNetworkExceptions } returns false
 
         val config = ConstructorIoConfig("dummyKey")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
@@ -84,7 +85,7 @@ class ConstructorIoBrowseItemsTest {
 
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt="
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -100,7 +101,7 @@ class ConstructorIoBrowseItemsTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt"
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -118,7 +119,7 @@ class ConstructorIoBrowseItemsTest {
         }
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt"
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -141,7 +142,7 @@ class ConstructorIoBrowseItemsTest {
 
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt"
+            "/browse/items?ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt"
         assert(request.path!!.startsWith(path))
     }
 
@@ -156,7 +157,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?section=Sold%20Out&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt="
+            "/browse/items?section=Sold%20Out&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -175,7 +176,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt="
+            "/browse/items?filters%5BBrand%5D=Signature%20Farms&filters%5BBrand%5D=Del%20Monte&filters%5BNutrition%5D=Organic&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -190,7 +191,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt="
+            "/browse/items?fmt_options%5Bhidden_fields%5D=hiddenField1&fmt_options%5Bhidden_fields%5D=hiddenField2&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -206,7 +207,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt="
+            "/browse/items?fmt_options%5Bhidden_facets%5D=Brand&fmt_options%5Bhidden_facets%5D=price_US&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -222,7 +223,7 @@ class ConstructorIoBrowseItemsTest {
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-            "/browse/items?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt="
+            "/browse/items?fmt_options%5Bgroups_sort_by%5D=value&fmt_options%5Bgroups_sort_order%5D=ascending&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -237,7 +238,7 @@ class ConstructorIoBrowseItemsTest {
                 .build()
         val observer = constructorIo.getBrowseItemsResults(browseItemsRequest).test()
         val request = mockServer.takeRequest()
-        val path = "/browse/items?fmt_options%5Bgroups_start%5D=5&fmt_options%5Bshow_hidden_facets%5D=false&fmt_options%5Bgroups_sort_order%5D=ascending&fmt_options%5Bfields%5D=false&fmt_options%5Bfields%5D=test2&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358&_dt="
+        val path = "/browse/items?fmt_options%5Bgroups_start%5D=5&fmt_options%5Bshow_hidden_facets%5D=false&fmt_options%5Bgroups_sort_order%5D=ascending&fmt_options%5Bfields%5D=false&fmt_options%5Bfields%5D=test2&ids=10001&ids=dai_pid_2003597&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -267,7 +268,7 @@ class ConstructorIoBrowseItemsTest {
                 "i" to "guapo-the-guid",
                 "ui" to "player-two",
                 "s" to "92",
-                "c" to "cioand-2.38.0-cdx-358",
+                "c" to "cioand-2.38.0-cdx-358-2",
                 "_dt" to "1",
                 "ids" to "10001",
             )

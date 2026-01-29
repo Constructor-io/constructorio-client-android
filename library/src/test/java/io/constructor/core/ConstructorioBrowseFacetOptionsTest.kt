@@ -49,6 +49,7 @@ class ConstructorioBrowseFacetOptionsTest {
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
+        every { configMemoryHolder.suppressNetworkExceptions } returns false
 
         val config = ConstructorIoConfig("dummyKey")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
@@ -77,7 +78,7 @@ class ConstructorioBrowseFacetOptionsTest {
 
         val request = mockServer.takeRequest()
         val path =
-                "/browse/facet_options?facet_name=brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358"
+                "/browse/facet_options?facet_name=brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2"
         assert(request.path!!.startsWith(path))
     }
 
@@ -131,7 +132,7 @@ class ConstructorioBrowseFacetOptionsTest {
 
         val request = mockServer.takeRequest()
         val path =
-                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358"
+                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2"
         assert(request.path!!.startsWith(path))
     }
 
@@ -146,7 +147,7 @@ class ConstructorioBrowseFacetOptionsTest {
         val observer = constructorIo.getBrowseFacetOptions(browseFacetOptionsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358"
+                "/browse/facet_options?fmt_options%5Bshow_hidden_facets%5D=true&facet_name=Brands&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2"
         assert(request.path!!.startsWith(path))
     }
 }

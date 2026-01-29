@@ -42,4 +42,6 @@ class ConfigMemoryHolder @Inject constructor() {
     var userId: String? = null
 
     var defaultAnalyticsTags: Map<String, String>? = null
+
+    var suppressNetworkExceptions: Boolean = false
 }

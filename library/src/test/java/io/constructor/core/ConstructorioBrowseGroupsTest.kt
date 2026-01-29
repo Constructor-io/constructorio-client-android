@@ -49,6 +49,7 @@ class ConstructorioBrowseGroupsTest {
         every { configMemoryHolder.userId } returns "player-two"
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
+        every { configMemoryHolder.suppressNetworkExceptions } returns false
 
         val config = ConstructorIoConfig("dummyKey")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
@@ -71,7 +72,7 @@ class ConstructorioBrowseGroupsTest {
 
         val request = mockServer.takeRequest()
         val path =
-                "/browse/groups?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358"
+                "/browse/groups?key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2"
         assert(request.path!!.startsWith(path))
     }
 
@@ -125,7 +126,7 @@ class ConstructorioBrowseGroupsTest {
 
         val request = mockServer.takeRequest()
         val path =
-               "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358"
+               "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2"
         assert(request.path!!.startsWith(path))
     }
 
@@ -141,7 +142,7 @@ class ConstructorioBrowseGroupsTest {
         val observer = constructorIo.getBrowseGroups(browseGroupsRequest).test()
         val request = mockServer.takeRequest()
         val path =
-                "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358"
+                "/browse/groups?filters%5Bgroup_id%5D=Brand&fmt_options%5Bgroups_max_depth%5D=1&key=silver-key&i=guapo-the-guid&ui=player-two&s=92&c=cioand-2.38.0-cdx-358-2"
         assert(request.path!!.startsWith(path))
     }
 }

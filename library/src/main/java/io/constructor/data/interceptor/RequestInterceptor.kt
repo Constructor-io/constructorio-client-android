@@ -5,9 +5,18 @@ import io.constructor.core.Constants
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.remote.ApiPaths
+import io.constructor.util.e
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
+import okhttp3.Protocol
 import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
+import java.io.IOException
+import java.io.InterruptedIOException
+import java.net.SocketException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import javax.net.ssl.SSLException
 
 /**
  * @suppress
@@ -96,6 +105,38 @@ class RequestInterceptor(
         }
 
         val newRequest = newRequestBuilder.url(builder.build()).build();
-        return chain.proceed(newRequest)
+
+        // If suppressNetworkExceptions is disabled, use default behavior (let exceptions propagate)
+        if (!configMemoryHolder.suppressNetworkExceptions) {
+            return chain.proceed(newRequest)
+        }
+
+        return try {
+            chain.proceed(newRequest)
+        } catch (e: Exception) {
+            // Handle network exceptions that would otherwise crash the app when they occur
+            // on OkHttp's background threads. These exceptions can bypass RxJava's error
+            // handling since they may occur in OkHttp's thread pool context.
+            when (e) {
+                is SocketTimeoutException,
+                is InterruptedIOException,
+                is SocketException,
+                is UnknownHostException,
+                is SSLException,
+                is IOException -> {
+                    e("Network error intercepted: ${e.javaClass.simpleName} - ${e.message}")
+                    // Return a synthetic error response to prevent crashes while
+                    // preserving error semantics for the app's error handling
+                    Response.Builder()
+                        .request(newRequest)
+                        .protocol(Protocol.HTTP_1_1)
+                        .code(599) // Network connect timeout error
+                        .message("Network Error: ${e.message ?: "Unknown"}")
+                        .body("".toResponseBody(null))
+                        .build()
+                }
+                else -> throw e // Re-throw unexpected non-network exceptions
+            }
+        }
     }
 }

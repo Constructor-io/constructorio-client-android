@@ -46,6 +46,7 @@ class ConstructorIoIntegrationQuizTest {
         every { configMemoryHolder.defaultAnalyticsTags } returns mapOf("appVersion" to "123", "appPlatform" to "Android")
         every { configMemoryHolder.testCellParams } returns emptyList()
         every { configMemoryHolder.segments } returns emptyList()
+        every { configMemoryHolder.suppressNetworkExceptions } returns false
 
         val config = ConstructorIoConfig("ZqXaOfXuBWD4s3XzCI1q")
         val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
