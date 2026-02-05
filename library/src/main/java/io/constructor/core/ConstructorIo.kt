@@ -33,7 +33,10 @@ import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 import java.util.*
 
 typealias ConstructorError = ((Throwable) -> Unit)?
@@ -110,6 +113,10 @@ object ConstructorIo {
         }
         this.context = context.applicationContext
 
+        // Set up RxJava global error handler to prevent crashes from undeliverable exceptions.
+        // This handles network errors that occur after the RxJava chain has completed/disposed.
+        setupRxJavaErrorHandler()
+
         configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
@@ -129,6 +136,32 @@ object ConstructorIo {
 
         // Instantiate the data manager last (depends on the preferences helper)
         dataManager = component.dataManager()
+    }
+
+    /**
+     * Sets up a global RxJava error handler to gracefully handle undeliverable exceptions.
+     * These exceptions can occur when network errors happen after the RxJava stream has
+     * already completed or been disposed, particularly with OkHttp async operations.
+     */
+    private fun setupRxJavaErrorHandler() {
+        RxJavaPlugins.setErrorHandler { throwable ->
+            var error = throwable
+            // Unwrap the actual cause from UndeliverableException
+            if (error is UndeliverableException) {
+                error = error.cause ?: error
+            }
+
+            // Network exceptions are expected during normal operation (timeout, no connectivity, etc.)
+            // Log them but don't crash the app
+            if (error is IOException || error is InterruptedException) {
+                e("Constructor.io: Non-fatal network error: ${error.javaClass.simpleName} - ${error.message}")
+                return@setErrorHandler
+            }
+
+            // For other unexpected exceptions, log them as errors
+            // but still don't crash - these shouldn't bring down the host app
+            e("Constructor.io: Undeliverable exception: ${error.javaClass.simpleName} - ${error.message}")
+        }
     }
 
     /**
