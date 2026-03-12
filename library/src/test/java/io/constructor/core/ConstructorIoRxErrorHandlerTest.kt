@@ -5,6 +5,7 @@ import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
 import org.junit.After
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
@@ -23,6 +24,13 @@ class ConstructorIoRxErrorHandlerTest {
     @After
     fun teardown() {
         RxJavaPlugins.reset()
+    }
+
+    @Test
+    fun isIdempotent() {
+        val handlerAfterFirstCall = RxJavaPlugins.getErrorHandler()
+        constructorIo.setupRxJavaErrorHandler()
+        assertSame(handlerAfterFirstCall, RxJavaPlugins.getErrorHandler())
     }
 
     @Test
@@ -45,7 +53,10 @@ class ConstructorIoRxErrorHandlerTest {
     @Test
     fun handlesUndeliverableInterruptedException() {
         // Should not throw - InterruptedException is handled gracefully
+        // and the interrupt flag should be restored on the current thread
+        Thread.interrupted() // clear any pre-existing interrupt flag
         RxJavaPlugins.onError(UndeliverableException(InterruptedException("thread interrupted")))
+        assertTrue("Interrupt flag should be restored", Thread.interrupted())
     }
 
     @Test
@@ -74,6 +85,22 @@ class ConstructorIoRxErrorHandlerTest {
             assertSame(error, caughtThrowable)
         } finally {
             Thread.currentThread().uncaughtExceptionHandler = original
+        }
+    }
+
+    @Test
+    fun logsUnexpectedExceptionWhenNoUncaughtHandler() {
+        val original = Thread.currentThread().uncaughtExceptionHandler
+        val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+        try {
+            Thread.currentThread().uncaughtExceptionHandler = null
+            Thread.setDefaultUncaughtExceptionHandler(null)
+
+            // Should not throw — falls back to logging when both handlers are null
+            RxJavaPlugins.onError(UndeliverableException(IllegalStateException("no handler")))
+        } finally {
+            Thread.currentThread().uncaughtExceptionHandler = original
+            Thread.setDefaultUncaughtExceptionHandler(defaultHandler)
         }
     }
 

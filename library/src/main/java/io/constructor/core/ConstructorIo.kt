@@ -152,18 +152,31 @@ object ConstructorIo {
                 error = error.cause ?: error
             }
 
+            // InterruptedException signals the thread should stop — restore the interrupt flag
+            // so cooperative cancellation continues to work, then return without crashing
+            if (error is InterruptedException) {
+                Thread.currentThread().interrupt()
+                e("Constructor.io: Non-fatal interrupted error: ${error.message}")
+                return@setErrorHandler
+            }
+
             // Network exceptions are expected during normal operation (timeout, no connectivity, etc.)
             // Log them but don't crash the app
-            if (error is IOException || error is InterruptedException) {
+            if (error is IOException) {
                 e("Constructor.io: Non-fatal network error: ${error.javaClass.simpleName} - ${error.message}")
                 return@setErrorHandler
             }
 
             // Unexpected exception — forward to the thread's uncaught exception handler,
-            // falling back to the JVM default handler if the thread has none set
+            // falling back to the JVM default handler if the thread has none set.
+            // If no handler is available, log the error.
             val handler = Thread.currentThread().uncaughtExceptionHandler
                 ?: Thread.getDefaultUncaughtExceptionHandler()
-            handler?.uncaughtException(Thread.currentThread(), error)
+            if (handler != null) {
+                handler.uncaughtException(Thread.currentThread(), error)
+            } else {
+                e("Constructor.io: Undeliverable unexpected exception (no uncaught handler): $error")
+            }
         }
     }
 
