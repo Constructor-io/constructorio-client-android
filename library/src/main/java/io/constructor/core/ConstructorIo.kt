@@ -158,9 +158,9 @@ object ConstructorIo {
                 return@setErrorHandler
             }
 
-            // For other unexpected exceptions, log them as errors
-            // but still don't crash - these shouldn't bring down the host app
-            e("Constructor.io: Undeliverable exception: ${error.javaClass.simpleName} - ${error.message}")
+            // Unexpected exception — re-throw on the current thread so it surfaces
+            // via the thread's uncaught exception handler, rather than silently vanishing
+            Thread.currentThread().uncaughtExceptionHandler?.uncaughtException(Thread.currentThread(), error)
         }
     }
 

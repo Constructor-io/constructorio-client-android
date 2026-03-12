@@ -11,10 +11,12 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 class ConstructorIoRxErrorHandlerTest {
 
@@ -80,14 +82,43 @@ class ConstructorIoRxErrorHandlerTest {
     }
 
     @Test
-    fun handlesUnexpectedException() {
-        // Should not throw - unexpected exceptions are logged but don't crash
-        RxJavaPlugins.onError(UndeliverableException(IllegalStateException("unexpected error")))
+    fun handlesSocketTimeoutException() {
+        // Should not throw - SocketTimeoutException is a subclass of IOException
+        RxJavaPlugins.onError(UndeliverableException(SocketTimeoutException("connect timed out")))
     }
 
     @Test
-    fun handlesUndeliverableExceptionWithNullCause() {
-        // Should not throw - UndeliverableException with no cause
-        RxJavaPlugins.onError(UndeliverableException(null))
+    fun forwardsUnexpectedExceptionToUncaughtExceptionHandler() {
+        val original = Thread.currentThread().uncaughtExceptionHandler
+        try {
+            var caughtThrowable: Throwable? = null
+            Thread.currentThread().uncaughtExceptionHandler =
+                Thread.UncaughtExceptionHandler { _, throwable -> caughtThrowable = throwable }
+
+            val error = IllegalStateException("unexpected error")
+            RxJavaPlugins.onError(UndeliverableException(error))
+
+            assertSame(error, caughtThrowable)
+        } finally {
+            Thread.currentThread().uncaughtExceptionHandler = original
+        }
+    }
+
+    @Test
+    fun forwardsNullCauseExceptionToUncaughtExceptionHandler() {
+        val original = Thread.currentThread().uncaughtExceptionHandler
+        try {
+            var caughtThrowable: Throwable? = null
+            Thread.currentThread().uncaughtExceptionHandler =
+                Thread.UncaughtExceptionHandler { _, throwable -> caughtThrowable = throwable }
+
+            val error = UndeliverableException(null)
+            RxJavaPlugins.onError(error)
+
+            // When cause is null, the UndeliverableException itself is forwarded
+            assertSame(error, caughtThrowable)
+        } finally {
+            Thread.currentThread().uncaughtExceptionHandler = original
+        }
     }
 }
