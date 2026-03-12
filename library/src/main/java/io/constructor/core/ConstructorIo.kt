@@ -113,8 +113,8 @@ object ConstructorIo {
         }
         this.context = context.applicationContext
 
-        // Set up RxJava global error handler to prevent crashes from undeliverable exceptions.
-        // This handles network errors that occur after the RxJava chain has completed/disposed.
+        // Install the error handler early, before component initialization triggers the Dagger
+        // graph, so that any undeliverable RxJava exceptions during init are also caught.
         setupRxJavaErrorHandler()
 
         configMemoryHolder = component.configMemoryHolder()
@@ -144,6 +144,7 @@ object ConstructorIo {
      * already completed or been disposed, particularly with OkHttp async operations.
      */
     internal fun setupRxJavaErrorHandler() {
+        if (RxJavaPlugins.getErrorHandler() != null) return
         RxJavaPlugins.setErrorHandler { throwable ->
             var error = throwable
             // Unwrap the actual cause from UndeliverableException
@@ -158,9 +159,11 @@ object ConstructorIo {
                 return@setErrorHandler
             }
 
-            // Unexpected exception — re-throw on the current thread so it surfaces
-            // via the thread's uncaught exception handler, rather than silently vanishing
-            Thread.currentThread().uncaughtExceptionHandler?.uncaughtException(Thread.currentThread(), error)
+            // Unexpected exception — forward to the thread's uncaught exception handler,
+            // falling back to the JVM default handler if the thread has none set
+            val handler = Thread.currentThread().uncaughtExceptionHandler
+                ?: Thread.getDefaultUncaughtExceptionHandler()
+            handler?.uncaughtException(Thread.currentThread(), error)
         }
     }
 

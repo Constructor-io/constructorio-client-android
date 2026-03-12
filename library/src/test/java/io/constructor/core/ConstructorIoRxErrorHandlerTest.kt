@@ -1,66 +1,39 @@
 package io.constructor.core
 
-import android.content.Context
-import io.constructor.data.local.PreferencesHelper
-import io.constructor.data.memory.ConfigMemoryHolder
-import io.constructor.test.createTestDataManager
-import io.constructor.util.RxSchedulersOverrideRule
-import io.mockk.every
-import io.mockk.mockk
 import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
-import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Assert.assertSame
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
 import java.net.SocketTimeoutException
 
 class ConstructorIoRxErrorHandlerTest {
 
-    @Rule
-    @JvmField
-    val overrideSchedulersRule = RxSchedulersOverrideRule()
-
-    private lateinit var mockServer: MockWebServer
     private var constructorIo = ConstructorIo
-    private val ctx = mockk<Context>()
-    private val preferencesHelper = mockk<PreferencesHelper>()
-    private val configMemoryHolder = mockk<ConfigMemoryHolder>()
 
     @Before
     fun setup() {
-        mockServer = MockWebServer()
-        mockServer.start()
-
-        every { ctx.applicationContext } returns ctx
-
-        every { preferencesHelper.apiKey } returns "golden-key"
-        every { preferencesHelper.id } returns "guido-the-guid"
-        every { preferencesHelper.serviceUrl } returns mockServer.hostName
-        every { preferencesHelper.port } returns mockServer.port
-        every { preferencesHelper.scheme } returns "http"
-        every { preferencesHelper.defaultItemSection } returns "Products"
-        every { preferencesHelper.getSessionId(any(), any()) } returns 79
-
-        every { configMemoryHolder.autocompleteResultCount } returns null
-        every { configMemoryHolder.userId } returns "player-one"
-        every { configMemoryHolder.testCellParams } returns emptyList()
-        every { configMemoryHolder.segments } returns emptyList()
-
-        val config = ConstructorIoConfig("dummyKey")
-        val dataManager = createTestDataManager(preferencesHelper, configMemoryHolder)
-
-        constructorIo.testInit(ctx, config, dataManager, preferencesHelper, configMemoryHolder)
+        RxJavaPlugins.reset()
         constructorIo.setupRxJavaErrorHandler()
     }
 
     @After
     fun teardown() {
-        mockServer.shutdown()
         RxJavaPlugins.reset()
+    }
+
+    @Test
+    fun doesNotOverwriteExistingErrorHandler() {
+        RxJavaPlugins.reset()
+        val existingHandler = Consumer<Throwable> { }
+        RxJavaPlugins.setErrorHandler(existingHandler)
+
+        constructorIo.setupRxJavaErrorHandler()
+
+        assertSame(existingHandler, RxJavaPlugins.getErrorHandler())
     }
 
     @Test
