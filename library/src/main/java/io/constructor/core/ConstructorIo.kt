@@ -143,7 +143,7 @@ object ConstructorIo {
      * These exceptions can occur when network errors happen after the RxJava stream has
      * already completed or been disposed, particularly with OkHttp async operations.
      */
-    private fun setupRxJavaErrorHandler() {
+    internal fun setupRxJavaErrorHandler() {
         RxJavaPlugins.setErrorHandler { throwable ->
             var error = throwable
             // Unwrap the actual cause from UndeliverableException
