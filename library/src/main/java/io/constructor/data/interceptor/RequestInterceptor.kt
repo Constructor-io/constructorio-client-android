@@ -46,7 +46,7 @@ class RequestInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val ignoreDtPaths = listOf(ApiPaths.URL_BROWSE_GROUPS, ApiPaths.URL_BROWSE_FACETS, ApiPaths.URL_BROWSE_FACET_OPTIONS);
-        val behavioralEndpointPaths = listOf(ApiPaths.URL_BEHAVIORAL_V1_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_V2_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_SEARCH_REGEX.toRegex() )
+        val behavioralEndpointPaths = listOf(ApiPaths.URL_BEHAVIORAL_V1_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_V2_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_AD_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_SEARCH_REGEX.toRegex() )
         val request = chain.request()
         var builder = request.url.newBuilder();
         val newRequestBuilder = request.newBuilder()

@@ -13,11 +13,14 @@ import io.constructor.data.model.recommendations.RecommendationResultViewRequest
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
+import io.constructor.data.model.tracking.MediaImpressionClickRequestBody
+import io.constructor.data.model.tracking.MediaImpressionViewRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.injection.ConstructorSdk
 import io.reactivex.Completable
 import io.reactivex.Observable
+import okhttp3.HttpUrl
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -310,6 +313,26 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackQuizConversion(quizConversionRequestBody: QuizConversionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackQuizConversion(quizConversionRequestBody, params.toMap())
+    }
+
+    fun trackMediaImpressionView(preferencesHelper: PreferencesHelper, mediaImpressionViewRequestBody: MediaImpressionViewRequestBody): Completable {
+        val url = buildMediaUrl(preferencesHelper, ApiPaths.URL_MEDIA_IMPRESSION_VIEW_EVENT)
+        return constructorApi.trackMediaImpressionView(url, mediaImpressionViewRequestBody)
+    }
+
+    fun trackMediaImpressionClick(preferencesHelper: PreferencesHelper, mediaImpressionClickRequestBody: MediaImpressionClickRequestBody): Completable {
+        val url = buildMediaUrl(preferencesHelper, ApiPaths.URL_MEDIA_IMPRESSION_CLICK_EVENT)
+        return constructorApi.trackMediaImpressionClick(url, mediaImpressionClickRequestBody)
+    }
+
+    private fun buildMediaUrl(preferencesHelper: PreferencesHelper, path: String): String {
+        val cleanedPathSegments = path.split("/").filter { it.isNotBlank() }
+        val builder = HttpUrl.Builder()
+                .scheme(preferencesHelper.scheme ?: "https")
+                .host(preferencesHelper.mediaServiceUrl ?: preferencesHelper.serviceUrl ?: "")
+                .port(preferencesHelper.port)
+        cleanedPathSegments.forEach { builder.addPathSegment(it) }
+        return builder.build().toString()
     }
 
     fun getQuizNextQuestion(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): Observable<ConstructorData<QuizQuestionResponse>> {

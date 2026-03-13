@@ -6,6 +6,7 @@ package io.constructor.data.remote
 object ApiPaths {
     const val URL_BEHAVIORAL_V1_PREFIX = "/behavior"
     const val URL_BEHAVIORAL_V2_PREFIX = "/v2/behavioral_action"
+    const val URL_BEHAVIORAL_AD_PREFIX = "/v2/ad_behavioral_action"
     const val URL_BEHAVIORAL_SEARCH_REGEX = "/autocomplete/.*/(search|select|click_through)$"
     const val URL_AUTOCOMPLETE = "autocomplete/%s"
     const val URL_AUTOCOMPLETE_SELECT_EVENT = "autocomplete/{term}/select"
@@ -34,4 +35,6 @@ object ApiPaths {
     const val URL_QUIZ_CONVERSION_EVENT = "v2/behavioral_action/quiz_conversion"
     const val URL_QUIZ_NEXT_QUESTION = "v1/quizzes/%s/next"
     const val URL_QUIZ_RESULTS = "v1/quizzes/%s/results"
+    const val URL_MEDIA_IMPRESSION_VIEW_EVENT = "v2/ad_behavioral_action/display_ad_view"
+    const val URL_MEDIA_IMPRESSION_CLICK_EVENT = "v2/ad_behavioral_action/display_ad_click"
 }

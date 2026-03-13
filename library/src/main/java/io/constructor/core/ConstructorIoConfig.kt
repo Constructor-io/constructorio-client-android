@@ -24,5 +24,6 @@ data class ConstructorIoConfig(
         val defaultItemSection: String = BuildConfig.DEFAULT_ITEM_SECTION,
         val servicePort: Int = BuildConfig.SERVICE_PORT,
         val serviceScheme: String = BuildConfig.SERVICE_SCHEME,
-        val defaultAnalyticsTags: Map<String, String> = emptyMap()
+        val defaultAnalyticsTags: Map<String, String> = emptyMap(),
+        val mediaServiceUrl: String = "behavior.media-cnstrc.com"
 )

@@ -634,3 +634,18 @@ ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
 // Track when a product is clicked. Should be used when a clicked product is not part of search/browse/recommendation experiences. (itemName, customerId, variationId?, sectionName?)
 ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
 ```
+
+### Media Impression Events
+
+```kotlin
+// Track when a media placement is viewed
+ConstructorIo.trackMediaImpressionView(
+    bannerAdId = "abc123",
+    placementId = "home"
+)
+
+// Track when a media placement is clicked
+ConstructorIo.trackMediaImpressionClick(
+    bannerAdId = "abc123",
+    placementId = "home"
+)

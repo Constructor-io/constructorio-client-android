@@ -24,6 +24,8 @@ import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
+import io.constructor.data.model.tracking.MediaImpressionClickRequestBody
+import io.constructor.data.model.tracking.MediaImpressionViewRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -120,6 +122,7 @@ object ConstructorIo {
         preferenceHelper.apiKey = constructorIoConfig.apiKey
         preferenceHelper.serviceUrl = constructorIoConfig.serviceUrl
         preferenceHelper.quizzesServiceUrl = constructorIoConfig.quizzesServiceUrl
+        preferenceHelper.mediaServiceUrl = constructorIoConfig.mediaServiceUrl
         preferenceHelper.port = constructorIoConfig.servicePort
         preferenceHelper.scheme = constructorIoConfig.serviceScheme
         preferenceHelper.defaultItemSection = constructorIoConfig.defaultItemSection
@@ -1894,6 +1897,26 @@ object ConstructorIo {
         }))
     }
 
+    /**
+     * Tracks media impression view events.
+     */
+    fun trackMediaImpressionView(bannerAdId: String, placementId: String) {
+        val completable = trackMediaImpressionViewInternal(bannerAdId, placementId)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t ->
+            e("Media Impression View error: ${t.message}")
+        }))
+    }
+
+    /**
+     * Tracks media impression click events.
+     */
+    fun trackMediaImpressionClick(bannerAdId: String, placementId: String) {
+        val completable = trackMediaImpressionClickInternal(bannerAdId, placementId)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t ->
+            e("Media Impression Click error: ${t.message}")
+        }))
+    }
+
     internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
@@ -1918,6 +1941,42 @@ object ConstructorIo {
                 itemDetailLoadRequestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section),
         )
+    }
+
+    internal fun trackMediaImpressionViewInternal(bannerAdId: String, placementId: String): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val requestBody = MediaImpressionViewRequestBody(
+                bannerAdId,
+                placementId,
+                true,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackMediaImpressionView(preferenceHelper, requestBody)
+    }
+
+    internal fun trackMediaImpressionClickInternal(bannerAdId: String, placementId: String): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val requestBody = MediaImpressionClickRequestBody(
+                bannerAdId,
+                placementId,
+                true,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackMediaImpressionClick(preferenceHelper, requestBody)
     }
 
     /**
