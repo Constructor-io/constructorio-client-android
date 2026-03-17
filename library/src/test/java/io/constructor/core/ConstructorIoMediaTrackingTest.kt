@@ -119,23 +119,29 @@ class ConstructorIoMediaTrackingTest {
 
     @Test
     fun trackMediaImpressionViewTimeout() {
-        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
-        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        val mockResponse = MockResponse()
+                .setResponseCode(500)
+                .setBody("Internal server error")
+                .setBodyDelay(5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
 
         val observer = ConstructorIo.trackMediaImpressionViewInternal("test-banner", "home").test()
+        observer.awaitDone(6, TimeUnit.SECONDS)
         observer.assertError(SocketTimeoutException::class.java)
-        val request = mockServer.takeRequest()
+        val request = awaitRequest();
         assert(request.path!!.startsWith("/v2/ad_behavioral_action/display_ad_view"))
     }
 
     @Test
     fun trackMediaImpressionClickTimeout() {
-        val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
-        mockResponse.throttleBody(0, 5, TimeUnit.SECONDS)
+        val mockResponse = MockResponse()
+                .setResponseCode(500)
+                .setBody("Internal server error")
+                .setBodyDelay(5, TimeUnit.SECONDS)
         mockServer.enqueue(mockResponse)
 
         val observer = ConstructorIo.trackMediaImpressionClickInternal("test-banner", "home").test()
+        observer.awaitDone(6, TimeUnit.SECONDS)
         observer.assertError(SocketTimeoutException::class.java)
         val request = awaitRequest()
         assert(request.path!!.startsWith("/v2/ad_behavioral_action/display_ad_click"))

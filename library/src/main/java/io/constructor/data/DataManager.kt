@@ -327,9 +327,13 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     private fun buildMediaUrl(preferencesHelper: PreferencesHelper, path: String): String {
         val cleanedPathSegments = path.split("/").filter { it.isNotBlank() }
+        val scheme = preferencesHelper.scheme?.takeIf { it.isNotBlank() } ?: "https"
+        val host = preferencesHelper.mediaServiceUrl?.takeIf { it.isNotBlank() }
+                ?: preferencesHelper.serviceUrl?.takeIf { it.isNotBlank() }
+                ?: throw IllegalStateException("Media service host is not configured")
         val builder = HttpUrl.Builder()
-                .scheme(preferencesHelper.scheme ?: "https")
-                .host(preferencesHelper.mediaServiceUrl ?: preferencesHelper.serviceUrl ?: "")
+                .scheme(scheme)
+                .host(host)
                 .port(preferencesHelper.port)
         cleanedPathSegments.forEach { builder.addPathSegment(it) }
         return builder.build().toString()
