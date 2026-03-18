@@ -33,7 +33,10 @@ import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 import java.util.*
 
 typealias ConstructorError = ((Throwable) -> Unit)?
@@ -110,6 +113,10 @@ object ConstructorIo {
         }
         this.context = context.applicationContext
 
+        // Install the error handler early, before component initialization triggers the Dagger
+        // graph, so that any undeliverable RxJava exceptions during init are also caught.
+        setupRxJavaErrorHandler()
+
         configMemoryHolder = component.configMemoryHolder()
         configMemoryHolder.autocompleteResultCount = constructorIoConfig.autocompleteResultCount
         configMemoryHolder.testCellParams = constructorIoConfig.testCells
@@ -129,6 +136,49 @@ object ConstructorIo {
 
         // Instantiate the data manager last (depends on the preferences helper)
         dataManager = component.dataManager()
+    }
+
+    /**
+     * Sets up a global RxJava error handler to gracefully handle undeliverable exceptions.
+     * These exceptions can occur when network errors happen after the RxJava stream has
+     * already completed or been disposed, particularly with OkHttp async operations.
+     */
+    @Synchronized
+    internal fun setupRxJavaErrorHandler() {
+        if (RxJavaPlugins.getErrorHandler() != null) return
+        RxJavaPlugins.setErrorHandler { throwable ->
+            var error = throwable
+            // Unwrap the actual cause from UndeliverableException
+            if (error is UndeliverableException) {
+                error = error.cause ?: error
+            }
+
+            // InterruptedException signals the thread should stop — restore the interrupt flag
+            // so cooperative cancellation continues to work, then return without crashing
+            if (error is InterruptedException) {
+                Thread.currentThread().interrupt()
+                e("Constructor.io: Non-fatal interrupted error: ${error.message}")
+                return@setErrorHandler
+            }
+
+            // Network exceptions are expected during normal operation (timeout, no connectivity, etc.)
+            // Log them but don't crash the app
+            if (error is IOException) {
+                e("Constructor.io: Non-fatal network error: ${error.javaClass.simpleName} - ${error.message}")
+                return@setErrorHandler
+            }
+
+            // Unexpected exception — forward to the thread's uncaught exception handler,
+            // falling back to the JVM default handler if the thread has none set.
+            // If no handler is available, log the error.
+            val handler = Thread.currentThread().uncaughtExceptionHandler
+                ?: Thread.getDefaultUncaughtExceptionHandler()
+            if (handler != null) {
+                handler.uncaughtException(Thread.currentThread(), error)
+            } else {
+                e("Constructor.io: Undeliverable unexpected exception (no uncaught handler): $error")
+            }
+        }
     }
 
     /**
