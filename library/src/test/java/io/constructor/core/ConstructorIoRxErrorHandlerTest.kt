@@ -13,12 +13,10 @@ import java.net.SocketTimeoutException
 
 class ConstructorIoRxErrorHandlerTest {
 
-    private var constructorIo = ConstructorIo
-
     @Before
     fun setup() {
         RxJavaPlugins.reset()
-        constructorIo.setupRxJavaErrorHandler()
+        ConstructorIo.setupRxJavaErrorHandler()
     }
 
     @After
@@ -29,7 +27,7 @@ class ConstructorIoRxErrorHandlerTest {
     @Test
     fun isIdempotent() {
         val handlerAfterFirstCall = RxJavaPlugins.getErrorHandler()
-        constructorIo.setupRxJavaErrorHandler()
+        ConstructorIo.setupRxJavaErrorHandler()
         assertSame(handlerAfterFirstCall, RxJavaPlugins.getErrorHandler())
     }
 
@@ -39,7 +37,7 @@ class ConstructorIoRxErrorHandlerTest {
         val existingHandler = Consumer<Throwable> { }
         RxJavaPlugins.setErrorHandler(existingHandler)
 
-        constructorIo.setupRxJavaErrorHandler()
+        ConstructorIo.setupRxJavaErrorHandler()
 
         assertSame(existingHandler, RxJavaPlugins.getErrorHandler())
     }
