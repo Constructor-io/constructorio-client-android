@@ -143,6 +143,7 @@ object ConstructorIo {
      * These exceptions can occur when network errors happen after the RxJava stream has
      * already completed or been disposed, particularly with OkHttp async operations.
      */
+    @Synchronized
     internal fun setupRxJavaErrorHandler() {
         if (RxJavaPlugins.getErrorHandler() != null) return
         RxJavaPlugins.setErrorHandler { throwable ->
