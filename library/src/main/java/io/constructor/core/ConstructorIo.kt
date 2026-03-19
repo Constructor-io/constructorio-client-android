@@ -24,8 +24,7 @@ import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
-import io.constructor.data.model.tracking.MediaImpressionClickRequestBody
-import io.constructor.data.model.tracking.MediaImpressionViewRequestBody
+import io.constructor.data.model.tracking.MediaImpressionRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -1900,8 +1899,8 @@ object ConstructorIo {
     /**
      * Tracks media impression view events.
      */
-    fun trackMediaImpressionView(bannerAdId: String, placementId: String) {
-        val completable = trackMediaImpressionViewInternal(bannerAdId, placementId)
+    fun trackMediaImpressionView(bannerAdId: String, placementId: String, analyticsTags: Map<String, String>? = null) {
+        val completable = trackMediaImpressionViewInternal(bannerAdId, placementId, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t ->
             e("Media Impression View error: ${t.message}")
         }))
@@ -1910,8 +1909,8 @@ object ConstructorIo {
     /**
      * Tracks media impression click events.
      */
-    fun trackMediaImpressionClick(bannerAdId: String, placementId: String) {
-        val completable = trackMediaImpressionClickInternal(bannerAdId, placementId)
+    fun trackMediaImpressionClick(bannerAdId: String, placementId: String, analyticsTags: Map<String, String>? = null) {
+        val completable = trackMediaImpressionClickInternal(bannerAdId, placementId, analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t ->
             e("Media Impression Click error: ${t.message}")
         }))
@@ -1943,11 +1942,12 @@ object ConstructorIo {
         )
     }
 
-    internal fun trackMediaImpressionViewInternal(bannerAdId: String, placementId: String): Completable {
+    internal fun trackMediaImpressionViewInternal(bannerAdId: String, placementId: String, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val requestBody = MediaImpressionViewRequestBody(
+        val requestBody = MediaImpressionRequestBody(
                 bannerAdId,
                 placementId,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
@@ -1961,11 +1961,12 @@ object ConstructorIo {
         return dataManager.trackMediaImpressionView(preferenceHelper, requestBody)
     }
 
-    internal fun trackMediaImpressionClickInternal(bannerAdId: String, placementId: String): Completable {
+    internal fun trackMediaImpressionClickInternal(bannerAdId: String, placementId: String, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val requestBody = MediaImpressionClickRequestBody(
+        val requestBody = MediaImpressionRequestBody(
                 bannerAdId,
                 placementId,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,

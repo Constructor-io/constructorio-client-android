@@ -13,8 +13,7 @@ import io.constructor.data.model.recommendations.RecommendationResultViewRequest
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
-import io.constructor.data.model.tracking.MediaImpressionClickRequestBody
-import io.constructor.data.model.tracking.MediaImpressionViewRequestBody
+import io.constructor.data.model.tracking.MediaImpressionRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.injection.ConstructorSdk
@@ -315,14 +314,14 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackQuizConversion(quizConversionRequestBody, params.toMap())
     }
 
-    fun trackMediaImpressionView(preferencesHelper: PreferencesHelper, mediaImpressionViewRequestBody: MediaImpressionViewRequestBody): Completable {
+    fun trackMediaImpressionView(preferencesHelper: PreferencesHelper, mediaImpressionRequestBody: MediaImpressionRequestBody): Completable {
         val url = buildMediaUrl(preferencesHelper, ApiPaths.URL_MEDIA_IMPRESSION_VIEW_EVENT)
-        return constructorApi.trackMediaImpressionView(url, mediaImpressionViewRequestBody)
+        return constructorApi.trackMediaImpressionView(url, mediaImpressionRequestBody)
     }
 
-    fun trackMediaImpressionClick(preferencesHelper: PreferencesHelper, mediaImpressionClickRequestBody: MediaImpressionClickRequestBody): Completable {
+    fun trackMediaImpressionClick(preferencesHelper: PreferencesHelper, mediaImpressionRequestBody: MediaImpressionRequestBody): Completable {
         val url = buildMediaUrl(preferencesHelper, ApiPaths.URL_MEDIA_IMPRESSION_CLICK_EVENT)
-        return constructorApi.trackMediaImpressionClick(url, mediaImpressionClickRequestBody)
+        return constructorApi.trackMediaImpressionClick(url, mediaImpressionRequestBody)
     }
 
     private fun buildMediaUrl(preferencesHelper: PreferencesHelper, path: String): String {

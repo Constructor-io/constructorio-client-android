@@ -4,8 +4,7 @@ import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
-import io.constructor.data.model.tracking.MediaImpressionClickRequestBody
-import io.constructor.data.model.tracking.MediaImpressionViewRequestBody
+import io.constructor.data.model.tracking.MediaImpressionRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -140,10 +139,10 @@ interface ConstructorApi {
                             @QueryMap params: Map<String, String>): Completable
 
     @POST
-    fun trackMediaImpressionView(@Url url: String, @Body mediaImpressionViewRequestBody: MediaImpressionViewRequestBody): Completable
+    fun trackMediaImpressionView(@Url url: String, @Body mediaImpressionRequestBody: MediaImpressionRequestBody): Completable
 
     @POST
-    fun trackMediaImpressionClick(@Url url: String, @Body mediaImpressionClickRequestBody: MediaImpressionClickRequestBody): Completable
+    fun trackMediaImpressionClick(@Url url: String, @Body mediaImpressionRequestBody: MediaImpressionRequestBody): Completable
 
     @GET
     fun getQuizNextQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>

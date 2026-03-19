@@ -128,7 +128,7 @@ class ConstructorIoMediaTrackingTest {
         val observer = ConstructorIo.trackMediaImpressionViewInternal("test-banner", "home").test()
         observer.awaitDone(6, TimeUnit.SECONDS)
         observer.assertError(SocketTimeoutException::class.java)
-        val request = awaitRequest();
+        val request = awaitRequest()
         assert(request.path!!.startsWith("/v2/ad_behavioral_action/display_ad_view"))
     }
 
