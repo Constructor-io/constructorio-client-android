@@ -46,13 +46,16 @@ class RequestInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val ignoreDtPaths = listOf(ApiPaths.URL_BROWSE_GROUPS, ApiPaths.URL_BROWSE_FACETS, ApiPaths.URL_BROWSE_FACET_OPTIONS);
-        val behavioralEndpointPaths = listOf(ApiPaths.URL_BEHAVIORAL_V1_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_V2_PREFIX.toRegex(), ApiPaths.URL_BEHAVIORAL_SEARCH_REGEX.toRegex() )
+        val behavioralEndpointPrefixes = listOf(ApiPaths.URL_BEHAVIORAL_V1_PREFIX, ApiPaths.URL_BEHAVIORAL_V2_PREFIX, ApiPaths.URL_BEHAVIORAL_AD_PREFIX)
+        val behavioralSearchRegex = ApiPaths.URL_BEHAVIORAL_SEARCH_REGEX.toRegex()
         val request = chain.request()
         var builder = request.url.newBuilder();
         val newRequestBuilder = request.newBuilder()
 
         /* Re-add, Redact url query parameters for /behavior, /v2/behavioral_action */
-        if (behavioralEndpointPaths.any{request.url.encodedPath.matches(it)} ) {
+        val encodedPath = request.url.encodedPath
+        val isBehavioralEndpoint = behavioralEndpointPrefixes.any { encodedPath.startsWith(it) } || behavioralSearchRegex.matches(encodedPath)
+        if (isBehavioralEndpoint ) {
             builder = HttpUrl.Builder()
                     .scheme(request.url.scheme)
                     .port(request.url.port)
