@@ -1171,6 +1171,40 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackRecommendationResultClickWithSingleSeedItemId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", seedItemId = "seed-item-123").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.38.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("User Featured", requestBody["strategy_id"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("[seed-item-123]", requestBody["seed_item_ids"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultClickWithMultipleSeedItemIds() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", seedItemIds = listOf("seed-item-1", "seed-item-2", "seed-item-3")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.38.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("User Featured", requestBody["strategy_id"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("[seed-item-1,seed-item-2,seed-item-3]", requestBody["seed_item_ids"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackRecommendationResultClick500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -1260,6 +1294,38 @@ class ConstructorIoTrackingTest {
         assertEquals("1", requestBody["result_page"])
         assertEquals("4", requestBody["result_count"])
         assertEquals("3467632", requestBody["result_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithSingleSeedItemId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, seedItemId = "seed-item-123").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.38.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("[seed-item-123]", requestBody["seed_item_ids"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithMultipleSeedItemIds() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, seedItemIds = listOf("seed-item-1", "seed-item-2", "seed-item-3")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.38.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("[seed-item-1,seed-item-2,seed-item-3]", requestBody["seed_item_ids"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
