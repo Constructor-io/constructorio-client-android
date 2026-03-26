@@ -2223,7 +2223,7 @@ object ConstructorIo {
                 true,
                 section,
                 System.currentTimeMillis(),
-                seedItemIds
+                seedItemIds?.takeIf { it.isNotEmpty() }
         )
 
         return dataManager.trackRecommendationResultClick(
@@ -2301,7 +2301,7 @@ object ConstructorIo {
                 true,
                 section,
                 System.currentTimeMillis(),
-                seedItemIds
+                seedItemIds?.takeIf { it.isNotEmpty() }
         )
 
         return dataManager.trackRecommendationResultsView(
