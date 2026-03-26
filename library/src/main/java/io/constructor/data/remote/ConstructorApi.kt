@@ -2,7 +2,9 @@ package io.constructor.data.remote
 
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
+import io.constructor.data.model.tracking.MediaImpressionRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -10,7 +12,6 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
-import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -136,6 +137,12 @@ interface ConstructorApi {
     @POST(ApiPaths.URL_QUIZ_CONVERSION_EVENT)
     fun trackQuizConversion(@Body quizConversionRequestBody: QuizConversionRequestBody,
                             @QueryMap params: Map<String, String>): Completable
+
+    @POST
+    fun trackMediaImpressionView(@Url url: String, @Body mediaImpressionRequestBody: MediaImpressionRequestBody): Completable
+
+    @POST
+    fun trackMediaImpressionClick(@Url url: String, @Body mediaImpressionRequestBody: MediaImpressionRequestBody): Completable
 
     @GET
     fun getQuizNextQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>

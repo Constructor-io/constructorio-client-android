@@ -50,6 +50,8 @@ $dokka.location:io.constructor.core/ConstructorIo/trackConversion/#kotlin.String
 $dokka.location:io.constructor.core/ConstructorIo/trackGenericResultClick/#kotlin.String#kotlin.String#kotlin.String?#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-generic-result-click.html
 $dokka.location:io.constructor.core/ConstructorIo/trackInputFocus/#kotlin.String?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-input-focus.html
 $dokka.location:io.constructor.core/ConstructorIo/trackItemDetailLoaded/#kotlin.String#kotlin.String#kotlin.String?#kotlin.String?#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-item-detail-loaded.html
+$dokka.location:io.constructor.core/ConstructorIo/trackMediaImpressionClick/#kotlin.String#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-media-impression-click.html
+$dokka.location:io.constructor.core/ConstructorIo/trackMediaImpressionView/#kotlin.String#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-media-impression-view.html
 $dokka.location:io.constructor.core/ConstructorIo/trackPurchase/#kotlin.Array[io.constructor.data.model.purchase.PurchaseItem]#kotlin.Double?#kotlin.String#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-purchase.html
 $dokka.location:io.constructor.core/ConstructorIo/trackPurchase/#kotlin.Array[kotlin.String]#kotlin.Double?#kotlin.String#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-purchase.html
 $dokka.location:io.constructor.core/ConstructorIo/trackQuizConversion/#kotlin.String#kotlin.String#kotlin.String#kotlin.String?#kotlin.String?#kotlin.Boolean?#kotlin.String#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-quiz-conversion.html
@@ -65,11 +67,12 @@ $dokka.location:io.constructor.core/ConstructorIo/trackSearchResultsLoaded/#kotl
 $dokka.location:io.constructor.core/ConstructorIo/trackSearchSubmit/#kotlin.String#kotlin.String#io.constructor.data.model.common.ResultGroup?/PointingToDeclaration/library/io.constructor.core/-constructor-io/track-search-submit.html
 $dokka.location:io.constructor.core/ConstructorIo/userId/#/PointingToDeclaration/library/io.constructor.core/-constructor-io/user-id.html
 $dokka.location:io.constructor.core/ConstructorIoConfig///PointingToDeclaration/library/io.constructor.core/-constructor-io-config/index.html
-$dokka.location:io.constructor.core/ConstructorIoConfig/ConstructorIoConfig/#kotlin.String#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]#kotlin.collections.Map[kotlin.String,kotlin.Int]#kotlin.String#kotlin.Int#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/-constructor-io-config.html
+$dokka.location:io.constructor.core/ConstructorIoConfig/ConstructorIoConfig/#kotlin.String#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.Pair[kotlin.String,kotlin.String]]#kotlin.collections.Map[kotlin.String,kotlin.Int]#kotlin.String#kotlin.Int#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]#kotlin.String/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/-constructor-io-config.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/apiKey/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/api-key.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/autocompleteResultCount/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/autocomplete-result-count.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/defaultAnalyticsTags/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/default-analytics-tags.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/defaultItemSection/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/default-item-section.html
+$dokka.location:io.constructor.core/ConstructorIoConfig/mediaServiceUrl/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/media-service-url.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/quizzesServiceUrl/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/quizzes-service-url.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/segments/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/segments.html
 $dokka.location:io.constructor.core/ConstructorIoConfig/servicePort/#/PointingToDeclaration/library/io.constructor.core/-constructor-io-config/service-port.html
@@ -703,6 +706,20 @@ $dokka.location:io.constructor.data.model.search/SearchResponseInner/refinedCont
 $dokka.location:io.constructor.data.model.search/SearchResponseInner/resultCount/#/PointingToDeclaration/library/io.constructor.data.model.search/-search-response-inner/result-count.html
 $dokka.location:io.constructor.data.model.search/SearchResponseInner/resultSources/#/PointingToDeclaration/library/io.constructor.data.model.search/-search-response-inner/result-sources.html
 $dokka.location:io.constructor.data.model.search/SearchResponseInner/results/#/PointingToDeclaration/library/io.constructor.data.model.search/-search-response-inner/results.html
+$dokka.location:io.constructor.data.model.tracking////PointingToDeclaration/library/io.constructor.data.model.tracking/index.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody///PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/index.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/MediaImpressionRequestBody/#kotlin.String#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?#kotlin.Boolean#kotlin.String#kotlin.String#kotlin.Int#kotlin.String#kotlin.String?#kotlin.collections.List[kotlin.String?]#kotlin.Long?/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/-media-impression-request-body.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/_dt/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/_dt.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/analyticsTags/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/analytics-tags.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/bannerAdId/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/banner-ad-id.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/beacon/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/beacon.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/c/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/c.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/i/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/i.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/key/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/key.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/placementId/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/placement-id.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/s/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/s.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/ui/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/ui.html
+$dokka.location:io.constructor.data.model.tracking/MediaImpressionRequestBody/us/#/PointingToDeclaration/library/io.constructor.data.model.tracking/-media-impression-request-body/us.html
 $dokka.location:io.constructor.injection////PointingToDeclaration/library/io.constructor.injection/index.html
 $dokka.location:io.constructor.injection/ConstructorSdk///PointingToDeclaration/library/io.constructor.injection/-constructor-sdk/index.html
 $dokka.location:io.constructor.injection/ConstructorSdk/ConstructorSdk/#/PointingToDeclaration/library/io.constructor.injection/-constructor-sdk/-constructor-sdk.html
@@ -714,5 +731,6 @@ io.constructor.data.model.common
 io.constructor.data.model.quiz
 io.constructor.data.model.recommendations
 io.constructor.data.model.search
+io.constructor.data.model.tracking
 io.constructor.injection
 

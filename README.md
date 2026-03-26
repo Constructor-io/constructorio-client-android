@@ -9,7 +9,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.38.0) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.39.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 
@@ -634,3 +634,18 @@ ConstructorIo.trackItemDetailLoaded("Pencil", "123", "234")
 // Track when a product is clicked. Should be used when a clicked product is not part of search/browse/recommendation experiences. (itemName, customerId, variationId?, sectionName?)
 ConstructorIo.trackGenericResultClick("Pencil", "123", "234")
 ```
+
+### Media Impression Events
+
+```kotlin
+// Track when a media placement is viewed
+ConstructorIo.trackMediaImpressionView(
+    bannerAdId = "abc123",
+    placementId = "home"
+)
+
+// Track when a media placement is clicked
+ConstructorIo.trackMediaImpressionClick(
+    bannerAdId = "abc123",
+    placementId = "home"
+)
