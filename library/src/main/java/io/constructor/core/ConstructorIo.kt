@@ -2139,17 +2139,21 @@ object ConstructorIo {
             t -> e("Recommendation Result Click error: ${t.message}")
         }))
     }
+
     /**
      * Tracks recommendation result click events with a single seed item ID.
      *
+     * @param seedItemId The seed item ID used to generate the recommendation results
      * @see trackRecommendationResultClick
      */
     fun trackRecommendationResultClick(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null, analyticsTags: Map<String, String>? = null, seedItemId: String) {
         trackRecommendationResultClick(podId, strategyId, customerId, variationId, sectionName, resultId, numResultsPerPage, resultPage, resultCount, resultPositionOnPage, analyticsTags, listOf(seedItemId))
     }
+
     internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null, analyticsTags: Map<String, String>? = null, seedItemId: String): Completable {
         return trackRecommendationResultClickInternal(podId, strategyId, customerId, variationId, sectionName, resultId, numResultsPerPage, resultPage, resultCount, resultPositionOnPage, analyticsTags, listOf(seedItemId))
     }
+
     internal fun trackRecommendationResultClickInternal(podId: String, strategyId: String, customerId: String, variationId: String? = null, sectionName: String? = null, resultId: String? = null, numResultsPerPage: Int? = null, resultPage: Int? = null, resultCount: Int? = null, resultPositionOnPage: Int? = null, analyticsTags: Map<String, String>? = null, seedItemIds: List<String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
@@ -2205,9 +2209,11 @@ object ConstructorIo {
                 t -> e("Recommendation Results View error: ${t.message}")
         }))
     }
+
     /**
      * Tracks recommendation result view events with a single seed item ID.
      *
+     * @param seedItemId The seed item ID used to generate the recommendation results
      * @see trackRecommendationResultsView
      */
     fun trackRecommendationResultsView(podId: String, itemIds: Array<String>, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemId: String) {
@@ -2236,6 +2242,7 @@ object ConstructorIo {
             t -> e("Recommendation Results View error: ${t.message}")
         }))
     }
+
     /**
      * Tracks recommendation result view events with a single seed item ID.
      *
@@ -2244,9 +2251,11 @@ object ConstructorIo {
     fun trackRecommendationResultsView(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemId: String) {
         trackRecommendationResultsView(podId, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags, listOf(seedItemId))
     }
+
     internal fun trackRecommendationResultsViewInternal(podId: String, itemIds: Array<String>? = null, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemId: String): Completable {
         return trackRecommendationResultsViewInternal(podId, itemIds, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags, listOf(seedItemId))
     }
+
     internal fun trackRecommendationResultsViewInternal(podId: String, itemIds: Array<String>? = null, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemIds: List<String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
