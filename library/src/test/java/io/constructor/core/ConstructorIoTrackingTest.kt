@@ -1174,7 +1174,7 @@ class ConstructorIoTrackingTest {
     fun trackRecommendationResultClickWithSingleSeedItemId() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", seedItemId = "seed-item-123").test()
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", seedItemIds = listOf("seed-item-123")).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -1302,7 +1302,7 @@ class ConstructorIoTrackingTest {
     fun trackRecommendationResultsViewWithSingleSeedItemId() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, seedItemId = "seed-item-123").test()
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, seedItemIds = listOf("seed-item-123")).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
