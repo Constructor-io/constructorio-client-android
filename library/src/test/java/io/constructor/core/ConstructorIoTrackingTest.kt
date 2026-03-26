@@ -22,6 +22,7 @@ import java.net.URLEncoder
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
     val requestBodyString = request.body.readUtf8().drop(1).dropLast(1).replace("\"", "")
@@ -1133,6 +1134,7 @@ class ConstructorIoTrackingTest {
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("User Featured", requestBody["strategy_id"])
         assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertNull(requestBody["seed_item_ids"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -1242,6 +1244,7 @@ class ConstructorIoTrackingTest {
         val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.38.0&_dt="
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("4", requestBody["num_results_viewed"])
+        assertNull(requestBody["seed_item_ids"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
