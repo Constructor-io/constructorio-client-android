@@ -25,5 +25,6 @@ data class RecommendationResultClickRequestBody(
         @Json(name = "analytics_tags") val analyticsTags: Map<String, String>?,
         @Json(name= "beacon") val beacon: Boolean?,
         @Json(name= "section") val section: String?,
-        @Json(name= "_dt") val _dt: Long?
+        @Json(name= "_dt") val _dt: Long?,
+        @Json(name = "seed_item_ids") val seedItemIds: List<String>?
 ) : Serializable

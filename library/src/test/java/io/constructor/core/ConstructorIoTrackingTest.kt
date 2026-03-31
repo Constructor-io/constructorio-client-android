@@ -22,6 +22,7 @@ import java.net.URLEncoder
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 internal fun getRequestBody(request: RecordedRequest): Map<String, String> {
     val requestBodyString = request.body.readUtf8().drop(1).dropLast(1).replace("\"", "")
@@ -1133,6 +1134,7 @@ class ConstructorIoTrackingTest {
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("User Featured", requestBody["strategy_id"])
         assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertNull(requestBody["seed_item_ids"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -1166,6 +1168,57 @@ class ConstructorIoTrackingTest {
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("User Featured", requestBody["strategy_id"])
         assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultClickWithSingleSeedItemId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", seedItemIds = listOf("seed-item-123")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.39.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("User Featured", requestBody["strategy_id"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("[seed-item-123]", requestBody["seed_item_ids"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultClickWithMultipleSeedItemIds() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured","TIT-REP-1997", seedItemIds = listOf("seed-item-1", "seed-item-2", "seed-item-3")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.39.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("User Featured", requestBody["strategy_id"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertEquals("[seed-item-1,seed-item-2,seed-item-3]", requestBody["seed_item_ids"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultClickWithEmptySeedItemIds() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultClickInternal("pdp5", "User Featured", "TIT-REP-1997", seedItemIds = listOf()).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_click?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.39.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("User Featured", requestBody["strategy_id"])
+        assertEquals("TIT-REP-1997", requestBody["item_id"])
+        assertNull(requestBody["seed_item_ids"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -1208,6 +1261,7 @@ class ConstructorIoTrackingTest {
         val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.39.0&_dt="
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("4", requestBody["num_results_viewed"])
+        assertNull(requestBody["seed_item_ids"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -1260,6 +1314,54 @@ class ConstructorIoTrackingTest {
         assertEquals("1", requestBody["result_page"])
         assertEquals("4", requestBody["result_count"])
         assertEquals("3467632", requestBody["result_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithSingleSeedItemId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, seedItemIds = listOf("seed-item-123")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.39.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("[seed-item-123]", requestBody["seed_item_ids"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithMultipleSeedItemIds() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, seedItemIds = listOf("seed-item-1", "seed-item-2", "seed-item-3")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.39.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("[seed-item-1,seed-item-2,seed-item-3]", requestBody["seed_item_ids"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithEmptySeedItemIds() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null, 4, seedItemIds = listOf()).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.39.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertNull(requestBody["seed_item_ids"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
