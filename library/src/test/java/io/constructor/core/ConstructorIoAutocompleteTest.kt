@@ -73,6 +73,18 @@ class ConstructorIoAutocompleteTest {
     }
 
     @Test
+    fun getAutocompleteResultsWithTotalNumResultsPerSection() {
+        val mockResponse = MockResponse().setResponseCode(200)
+            .setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
+        mockServer.enqueue(mockResponse)
+        val observer = constructorIo.getAutocompleteResults("titanic").test()
+        observer.assertComplete().assertValue {
+            val totalNumResults = it.get()!!.totalNumResultsPerSection
+            totalNumResults != null && totalNumResults["Products"] == 168 && totalNumResults["Search Suggestions"] == 32
+        }
+    }
+
+    @Test
     fun getAutocompleteResultsWithFacetFilter() {
         val mockResponse = MockResponse().setResponseCode(200)
             .setBody(TestDataLoader.loadAsString("autocomplete_response.json"))
