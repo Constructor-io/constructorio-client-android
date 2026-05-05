@@ -82,6 +82,10 @@ class ConstructorIoAutocompleteTest {
             val totalNumResults = it.get()!!.totalNumResultsPerSection
             totalNumResults != null && totalNumResults["Products"] == 168 && totalNumResults["Search Suggestions"] == 32
         }
+        val request = mockServer.takeRequest()
+        val path =
+            "/autocomplete/titanic?key=golden-key&i=guido-the-guid&ui=player-one&s=79&c=cioand-2.40.0&_dt="
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
