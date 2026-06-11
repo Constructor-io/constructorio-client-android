@@ -37,4 +37,5 @@ object ApiPaths {
     const val URL_QUIZ_RESULTS = "v1/quizzes/%s/results"
     const val URL_MEDIA_IMPRESSION_VIEW_EVENT = "v2/ad_behavioral_action/display_ad_view"
     const val URL_MEDIA_IMPRESSION_CLICK_EVENT = "v2/ad_behavioral_action/display_ad_click"
+    const val URL_RESULTS_IMPRESSION_VIEW_EVENT = "v2/behavioral_action/impression_view"
 }

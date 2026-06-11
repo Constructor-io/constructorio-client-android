@@ -649,3 +649,23 @@ ConstructorIo.trackMediaImpressionClick(
     bannerAdId = "abc123",
     placementId = "home"
 )
+```
+
+### Results Impression View Events
+
+```kotlin
+// Track sponsored results impression view
+val items = listOf(
+    ResultsImpressionItem(
+        itemId = "product-789",
+        itemName = "Premium Sneakers",
+        variationId = "product-789-white",
+        slCampaignId = "campaign-1",
+        slCampaignOwner = "owner-a"
+    )
+)
+ConstructorIo.trackResultsImpressionView(
+    items = items,
+    searchTerm = "sneakers"
+)
+```

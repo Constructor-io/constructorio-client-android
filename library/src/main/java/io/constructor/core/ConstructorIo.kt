@@ -25,6 +25,8 @@ import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
+import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
+import io.constructor.data.model.common.ResultsImpressionItem
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -1966,6 +1968,16 @@ object ConstructorIo {
         }))
     }
 
+    /**
+     * Tracks results impression view events (items that were viewably impressed per MRC guidelines).
+     */
+    fun trackResultsImpressionView(items: List<ResultsImpressionItem>, searchTerm: String? = null, filterName: String? = null, filterValue: String? = null, analyticsTags: Map<String, String>? = null) {
+        val completable = trackResultsImpressionViewInternal(items, searchTerm, filterName, filterValue, analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t ->
+            e("Results Impression View error: ${t.message}")
+        }))
+    }
+
     internal fun trackItemDetailLoadedInternal(itemName: String, customerId: String, variationId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
@@ -2028,6 +2040,27 @@ object ConstructorIo {
         )
 
         return dataManager.trackMediaImpressionClick(preferenceHelper, requestBody)
+    }
+
+    internal fun trackResultsImpressionViewInternal(items: List<ResultsImpressionItem>, searchTerm: String? = null, filterName: String? = null, filterValue: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val requestBody = ResultsImpressionViewRequestBody(
+                items,
+                searchTerm,
+                filterName,
+                filterValue,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                true,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackResultsImpressionView(requestBody)
     }
 
     /**
