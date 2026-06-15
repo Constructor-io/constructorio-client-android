@@ -18,7 +18,6 @@ import org.junit.Test
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class ConstructorIoResultsImpressionViewTrackingTest {
 
@@ -77,14 +76,16 @@ class ConstructorIoResultsImpressionViewTrackingTest {
         observer.assertComplete()
         val request = awaitRequest()
         assertEquals("POST", request.method)
-        assertTrue(request.path!!.startsWith("/v2/behavioral_action/impression_view"))
+        assert(request.path!!.startsWith("/v2/behavioral_action/impression_view"))
 
         val requestBody = getRequestBody(request)
         assertEquals("true", requestBody["beacon"])
-        assertTrue(requestBody["items"]!!.contains("item_id:item-1"))
-        assertTrue(requestBody["items"]!!.contains("item_name:Item One"))
-        assertTrue(requestBody["items"]!!.contains("item_id:item-2"))
-        assertTrue(requestBody["items"]!!.contains("variation_id:var-2"))
+        assertEquals("wacko-the-guid", requestBody["i"])
+        assertEquals("67", requestBody["s"])
+        assert(requestBody["items"]!!.contains("item_id:item-1"))
+        assert(requestBody["items"]!!.contains("item_name:Item One"))
+        assert(requestBody["items"]!!.contains("item_id:item-2"))
+        assert(requestBody["items"]!!.contains("variation_id:var-2"))
     }
 
     @Test
@@ -99,8 +100,8 @@ class ConstructorIoResultsImpressionViewTrackingTest {
 
         val requestBody = getRequestBody(request)
         assertEquals("shoes", requestBody["search_term"])
-        assertTrue(requestBody["items"]!!.contains("sl_campaign_id:camp-1"))
-        assertTrue(requestBody["items"]!!.contains("sl_campaign_owner:owner-a"))
+        assert(requestBody["items"]!!.contains("sl_campaign_id:camp-1"))
+        assert(requestBody["items"]!!.contains("sl_campaign_owner:owner-a"))
     }
 
     @Test
@@ -119,6 +120,20 @@ class ConstructorIoResultsImpressionViewTrackingTest {
     }
 
     @Test
+    fun trackResultsImpressionViewWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+
+        val items = listOf(ResultsImpressionItem("item-1", "Item One"))
+        val observer = ConstructorIo.trackResultsImpressionViewInternal(items, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = awaitRequest()
+
+        val requestBody = getRequestBody(request)
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+    }
+
+    @Test
     fun trackResultsImpressionView500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -127,7 +142,7 @@ class ConstructorIoResultsImpressionViewTrackingTest {
         val observer = ConstructorIo.trackResultsImpressionViewInternal(items).test()
         observer.assertError { true }
         val request = awaitRequest()
-        assertTrue(request.path!!.startsWith("/v2/behavioral_action/impression_view"))
+        assert(request.path!!.startsWith("/v2/behavioral_action/impression_view"))
     }
 
     @Test
@@ -143,7 +158,7 @@ class ConstructorIoResultsImpressionViewTrackingTest {
         observer.awaitDone(6, TimeUnit.SECONDS)
         observer.assertError(SocketTimeoutException::class.java)
         val request = awaitRequest()
-        assertTrue(request.path!!.startsWith("/v2/behavioral_action/impression_view"))
+        assert(request.path!!.startsWith("/v2/behavioral_action/impression_view"))
     }
 
     private fun awaitRequest(): RecordedRequest {
