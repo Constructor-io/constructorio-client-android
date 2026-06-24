@@ -1448,18 +1448,19 @@ object ConstructorIo {
      * @param sectionName the section the selection came from, i.e. "Search Suggestions"
      * @param resultGroup the group to search within if a user selected to search in a group, i.e. "Pumpkin in Canned Goods"
      * @param resultID the result ID of the autocomplete response that the selection came from
+     * @param itemID the item ID of the selection, i.e. "ITEM-123"
      */
-    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null) {
-        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID)
+    fun trackAutocompleteSelect(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null, itemID: String? = null) {
+        var completable = trackAutocompleteSelectInternal(searchTerm, originalQuery, sectionName, resultGroup, resultID, itemID)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
             context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to searchTerm)
         }, {
             t -> e("Autocomplete Select error: ${t.message}")
         }))
     }
-    internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null): Completable {
+    internal fun trackAutocompleteSelectInternal(searchTerm: String, originalQuery: String, sectionName: String, resultGroup: ResultGroup? = null, resultID: String? = null, itemID: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName, resultId = resultID)
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName, resultId = resultID, itemId = itemID)
 
         return dataManager.trackAutocompleteSelect(searchTerm, arrayOf(
             Constants.QueryConstants.SECTION to sectionName,
