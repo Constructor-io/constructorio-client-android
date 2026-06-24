@@ -524,6 +524,9 @@ ConstructorIo.trackInputFocus("")
 // Track when the user selects an autocomplete suggestion (searchTerm, originalQuery, sectionName)
 ConstructorIo.trackAutocompleteSelect("toothpicks", "tooth", "Search Suggestions")
 
+// Track when the user selects an autocomplete suggestion with an item ID (searchTerm, originalQuery, sectionName, resultGroup, resultID, itemID)
+ConstructorIo.trackAutocompleteSelect("Fashionable Toothpicks", "tooth", "Products", itemID = "1234567-AB")
+
 // Track when the user submits a search  (searchTerm, originalQuery)
 ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 ```

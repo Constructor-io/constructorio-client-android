@@ -300,6 +300,17 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackAutocompleteSelectWithItemID() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackAutocompleteSelectInternal("titanic", "tit", "Search Suggestions", null, null, "TIT-REP-1997").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/titanic/select?section=Search%20Suggestions&original_query=tit&tr=click&item_id=TIT-REP-1997&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.41.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackAutocompleteSelectWithServerError() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
