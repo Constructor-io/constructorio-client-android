@@ -9,7 +9,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.41.0) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.42.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 
@@ -523,6 +523,9 @@ ConstructorIo.trackInputFocus("")
 
 // Track when the user selects an autocomplete suggestion (searchTerm, originalQuery, sectionName)
 ConstructorIo.trackAutocompleteSelect("toothpicks", "tooth", "Search Suggestions")
+
+// Track when the user selects an autocomplete suggestion with an item ID (searchTerm, originalQuery, sectionName, resultGroup, resultID, itemID)
+ConstructorIo.trackAutocompleteSelect("Fashionable Toothpicks", "tooth", "Products", itemID = "1234567-AB")
 
 // Track when the user submits a search  (searchTerm, originalQuery)
 ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
