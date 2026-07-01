@@ -5,6 +5,7 @@ import io.constructor.data.model.browse.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
+import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -143,6 +144,9 @@ interface ConstructorApi {
 
     @POST
     fun trackMediaImpressionClick(@Url url: String, @Body mediaImpressionRequestBody: MediaImpressionRequestBody): Completable
+
+    @POST(ApiPaths.URL_RESULTS_IMPRESSION_VIEW_EVENT)
+    fun trackResultsImpressionView(@Body body: ResultsImpressionViewRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @GET
     fun getQuizNextQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>

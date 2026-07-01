@@ -14,6 +14,7 @@ import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
+import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.injection.ConstructorSdk
@@ -312,6 +313,10 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackQuizConversion(quizConversionRequestBody: QuizConversionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackQuizConversion(quizConversionRequestBody, params.toMap())
+    }
+
+    fun trackResultsImpressionView(resultsImpressionViewRequestBody: ResultsImpressionViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackResultsImpressionView(resultsImpressionViewRequestBody, params.toMap())
     }
 
     fun trackMediaImpressionView(preferencesHelper: PreferencesHelper, mediaImpressionRequestBody: MediaImpressionRequestBody): Completable {
