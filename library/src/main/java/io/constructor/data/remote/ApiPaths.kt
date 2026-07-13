@@ -38,4 +38,10 @@ object ApiPaths {
     const val URL_MEDIA_IMPRESSION_VIEW_EVENT = "v2/ad_behavioral_action/display_ad_view"
     const val URL_MEDIA_IMPRESSION_CLICK_EVENT = "v2/ad_behavioral_action/display_ad_click"
     const val URL_RESULTS_IMPRESSION_VIEW_EVENT = "v2/behavioral_action/impression_view"
+    const val URL_AGENT_SUBMIT_EVENT = "v2/behavioral_action/assistant_submit"
+    const val URL_AGENT_RESULT_LOAD_STARTED_EVENT = "v2/behavioral_action/assistant_result_load_start"
+    const val URL_AGENT_RESULT_LOAD_FINISHED_EVENT = "v2/behavioral_action/assistant_result_load_finish"
+    const val URL_AGENT_RESULT_CLICK_EVENT = "v2/behavioral_action/assistant_search_result_click"
+    const val URL_AGENT_RESULT_VIEW_EVENT = "v2/behavioral_action/assistant_search_result_view"
+    const val URL_AGENT_SEARCH_SUBMIT_EVENT = "v2/behavioral_action/assistant_search_submit"
 }

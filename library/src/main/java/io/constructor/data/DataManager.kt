@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
-import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
+import io.constructor.data.model.tracking.*
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -12,9 +12,6 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
-import io.constructor.data.model.tracking.GenericResultClickRequestBody
-import io.constructor.data.model.tracking.MediaImpressionRequestBody
-import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
 import io.constructor.injection.ConstructorSdk
@@ -317,6 +314,30 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
 
     fun trackResultsImpressionView(resultsImpressionViewRequestBody: ResultsImpressionViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackResultsImpressionView(resultsImpressionViewRequestBody, params.toMap())
+    }
+
+    fun trackAgentSubmit(body: AgentSubmitRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackAgentSubmit(body, params.toMap())
+    }
+
+    fun trackAgentResultLoadStarted(body: AgentResultLoadStartedRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackAgentResultLoadStarted(body, params.toMap())
+    }
+
+    fun trackAgentResultLoadFinished(body: AgentResultLoadFinishedRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackAgentResultLoadFinished(body, params.toMap())
+    }
+
+    fun trackAgentResultClick(body: AgentResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackAgentResultClick(body, params.toMap())
+    }
+
+    fun trackAgentResultView(body: AgentResultViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackAgentResultView(body, params.toMap())
+    }
+
+    fun trackAgentSearchSubmit(body: AgentSearchSubmitRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackAgentSearchSubmit(body, params.toMap())
     }
 
     fun trackMediaImpressionView(preferencesHelper: PreferencesHelper, mediaImpressionRequestBody: MediaImpressionRequestBody): Completable {

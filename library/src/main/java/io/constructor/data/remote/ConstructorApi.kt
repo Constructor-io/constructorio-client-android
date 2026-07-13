@@ -2,10 +2,7 @@ package io.constructor.data.remote
 
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
-import io.constructor.data.model.tracking.GenericResultClickRequestBody
-import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
-import io.constructor.data.model.tracking.MediaImpressionRequestBody
-import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
+import io.constructor.data.model.tracking.*
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -147,6 +144,24 @@ interface ConstructorApi {
 
     @POST(ApiPaths.URL_RESULTS_IMPRESSION_VIEW_EVENT)
     fun trackResultsImpressionView(@Body body: ResultsImpressionViewRequestBody, @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_AGENT_SUBMIT_EVENT)
+    fun trackAgentSubmit(@Body body: AgentSubmitRequestBody, @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_AGENT_RESULT_LOAD_STARTED_EVENT)
+    fun trackAgentResultLoadStarted(@Body body: AgentResultLoadStartedRequestBody, @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_AGENT_RESULT_LOAD_FINISHED_EVENT)
+    fun trackAgentResultLoadFinished(@Body body: AgentResultLoadFinishedRequestBody, @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_AGENT_RESULT_CLICK_EVENT)
+    fun trackAgentResultClick(@Body body: AgentResultClickRequestBody, @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_AGENT_RESULT_VIEW_EVENT)
+    fun trackAgentResultView(@Body body: AgentResultViewRequestBody, @QueryMap params: Map<String, String>): Completable
+
+    @POST(ApiPaths.URL_AGENT_SEARCH_SUBMIT_EVENT)
+    fun trackAgentSearchSubmit(@Body body: AgentSearchSubmitRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @GET
     fun getQuizNextQuestion(@Url quizUrl: String): Single<Result<ResponseBody>>
