@@ -155,10 +155,10 @@ interface ConstructorApi {
     fun trackAgentResultLoadFinished(@Body body: AgentResultLoadFinishedRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_AGENT_RESULT_CLICK_EVENT)
-    fun trackAgentResultClick(@Body body: AgentResultClickRequestBody, @QueryMap params: Map<String, String>): Completable
+    fun trackAgentResultClick(@Body body: AgentResultClickRequestBody): Completable
 
     @POST(ApiPaths.URL_AGENT_RESULT_VIEW_EVENT)
-    fun trackAgentResultView(@Body body: AgentResultViewRequestBody, @QueryMap params: Map<String, String>): Completable
+    fun trackAgentResultView(@Body body: AgentResultViewRequestBody): Completable
 
     @POST(ApiPaths.URL_AGENT_SEARCH_SUBMIT_EVENT)
     fun trackAgentSearchSubmit(@Body body: AgentSearchSubmitRequestBody, @QueryMap params: Map<String, String>): Completable

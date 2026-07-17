@@ -262,7 +262,6 @@ class ConstructorIoAgentTrackingTest {
 
         val requestBody = getRequestBody(request)
         assertEquals("Search Suggestions", requestBody["section"])
-        assert(request.path!!.contains("section=Search+Suggestions") || request.path!!.contains("section=Search%20Suggestions"))
     }
 
     @Test

@@ -328,12 +328,12 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackAgentResultLoadFinished(body, params.toMap())
     }
 
-    fun trackAgentResultClick(body: AgentResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackAgentResultClick(body, params.toMap())
+    fun trackAgentResultClick(body: AgentResultClickRequestBody): Completable {
+        return constructorApi.trackAgentResultClick(body)
     }
 
-    fun trackAgentResultView(body: AgentResultViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackAgentResultView(body, params.toMap())
+    fun trackAgentResultView(body: AgentResultViewRequestBody): Completable {
+        return constructorApi.trackAgentResultView(body)
     }
 
     fun trackAgentSearchSubmit(body: AgentSearchSubmitRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {

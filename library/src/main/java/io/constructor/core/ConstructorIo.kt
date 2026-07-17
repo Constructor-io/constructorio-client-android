@@ -2535,10 +2535,7 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentResultClick(
-                requestBody,
-                arrayOf(Constants.QueryConstants.SECTION to section)
-        )
+        return dataManager.trackAgentResultClick(requestBody)
     }
 
     /**
@@ -2585,10 +2582,7 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentResultView(
-                requestBody,
-                arrayOf(Constants.QueryConstants.SECTION to section)
-        )
+        return dataManager.trackAgentResultView(requestBody)
     }
 
     /**
