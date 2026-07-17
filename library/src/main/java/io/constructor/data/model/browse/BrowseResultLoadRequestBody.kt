@@ -14,6 +14,7 @@ data class BrowseResultLoadRequestBody(
         @Json(name = "filter_value") val filterValue: String,
         @Json(name = "items") val items: List<TrackingItem>?,
         @Json(name = "result_count") val resultCount: Int,
+        @Json(name = "result_id") val resultId: String?,
         @Json(name = "url") val url: String,
         @Json(name = "c") val c: String,
         @Json(name = "i") val i: String,

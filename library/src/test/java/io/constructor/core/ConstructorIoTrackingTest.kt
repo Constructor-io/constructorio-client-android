@@ -435,6 +435,22 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackSearchResultLoadedWithResultId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, resultId = "179b8a0e-3799-4a31-be87-127b06871de2").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackSearchResultLoaded500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -849,6 +865,23 @@ class ConstructorIoTrackingTest {
         assertEquals("Movies", requestBody["filter_value"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultLoadedWithResultId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, null, 10, resultId = "179b8a0e-3799-4a31-be87-127b06871de2").test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
