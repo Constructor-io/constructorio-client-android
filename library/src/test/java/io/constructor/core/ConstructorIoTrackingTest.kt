@@ -1332,7 +1332,7 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
-    fun trackRecommendationResultsViewWithVariationTrackingItems() {
+    fun trackRecommendationResultsViewWithTrackingItemsIncludingVariations() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
         val items = arrayOf(
