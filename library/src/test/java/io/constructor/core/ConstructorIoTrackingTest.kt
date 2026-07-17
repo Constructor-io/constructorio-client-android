@@ -1312,6 +1312,64 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackRecommendationResultsViewWithTrackingItems() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(
+            TrackingItem("123", null, null, null),
+            TrackingItem("234", null, null, null)
+        )
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", numResultsViewed = 4, items = items).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithTrackingItemsIncludingVariations() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(
+            TrackingItem("123", "var123", null, null),
+            TrackingItem("234", "var234", null, null)
+        )
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", numResultsViewed = 4, items = items).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("[{item_id:123,variation_id:var123},{item_id:234,variation_id:var234}]", requestBody["items"])
+        assertEquals("4", requestBody["num_results_viewed"])
+        assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackRecommendationResultsViewWithTrackingItemsAndAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(
+            TrackingItem("123", null, "cmp123", "ownerA"),
+            TrackingItem("234", null, "cmp456", "ownerB")
+        )
+        val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", numResultsViewed = 4, items = items).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        assert(requestBody["items"]!!.contains("sl_campaign_owner:ownerA"))
+        assert(requestBody["items"]!!.contains("sl_campaign_id:cmp123"))
+        assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("POST", request.method)
+    }
+
+    @Test
     fun trackRecommendationResultsViewWithSectionAndResultID() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
