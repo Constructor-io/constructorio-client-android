@@ -23,10 +23,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
-import io.constructor.data.model.tracking.GenericResultClickRequestBody
-import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
-import io.constructor.data.model.tracking.MediaImpressionRequestBody
-import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
+import io.constructor.data.model.tracking.*
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
@@ -2371,5 +2368,264 @@ object ConstructorIo {
                 recommendationResultViewRequestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section)
         )
+    }
+
+    /**
+     * Tracks agent submit events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackAgentSubmit("find me a red shirt")
+     * ```
+     * @param intent the user's intent/query submitted to the agent
+     * @param sectionName the section name (defaults to "Products")
+     * @param analyticsTags additional analytics tags to pass
+     */
+    fun trackAgentSubmit(intent: String, sectionName: String? = null, analyticsTags: Map<String, String>? = null) {
+        val completable = trackAgentSubmitInternal(intent, sectionName, analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Agent Submit error: ${t.message}")
+        }))
+    }
+
+    internal fun trackAgentSubmitInternal(intent: String, sectionName: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val requestBody = AgentSubmitRequestBody(
+                intent,
+                true,
+                section,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackAgentSubmit(requestBody)
+    }
+
+    /**
+     * Tracks agent result load started events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackAgentResultLoadStarted("find me a red shirt")
+     * ```
+     * @param intent the user's intent/query submitted to the agent
+     * @param sectionName the section name (defaults to "Products")
+     * @param intentResultId the intent result identifier
+     * @param analyticsTags additional analytics tags to pass
+     */
+    fun trackAgentResultLoadStarted(intent: String, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null) {
+        val completable = trackAgentResultLoadStartedInternal(intent, sectionName, intentResultId, analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Agent Result Load Started error: ${t.message}")
+        }))
+    }
+
+    internal fun trackAgentResultLoadStartedInternal(intent: String, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val requestBody = AgentResultLoadStartedRequestBody(
+                intent,
+                true,
+                section,
+                intentResultId,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackAgentResultLoadStarted(requestBody)
+    }
+
+    /**
+     * Tracks agent result load finished events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackAgentResultLoadFinished("find me a red shirt", 25)
+     * ```
+     * @param intent the user's intent/query submitted to the agent
+     * @param searchResultCount the number of search results returned
+     * @param sectionName the section name (defaults to "Products")
+     * @param intentResultId the intent result identifier
+     * @param analyticsTags additional analytics tags to pass
+     */
+    fun trackAgentResultLoadFinished(intent: String, searchResultCount: Int, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null) {
+        val completable = trackAgentResultLoadFinishedInternal(intent, searchResultCount, sectionName, intentResultId, analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Agent Result Load Finished error: ${t.message}")
+        }))
+    }
+
+    internal fun trackAgentResultLoadFinishedInternal(intent: String, searchResultCount: Int, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val requestBody = AgentResultLoadFinishedRequestBody(
+                intent,
+                searchResultCount,
+                true,
+                section,
+                intentResultId,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackAgentResultLoadFinished(requestBody)
+    }
+
+    /**
+     * Tracks agent result click events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackAgentResultClick("find me a red shirt", "result-123")
+     * ```
+     * @param intent the user's intent/query submitted to the agent
+     * @param searchResultId the identifier of the search result clicked
+     * @param itemId the item identifier
+     * @param itemName the item name
+     * @param variationId the variation identifier
+     * @param sectionName the section name (defaults to "Products")
+     * @param intentResultId the intent result identifier
+     * @param analyticsTags additional analytics tags to pass
+     */
+    fun trackAgentResultClick(intent: String, searchResultId: String, itemId: String? = null, itemName: String? = null, variationId: String? = null, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null) {
+        val completable = trackAgentResultClickInternal(intent, searchResultId, itemId, itemName, variationId, sectionName, intentResultId, analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Agent Result Click error: ${t.message}")
+        }))
+    }
+
+    internal fun trackAgentResultClickInternal(intent: String, searchResultId: String, itemId: String? = null, itemName: String? = null, variationId: String? = null, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val requestBody = AgentResultClickRequestBody(
+                intent,
+                searchResultId,
+                itemId,
+                itemName,
+                variationId,
+                true,
+                section,
+                intentResultId,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackAgentResultClick(requestBody)
+    }
+
+    /**
+     * Tracks agent result view events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackAgentResultView("find me a red shirt", "result-123", 5)
+     * ```
+     * @param intent the user's intent/query submitted to the agent
+     * @param searchResultId the identifier of the search result
+     * @param numResultsViewed the number of results viewed
+     * @param items the list of items viewed (capped at 100)
+     * @param sectionName the section name (defaults to "Products")
+     * @param intentResultId the intent result identifier
+     * @param analyticsTags additional analytics tags to pass
+     */
+    fun trackAgentResultView(intent: String, searchResultId: String, numResultsViewed: Int, items: List<ResultsImpressionItem>? = null, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null) {
+        val completable = trackAgentResultViewInternal(intent, searchResultId, numResultsViewed, items, sectionName, intentResultId, analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Agent Result View error: ${t.message}")
+        }))
+    }
+
+    internal fun trackAgentResultViewInternal(intent: String, searchResultId: String, numResultsViewed: Int, items: List<ResultsImpressionItem>? = null, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val cappedItems = items?.take(100)
+        val requestBody = AgentResultViewRequestBody(
+                intent,
+                searchResultId,
+                numResultsViewed,
+                cappedItems,
+                true,
+                section,
+                intentResultId,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackAgentResultView(requestBody)
+    }
+
+    /**
+     * Tracks agent search submit events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackAgentSearchSubmit("find me a red shirt", "red shirt", "result-123")
+     * ```
+     * @param intent the user's intent/query submitted to the agent
+     * @param searchTerm the search term submitted
+     * @param searchResultId the identifier of the search result
+     * @param sectionName the section name (defaults to "Products")
+     * @param intentResultId the intent result identifier
+     * @param analyticsTags additional analytics tags to pass
+     */
+    fun trackAgentSearchSubmit(intent: String, searchTerm: String, searchResultId: String, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null) {
+        val completable = trackAgentSearchSubmitInternal(intent, searchTerm, searchResultId, sectionName, intentResultId, analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Agent Search Submit error: ${t.message}")
+        }))
+    }
+
+    internal fun trackAgentSearchSubmitInternal(intent: String, searchTerm: String, searchResultId: String, sectionName: String? = null, intentResultId: String? = null, analyticsTags: Map<String, String>? = null): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
+        val requestBody = AgentSearchSubmitRequestBody(
+                intent,
+                searchTerm,
+                searchResultId,
+                true,
+                section,
+                intentResultId,
+                BuildConfig.CLIENT_VERSION,
+                preferenceHelper.id,
+                preferenceHelper.getSessionId(),
+                preferenceHelper.apiKey,
+                configMemoryHolder.userId,
+                configMemoryHolder.segments,
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
+                System.currentTimeMillis()
+        )
+
+        return dataManager.trackAgentSearchSubmit(requestBody)
     }
 }

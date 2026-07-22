@@ -514,6 +514,7 @@ Three types of these events exist:
 4. **Recommendation Events** measure user interaction with recommendation results
 5. **Quiz Events** measure user interaction with quiz results
 6. **Conversion Events** measure user events like `add to cart` or `purchase`
+7. **Agent Events** measure user interaction with the AI agent search assistant
 
 ### Autocomplete Events
 
@@ -670,5 +671,49 @@ val items = listOf(
 ConstructorIo.trackResultsImpressionView(
     items = items,
     searchTerm = "sneakers"
+)
+```
+
+### Agent Search Assistant (ASA) Events
+
+```kotlin
+// Track when a user submits an intent to the agent (intent, sectionName?)
+ConstructorIo.trackAgentSubmit("find me a red shirt")
+
+// Track when agent results start loading (intent, sectionName?, intentResultId?)
+ConstructorIo.trackAgentResultLoadStarted("find me a red shirt", intentResultId = "intent-123")
+
+// Track when agent results finish loading (intent, searchResultCount, sectionName?, intentResultId?)
+ConstructorIo.trackAgentResultLoadFinished("find me a red shirt", 25, intentResultId = "intent-123")
+
+// Track when an agent search result is clicked (intent, searchResultId, itemId?, itemName?, variationId?, sectionName?, intentResultId?)
+ConstructorIo.trackAgentResultClick(
+    intent = "find me a red shirt",
+    searchResultId = "result-123",
+    itemId = "item-456",
+    itemName = "Red Shirt",
+    variationId = "var-789",
+    intentResultId = "intent-123"
+)
+
+// Track when agent search results are viewed (intent, searchResultId, numResultsViewed, items?, sectionName?, intentResultId?)
+val items = listOf(
+    ResultsImpressionItem("item-1", "Item One"),
+    ResultsImpressionItem("item-2", "Item Two", variationId = "var-2")
+)
+ConstructorIo.trackAgentResultView(
+    intent = "find me a red shirt",
+    searchResultId = "result-123",
+    numResultsViewed = 5,
+    items = items,
+    intentResultId = "intent-123"
+)
+
+// Track when a user submits a search from within the agent (intent, searchTerm, searchResultId, sectionName?, intentResultId?)
+ConstructorIo.trackAgentSearchSubmit(
+    intent = "find me a red shirt",
+    searchTerm = "red shirt",
+    searchResultId = "result-123",
+    intentResultId = "intent-123"
 )
 ```
