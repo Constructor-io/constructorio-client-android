@@ -435,10 +435,11 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
-    fun trackSearchResultLoadedWithResultId() {
+    fun trackSearchResultLoadedWithAllParams() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, resultId = "179b8a0e-3799-4a31-be87-127b06871de2").test()
+        val items = arrayOf(TrackingItem("123", null, null, null))
+        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, items = items, resultId = "179b8a0e-3799-4a31-be87-127b06871de2", resultPage = 3, resultOffset = 20, sortOrder = "ascending", sortBy = "price", selectedFilters = mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -446,6 +447,11 @@ class ConstructorIoTrackingTest {
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("3", requestBody["result_page"])
+        assertEquals("20", requestBody["result_offset"])
+        assertEquals("ascending", requestBody["sort_order"])
+        assertEquals("price", requestBody["sort_by"])
+        assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
@@ -870,10 +876,11 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
-    fun trackBrowseResultLoadedWithResultId() {
+    fun trackBrowseResultLoadedWithAllParams() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, null, 10, resultId = "179b8a0e-3799-4a31-be87-127b06871de2").test()
+        val items = arrayOf(TrackingItem("123", null, null, null))
+        val observer = ConstructorIo.trackBrowseResultsLoadedInternal("group_id", "Movies", null, items, 10, resultId = "179b8a0e-3799-4a31-be87-127b06871de2", resultPage = 3, resultOffset = 20, sortOrder = "ascending", sortBy = "price", selectedFilters = mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
@@ -882,6 +889,11 @@ class ConstructorIoTrackingTest {
         assertEquals("Movies", requestBody["filter_value"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("3", requestBody["result_page"])
+        assertEquals("20", requestBody["result_offset"])
+        assertEquals("ascending", requestBody["sort_order"])
+        assertEquals("price", requestBody["sort_by"])
+        assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
