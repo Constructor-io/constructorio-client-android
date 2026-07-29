@@ -1890,41 +1890,6 @@ object ConstructorIo {
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Browse Results Loaded error: ${t.message}") }))
     }
 
-    /**
-     * Tracks browse result loaded (a.k.a. browse results viewed) events, with support for the
-     * result ID, pagination, sorting and selected filters of the browse results.
-     *
-     * Example:
-     * ```
-     * ConstructorIo.trackBrowseResultsLoaded(
-     *     "Category",
-     *     "Snacks",
-     *     674,
-     *     resultId = "179b8a0e-3799-4a31-be87-127b06871de2",
-     *     resultPage = 3,
-     *     sortOrder = "ascending",
-     *     sortBy = "price",
-     *     selectedFilters = mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))
-     * )
-     * ```
-     * @param filterName the name of the primary filter, i.e. "Aisle"
-     * @param filterValue the value of the primary filter, i.e. "Produce"
-     * @param resultCount the number of results for that filter name/value pair
-     * @param resultId The result ID of the browse response that the results came from, i.e. "179b8a0e-3799-4a31-be87-127b06871de2"
-     * @param analyticsTags Additional analytics tags to pass
-     * @param resultPage The current page of the browse results, i.e. 3. Cannot be used with resultOffset
-     * @param resultOffset The current offset of the browse results, used on scrolling sites, i.e. 20. Cannot be used with resultPage
-     * @param sortOrder The sort order of the browse results, i.e. "ascending" or "descending"
-     * @param sortBy The sorting method of the browse results, i.e. "price"
-     * @param selectedFilters The filters that were selected for the browse results, i.e. mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))
-     */
-    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, resultCount: Int, resultId: String, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null) {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, null, null, resultCount, sectionName, url, analyticsTags, resultId, resultPage, resultOffset, sortOrder, sortBy, selectedFilters)
-        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
-            t -> e("Browse Results Loaded error: ${t.message}")
-        }))
-    }
-
     internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, items: Array<TrackingItem>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, resultId: String? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
