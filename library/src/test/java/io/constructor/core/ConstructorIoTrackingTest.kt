@@ -443,7 +443,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
@@ -884,7 +884,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assertEquals("group_id", requestBody["filter_name"])
         assertEquals("Movies", requestBody["filter_value"])
         assertEquals("10", requestBody["result_count"])
