@@ -11,6 +11,15 @@
 -dontwarn okio.**
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
+-keepattributes *Annotation*, Signature, EnclosingMethod, InnerClasses
+
+# Keep Moshi's core runtime classes. R8 (especially full mode) can rename or
+# horizontally merge JsonReader/JsonAdapter, which breaks the identity check
+# Moshi's AdapterMethodsFactory performs on @FromJson/@ToJson parameter types.
+-keep class com.squareup.moshi.** { *; }
+-keep interface com.squareup.moshi.** { *; }
+-dontwarn com.squareup.moshi.**
+
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
 }
