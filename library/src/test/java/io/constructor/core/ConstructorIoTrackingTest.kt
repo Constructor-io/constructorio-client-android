@@ -446,6 +446,7 @@ class ConstructorIoTrackingTest {
         val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
+        assertEquals("[{item_id:123}]", requestBody["items"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
         assertEquals("3", requestBody["result_page"])
         assertEquals("20", requestBody["result_offset"])
@@ -888,6 +889,7 @@ class ConstructorIoTrackingTest {
         assertEquals("group_id", requestBody["filter_name"])
         assertEquals("Movies", requestBody["filter_value"])
         assertEquals("10", requestBody["result_count"])
+        assertEquals("[{item_id:123}]", requestBody["items"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
         assertEquals("3", requestBody["result_page"])
         assertEquals("20", requestBody["result_offset"])

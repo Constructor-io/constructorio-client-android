@@ -1545,6 +1545,7 @@ object ConstructorIo {
      *     "tooth",
      *     789,
      *     arrayOf(TrackingItem("1234", "2345", "camp1234", "owner-A")),
+     *     analyticsTags = mapOf("campaign" to "summer_sale"),
      *     resultId = "179b8a0e-3799-4a31-be87-127b06871de2",
      *     resultPage = 3,
      *     sortOrder = "ascending",
@@ -1555,16 +1556,16 @@ object ConstructorIo {
      * @param term the term that results are displayed for, i.e. "Pumpkin"
      * @param resultCount the number of results for that term
      * @param items the list of items shown
-     * @param resultId The result ID of the search response that the results came from, i.e. "179b8a0e-3799-4a31-be87-127b06871de2"
      * @param analyticsTags Additional analytics tags to pass
+     * @param resultId The result ID of the search response that the results came from, i.e. "179b8a0e-3799-4a31-be87-127b06871de2"
      * @param resultPage The current page of the search results, i.e. 3. Cannot be used with resultOffset
      * @param resultOffset The current offset of the search results, used on scrolling sites, i.e. 20. Cannot be used with resultPage
      * @param sortOrder The sort order of the search results, i.e. "ascending" or "descending"
      * @param sortBy The sorting method of the search results, i.e. "price"
      * @param selectedFilters The filters that were selected for the search results, i.e. mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, resultId: String, analyticsTags: Map<String, String>? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null) {
-        var completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags, resultId = resultId, resultPage = resultPage, resultOffset = resultOffset, sortOrder = sortOrder, sortBy = sortBy, selectedFilters = selectedFilters)
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>? = null, resultId: String, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null) {
+        val completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags, resultId = resultId, resultPage = resultPage, resultOffset = resultOffset, sortOrder = sortOrder, sortBy = sortBy, selectedFilters = selectedFilters)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
 
@@ -1866,6 +1867,7 @@ object ConstructorIo {
      *     "Snacks",
      *     arrayOf(TrackingItem("1234", "2345", "camp1234", "owner-A")),
      *     674,
+     *     analyticsTags = mapOf("campaign" to "summer_sale"),
      *     resultId = "179b8a0e-3799-4a31-be87-127b06871de2",
      *     resultPage = 3,
      *     sortOrder = "ascending",
@@ -1877,16 +1879,17 @@ object ConstructorIo {
      * @param filterValue the value of the primary filter, i.e. "Produce"
      * @param items the list of the displayed items
      * @param resultCount the number of results for that filter name/value pair
-     * @param resultId The result ID of the browse response that the results came from, i.e. "179b8a0e-3799-4a31-be87-127b06871de2"
+     * @param sectionName the name of the section the results came from, i.e. "Products"
      * @param analyticsTags Additional analytics tags to pass
+     * @param resultId The result ID of the browse response that the results came from, i.e. "179b8a0e-3799-4a31-be87-127b06871de2"
      * @param resultPage The current page of the browse results, i.e. 3. Cannot be used with resultOffset
      * @param resultOffset The current offset of the browse results, used on scrolling sites, i.e. 20. Cannot be used with resultPage
      * @param sortOrder The sort order of the browse results, i.e. "ascending" or "descending"
      * @param sortBy The sorting method of the browse results, i.e. "price"
      * @param selectedFilters The filters that were selected for the browse results, i.e. mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))
      */
-    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, items: Array<TrackingItem>, resultCount: Int, resultId: String, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null) {
-        var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, items = items, resultCount = resultCount, sectionName = sectionName, url = url, analyticsTags = analyticsTags, resultId = resultId, resultPage = resultPage, resultOffset = resultOffset, sortOrder = sortOrder, sortBy = sortBy, selectedFilters = selectedFilters)
+    fun trackBrowseResultsLoaded(filterName: String, filterValue: String, items: Array<TrackingItem>, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, resultId: String, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null) {
+        val completable = trackBrowseResultsLoadedInternal(filterName, filterValue, items = items, resultCount = resultCount, sectionName = sectionName, url = url, analyticsTags = analyticsTags, resultId = resultId, resultPage = resultPage, resultOffset = resultOffset, sortOrder = sortOrder, sortBy = sortBy, selectedFilters = selectedFilters)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Browse Results Loaded error: ${t.message}") }))
     }
 
