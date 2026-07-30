@@ -5,6 +5,8 @@ import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.purchase.PurchaseItem
+import io.constructor.data.builder.BrowseResultsLoadedData
+import io.constructor.data.builder.SearchResultsLoadedData
 import io.constructor.data.model.common.TrackingItem
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
@@ -458,6 +460,36 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackSearchResultLoadedWithRequestBuilder() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = SearchResultsLoadedData.build("titanic", 10) {
+            setItems(listOf(TrackingItem("123", null, null, null)))
+            setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
+            setResultPage(3)
+            setResultOffset(20)
+            setSortOrder("ascending")
+            setSortBy("price")
+            setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
+        }
+        ConstructorIo.trackSearchResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("[{item_id:123}]", requestBody["items"])
+        assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("3", requestBody["result_page"])
+        assertEquals("20", requestBody["result_offset"])
+        assertEquals("ascending", requestBody["sort_order"])
+        assertEquals("price", requestBody["sort_by"])
+        assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
+        assertEquals("POST", recordedRequest.method)
+        assert(recordedRequest.path!!.startsWith(path))
+    }
+
+    @Test
     fun trackSearchResultLoaded500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -898,6 +930,37 @@ class ConstructorIoTrackingTest {
         assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackBrowseResultLoadedWithRequestBuilder() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = BrowseResultsLoadedData.build("group_id", "Movies", 10) {
+            setItems(listOf(TrackingItem("123", null, null, null)))
+            setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
+            setResultPage(3)
+            setResultOffset(20)
+            setSortOrder("ascending")
+            setSortBy("price")
+            setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
+        }
+        ConstructorIo.trackBrowseResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/browse_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        assertEquals("group_id", requestBody["filter_name"])
+        assertEquals("Movies", requestBody["filter_value"])
+        assertEquals("10", requestBody["result_count"])
+        assertEquals("[{item_id:123}]", requestBody["items"])
+        assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("3", requestBody["result_page"])
+        assertEquals("20", requestBody["result_offset"])
+        assertEquals("ascending", requestBody["sort_order"])
+        assertEquals("price", requestBody["sort_by"])
+        assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
+        assertEquals("POST", recordedRequest.method)
+        assert(recordedRequest.path!!.startsWith(path))
     }
 
     @Test
