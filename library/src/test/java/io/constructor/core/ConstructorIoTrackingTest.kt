@@ -1278,7 +1278,7 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
-    fun trackRecommendationResultsViewWithAnalyticsTags() {
+    fun trackRecommendationResultsViewWithCampaignItems() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackRecommendationResultsViewInternal("pdp5", null,4, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
