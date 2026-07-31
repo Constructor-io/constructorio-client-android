@@ -1323,7 +1323,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
         assertEquals("4", requestBody["num_results_viewed"])
@@ -1343,7 +1343,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.43.0&_dt="
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assertEquals("pdp5", requestBody["pod_id"])
         assertEquals("[{item_id:123,variation_id:var123},{item_id:234,variation_id:var234}]", requestBody["items"])
         assertEquals("4", requestBody["num_results_viewed"])
@@ -1363,10 +1363,13 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/recommendation_result_view?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assert(requestBody["items"]!!.contains("sl_campaign_owner:ownerA"))
         assert(requestBody["items"]!!.contains("sl_campaign_id:cmp123"))
         assertEquals("pdp5", requestBody["pod_id"])
+        assertEquals("4", requestBody["num_results_viewed"])
         assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
