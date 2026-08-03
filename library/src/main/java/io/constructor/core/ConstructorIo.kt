@@ -1555,7 +1555,18 @@ object ConstructorIo {
      * @param request the search results loaded request object holding all of the tracking parameters
      */
     fun trackSearchResultsLoaded(request: SearchResultsLoadedData) {
-        val completable = trackSearchResultsLoadedInternal(request.term, request.resultCount, items = request.items?.toTypedArray(), analyticsTags = request.analyticsTags, resultId = request.resultId, resultPage = request.resultPage, resultOffset = request.resultOffset, sortOrder = request.sortOrder, sortBy = request.sortBy, selectedFilters = request.selectedFilters)
+        val completable = trackSearchResultsLoadedInternal(
+            term = request.term,
+            resultCount = request.resultCount,
+            items = request.items?.toTypedArray(),
+            analyticsTags = request.analyticsTags,
+            resultId = request.resultId,
+            resultPage = request.resultPage,
+            resultOffset = request.resultOffset,
+            sortOrder = request.sortOrder,
+            sortBy = request.sortBy,
+            selectedFilters = request.selectedFilters
+        )
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
 
@@ -1867,7 +1878,21 @@ object ConstructorIo {
      * @param request the browse results loaded request object holding all of the tracking parameters
      */
     fun trackBrowseResultsLoaded(request: BrowseResultsLoadedData) {
-        val completable = trackBrowseResultsLoadedInternal(request.filterName, request.filterValue, items = request.items?.toTypedArray(), resultCount = request.resultCount, sectionName = request.sectionName, url = request.url, analyticsTags = request.analyticsTags, resultId = request.resultId, resultPage = request.resultPage, resultOffset = request.resultOffset, sortOrder = request.sortOrder, sortBy = request.sortBy, selectedFilters = request.selectedFilters)
+        val completable = trackBrowseResultsLoadedInternal(
+            request.filterName,
+            request.filterValue,
+            items = request.items?.toTypedArray(),
+            resultCount = request.resultCount,
+            sectionName = request.sectionName,
+            url = request.url,
+            analyticsTags = request.analyticsTags,
+            resultId = request.resultId,
+            resultPage = request.resultPage,
+            resultOffset = request.resultOffset,
+            sortOrder = request.sortOrder,
+            sortBy = request.sortBy,
+            selectedFilters = request.selectedFilters
+        )
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Browse Results Loaded error: ${t.message}") }))
     }
 
