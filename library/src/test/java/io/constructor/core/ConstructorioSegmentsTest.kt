@@ -109,7 +109,7 @@ class ConstructorioSegmentsTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.44.0&_dt="
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&us=mobile&us=COUNTRY_US&c=cioand-2.44.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 

@@ -6,6 +6,7 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.common.TrackingItem
+import io.constructor.data.builder.SearchSubmitData
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -340,8 +341,33 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchSubmitWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null, mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=150&analytics_tags%5BappPlatform%5D=Android&analytics_tags%5Btest%5D=test1&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchSubmitWithRequestBuilder() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = SearchSubmitData.build("titanic", "tit") {
+            setResultGroup(ResultGroup("Movies", "group_id"))
+            setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
+        }
+        ConstructorIo.trackSearchSubmit(request)
+        val recordedRequest = mockServer.takeRequest()
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&group%5Bgroup_id%5D=group_id&group%5Bdisplay_name%5D=Movies&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&analytics_tags%5BrelatedSearchTerm%5D=true&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        assert(recordedRequest.path!!.startsWith(path))
     }
 
     @Test
@@ -351,7 +377,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
@@ -363,7 +389,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertError(SocketTimeoutException::class.java)
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
