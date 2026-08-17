@@ -19,7 +19,11 @@ class SearchSubmitData(
     )
 
     companion object {
-        inline fun build(searchTerm: String, originalQuery: String, block: Builder.() -> Unit = {}) = Builder(searchTerm, originalQuery).apply(block).build()
+        inline fun build(
+            searchTerm: String,
+            originalQuery: String,
+            block: Builder.() -> Unit = {}
+        ) = Builder(searchTerm, originalQuery).apply(block).build()
     }
 
     class Builder(
