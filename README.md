@@ -532,7 +532,7 @@ ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 
 // Track when the user submits a search with additional parameters, i.e. analytics tags
 // Request level analytics tags are merged with the default analytics tags passed on initialization
-val request = SearchSubmitData.build("toothpicks", "tooth") {
+val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
     setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
 }
 ConstructorIo.trackSearchSubmit(request)

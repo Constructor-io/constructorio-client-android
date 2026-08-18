@@ -1496,7 +1496,7 @@ object ConstructorIo {
      *
      * Example:
      * ```
-     * val request = SearchSubmitData.build("toothpicks", "tooth") {
+     * val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
      *     setResultGroup(ResultGroup("Canned Goods", "canned-goods"))
      *     setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
      * }
