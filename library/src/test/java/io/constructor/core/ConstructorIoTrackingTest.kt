@@ -6,7 +6,7 @@ import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.ResultGroup
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.data.model.common.TrackingItem
-import io.constructor.data.builder.SearchSubmitData
+import io.constructor.data.builder.SearchSubmitTrackingData
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
 import io.mockk.every
@@ -360,7 +360,7 @@ class ConstructorIoTrackingTest {
     fun trackSearchSubmitWithRequestBuilder() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        val request = SearchSubmitData.build("titanic", "tit") {
+        val request = SearchSubmitTrackingData.build("titanic", "tit") {
             setResultGroup(ResultGroup("Movies", "group_id"))
             setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
         }

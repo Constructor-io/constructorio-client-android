@@ -5,7 +5,7 @@ import io.constructor.data.model.common.ResultGroup
 /**
  * Create a Search Submit tracking request object utilizing a builder
  */
-class SearchSubmitData(
+class SearchSubmitTrackingData(
     val searchTerm: String,
     val originalQuery: String,
     val resultGroup: ResultGroup? = null,
@@ -35,6 +35,6 @@ class SearchSubmitData(
 
         fun setResultGroup(resultGroup: ResultGroup): Builder = apply { this.resultGroup = resultGroup }
         fun setAnalyticsTags(analyticsTags: Map<String, String>): Builder = apply { this.analyticsTags = analyticsTags }
-        fun build(): SearchSubmitData = SearchSubmitData(this)
+        fun build(): SearchSubmitTrackingData = SearchSubmitTrackingData(this)
     }
 }

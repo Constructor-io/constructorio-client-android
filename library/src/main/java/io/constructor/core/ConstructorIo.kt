@@ -1504,7 +1504,7 @@ object ConstructorIo {
      * ```
      * @param request the search submit request object holding all of the tracking parameters
      */
-    fun trackSearchSubmit(request: SearchSubmitData) {
+    fun trackSearchSubmit(request: SearchSubmitTrackingData) {
         val completable = trackSearchSubmitInternal(request.searchTerm, request.originalQuery, request.resultGroup, request.analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
             context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to request.searchTerm)
