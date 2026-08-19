@@ -64,6 +64,7 @@ class Constants {
         const val GROUPS_MAX_DEPTH = "groups_max_depth"
         const val FILTER_GROUP_ID = "filters[group_id]"
         const val PRE_FILTER_EXPRESSION = "pre_filter_expression"
+        const val ANALYTICS_TAGS = "analytics_tags[%s]"
     }
 
     object QueryValues {

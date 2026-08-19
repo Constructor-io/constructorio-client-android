@@ -529,6 +529,13 @@ ConstructorIo.trackAutocompleteSelect("Fashionable Toothpicks", "tooth", "Produc
 
 // Track when the user submits a search  (searchTerm, originalQuery)
 ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
+
+// Track when the user submits a search with additional parameters, i.e. analytics tags
+// Request level analytics tags are merged with the default analytics tags passed on initialization
+val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
+    setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
+}
+ConstructorIo.trackSearchSubmit(request)
 ```
 
 ### Search Events

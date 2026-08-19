@@ -1490,9 +1490,38 @@ object ConstructorIo {
             t -> e("Search Submit error: ${t.message}")
         }))
     }
-    internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?): Completable {
+
+    /**
+     * Tracks search submit events.
+     *
+     * Example:
+     * ```
+     * val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
+     *     setResultGroup(ResultGroup("Canned Goods", "canned-goods"))
+     *     setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
+     * }
+     * ConstructorIo.trackSearchSubmit(request)
+     * ```
+     * @param request the search submit request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackSearchSubmit(request: SearchSubmitTrackingData) {
+        val completable = trackSearchSubmitInternal(request.searchTerm, request.originalQuery, request.resultGroup, request.analyticsTags)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
+            context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to request.searchTerm)
+        }, {
+            t -> e("Search Submit error: ${t.message}")
+        }))
+    }
+
+    internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?, analyticsTags: Map<String, String>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName)
+        mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)?.forEach { (key, value) ->
+            encodedParams.add(Constants.QueryConstants.ANALYTICS_TAGS.format(key).urlEncode() to value.urlEncode())
+        }
 
         return dataManager.trackSearchSubmit(searchTerm, arrayOf(
                 Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
