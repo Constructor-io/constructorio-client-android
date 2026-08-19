@@ -1502,7 +1502,10 @@ object ConstructorIo {
      * }
      * ConstructorIo.trackSearchSubmit(request)
      * ```
-     * @param request the search submit request object holding all of the tracking parameters
+     * @param request the search submit request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
      */
     fun trackSearchSubmit(request: SearchSubmitTrackingData) {
         val completable = trackSearchSubmitInternal(request.searchTerm, request.originalQuery, request.resultGroup, request.analyticsTags)
