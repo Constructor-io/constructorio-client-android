@@ -1564,7 +1564,42 @@ object ConstructorIo {
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
 
-    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null, items: Array<TrackingItem>? = null, analyticsTags: Map<String, String>? = null): Completable {
+    /**
+     * Tracks search results loaded (a.k.a. search results viewed) events, with support for the
+     * result ID, pagination, sorting and selected filters of the search results.
+     *
+     * Example:
+     * ```
+     * val request = SearchResultsLoadedData.build("tooth", 789) {
+     *     setItems(listOf(TrackingItem("1234", "2345", "camp1234", "owner-A")))
+     *     setAnalyticsTags(mapOf("campaign" to "summer_sale"))
+     *     setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
+     *     setResultPage(3)
+     *     setSortOrder("ascending")
+     *     setSortBy("price")
+     *     setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
+     * }
+     * ConstructorIo.trackSearchResultsLoaded(request)
+     * ```
+     * @param request the search results loaded request object holding all of the tracking parameters
+     */
+    fun trackSearchResultsLoaded(request: SearchResultsLoadedData) {
+        val completable = trackSearchResultsLoadedInternal(
+            term = request.term,
+            resultCount = request.resultCount,
+            items = request.items?.toTypedArray(),
+            analyticsTags = request.analyticsTags,
+            resultId = request.resultId,
+            resultPage = request.resultPage,
+            resultOffset = request.resultOffset,
+            sortOrder = request.sortOrder,
+            sortBy = request.sortBy,
+            selectedFilters = request.selectedFilters
+        )
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
+    }
+
+    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null, items: Array<TrackingItem>? = null, analyticsTags: Map<String, String>? = null, resultId: String? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val itemsList: List<TrackingItem>? = when {
             items != null -> items.toList()
@@ -1575,6 +1610,12 @@ object ConstructorIo {
                 term,
                 itemsList,
                 resultCount,
+                resultId,
+                resultPage,
+                resultOffset,
+                sortOrder,
+                sortBy,
+                selectedFilters,
                 "Not Available",
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
@@ -1845,7 +1886,46 @@ object ConstructorIo {
         }))
     }
 
-    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, items: Array<TrackingItem>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null): Completable {
+    /**
+     * Tracks browse result loaded (a.k.a. browse results viewed) events, with support for the
+     * result ID, pagination, sorting and selected filters of the browse results.
+     *
+     * Example:
+     * ```
+     * val request = BrowseResultsLoadedData.build("group_id", "Snacks", 674) {
+     *     setItems(listOf(TrackingItem("1234", "2345", "camp1234", "owner-A")))
+     *     setSectionName("Products")
+     *     setAnalyticsTags(mapOf("campaign" to "summer_sale"))
+     *     setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
+     *     setResultPage(3)
+     *     setSortOrder("ascending")
+     *     setSortBy("price")
+     *     setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
+     * }
+     * ConstructorIo.trackBrowseResultsLoaded(request)
+     * ```
+     * @param request the browse results loaded request object holding all of the tracking parameters
+     */
+    fun trackBrowseResultsLoaded(request: BrowseResultsLoadedData) {
+        val completable = trackBrowseResultsLoadedInternal(
+            request.filterName,
+            request.filterValue,
+            items = request.items?.toTypedArray(),
+            resultCount = request.resultCount,
+            sectionName = request.sectionName,
+            url = request.url,
+            analyticsTags = request.analyticsTags,
+            resultId = request.resultId,
+            resultPage = request.resultPage,
+            resultOffset = request.resultOffset,
+            sortOrder = request.sortOrder,
+            sortBy = request.sortBy,
+            selectedFilters = request.selectedFilters
+        )
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Browse Results Loaded error: ${t.message}") }))
+    }
+
+    internal fun trackBrowseResultsLoadedInternal(filterName: String, filterValue: String, itemIds: Array<String>? = null, items: Array<TrackingItem>? = null, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, resultId: String? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
         val itemsList: List<TrackingItem>? = when {
@@ -1858,6 +1938,12 @@ object ConstructorIo {
                 filterValue,
                 itemsList,
                 resultCount,
+                resultId,
+                resultPage,
+                resultOffset,
+                sortOrder,
+                sortBy,
+                selectedFilters,
                 url,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
