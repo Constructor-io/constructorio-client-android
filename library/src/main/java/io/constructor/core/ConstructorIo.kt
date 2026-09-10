@@ -1501,7 +1501,7 @@ object ConstructorIo {
     }
 
     /**
-     * @deprecated Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.
+     * @Deprecated Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.
      * Tracks search results loaded (a.k.a. search results viewed) events.
      *
      * Example:
@@ -1761,7 +1761,7 @@ object ConstructorIo {
     }
 
     /**
-     * @deprecated Prefer [trackBrowseResultsLoaded] with an array of [TrackingItem] in place of an array of strings for itemIds.
+     * @Deprecated Prefer [trackBrowseResultsLoaded] with an array of [TrackingItem] in place of an array of strings for itemIds.
      * Tracks browse result loaded (a.k.a. browse results viewed) events.
      *
      * Example:
@@ -2296,7 +2296,7 @@ object ConstructorIo {
     }
 
     /**
-     * @deprecated Prefer [trackRecommendationResultsView] with an array of [TrackingItem] in place of an array of strings for itemIds.
+     * @Deprecated Prefer [trackRecommendationResultsView] with an array of [TrackingItem] in place of an array of strings for itemIds.
      * Tracks recommendation result view events.
      *
      * Example:
