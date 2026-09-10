@@ -1530,7 +1530,6 @@ object ConstructorIo {
     }
 
     /**
-     * @deprecated Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.
      * Tracks search results loaded (a.k.a. search results viewed) events.
      *
      * Example:
@@ -1542,6 +1541,7 @@ object ConstructorIo {
      * @param customerIds the customerIds of shown items
      * @param analyticsTags Additional analytics tags to pass
      */
+    @Deprecated("Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.")
     fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null) {
         var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds = customerIds, analyticsTags = analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
@@ -1790,7 +1790,6 @@ object ConstructorIo {
     }
 
     /**
-     * @deprecated Prefer [trackBrowseResultsLoaded] with an array of [TrackingItem] in place of an array of strings for itemIds.
      * Tracks browse result loaded (a.k.a. browse results viewed) events.
      *
      * Example:
@@ -1803,6 +1802,7 @@ object ConstructorIo {
      * @param resultCount the number of results for that filter name/value pair
      * @param analyticsTags Additional analytics tags to pass
      */
+    @Deprecated("Prefer [trackBrowseResultsLoaded] with an array of [TrackingItem] in place of an array of strings for itemIds.")
     fun trackBrowseResultsLoaded(filterName: String, filterValue: String, itemIds: Array<String>, resultCount: Int, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null) {
         var completable = trackBrowseResultsLoadedInternal(filterName, filterValue, itemIds = itemIds, resultCount = resultCount, sectionName = sectionName, url = url, analyticsTags = analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Browse Results Loaded error: ${t.message}") }))
@@ -2332,7 +2332,7 @@ object ConstructorIo {
      * ConstructorIo.trackRecommendationResultsView("Best_Sellers", arrayOf("123", "234"), 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
      * ```
      * @param podId The pod id
-     * @param itemIds the item ids of the dislayed items
+     * @param itemIds the item ids of the displayed items
      * @param numResultsViewed The count of recommendation results being viewed
      * @param resultPage The current page that recommendation result is on
      * @param resultCount The total number of recommendation results
@@ -2341,8 +2341,9 @@ object ConstructorIo {
      * @param analyticsTags Additional analytics tags to pass
      * @param seedItemIds The seed item ID(s) used to generate the recommendation results
      */
+    @Deprecated("Prefer [trackRecommendationResultsView] with an array of [TrackingItem] in place of an array of strings for itemIds.")
     fun trackRecommendationResultsView(podId: String, itemIds: Array<String>, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemIds: List<String>? = null) {
-        var completable = trackRecommendationResultsViewInternal(podId, itemIds, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags, seedItemIds)
+        val completable = trackRecommendationResultsViewInternal(podId, itemIds, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags, seedItemIds)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
                 t -> e("Recommendation Results View error: ${t.message}")
         }))
@@ -2365,19 +2366,47 @@ object ConstructorIo {
      * @param seedItemIds The seed item ID(s) used to generate the recommendation results
      */
     fun trackRecommendationResultsView(podId: String, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemIds: List<String>? = null) {
-        var completable = trackRecommendationResultsViewInternal(podId, null, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags, seedItemIds)
+        val completable = trackRecommendationResultsViewInternal(podId, null, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags, seedItemIds)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
             t -> e("Recommendation Results View error: ${t.message}")
         }))
     }
 
-    internal fun trackRecommendationResultsViewInternal(podId: String, itemIds: Array<String>? = null, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemIds: List<String>? = null): Completable {
+    /**
+     * Tracks recommendation result view events.
+     *
+     * Example:
+     * ```
+     * ConstructorIo.trackRecommendationResultsView("Best_Sellers", arrayOf(TrackingItem("1234", "2345", "camp1234", "owner-A")), 4, 1, 4, "179b8a0e-3799-4a31-be87-127b06871de2", "Products")
+     * ```
+     * @param podId The pod id
+     * @param items the displayed items
+     * @param numResultsViewed The count of recommendation results being viewed
+     * @param resultPage The current page that recommendation result is on
+     * @param resultCount The total number of recommendation results
+     * @param resultId The result ID of the recommendation response that the selection came from
+     * @param sectionName The section that the results came from, i.e. "Products"
+     * @param analyticsTags Additional analytics tags to pass
+     * @param seedItemIds The seed item ID(s) used to generate the recommendation results
+     */
+    fun trackRecommendationResultsView(podId: String, items: Array<TrackingItem>, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemIds: List<String>? = null) {
+        val completable = trackRecommendationResultsViewInternal(podId, null, numResultsViewed, resultPage, resultCount, resultId, sectionName, url, analyticsTags, seedItemIds, items)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+                t -> e("Recommendation Results View error: ${t.message}")
+        }))
+    }
+
+    internal fun trackRecommendationResultsViewInternal(podId: String, itemIds: Array<String>? = null, numResultsViewed: Int, resultPage: Int? = null, resultCount: Int? = null, resultId: String? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, seedItemIds: List<String>? = null, items: Array<TrackingItem>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
         val section = sectionName ?: preferenceHelper.defaultItemSection
-        val items = itemIds?.map{ item -> TrackingItem(item, null, null, null)}
+        val itemsList: List<TrackingItem>? = when {
+            items != null -> items.toList()
+            itemIds != null -> itemIds.map { id -> TrackingItem(id, null, null, null) }
+            else -> null
+        }
         val recommendationResultViewRequestBody = RecommendationResultViewRequestBody(
                 podId,
-                items,
+                itemsList,
                 numResultsViewed,
                 resultPage,
                 resultCount,
