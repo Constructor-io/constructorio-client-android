@@ -9,7 +9,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Install
 
-Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.44.0) to add the client to your project.
+Please follow the directions at [Jitpack.io](https://jitpack.io/#Constructor-io/constructorio-client-android/v2.45.0) to add the client to your project.
 
 ## 2. Retrieve an API key
 
@@ -529,6 +529,13 @@ ConstructorIo.trackAutocompleteSelect("Fashionable Toothpicks", "tooth", "Produc
 
 // Track when the user submits a search  (searchTerm, originalQuery)
 ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
+
+// Track when the user submits a search with additional parameters, i.e. analytics tags
+// Request level analytics tags are merged with the default analytics tags passed on initialization
+val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
+    setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
+}
+ConstructorIo.trackSearchSubmit(request)
 ```
 
 ### Search Events
