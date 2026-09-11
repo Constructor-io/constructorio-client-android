@@ -402,6 +402,7 @@ class ConstructorIoTrackingTest {
         val path = "/v2/behavioral_action/search?section=Content&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("tit", requestBody["user_input"])
+        assertNull(requestBody["filters"])
         assertEquals("POST", recordedRequest.method)
         assert(recordedRequest.path!!.startsWith(path))
     }
@@ -2006,7 +2007,7 @@ class ConstructorIoTrackingTest {
             observer.assertComplete()
             val request = mockServer.takeRequest()
             val decodedPath = URLDecoder.decode(request.path, "UTF-8");
-            assert(Regex("email_omitted").findAll(decodedPath).count() === 2)
+            assert(Regex("email_omitted").findAll(decodedPath).count() == 2)
             assert(!decodedPath!!.contains(Regex(email)))
         }
 
@@ -2016,7 +2017,7 @@ class ConstructorIoTrackingTest {
             observer.assertComplete()
             val request = mockServer.takeRequest()
             val decodedPath = URLDecoder.decode(request.path, "UTF-8");
-            assert(Regex("credit_omitted").findAll(decodedPath).count() === 2)
+            assert(Regex("credit_omitted").findAll(decodedPath).count() == 2)
             assert(!decodedPath!!.contains(card))
         }
 
@@ -2026,7 +2027,7 @@ class ConstructorIoTrackingTest {
             observer.assertComplete()
             val request = mockServer.takeRequest()
             val decodedPath = URLDecoder.decode(request.path, "UTF-8");
-            assert(Regex("phone_omitted").findAll(decodedPath).count() === 2)
+            assert(Regex("phone_omitted").findAll(decodedPath).count() == 2)
             assert(!decodedPath!!.contains(phone))
         }
     }
@@ -2054,7 +2055,7 @@ class ConstructorIoTrackingTest {
             val observer = ConstructorIo.trackSearchSubmitInternal(email, email, null).test()
             observer.assertComplete()
             val body = mockServer.takeRequest().body.readUtf8()
-            assert(Regex("email_omitted").findAll(body).count() === 2)
+            assert(Regex("email_omitted").findAll(body).count() == 2)
             assert(!body.contains(Regex(email)))
         }
 
@@ -2063,7 +2064,7 @@ class ConstructorIoTrackingTest {
             val observer = ConstructorIo.trackSearchSubmitInternal(card, card, null).test()
             observer.assertComplete()
             val body = mockServer.takeRequest().body.readUtf8()
-            assert(Regex("credit_omitted").findAll(body).count() === 2)
+            assert(Regex("credit_omitted").findAll(body).count() == 2)
             assert(!body.contains(card))
         }
 
@@ -2072,7 +2073,7 @@ class ConstructorIoTrackingTest {
             val observer = ConstructorIo.trackSearchSubmitInternal(phone, phone, null).test()
             observer.assertComplete()
             val body = mockServer.takeRequest().body.readUtf8()
-            assert(Regex("phone_omitted").findAll(body).count() === 2)
+            assert(Regex("phone_omitted").findAll(body).count() == 2)
             assert(!body.contains(phone))
         }
     }

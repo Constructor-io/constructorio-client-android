@@ -1,4 +1,4 @@
-package io.constructor.data.model.search;
+package io.constructor.data.model.search
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
