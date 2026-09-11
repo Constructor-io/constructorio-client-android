@@ -530,10 +530,13 @@ ConstructorIo.trackAutocompleteSelect("Fashionable Toothpicks", "tooth", "Produc
 // Track when the user submits a search  (searchTerm, originalQuery)
 ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 
-// Track when the user submits a search with additional parameters, i.e. analytics tags
+// Track when the user submits a search with additional parameters, i.e. analytics tags,
+// result group and section (section defaults to the default item section, i.e. "Products")
 // Request level analytics tags are merged with the default analytics tags passed on initialization
 val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
     setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
+    setResultGroup(ResultGroup("Canned Goods", "canned-goods"))
+    setSection("Products")
 }
 ConstructorIo.trackSearchSubmit(request)
 ```

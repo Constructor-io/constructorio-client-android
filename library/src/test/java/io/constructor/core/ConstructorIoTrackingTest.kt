@@ -341,7 +341,13 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("tit", requestBody["user_input"])
+        assertEquals("{appVersion:123,appPlatform:Android}", requestBody["analytics_tags"])
+        assertNull(requestBody["filters"])
+        assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
 
@@ -352,7 +358,12 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null, mapOf("test" to "test1", "appVersion" to "150")).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=150&analytics_tags%5BappPlatform%5D=Android&analytics_tags%5Btest%5D=test1&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("tit", requestBody["user_input"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+        assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
 
@@ -366,7 +377,31 @@ class ConstructorIoTrackingTest {
         }
         ConstructorIo.trackSearchSubmit(request)
         val recordedRequest = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&group%5Bgroup_id%5D=group_id&group%5Bdisplay_name%5D=Movies&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&analytics_tags%5BrelatedSearchTerm%5D=true&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("tit", requestBody["user_input"])
+        assertEquals("{group_id:group_id}", requestBody["filters"])
+        assertEquals("{appVersion:123,appPlatform:Android,relatedSearchTerm:true}", requestBody["analytics_tags"])
+        assertEquals("POST", recordedRequest.method)
+        assert(recordedRequest.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchSubmitWithSection() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = SearchSubmitTrackingData.build("titanic", "tit") {
+            setSection("Content")
+        }
+        ConstructorIo.trackSearchSubmit(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/search?section=Content&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("tit", requestBody["user_input"])
+        assertNull(requestBody["filters"])
+        assertEquals("POST", recordedRequest.method)
         assert(recordedRequest.path!!.startsWith(path))
     }
 
@@ -377,7 +412,11 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("tit", requestBody["user_input"])
+        assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
 
@@ -388,9 +427,8 @@ class ConstructorIoTrackingTest {
         mockServer.enqueue(mockResponse)
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertError(SocketTimeoutException::class.java)
-        val request = mockServer.takeRequest()
-        val path = "/autocomplete/titanic/search?original_query=tit&tr=search&analytics_tags%5BappVersion%5D=123&analytics_tags%5BappPlatform%5D=Android&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
-        assert(request.path!!.startsWith(path))
+        val request = mockServer.takeRequest(10, TimeUnit.SECONDS)
+        assertEquals(null, request)
     }
 
     @Test
@@ -1747,31 +1785,31 @@ class ConstructorIoTrackingTest {
 
         for (email in emailPii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchSubmitInternal(email, email, null).test()
+            val observer = ConstructorIo.trackAutocompleteSelectInternal(email, email, "Search Suggestions").test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
             val decodedPath = URLDecoder.decode(request.path, "UTF-8");
-            assert(Regex("email_omitted").findAll(decodedPath).count() === 2)
+            assert(Regex("email_omitted").findAll(decodedPath).count() == 2)
             assert(!decodedPath!!.contains(Regex(email)))
         }
 
         for (card in creditCardPii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchSubmitInternal(card, card, null).test()
+            val observer = ConstructorIo.trackAutocompleteSelectInternal(card, card, "Search Suggestions").test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
             val decodedPath = URLDecoder.decode(request.path, "UTF-8");
-            assert(Regex("credit_omitted").findAll(decodedPath).count() === 2)
+            assert(Regex("credit_omitted").findAll(decodedPath).count() == 2)
             assert(!decodedPath!!.contains(card))
         }
 
         for (phone in phonePii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchSubmitInternal(phone, phone, null).test()
+            val observer = ConstructorIo.trackAutocompleteSelectInternal(phone, phone, "Search Suggestions").test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
             val decodedPath = URLDecoder.decode(request.path, "UTF-8");
-            assert(Regex("phone_omitted").findAll(decodedPath).count() === 2)
+            assert(Regex("phone_omitted").findAll(decodedPath).count() == 2)
             assert(!decodedPath!!.contains(phone))
         }
     }
@@ -1782,11 +1820,57 @@ class ConstructorIoTrackingTest {
 
         for (query in invalidPii) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchSubmitInternal(query, query, null).test()
+            val observer = ConstructorIo.trackAutocompleteSelectInternal(query, query, "Search Suggestions").test()
             observer.assertComplete()
             val request = mockServer.takeRequest()
             assert(request.path!!.contains(URLEncoder.encode(query, "UTF-8").replace("+", "%20")))
             assert(!request.path!!.contains("omitted"))
+        }
+    }
+
+    @Test
+    fun trackSearchSubmitWithPiiShouldBeOmitted() {
+        val mockResponse = MockResponse().setResponseCode(204)
+
+        for (email in emailPii) {
+            mockServer.enqueue(mockResponse)
+            val observer = ConstructorIo.trackSearchSubmitInternal(email, email, null).test()
+            observer.assertComplete()
+            val body = mockServer.takeRequest().body.readUtf8()
+            assert(Regex("email_omitted").findAll(body).count() == 2)
+            assert(!body.contains(Regex(email)))
+        }
+
+        for (card in creditCardPii) {
+            mockServer.enqueue(mockResponse)
+            val observer = ConstructorIo.trackSearchSubmitInternal(card, card, null).test()
+            observer.assertComplete()
+            val body = mockServer.takeRequest().body.readUtf8()
+            assert(Regex("credit_omitted").findAll(body).count() == 2)
+            assert(!body.contains(card))
+        }
+
+        for (phone in phonePii) {
+            mockServer.enqueue(mockResponse)
+            val observer = ConstructorIo.trackSearchSubmitInternal(phone, phone, null).test()
+            observer.assertComplete()
+            val body = mockServer.takeRequest().body.readUtf8()
+            assert(Regex("phone_omitted").findAll(body).count() == 2)
+            assert(!body.contains(phone))
+        }
+    }
+
+    @Test
+    fun trackSearchSubmitWithNoPiiShouldNotBeOmitted() {
+        val mockResponse = MockResponse().setResponseCode(204)
+
+        for (query in invalidPii) {
+            mockServer.enqueue(mockResponse)
+            val observer = ConstructorIo.trackSearchSubmitInternal(query, query, null).test()
+            observer.assertComplete()
+            val body = mockServer.takeRequest().body.readUtf8()
+            assert(body.contains(query))
+            assert(!body.contains("omitted"))
         }
     }
 }
