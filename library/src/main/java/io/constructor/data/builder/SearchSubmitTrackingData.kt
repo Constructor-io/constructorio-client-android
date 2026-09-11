@@ -10,12 +10,14 @@ class SearchSubmitTrackingData(
     val originalQuery: String,
     val resultGroup: ResultGroup? = null,
     val analyticsTags: Map<String, String>? = null,
+    val section: String? = null,
 ) {
     private constructor(builder: Builder) : this(
         builder.searchTerm,
         builder.originalQuery,
         builder.resultGroup,
         builder.analyticsTags,
+        builder.section,
     )
 
     companion object {
@@ -32,9 +34,11 @@ class SearchSubmitTrackingData(
     ) {
         var resultGroup: ResultGroup? = null
         var analyticsTags: Map<String, String>? = null
+        var section: String? = null
 
         fun setResultGroup(resultGroup: ResultGroup): Builder = apply { this.resultGroup = resultGroup }
         fun setAnalyticsTags(analyticsTags: Map<String, String>): Builder = apply { this.analyticsTags = analyticsTags }
+        fun setSection(section: String): Builder = apply { this.section = section }
         fun build(): SearchSubmitTrackingData = SearchSubmitTrackingData(this)
     }
 }
