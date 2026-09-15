@@ -97,6 +97,7 @@ class ConstructorIoIntegrationQuizTest {
     fun getQuizNextQuestionWithSingleTypeAnswerAgainstRealResponse() {
         val answers = listOf(listOf("1"))
         val request = QuizRequest.Builder("test-quiz")
+            .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
             .setAnswers(answers)
             .build()
         val observer = constructorIo.getQuizNextQuestion(request).test()
@@ -130,6 +131,7 @@ class ConstructorIoIntegrationQuizTest {
             listOf("1", "2")
         )
         val request = QuizRequest.Builder("test-quiz")
+                .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
                 .setAnswers(answers)
                 .build()
         val observer = constructorIo.getQuizNextQuestion(request).test()
@@ -157,6 +159,7 @@ class ConstructorIoIntegrationQuizTest {
             listOf("seen")
         )
         val request = QuizRequest.Builder("test-quiz")
+                .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
                 .setAnswers(answers)
                 .build()
         val observer = constructorIo.getQuizNextQuestion(request).test()
@@ -186,6 +189,7 @@ class ConstructorIoIntegrationQuizTest {
                 listOf("true")
         )
         val request = QuizRequest.Builder("test-quiz")
+                .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
                 .setAnswers(answers)
                 .build()
         val observer = constructorIo.getQuizNextQuestion(request).test()
@@ -208,6 +212,7 @@ class ConstructorIoIntegrationQuizTest {
             listOf("seen")
         )
         val request = QuizRequest.Builder("test-quiz")
+            .setQuizSessionId("bc48a85d-2f45-4c91-ba3a-dcf655b33831")
             .setAnswers(answers)
             .build()
         val observer = constructorIo.getQuizResults(request).test()
@@ -255,7 +260,7 @@ class ConstructorIoIntegrationQuizTest {
                 listOf("1", "2"),
                 listOf("seen")
             )
-            val quizResult = constructorIo.getQuizNextQuestionCRT("test-quiz", answers)
+            val quizResult = constructorIo.getQuizNextQuestionCRT("test-quiz", answers, quizSessionId = "bc48a85d-2f45-4c91-ba3a-dcf655b33831")
             assertNotNull(quizResult?.quizId)
             assertNotNull(quizResult?.quizVersionId)
             assertNotNull(quizResult?.quizSessionId)
@@ -278,7 +283,7 @@ class ConstructorIoIntegrationQuizTest {
                 listOf("1", "2"),
                 listOf("seen")
             )
-            val quizResult = constructorIo.getQuizResultsCRT("test-quiz", answers)
+            val quizResult = constructorIo.getQuizResultsCRT("test-quiz", answers, quizSessionId = "bc48a85d-2f45-4c91-ba3a-dcf655b33831")
             assertEquals(quizResult?.quizId, "test-quiz");
             assertNotNull(quizResult?.quizVersionId)
             assertNotNull(quizResult?.quizSessionId)
