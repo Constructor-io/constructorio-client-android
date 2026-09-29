@@ -544,6 +544,20 @@ ConstructorIo.trackSearchSubmit(request)
 // Track when search results are loaded into view (searchTerm, resultCount, customerIds of shown items)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"))
 
+// Track when search results are loaded into view using a request builder (searchTerm, resultCount)
+val searchResultsLoadedRequest = SearchResultsLoadedData.build("tooth", 789) {
+  setItems(listOf(TrackingItem("1234567-AB", "RED", null, null)))
+  setSectionName("Products")
+  setUrl("https://constructor.io/search?q=tooth")
+  setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
+  setResultPage(3)
+  setResultOffset(20)
+  setSortOrder("ascending")
+  setSortBy("price")
+  setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
+}
+ConstructorIo.trackSearchResultsLoaded(searchResultsLoadedRequest)
+
 // Track when a search result is clicked (itemName, customerId, searchTerm, sectionName, resultId)
 ConstructorIo.trackSearchResultClick("Fashionable Toothpicks", "1234567-AB", "tooth", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
 
@@ -571,6 +585,20 @@ ConstructorIo.trackBrowseResultsLoaded("group_id", "Snacks", 674)
 // v2.25.2+ only
 // Track when browse results are loaded into view (filterName, filterValue, itemIds, resultCount)
 ConstructorIo.trackBrowseResultsLoaded("group_id", "Snacks", arrayOf("1234", "2345"), 674)
+
+// Track when browse results are loaded into view using a request builder (filterName, filterValue, resultCount)
+val browseResultsLoadedRequest = BrowseResultsLoadedData.build("group_id", "Snacks", 674) {
+  setItems(listOf(TrackingItem("7654321-BA", "RED", null, null)))
+  setSectionName("Products")
+  setUrl("https://constructor.io/browse/group_id/Snacks")
+  setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
+  setResultPage(3)
+  setResultOffset(20)
+  setSortOrder("ascending")
+  setSortBy("price")
+  setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
+}
+ConstructorIo.trackBrowseResultsLoaded(browseResultsLoadedRequest)
 
 // Track when a browse result is clicked (filterName, filterValue, customerId, resultPositionOnPage, sectionName, resultId)
 ConstructorIo.trackBrowseResultClick("group_id", "Snacks", "7654321-BA", "4", "Products", "179b8a0e-3799-4a31-be87-127b06871de2")
