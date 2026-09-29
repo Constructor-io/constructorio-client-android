@@ -1543,6 +1543,7 @@ object ConstructorIo {
      * ```
      * val request = SearchResultsLoadedData.build("tooth", 789) {
      *     setItems(listOf(TrackingItem("1234", "2345", "camp1234", "owner-A")))
+     *     setSectionName("Products")
      *     setAnalyticsTags(mapOf("campaign" to "summer_sale"))
      *     setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
      *     setResultPage(3)
@@ -1559,6 +1560,8 @@ object ConstructorIo {
             term = request.term,
             resultCount = request.resultCount,
             items = request.items?.toTypedArray(),
+            sectionName = request.sectionName,
+            url = request.url,
             analyticsTags = request.analyticsTags,
             resultId = request.resultId,
             resultPage = request.resultPage,
@@ -1570,8 +1573,9 @@ object ConstructorIo {
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
 
-    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null, items: Array<TrackingItem>? = null, analyticsTags: Map<String, String>? = null, resultId: String? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null): Completable {
+    internal fun trackSearchResultsLoadedInternal(term: String, resultCount: Int, customerIds: Array<String>? = null, items: Array<TrackingItem>? = null, sectionName: String? = null, url: String = "Not Available", analyticsTags: Map<String, String>? = null, resultId: String? = null, resultPage: Int? = null, resultOffset: Int? = null, sortOrder: String? = null, sortBy: String? = null, selectedFilters: Map<String, List<String>>? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = sectionName ?: preferenceHelper.defaultItemSection
         val itemsList: List<TrackingItem>? = when {
             items != null -> items.toList()
             customerIds != null -> customerIds.map { id -> TrackingItem(id, null, null, null) }
@@ -1587,7 +1591,7 @@ object ConstructorIo {
                 sortOrder,
                 sortBy,
                 selectedFilters,
-                "Not Available",
+                url,
                 BuildConfig.CLIENT_VERSION,
                 preferenceHelper.id,
                 preferenceHelper.getSessionId(),
@@ -1596,7 +1600,7 @@ object ConstructorIo {
                 configMemoryHolder.segments,
                 mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags),
                 true,
-                preferenceHelper.defaultItemSection,
+                section,
                 System.currentTimeMillis()
         )
 

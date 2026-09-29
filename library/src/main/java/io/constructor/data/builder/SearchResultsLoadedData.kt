@@ -9,6 +9,8 @@ class SearchResultsLoadedData(
     val term: String,
     val resultCount: Int,
     val items: List<TrackingItem>? = null,
+    val sectionName: String? = null,
+    val url: String = "Not Available",
     val analyticsTags: Map<String, String>? = null,
     val resultId: String? = null,
     val resultPage: Int? = null,
@@ -21,6 +23,8 @@ class SearchResultsLoadedData(
         builder.term,
         builder.resultCount,
         builder.items,
+        builder.sectionName,
+        builder.url,
         builder.analyticsTags,
         builder.resultId,
         builder.resultPage,
@@ -39,6 +43,8 @@ class SearchResultsLoadedData(
         val resultCount: Int
     ) {
         var items: List<TrackingItem>? = null
+        var sectionName: String? = null
+        var url: String = "Not Available"
         var analyticsTags: Map<String, String>? = null
         var resultId: String? = null
         var resultPage: Int? = null
@@ -48,6 +54,8 @@ class SearchResultsLoadedData(
         var selectedFilters: Map<String, List<String>>? = null
 
         fun setItems(items: List<TrackingItem>): Builder = apply { this.items = items }
+        fun setSectionName(sectionName: String): Builder = apply { this.sectionName = sectionName }
+        fun setUrl(url: String): Builder = apply { this.url = url }
         fun setAnalyticsTags(analyticsTags: Map<String, String>): Builder = apply { this.analyticsTags = analyticsTags }
         fun setResultId(resultId: String): Builder = apply { this.resultId = resultId }
         fun setResultPage(resultPage: Int): Builder = apply { this.resultPage = resultPage }

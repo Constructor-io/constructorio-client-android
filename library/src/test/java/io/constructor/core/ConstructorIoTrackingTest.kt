@@ -490,6 +490,50 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackSearchResultLoadedWithRequestBuilderAndSectionName() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = SearchResultsLoadedData.build("titanic", 10) {
+            setSectionName("Search Suggestions")
+        }
+        ConstructorIo.trackSearchResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.44.0&_dt="
+        assertEquals("titanic", requestBody["search_term"])
+        assertEquals("Search Suggestions", requestBody["section"])
+        assertEquals("POST", recordedRequest.method)
+        assert(recordedRequest.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithRequestBuilderDefaultsSectionName() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = SearchResultsLoadedData.build("titanic", 10)
+        ConstructorIo.trackSearchResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("Products", requestBody["section"])
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithRequestBuilderAndUrl() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = SearchResultsLoadedData.build("titanic", 10) {
+            setUrl("https://constructor.io/search?q=titanic")
+        }
+        ConstructorIo.trackSearchResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("https://constructor.io/search?q=titanic", requestBody["url"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
     fun trackSearchResultLoaded500() {
         val mockResponse = MockResponse().setResponseCode(500).setBody("Internal server error")
         mockServer.enqueue(mockResponse)
@@ -933,6 +977,32 @@ class ConstructorIoTrackingTest {
     }
 
     @Test
+    fun trackBrowseResultLoadedWithRequestBuilderAndUrl() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = BrowseResultsLoadedData.build("group_id", "Movies", 10) {
+            setUrl("https://constructor.io/browse/group_id/Movies")
+        }
+        ConstructorIo.trackBrowseResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("https://constructor.io/browse/group_id/Movies", requestBody["url"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
+    fun trackBrowseResultLoadedWithRequestBuilderDefaultsUrl() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = BrowseResultsLoadedData.build("group_id", "Movies", 10)
+        ConstructorIo.trackBrowseResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("Not Available", requestBody["url"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
     fun trackBrowseResultLoadedWithRequestBuilder() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
@@ -941,9 +1011,11 @@ class ConstructorIoTrackingTest {
             setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
             setResultPage(3)
             setResultOffset(20)
+            setSectionName("Categories")
             setSortOrder("ascending")
             setSortBy("price")
             setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
+            setAnalyticsTags(mapOf("test" to "test1", "appVersion" to "150"))
         }
         ConstructorIo.trackBrowseResultsLoaded(request)
         val recordedRequest = mockServer.takeRequest()
@@ -952,6 +1024,7 @@ class ConstructorIoTrackingTest {
         assertEquals("group_id", requestBody["filter_name"])
         assertEquals("Movies", requestBody["filter_value"])
         assertEquals("10", requestBody["result_count"])
+        assertEquals("Categories", requestBody["section"])
         assertEquals("[{item_id:123}]", requestBody["items"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
         assertEquals("3", requestBody["result_page"])
@@ -959,6 +1032,7 @@ class ConstructorIoTrackingTest {
         assertEquals("ascending", requestBody["sort_order"])
         assertEquals("price", requestBody["sort_by"])
         assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", recordedRequest.method)
         assert(recordedRequest.path!!.startsWith(path))
     }
