@@ -2385,6 +2385,9 @@ object ConstructorIo {
     /**
      * Returns the results of every pod on a recommendation page.
      *
+     * Beta: available to a small group of users and may change. Contact your Customer Success
+     * Manager to request access.
+     *
      * Each pod in `response.pods` carries its own `resultId`. Send that id with the pod's
      * recommendation view and click events. The top-level `resultId` identifies the page request
      * and is not a tracking id.
@@ -2413,6 +2416,9 @@ object ConstructorIo {
 
     /**
      * Returns the results of every pod on a recommendation page.
+     *
+     * Beta: available to a small group of users and may change. Contact your Customer Success
+     * Manager to request access.
      *
      * Each pod in `response.pods` carries its own `resultId`; send that id with the pod's tracking
      * events. The top-level `resultId` identifies the page request and is not a tracking id.
