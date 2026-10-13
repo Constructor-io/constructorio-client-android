@@ -19,6 +19,8 @@ data class RecommendationPagePodOverride(
 
 /**
  * Create a Recommendation Page request object utilizing a builder
+ *
+ * @property podOverrides per-pod values keyed by pod id. A null entry means no override for that pod.
  */
 class RecommendationPageRequest (
     val pageId: String,
@@ -52,7 +54,7 @@ class RecommendationPageRequest (
     )
 
     /** The page-wide values that a pod override can replace */
-    val pageWideOverridable: RecommendationPagePodOverride
+    internal val pageWideOverridable: RecommendationPagePodOverride
         get() = RecommendationPagePodOverride(numResults, filters, filterMatchTypes, preFilterExpression, fmtOptions, hiddenFields, variationsMap)
 
     companion object {

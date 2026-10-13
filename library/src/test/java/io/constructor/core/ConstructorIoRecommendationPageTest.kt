@@ -4,6 +4,7 @@ import android.content.Context
 import io.constructor.data.builder.RecommendationPagePodOverride
 import io.constructor.data.builder.RecommendationPageRequest
 import io.constructor.data.local.PreferencesHelper
+import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
@@ -110,6 +111,7 @@ class ConstructorIoRecommendationPageTest {
                     preFilterExpression = preFilterExpression,
                     fmtOptions = mapOf("groups_max_depth" to 2),
                     hiddenFields = listOf("inventory", "margin"),
+                    variationsMap = VariationsMap(dtype = "array", values = mapOf("Price" to mapOf("aggregation" to "min", "field" to "data.facets.price"))),
                 ),
             ))
             .build()
@@ -130,6 +132,7 @@ class ConstructorIoRecommendationPageTest {
         assertEquals(preFilterExpression, url.queryParameter("$prefix[pre_filter_expression]"))
         assertEquals("2", url.queryParameter("$prefix[fmt_options][groups_max_depth]"))
         assertEquals(listOf("inventory", "margin"), url.queryParameterValues("$prefix[fmt_options][hidden_fields]"))
+        assertEquals("""{"dtype":"array","values":{"Price":{"aggregation":"min","field":"data.facets.price"}}}""", url.queryParameter("$prefix[variations_map]"))
         assertTrue(recordedRequest.path!!.contains("pod_overrides%5Bsimilar_items%5D%5Bnum_results%5D=0"))
         assertTrue(url.queryParameterNames.none { it.startsWith("pod_overrides[bestsellers]") })
     }
@@ -192,7 +195,7 @@ class ConstructorIoRecommendationPageTest {
     }
 
     @Test
-    fun getRecommendationPageResultsRejectsVariationIdWithoutSingleItemId() {
+    fun getRecommendationPageResultsRejectsVariationIdWithoutItemIds() {
         val request = RecommendationPageRequest.Builder("pdp_b2c").setVariationId("v1").build()
 
         assertFailsWith<IllegalArgumentException> {

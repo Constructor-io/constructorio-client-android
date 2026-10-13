@@ -16,6 +16,9 @@ data class RecommendationPageResponse(
         var rawData: String?
 ) : Serializable
 
+/**
+ * @property pods the pods on the page. An item appears in at most one pod on the page.
+ */
 @JsonClass(generateAdapter = true)
 data class RecommendationPageResponseInner(
         @Json(name = "page_id") val pageId: String?,
