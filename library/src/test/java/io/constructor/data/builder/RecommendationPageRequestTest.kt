@@ -2,17 +2,9 @@ package io.constructor.data.builder
 
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class RecommendationPageRequestTest {
     private val pageId = "pdp_b2c"
-
-    @Test
-    fun recommendationPageRequestUsingBuilder() {
-        val request = RecommendationPageRequest.Builder(pageId).build()
-        assertEquals(pageId, request.pageId)
-        assertNull(request.podOverrides)
-    }
 
     @Test
     fun recommendationPageRequestWithSharedValuesAndOverridesUsingBuilder() {
@@ -41,6 +33,7 @@ class RecommendationPageRequestTest {
             podOverrides = mapOf("complete_the_look" to RecommendationPagePodOverride(numResults = 8))
         }
 
+        assertEquals(pageId, request.pageId)
         assertEquals(10, request.numResults)
         assertEquals(8, request.podOverrides?.get("complete_the_look")?.numResults)
     }

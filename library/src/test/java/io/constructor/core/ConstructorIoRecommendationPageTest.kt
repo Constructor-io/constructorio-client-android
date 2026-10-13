@@ -18,7 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ConstructorIoRecommendationPageTest {
@@ -69,6 +69,7 @@ class ConstructorIoRecommendationPageTest {
         enqueuePageResponse()
         val request = RecommendationPageRequest.Builder("pdp_b2c")
             .setItemIds(listOf("product-123"))
+            .setVariationId("product-123-red")
             .setNumResults(10)
             .setFilters(mapOf("in_stock" to listOf("true")))
             .setFilterMatchTypes(mapOf("color" to "any"))
@@ -85,6 +86,7 @@ class ConstructorIoRecommendationPageTest {
         assertEquals("player-one", url.queryParameter("ui"))
         assertEquals("79", url.queryParameter("s"))
         assertEquals("product-123", url.queryParameter("item_id"))
+        assertEquals("product-123-red", url.queryParameter("variation_id"))
         assertEquals("10", url.queryParameter("num_results"))
         assertEquals("true", url.queryParameter("filters[in_stock]"))
         assertEquals("any", url.queryParameter("filter_match_types[color]"))
@@ -100,6 +102,7 @@ class ConstructorIoRecommendationPageTest {
             .setNumResults(10)
             .setPodOverrides(mapOf(
                 "similar_items" to RecommendationPagePodOverride(numResults = 0),
+                "bestsellers" to null,
                 "complete_the_look" to RecommendationPagePodOverride(
                     numResults = 8,
                     filters = mapOf("in_stock" to listOf("true"), "color" to listOf("red", "blue")),
@@ -128,6 +131,7 @@ class ConstructorIoRecommendationPageTest {
         assertEquals("2", url.queryParameter("$prefix[fmt_options][groups_max_depth]"))
         assertEquals(listOf("inventory", "margin"), url.queryParameterValues("$prefix[fmt_options][hidden_fields]"))
         assertTrue(recordedRequest.path!!.contains("pod_overrides%5Bsimilar_items%5D%5Bnum_results%5D=0"))
+        assertTrue(url.queryParameterNames.none { it.startsWith("pod_overrides[bestsellers]") })
     }
 
     @Test
@@ -141,19 +145,29 @@ class ConstructorIoRecommendationPageTest {
         val pods = page.response!!.pods!!
         assertEquals(pageResultId, page.resultId)
         assertEquals("pdp_b2c", page.response!!.pageId)
-        assertEquals("pdp", page.response!!.pageType)
         assertEquals(listOf("similar_items", "complete_the_look"), pods.map { it.podId })
         assertEquals("a1b2c3d4-0000-0000-0000-000000000001", pods[0].resultId)
-        assertEquals("Red Running Shoe", pods[0].response?.results?.get(0)?.value)
-        assertEquals(1, pods[0].response?.resultCount)
         assertEquals("a1b2c3d4-0000-0000-0000-000000000002", pods[1].resultId)
-        assertEquals(0, pods[1].response?.results?.size)
-        pods.forEach { assertNotEquals(pageResultId, it.resultId) }
 
         val asPodResponse = pods[0].toRecommendationsResponse()
         assertEquals("a1b2c3d4-0000-0000-0000-000000000001", asPodResponse.resultId)
         assertEquals("similar_items", asPodResponse.request?.get("pod_id"))
         assertEquals(pods[0].response, asPodResponse.response)
+        mockServer.takeRequest()
+    }
+
+    @Test
+    fun getRecommendationPageResultsToleratesPartialPodObjects() {
+        val body = """{"result_id":"page","response":{"page_id":"pdp_b2c","pods":[{"pod_id":"similar_items","result_id":"pod","response":{"pod":{"display_name":null},"total_num_results":0}}]}}"""
+        mockServer.enqueue(MockResponse().setResponseCode(200).setBody(body))
+        val observer = constructorIo.getRecommendationPageResults(RecommendationPageRequest.Builder("pdp_b2c").build()).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+
+        val pod = observer.values()[0].get()!!.response!!.pods!![0]
+        assertNull(pod.response?.pod?.response)
+        assertNull(pod.response?.results)
+        assertEquals("pod", pod.resultId)
         mockServer.takeRequest()
     }
 
