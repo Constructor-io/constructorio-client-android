@@ -4,7 +4,8 @@ import io.constructor.data.model.common.VariationsMap
 
 /**
  * Values that can be set per pod on a recommendation page request. Each value replaces (is not
- * merged with) the page-wide value for that pod.
+ * merged with) the page-wide value for that pod. [hiddenFields] is sent inside `fmt_options`, so
+ * setting either [fmtOptions] or [hiddenFields] replaces both page-wide values for that pod.
  */
 data class RecommendationPagePodOverride(
     val numResults: Int? = null,
@@ -32,7 +33,7 @@ class RecommendationPageRequest (
     val fmtOptions: Map<String, Any>? = null,
     val hiddenFields: List<String>? = null,
     val variationsMap: VariationsMap? = null,
-    val podOverrides: Map<String, RecommendationPagePodOverride>? = null,
+    val podOverrides: Map<String, RecommendationPagePodOverride?>? = null,
 ) {
     private constructor(builder: Builder) : this(
         builder.pageId,
@@ -72,7 +73,7 @@ class RecommendationPageRequest (
         var fmtOptions: Map<String, Any>? = null
         var hiddenFields: List<String>? = null
         var variationsMap: VariationsMap? = null
-        var podOverrides: Map<String, RecommendationPagePodOverride>? = null
+        var podOverrides: Map<String, RecommendationPagePodOverride?>? = null
 
         fun setItemIds(itemIds: List<String>): Builder = apply { this.itemIds = itemIds }
         fun setVariationId(variationId: String): Builder = apply { this.variationId = variationId }
@@ -85,7 +86,7 @@ class RecommendationPageRequest (
         fun setFmtOptions(fmtOptions: Map<String, Any>): Builder = apply { this.fmtOptions = fmtOptions }
         fun setHiddenFields(hiddenFields: List<String>): Builder = apply { this.hiddenFields = hiddenFields }
         fun setVariationsMap(variationsMap: VariationsMap): Builder = apply { this.variationsMap = variationsMap }
-        fun setPodOverrides(podOverrides: Map<String, RecommendationPagePodOverride>): Builder = apply { this.podOverrides = podOverrides }
+        fun setPodOverrides(podOverrides: Map<String, RecommendationPagePodOverride?>): Builder = apply { this.podOverrides = podOverrides }
         fun build(): RecommendationPageRequest = RecommendationPageRequest(this)
     }
 }

@@ -44,7 +44,6 @@ import io.constructor.util.broadcastIntent
 import io.constructor.util.e
 import io.constructor.util.truncateToCodePoints
 import io.constructor.util.urlEncode
-import java.net.URLDecoder
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -52,6 +51,7 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
+import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -2446,13 +2446,14 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(sectionName = request.section, itemIds = request.itemIds, term = request.term)
 
         request.variationId?.let {
-            if (request.itemIds?.size != 1) {
-                throw IllegalArgumentException("variationId requires exactly one itemId to be specified")
+            if (request.itemIds.isNullOrEmpty()) {
+                throw IllegalArgumentException("variationId requires itemIds")
             }
             encodedParams.add(Constants.QueryConstants.VARIATION_ID.urlEncode() to it.urlEncode())
         }
         encodedParams.addAll(getRecommendationPageOverridableParams(request.pageWideOverridable))
         request.podOverrides?.forEach { (podId, override) ->
+            if (override == null) return@forEach
             getRecommendationPageOverridableParams(override).forEach { (name, value) ->
                 encodedParams.add(nestQueryParamName(Constants.QueryConstants.POD_OVERRIDES.format(podId), name) to value)
             }
