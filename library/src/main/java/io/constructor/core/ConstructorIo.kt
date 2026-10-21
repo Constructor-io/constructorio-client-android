@@ -2405,7 +2405,10 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentSubmit(requestBody)
+        return dataManager.trackAgentSubmit(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
     }
 
     /**
@@ -2445,7 +2448,10 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentResultLoadStarted(requestBody)
+        return dataManager.trackAgentResultLoadStarted(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
     }
 
     /**
@@ -2487,7 +2493,10 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentResultLoadFinished(requestBody)
+        return dataManager.trackAgentResultLoadFinished(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
     }
 
     /**
@@ -2535,7 +2544,10 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentResultClick(requestBody)
+        return dataManager.trackAgentResultClick(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
     }
 
     /**
@@ -2582,7 +2594,10 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentResultView(requestBody)
+        return dataManager.trackAgentResultView(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
     }
 
     /**
@@ -2626,6 +2641,9 @@ object ConstructorIo {
                 System.currentTimeMillis()
         )
 
-        return dataManager.trackAgentSearchSubmit(requestBody)
+        return dataManager.trackAgentSearchSubmit(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
     }
 }

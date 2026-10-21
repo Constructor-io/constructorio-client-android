@@ -80,6 +80,7 @@ class ConstructorIoAgentTrackingTest {
         assertEquals("find me a red shirt", requestBody["intent"])
         assertEquals("true", requestBody["beacon"])
         assertEquals("Products", requestBody["section"])
+        assert(request.path!!.contains("section=Products"))
         assertEquals("wacko-the-guid", requestBody["i"])
         assertEquals("67", requestBody["s"])
     }
@@ -95,6 +96,7 @@ class ConstructorIoAgentTrackingTest {
 
         val requestBody = getRequestBody(request)
         assertEquals("Search Suggestions", requestBody["section"])
+        assert(request.path!!.contains("section=Search+Suggestions") || request.path!!.contains("section=Search%20Suggestions"))
     }
 
     @Test
@@ -141,6 +143,7 @@ class ConstructorIoAgentTrackingTest {
         assertEquals("intent-123", requestBody["intent_result_id"])
         assertEquals("true", requestBody["beacon"])
         assertEquals("Products", requestBody["section"])
+        assert(request.path!!.contains("section=Products"))
     }
 
     @Test
@@ -188,6 +191,7 @@ class ConstructorIoAgentTrackingTest {
         assertEquals("intent-123", requestBody["intent_result_id"])
         assertEquals("true", requestBody["beacon"])
         assertEquals("Products", requestBody["section"])
+        assert(request.path!!.contains("section=Products"))
     }
 
     @Test
@@ -245,6 +249,7 @@ class ConstructorIoAgentTrackingTest {
         assertEquals("intent-123", requestBody["intent_result_id"])
         assertEquals("true", requestBody["beacon"])
         assertEquals("Products", requestBody["section"])
+        assert(request.path!!.contains("section=Products"))
     }
 
     @Test
@@ -262,6 +267,7 @@ class ConstructorIoAgentTrackingTest {
 
         val requestBody = getRequestBody(request)
         assertEquals("Search Suggestions", requestBody["section"])
+        assert(request.path!!.contains("section=Search+Suggestions") || request.path!!.contains("section=Search%20Suggestions"))
     }
 
     @Test
@@ -320,6 +326,7 @@ class ConstructorIoAgentTrackingTest {
         assertEquals("intent-123", requestBody["intent_result_id"])
         assertEquals("true", requestBody["beacon"])
         assertEquals("Products", requestBody["section"])
+        assert(request.path!!.contains("section=Products"))
         assert(requestBody["items"]!!.contains("item_id:item-1"))
         assert(requestBody["items"]!!.contains("item_name:Item One"))
         assert(requestBody["items"]!!.contains("item_id:item-2"))
@@ -397,6 +404,7 @@ class ConstructorIoAgentTrackingTest {
         assertEquals("intent-123", requestBody["intent_result_id"])
         assertEquals("true", requestBody["beacon"])
         assertEquals("Products", requestBody["section"])
+        assert(request.path!!.contains("section=Products"))
     }
 
     @Test
@@ -415,6 +423,7 @@ class ConstructorIoAgentTrackingTest {
 
         val requestBody = getRequestBody(request)
         assertEquals("Search Suggestions", requestBody["section"])
+        assert(request.path!!.contains("section=Search+Suggestions") || request.path!!.contains("section=Search%20Suggestions"))
     }
 
     @Test
