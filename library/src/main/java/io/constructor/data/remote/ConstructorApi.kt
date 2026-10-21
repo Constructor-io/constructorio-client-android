@@ -2,7 +2,6 @@ package io.constructor.data.remote
 
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
-import io.constructor.data.model.tracking.*
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -10,6 +9,7 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
+import io.constructor.data.model.tracking.*
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.ResponseBody
