@@ -467,6 +467,71 @@ class ConstructorIoAgentTrackingTest {
         assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
     }
 
+    @Test
+    fun trackAgentResultLoadStartedWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+
+        val observer = ConstructorIo.trackAgentResultLoadStartedInternal("find me a red shirt", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = awaitRequest()
+
+        val requestBody = getRequestBody(request)
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+    }
+
+    @Test
+    fun trackAgentResultLoadFinishedWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+
+        val observer = ConstructorIo.trackAgentResultLoadFinishedInternal("find me a red shirt", 25, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = awaitRequest()
+
+        val requestBody = getRequestBody(request)
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+    }
+
+    @Test
+    fun trackAgentResultClickWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+
+        val observer = ConstructorIo.trackAgentResultClickInternal("find me a red shirt", "result-123", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = awaitRequest()
+
+        val requestBody = getRequestBody(request)
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+    }
+
+    @Test
+    fun trackAgentResultViewWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+
+        val observer = ConstructorIo.trackAgentResultViewInternal("find me a red shirt", "result-123", 5, analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = awaitRequest()
+
+        val requestBody = getRequestBody(request)
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+    }
+
+    @Test
+    fun trackAgentSearchSubmitWithAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+
+        val observer = ConstructorIo.trackAgentSearchSubmitInternal("find me a red shirt", "red shirt", "result-123", analyticsTags = mapOf("test" to "test1", "appVersion" to "150")).test()
+        observer.assertComplete()
+        val request = awaitRequest()
+
+        val requestBody = getRequestBody(request)
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+    }
+
     private fun awaitRequest(): RecordedRequest {
         return mockServer.takeRequest(1, TimeUnit.SECONDS)
                 ?: throw AssertionError("Expected request but timed out")
