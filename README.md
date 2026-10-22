@@ -550,8 +550,7 @@ val searchResultsLoadedRequest = SearchResultsLoadedData.build("tooth", 789) {
   setSectionName("Products")
   setUrl("https://constructor.io/search?q=tooth")
   setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
-  setResultPage(3)
-  setResultOffset(20)
+  setResultPage(3) // or setResultOffset(20) on infinite-scroll pages: set only one of the two
   setSortOrder("ascending")
   setSortBy("price")
   setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
@@ -592,8 +591,7 @@ val browseResultsLoadedRequest = BrowseResultsLoadedData.build("group_id", "Snac
   setSectionName("Products")
   setUrl("https://constructor.io/browse/group_id/Snacks")
   setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
-  setResultPage(3)
-  setResultOffset(20)
+  setResultPage(3) // or setResultOffset(20) on infinite-scroll pages: set only one of the two
   setSortOrder("ascending")
   setSortBy("price")
   setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
