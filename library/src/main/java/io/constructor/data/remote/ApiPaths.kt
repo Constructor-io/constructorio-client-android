@@ -38,4 +38,13 @@ object ApiPaths {
     const val URL_MEDIA_IMPRESSION_VIEW_EVENT = "v2/ad_behavioral_action/display_ad_view"
     const val URL_MEDIA_IMPRESSION_CLICK_EVENT = "v2/ad_behavioral_action/display_ad_click"
     const val URL_RESULTS_IMPRESSION_VIEW_EVENT = "v2/behavioral_action/impression_view"
+    const val URL_PRODUCT_INSIGHTS_AGENT_FOCUS_EVENT = "v2/behavioral_action/product_insights_agent_focus"
+    const val URL_PRODUCT_INSIGHTS_AGENT_OUT_OF_VIEW_EVENT = "v2/behavioral_action/product_insights_agent_out_of_view"
+    const val URL_PRODUCT_INSIGHTS_AGENT_VIEW_EVENT = "v2/behavioral_action/product_insights_agent_view"
+    const val URL_PRODUCT_INSIGHTS_AGENT_VIEWS_EVENT = "v2/behavioral_action/product_insights_agent_views"
+    const val URL_PRODUCT_INSIGHTS_AGENT_QUESTION_CLICK_EVENT = "v2/behavioral_action/product_insights_agent_question_click"
+    const val URL_PRODUCT_INSIGHTS_AGENT_QUESTION_SUBMIT_EVENT = "v2/behavioral_action/product_insights_agent_question_submit"
+    const val URL_PRODUCT_INSIGHTS_AGENT_ANSWER_FEEDBACK_EVENT = "v2/behavioral_action/product_insights_agent_answer_feedback"
+    const val URL_PRODUCT_INSIGHTS_AGENT_RESULT_CLICK_EVENT = "v2/behavioral_action/product_insights_agent_result_click"
+    const val URL_PRODUCT_INSIGHTS_AGENT_ANSWER_VIEW_EVENT = "v2/behavioral_action/product_insights_agent_answer_view"
 }
