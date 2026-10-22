@@ -514,6 +514,7 @@ Three types of these events exist:
 4. **Recommendation Events** measure user interaction with recommendation results
 5. **Quiz Events** measure user interaction with quiz results
 6. **Conversion Events** measure user events like `add to cart` or `purchase`
+7. **Product Insights Agent Events** measure user interaction with the Product Insights Agent
 
 ### Autocomplete Events
 
@@ -678,4 +679,80 @@ ConstructorIo.trackResultsImpressionView(
     items = items,
     searchTerm = "sneakers"
 )
+```
+
+### Product Insights Agent Events
+
+```kotlin
+// Track when the user focuses on the Product Insights Agent (itemId)
+ConstructorIo.trackProductInsightsAgentFocus(
+    ProductInsightsAgentFocusTrackingData.build("1234567-AB") {
+        itemName = "Waterproof Jacket"
+    }
+)
+
+// Track when the Product Insights Agent scrolls out of view (itemId)
+ConstructorIo.trackProductInsightsAgentOutOfView(
+    ProductInsightsAgentOutOfViewTrackingData.build("1234567-AB")
+)
+
+// Track when the Product Insights Agent comes into view (itemId, questions)
+ConstructorIo.trackProductInsightsAgentView(
+    ProductInsightsAgentViewTrackingData.build(
+        "1234567-AB",
+        listOf(ProductInsightsAgentQuestion("Is it waterproof?", "Durability"))
+    )
+)
+
+// Track the spans of time the Product Insights Agent was in view (itemId, questions, viewTimespans)
+// Timespan start and end are epoch milliseconds, i.e. System.currentTimeMillis(), and are sent as ISO-8601 UTC timestamps
+ConstructorIo.trackProductInsightsAgentViews(
+    ProductInsightsAgentViewsTrackingData.build(
+        "1234567-AB",
+        listOf(ProductInsightsAgentQuestion("Is it waterproof?")),
+        listOf(ProductInsightsAgentViewTimespan(viewStartedAtMillis, System.currentTimeMillis()))
+    )
+)
+
+// Track when the user clicks a suggested question (itemId, question)
+ConstructorIo.trackProductInsightsAgentQuestionClick(
+    ProductInsightsAgentQuestionClickTrackingData.build("1234567-AB", "Is it waterproof?") {
+        questionTopic = "Durability"
+    }
+)
+
+// Track when the user submits a question (itemId, question)
+ConstructorIo.trackProductInsightsAgentQuestionSubmit(
+    ProductInsightsAgentQuestionSubmitTrackingData.build("1234567-AB", "Is it waterproof?") {
+        threadId = "thread-123"
+    }
+)
+
+// Track when an answer is shown to the user (itemId, question, answerText)
+// Only the first 100 items and follow-up questions are sent
+ConstructorIo.trackProductInsightsAgentAnswerView(
+    ProductInsightsAgentAnswerViewTrackingData.build("1234567-AB", "Is it waterproof?", "Yes, it is fully waterproof.") {
+        qnaResultId = "qna-result-123"
+        items = listOf(TrackingItem("7654321-BA", null, null, null))
+        followUpQuestions = listOf("Is it breathable?")
+    }
+)
+
+// Track when the user gives feedback on an answer (itemId, feedbackLabel)
+ConstructorIo.trackProductInsightsAgentAnswerFeedback(
+    ProductInsightsAgentAnswerFeedbackTrackingData.build("1234567-AB", ProductInsightsAgentFeedbackLabel.THUMBS_UP) {
+        qnaResultId = "qna-result-123"
+    }
+)
+
+// Track when the user clicks an item recommended in an answer (itemId of the clicked item, question, seedItemId of the item the agent is displayed for)
+ConstructorIo.trackProductInsightsAgentResultClick(
+    ProductInsightsAgentResultClickTrackingData.build("7654321-BA", "Is it waterproof?", "1234567-AB") {
+        position = 0
+        qnaResultId = "qna-result-123"
+    }
+)
+
+// All Product Insights Agent requests also accept sectionName, threadId, itemName, variationId and analyticsTags
+// Request level analytics tags are merged with the default analytics tags passed on initialization
 ```
