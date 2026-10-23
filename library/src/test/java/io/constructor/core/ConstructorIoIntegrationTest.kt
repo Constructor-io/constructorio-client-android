@@ -6,6 +6,9 @@ import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.memory.ConfigMemoryHolder
 import io.constructor.data.model.common.VariationsMap
 import io.constructor.data.model.common.TrackingItem
+import io.constructor.data.model.tracking.ProductInsightsAgentFeedbackLabel
+import io.constructor.data.model.tracking.ProductInsightsAgentQuestion
+import io.constructor.data.model.tracking.ProductInsightsAgentViewTimespan
 import io.constructor.data.model.purchase.PurchaseItem
 import io.constructor.test.createTestDataManager
 import io.constructor.util.RxSchedulersOverrideRule
@@ -1865,6 +1868,151 @@ class ConstructorIoIntegrationTest {
         assertEquals(searchResponse?.response?.facets?.first()?.data?.get("cheese"), "pizza");
         assertEquals(searchResponse?.response?.facets?.first()?.options?.first()?.data?.get("milk"), "shake");
 
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentFocusAgainstRealResponse() {
+        val request = ProductInsightsAgentFocusTrackingData.build("10001") {
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentFocusInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentOutOfViewAgainstRealResponse() {
+        val request = ProductInsightsAgentOutOfViewTrackingData.build("10001") {
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentOutOfViewInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentViewAgainstRealResponse() {
+        val request = ProductInsightsAgentViewTrackingData.build(
+            "10001",
+            listOf(ProductInsightsAgentQuestion("Is it waterproof?", "Durability"), ProductInsightsAgentQuestion("Is it machine washable?"))
+        ) {
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentViewInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentViewsAgainstRealResponse() {
+        val now = System.currentTimeMillis()
+        val request = ProductInsightsAgentViewsTrackingData.build(
+            "10001",
+            listOf(ProductInsightsAgentQuestion("Is it waterproof?", "Durability")),
+            listOf(ProductInsightsAgentViewTimespan(now - 10000, now - 5000), ProductInsightsAgentViewTimespan(now - 2000, now))
+        ) {
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentViewsInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentQuestionClickAgainstRealResponse() {
+        val request = ProductInsightsAgentQuestionClickTrackingData.build("10001", "Is it waterproof?") {
+            questionTopic = "Durability"
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentQuestionClickInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentQuestionSubmitAgainstRealResponse() {
+        val request = ProductInsightsAgentQuestionSubmitTrackingData.build("10001", "Is it waterproof?") {
+            questionTopic = "Durability"
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentQuestionSubmitInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentAnswerFeedbackAgainstRealResponse() {
+        val request = ProductInsightsAgentAnswerFeedbackTrackingData.build("10001", ProductInsightsAgentFeedbackLabel.THUMBS_UP) {
+            qnaResultId = "qna-cdx-709"
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentAnswerFeedbackInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentResultClickAgainstRealResponse() {
+        val request = ProductInsightsAgentResultClickTrackingData.build("10002", "Is it waterproof?", "10001") {
+            position = 0
+            seedItemName = "item1"
+            seedVariationId = "20001"
+            qnaResultId = "qna-cdx-709"
+            itemName = "item2"
+            variationId = "20002"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentResultClickInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
+    @Test
+    fun trackProductInsightsAgentAnswerViewAgainstRealResponse() {
+        val request = ProductInsightsAgentAnswerViewTrackingData.build("10001", "Is it waterproof?", "") {
+            questionTopic = "Durability"
+            qnaResultId = "qna-cdx-709"
+            items = listOf(TrackingItem("10002", "20002", testCampaignId, testCampaignOwner), TrackingItem("10003", null, null, null))
+            followUpQuestions = listOf("Is it breathable?")
+            itemName = "item1"
+            variationId = "20001"
+            threadId = "thread-cdx-709"
+            analyticsTags = mapOf("test" to "test1")
+        }
+        val observer = constructorIo.trackProductInsightsAgentAnswerViewInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
         Thread.sleep(timeBetweenTests)
     }
 }
