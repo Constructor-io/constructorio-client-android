@@ -11,6 +11,7 @@ import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.RecommendationPageResponse
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.reactivex.Completable
@@ -118,6 +119,12 @@ interface ConstructorApi {
 
     @GET
     suspend fun getRecommendationResultsCRT(@Url recommendationUrl: String): RecommendationsResponse
+
+    @GET
+    fun getRecommendationPageResults(@Url recommendationPageUrl: String): Single<Result<ResponseBody>>
+
+    @GET
+    suspend fun getRecommendationPageResultsCRT(@Url recommendationPageUrl: String): RecommendationPageResponse
 
     @POST(ApiPaths.URL_RECOMMENDATION_RESULT_CLICK_EVENT)
     fun trackRecommendationResultClick(@Body recommendationResultClickRequestBody: RecommendationResultClickRequestBody,

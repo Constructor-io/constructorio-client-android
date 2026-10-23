@@ -10,6 +10,7 @@ import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.RecommendationPageResponse
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
@@ -293,6 +294,32 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     suspend fun getRecommendationResultsCRT(podId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): RecommendationsResponse {
         var dynamicUrl = "/${ApiPaths.URL_RECOMMENDATIONS.format(podId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getRecommendationResultsCRT(dynamicUrl)
+    }
+
+    fun getRecommendationPageResults(pageId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): Observable<ConstructorData<RecommendationPageResponse>> {
+        val dynamicUrl = "/${ApiPaths.URL_RECOMMENDATION_PAGE.format(pageId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getRecommendationPageResults(dynamicUrl).map {
+            if (!it.isError) {
+                it.response()?.let {
+                    if (it.isSuccessful) {
+                        val adapter = moshi.adapter(RecommendationPageResponse::class.java)
+                        val response = it.body()?.string()
+                        val result = response?.let { adapter.fromJson(it) }
+                        result?.rawData = response
+                        ConstructorData.of(result!!)
+                    } else {
+                        ConstructorData.networkError(it.errorBody()?.string())
+                    }
+                } ?: ConstructorData.error(it.error())
+            } else {
+                ConstructorData.error(it.error())
+            }
+        }.toObservable()
+    }
+
+    suspend fun getRecommendationPageResultsCRT(pageId: String, encodedParams: Array<Pair<String, String>> = arrayOf()): RecommendationPageResponse {
+        val dynamicUrl = "/${ApiPaths.URL_RECOMMENDATION_PAGE.format(pageId)}${getAdditionalParamsQueryString(encodedParams)}"
+        return constructorApi.getRecommendationPageResultsCRT(dynamicUrl)
     }
 
     fun trackRecommendationResultClick(recommendationResultClickRequestBody: RecommendationResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {

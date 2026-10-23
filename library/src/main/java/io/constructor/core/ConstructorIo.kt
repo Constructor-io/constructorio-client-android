@@ -21,6 +21,7 @@ import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
 import io.constructor.data.model.recommendations.RecommendationResultClickRequestBody
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
+import io.constructor.data.model.recommendations.RecommendationPageResponse
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
@@ -40,6 +41,7 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
+import java.net.URLDecoder
 import java.util.*
 
 typealias ConstructorError = ((Throwable) -> Unit)?
@@ -2353,6 +2355,112 @@ object ConstructorIo {
         val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(facets = request.filters?.toList(), itemIds = request.itemIds, term = request.term, numResults = request.numResults, sectionName = request.section, variationsMap = request.variationsMap, preFilterExpression = request.preFilterExpression, hiddenFields = request.hiddenFields)
 
         return dataManager.getRecommendationResults(request.podId, encodedParams = encodedParams.toTypedArray())
+    }
+
+    /**
+     * Returns the results of every pod on a recommendation page.
+     *
+     * Beta: available to a small group of users and may change. Contact your Customer Success
+     * Manager to request access.
+     *
+     * Each pod in `response.pods` carries its own `resultId`. Send that id with the pod's
+     * recommendation view and click events. The top-level `resultId` identifies the page request
+     * and is not a tracking id.
+     *
+     * Example:
+     * ```
+     * val request = RecommendationPageRequest.Builder("pdp_b2c")
+     *      .setItemIds(listOf("item_id_123"))
+     *      .setPodOverrides(mapOf("complete_the_look" to RecommendationPagePodOverride(numResults = 8)))
+     *      .build()
+     *
+     * ConstructorIo.getRecommendationPageResults(request)
+     *      .subscribeOn(Schedulers.io())
+     *      .observeOn(AndroidSchedulers.mainThread())
+     *      .subscribe {
+     *          it.onValue {
+     *              it.response?.pods?.forEach { pod -> view.renderPod(pod.toRecommendationsResponse()) }
+     *          }
+     *      }
+     * ```
+     * @param request the recommendation page request
+     */
+    fun getRecommendationPageResults(request: RecommendationPageRequest): Observable<ConstructorData<RecommendationPageResponse>> {
+        return dataManager.getRecommendationPageResults(request.pageId, encodedParams = getRecommendationPageEncodedParams(request).toTypedArray())
+    }
+
+    /**
+     * Returns the results of every pod on a recommendation page.
+     *
+     * Beta: available to a small group of users and may change. Contact your Customer Success
+     * Manager to request access.
+     *
+     * Each pod in `response.pods` carries its own `resultId`; send that id with the pod's tracking
+     * events. The top-level `resultId` identifies the page request and is not a tracking id.
+     *
+     * Example:
+     * ```
+     *  runBlocking {
+     *      launch {
+     *          try {
+     *              val page = constructorIo.getRecommendationPageResultsCRT(RecommendationPageRequest.Builder("pdp_b2c").build())
+     *              // Do something with page.response?.pods
+     *          } catch (e: Exception) {
+     *              println(e)
+     *          }
+     *      }
+     *  }
+     * ```
+     * @param request the recommendation page request
+     */
+    suspend fun getRecommendationPageResultsCRT(request: RecommendationPageRequest): RecommendationPageResponse {
+        return dataManager.getRecommendationPageResultsCRT(request.pageId, encodedParams = getRecommendationPageEncodedParams(request).toTypedArray())
+    }
+
+    private fun getRecommendationPageEncodedParams(request: RecommendationPageRequest): ArrayList<Pair<String, String>> {
+        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(sectionName = request.section, itemIds = request.itemIds, term = request.term)
+
+        request.variationId?.let {
+            if (request.itemIds.isNullOrEmpty()) {
+                throw IllegalArgumentException("variationId requires itemIds")
+            }
+            encodedParams.add(Constants.QueryConstants.VARIATION_ID.urlEncode() to it.urlEncode())
+        }
+        encodedParams.addAll(getRecommendationPageOverridableParams(request.pageWideOverridable))
+        request.podOverrides?.forEach { (podId, override) ->
+            if (override == null) return@forEach
+            getRecommendationPageOverridableParams(override).forEach { (name, value) ->
+                encodedParams.add(nestQueryParamName(Constants.QueryConstants.POD_OVERRIDES.format(podId), name) to value)
+            }
+        }
+
+        return encodedParams
+    }
+
+    // Same wire format as getRecommendationResults, so overrides encode exactly as page-wide values do
+    private fun getRecommendationPageOverridableParams(params: RecommendationPagePodOverride): ArrayList<Pair<String, String>> {
+        val encodedParams = getEncodedParams(
+            numResults = params.numResults,
+            facets = params.filters?.toList(),
+            preFilterExpression = params.preFilterExpression,
+            fmtOptions = params.fmtOptions,
+            hiddenFields = params.hiddenFields,
+            variationsMap = params.variationsMap,
+        )
+        params.filterMatchTypes?.forEach { (filterName, matchType) ->
+            encodedParams.add(Constants.QueryConstants.FILTER_MATCH_TYPES.format(filterName).urlEncode() to matchType.urlEncode())
+        }
+
+        return encodedParams
+    }
+
+    // Nests an encoded query parameter name under a bracket prefix: `filters[color]` -> `pod_overrides[pod][filters][color]`
+    private fun nestQueryParamName(prefix: String, encodedName: String): String {
+        val name = URLDecoder.decode(encodedName, "UTF-8")
+        val bracketIndex = name.indexOf('[')
+        val nested = if (bracketIndex == -1) "$prefix[$name]" else "$prefix[${name.substring(0, bracketIndex)}]${name.substring(bracketIndex)}"
+
+        return nested.urlEncode()
     }
 
     /**
