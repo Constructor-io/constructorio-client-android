@@ -7,10 +7,8 @@ import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentAnswerFeedbackRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentAnswerViewRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentFocusRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentOutOfViewRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentQuestionClickRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentQuestionSubmitRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentItemRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentQuestionRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentResultClickRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentViewRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentViewsRequestBody
@@ -170,10 +168,10 @@ interface ConstructorApi {
     suspend fun getQuizResultsCRT(@Url quizUrl: String): QuizResultsResponse
 
     @POST(ApiPaths.URL_PRODUCT_INSIGHTS_AGENT_FOCUS_EVENT)
-    fun trackProductInsightsAgentFocus(@Body body: ProductInsightsAgentFocusRequestBody, @QueryMap params: Map<String, String>): Completable
+    fun trackProductInsightsAgentFocus(@Body body: ProductInsightsAgentItemRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_PRODUCT_INSIGHTS_AGENT_OUT_OF_VIEW_EVENT)
-    fun trackProductInsightsAgentOutOfView(@Body body: ProductInsightsAgentOutOfViewRequestBody, @QueryMap params: Map<String, String>): Completable
+    fun trackProductInsightsAgentOutOfView(@Body body: ProductInsightsAgentItemRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_PRODUCT_INSIGHTS_AGENT_VIEW_EVENT)
     fun trackProductInsightsAgentView(@Body body: ProductInsightsAgentViewRequestBody, @QueryMap params: Map<String, String>): Completable
@@ -182,10 +180,10 @@ interface ConstructorApi {
     fun trackProductInsightsAgentViews(@Body body: ProductInsightsAgentViewsRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_PRODUCT_INSIGHTS_AGENT_QUESTION_CLICK_EVENT)
-    fun trackProductInsightsAgentQuestionClick(@Body body: ProductInsightsAgentQuestionClickRequestBody, @QueryMap params: Map<String, String>): Completable
+    fun trackProductInsightsAgentQuestionClick(@Body body: ProductInsightsAgentQuestionRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_PRODUCT_INSIGHTS_AGENT_QUESTION_SUBMIT_EVENT)
-    fun trackProductInsightsAgentQuestionSubmit(@Body body: ProductInsightsAgentQuestionSubmitRequestBody, @QueryMap params: Map<String, String>): Completable
+    fun trackProductInsightsAgentQuestionSubmit(@Body body: ProductInsightsAgentQuestionRequestBody, @QueryMap params: Map<String, String>): Completable
 
     @POST(ApiPaths.URL_PRODUCT_INSIGHTS_AGENT_ANSWER_FEEDBACK_EVENT)
     fun trackProductInsightsAgentAnswerFeedback(@Body body: ProductInsightsAgentAnswerFeedbackRequestBody, @QueryMap params: Map<String, String>): Completable

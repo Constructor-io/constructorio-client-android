@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
-import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -12,14 +12,12 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
-import io.constructor.data.model.tracking.GenericResultClickRequestBody
+import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentAnswerFeedbackRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentAnswerViewRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentFocusRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentOutOfViewRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentQuestionClickRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentQuestionSubmitRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentItemRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentQuestionRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentResultClickRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentViewRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentViewsRequestBody
@@ -404,11 +402,11 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.getQuizResultsCRT(url)
     }
 
-    fun trackProductInsightsAgentFocus(body: ProductInsightsAgentFocusRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+    fun trackProductInsightsAgentFocus(body: ProductInsightsAgentItemRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackProductInsightsAgentFocus(body, params.toMap())
     }
 
-    fun trackProductInsightsAgentOutOfView(body: ProductInsightsAgentOutOfViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+    fun trackProductInsightsAgentOutOfView(body: ProductInsightsAgentItemRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackProductInsightsAgentOutOfView(body, params.toMap())
     }
 
@@ -420,11 +418,11 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackProductInsightsAgentViews(body, params.toMap())
     }
 
-    fun trackProductInsightsAgentQuestionClick(body: ProductInsightsAgentQuestionClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+    fun trackProductInsightsAgentQuestionClick(body: ProductInsightsAgentQuestionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackProductInsightsAgentQuestionClick(body, params.toMap())
     }
 
-    fun trackProductInsightsAgentQuestionSubmit(body: ProductInsightsAgentQuestionSubmitRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+    fun trackProductInsightsAgentQuestionSubmit(body: ProductInsightsAgentQuestionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
         return constructorApi.trackProductInsightsAgentQuestionSubmit(body, params.toMap())
     }
 

@@ -28,11 +28,9 @@ import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentAnswerFeedbackRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentAnswerViewRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentFocusRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentFollowUpQuestion
-import io.constructor.data.model.tracking.ProductInsightsAgentOutOfViewRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentQuestionClickRequestBody
-import io.constructor.data.model.tracking.ProductInsightsAgentQuestionSubmitRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentItemRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentQuestionRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentResultClickRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentViewRequestBody
 import io.constructor.data.model.tracking.ProductInsightsAgentViewTimespanBody
@@ -373,6 +371,13 @@ object ConstructorIo {
     }
 
     // SimpleDateFormat isn't thread-safe and tracking runs on Schedulers.io(), so create one per call
+    // Section and analytics tags are resolved the same way for every Product Insights Agent event
+    private fun ProductInsightsAgentTrackingData.resolvedSection(): String =
+        sectionName ?: preferenceHelper.defaultItemSection
+
+    private fun ProductInsightsAgentTrackingData.mergedAnalyticsTags(): Map<String, String>? =
+        mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)
+
     private fun formatIsoTimestamp(epochMillis: Long): String {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
         format.timeZone = TimeZone.getTimeZone("UTC")
@@ -2474,13 +2479,13 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentFocusInternal(request: ProductInsightsAgentFocusTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
-        val requestBody = ProductInsightsAgentFocusRequestBody(
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentItemRequestBody(
                 itemId = request.itemId,
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentFocus(
@@ -2513,13 +2518,13 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentOutOfViewInternal(request: ProductInsightsAgentOutOfViewTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
-        val requestBody = ProductInsightsAgentOutOfViewRequestBody(
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentItemRequestBody(
                 itemId = request.itemId,
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentOutOfView(
@@ -2555,14 +2560,14 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentViewInternal(request: ProductInsightsAgentViewTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
+        val section = request.resolvedSection()
         val requestBody = ProductInsightsAgentViewRequestBody(
                 itemId = request.itemId,
                 questions = request.questions,
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentView(
@@ -2599,7 +2604,7 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentViewsInternal(request: ProductInsightsAgentViewsTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
+        val section = request.resolvedSection()
         val requestBody = ProductInsightsAgentViewsRequestBody(
                 itemId = request.itemId,
                 questions = request.questions,
@@ -2609,7 +2614,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentViews(
@@ -2642,15 +2647,15 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentQuestionClickInternal(request: ProductInsightsAgentQuestionClickTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
-        val requestBody = ProductInsightsAgentQuestionClickRequestBody(
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentQuestionRequestBody(
                 itemId = request.itemId,
                 question = request.question,
                 questionTopic = request.questionTopic,
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentQuestionClick(
@@ -2683,15 +2688,15 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentQuestionSubmitInternal(request: ProductInsightsAgentQuestionSubmitTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
-        val requestBody = ProductInsightsAgentQuestionSubmitRequestBody(
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentQuestionRequestBody(
                 itemId = request.itemId,
                 question = request.question,
                 questionTopic = request.questionTopic,
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentQuestionSubmit(
@@ -2724,7 +2729,7 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentAnswerFeedbackInternal(request: ProductInsightsAgentAnswerFeedbackTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
+        val section = request.resolvedSection()
         val requestBody = ProductInsightsAgentAnswerFeedbackRequestBody(
                 itemId = request.itemId,
                 feedbackLabel = request.feedbackLabel,
@@ -2732,7 +2737,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentAnswerFeedback(
@@ -2766,7 +2771,7 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentResultClickInternal(request: ProductInsightsAgentResultClickTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
+        val section = request.resolvedSection()
         val requestBody = ProductInsightsAgentResultClickRequestBody(
                 itemId = request.itemId,
                 question = request.question,
@@ -2778,7 +2783,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentResultClick(
@@ -2813,7 +2818,7 @@ object ConstructorIo {
 
     internal fun trackProductInsightsAgentAnswerViewInternal(request: ProductInsightsAgentAnswerViewTrackingData): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = request.sectionName ?: preferenceHelper.defaultItemSection
+        val section = request.resolvedSection()
         val requestBody = ProductInsightsAgentAnswerViewRequestBody(
                 itemId = request.itemId,
                 question = request.question,
@@ -2825,7 +2830,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
+                analyticsTags = request.mergedAnalyticsTags()
         )
 
         return dataManager.trackProductInsightsAgentAnswerView(
