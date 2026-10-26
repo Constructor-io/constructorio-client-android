@@ -17,19 +17,19 @@ package io.constructor.data.builder
  * @property analyticsTags additional analytics tags to pass. Merged with [io.constructor.core.ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on key collision
  */
 class ProductInsightsAgentResultClickTrackingData(
-    val itemId: String,
+    itemId: String,
     val question: String,
     val seedItemId: String,
     val position: Int? = null,
     val seedItemName: String? = null,
     val seedVariationId: String? = null,
     val qnaResultId: String? = null,
-    val itemName: String? = null,
-    val variationId: String? = null,
-    val threadId: String? = null,
-    val sectionName: String? = null,
-    val analyticsTags: Map<String, String>? = null,
-) {
+    itemName: String? = null,
+    variationId: String? = null,
+    threadId: String? = null,
+    sectionName: String? = null,
+    analyticsTags: Map<String, String>? = null,
+) : ProductInsightsAgentTrackingData(itemId, itemName, variationId, threadId, sectionName, analyticsTags) {
     private constructor(builder: Builder) : this(
         builder.itemId,
         builder.question,
@@ -64,7 +64,7 @@ class ProductInsightsAgentResultClickTrackingData(
         val itemId: String,
         val question: String,
         val seedItemId: String
-    ) {
+    ) : ProductInsightsAgentTrackingData.Builder<Builder>() {
         /** The zero-based position of the clicked item within the answer */
         var position: Int? = null
         /** The name of the item (product) the Product Insights Agent is displayed for */
@@ -73,16 +73,6 @@ class ProductInsightsAgentResultClickTrackingData(
         var seedVariationId: String? = null
         /** The result ID of the answer, as returned by the Product Insights Agent */
         var qnaResultId: String? = null
-        /** The name of the clicked item (product) recommended in the answer */
-        var itemName: String? = null
-        /** The variation ID of the clicked item (product) recommended in the answer */
-        var variationId: String? = null
-        /** The ID of the Product Insights Agent conversation thread */
-        var threadId: String? = null
-        /** The index section, i.e. "Products". Defaults to [io.constructor.core.ConstructorIoConfig.defaultItemSection] */
-        var sectionName: String? = null
-        /** Additional analytics tags to pass. Merged with [io.constructor.core.ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on key collision */
-        var analyticsTags: Map<String, String>? = null
 
         /** Sets [position] */
         fun setPosition(position: Int): Builder = apply { this.position = position }
@@ -92,16 +82,6 @@ class ProductInsightsAgentResultClickTrackingData(
         fun setSeedVariationId(seedVariationId: String): Builder = apply { this.seedVariationId = seedVariationId }
         /** Sets [qnaResultId] */
         fun setQnaResultId(qnaResultId: String): Builder = apply { this.qnaResultId = qnaResultId }
-        /** Sets [itemName] */
-        fun setItemName(itemName: String): Builder = apply { this.itemName = itemName }
-        /** Sets [variationId] */
-        fun setVariationId(variationId: String): Builder = apply { this.variationId = variationId }
-        /** Sets [threadId] */
-        fun setThreadId(threadId: String): Builder = apply { this.threadId = threadId }
-        /** Sets [sectionName] */
-        fun setSectionName(sectionName: String): Builder = apply { this.sectionName = sectionName }
-        /** Sets [analyticsTags] */
-        fun setAnalyticsTags(analyticsTags: Map<String, String>): Builder = apply { this.analyticsTags = analyticsTags }
 
         /** Builds the [ProductInsightsAgentResultClickTrackingData] */
         fun build(): ProductInsightsAgentResultClickTrackingData = ProductInsightsAgentResultClickTrackingData(this)

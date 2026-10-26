@@ -94,7 +94,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Waterproof Jacket", body.getString("item_name"))
         assertEquals("var-1", body.getString("variation_id"))
         assertEquals("thread-1", body.getString("thread_id"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -120,7 +120,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         val recordedRequest = awaitRequest()
         assertPathAndSection(recordedRequest, "focus", "Search Suggestions")
         val body = getJsonBody(recordedRequest)
-        assertEquals("Search Suggestions", body.getString("section"))
+        assertAbsent(body, listOf("section"))
         assertMergedAnalyticsTags(body)
     }
 
@@ -173,7 +173,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Waterproof Jacket", body.getString("item_name"))
         assertEquals("var-1", body.getString("variation_id"))
         assertEquals("thread-1", body.getString("thread_id"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -241,7 +241,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Durability", sentQuestions.getJSONObject(0).getString("question_topic"))
         assertEquals("Is it machine washable?", sentQuestions.getJSONObject(1).getString("question"))
         assertFalse(sentQuestions.getJSONObject(1).has("question_topic"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -319,7 +319,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("2026-10-21T02:40:10.456Z", timespans.getJSONObject(0).getString("end"))
         assertEquals("2026-10-21T02:40:20.000Z", timespans.getJSONObject(1).getString("start"))
         assertEquals("2026-10-21T02:40:25.000Z", timespans.getJSONObject(1).getString("end"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -416,7 +416,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Waterproof Jacket", body.getString("item_name"))
         assertEquals("var-1", body.getString("variation_id"))
         assertEquals("thread-1", body.getString("thread_id"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -480,7 +480,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Waterproof Jacket", body.getString("item_name"))
         assertEquals("var-1", body.getString("variation_id"))
         assertEquals("thread-1", body.getString("thread_id"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -544,7 +544,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Waterproof Jacket", body.getString("item_name"))
         assertEquals("var-1", body.getString("variation_id"))
         assertEquals("thread-1", body.getString("thread_id"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -624,7 +624,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Rain Boots", body.getString("item_name"))
         assertEquals("rec-var-1", body.getString("variation_id"))
         assertEquals("thread-1", body.getString("thread_id"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -726,7 +726,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals(2, followUpQuestions.length())
         assertEquals("Is it breathable?", followUpQuestions.getJSONObject(0).getString("value"))
         assertEquals("Does it come in blue?", followUpQuestions.getJSONObject(1).getString("value"))
-        assertWrapperFields(body, "Products")
+        assertClientParams(recordedRequest, body)
     }
 
     @Test
@@ -811,15 +811,16 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals(section, url.queryParameter("section"))
     }
 
-    private fun assertWrapperFields(body: JSONObject, section: String) {
-        assertEquals("wacko-the-guid", body.getString("i"))
-        assertEquals(67, body.getInt("s"))
-        assertEquals("copper-key", body.getString("key"))
-        assertEquals("player-three", body.getString("ui"))
-        assertEquals(true, body.getBoolean("beacon"))
-        assertEquals(section, body.getString("section"))
-        assertTrue(body.getString("c").startsWith("cioand-"))
-        assertTrue(body.getLong("_dt") > 0)
+    // The client parameters are added to the query by RequestInterceptor, not duplicated in the body
+    private fun assertClientParams(request: RecordedRequest, body: JSONObject) {
+        val url = request.requestUrl!!
+        assertEquals("wacko-the-guid", url.queryParameter("i"))
+        assertEquals("67", url.queryParameter("s"))
+        assertEquals("copper-key", url.queryParameter("key"))
+        assertEquals("player-three", url.queryParameter("ui"))
+        assertTrue(url.queryParameter("c")!!.startsWith("cioand-"))
+        assertTrue(url.queryParameter("_dt")!!.toLong() > 0)
+        assertAbsent(body, listOf("c", "i", "s", "key", "ui", "us", "_dt", "beacon", "section"))
         val analyticsTags = body.getJSONObject("analytics_tags")
         assertEquals("123", analyticsTags.getString("appVersion"))
         assertEquals("Android", analyticsTags.getString("appPlatform"))

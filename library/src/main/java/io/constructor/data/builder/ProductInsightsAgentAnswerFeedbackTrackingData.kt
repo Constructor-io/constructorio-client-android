@@ -15,15 +15,15 @@ import io.constructor.data.model.tracking.ProductInsightsAgentFeedbackLabel
  * @property analyticsTags additional analytics tags to pass. Merged with [io.constructor.core.ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on key collision
  */
 class ProductInsightsAgentAnswerFeedbackTrackingData(
-    val itemId: String,
+    itemId: String,
     val feedbackLabel: ProductInsightsAgentFeedbackLabel,
     val qnaResultId: String? = null,
-    val itemName: String? = null,
-    val variationId: String? = null,
-    val threadId: String? = null,
-    val sectionName: String? = null,
-    val analyticsTags: Map<String, String>? = null,
-) {
+    itemName: String? = null,
+    variationId: String? = null,
+    threadId: String? = null,
+    sectionName: String? = null,
+    analyticsTags: Map<String, String>? = null,
+) : ProductInsightsAgentTrackingData(itemId, itemName, variationId, threadId, sectionName, analyticsTags) {
     private constructor(builder: Builder) : this(
         builder.itemId,
         builder.feedbackLabel,
@@ -52,32 +52,12 @@ class ProductInsightsAgentAnswerFeedbackTrackingData(
     class Builder(
         val itemId: String,
         val feedbackLabel: ProductInsightsAgentFeedbackLabel
-    ) {
+    ) : ProductInsightsAgentTrackingData.Builder<Builder>() {
         /** The result ID of the answer, as returned by the Product Insights Agent */
         var qnaResultId: String? = null
-        /** The name of the item (product) the Product Insights Agent is displayed for, i.e. "Waterproof Jacket" */
-        var itemName: String? = null
-        /** The variation ID of the item (product) the Product Insights Agent is displayed for */
-        var variationId: String? = null
-        /** The ID of the Product Insights Agent conversation thread */
-        var threadId: String? = null
-        /** The index section, i.e. "Products". Defaults to [io.constructor.core.ConstructorIoConfig.defaultItemSection] */
-        var sectionName: String? = null
-        /** Additional analytics tags to pass. Merged with [io.constructor.core.ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on key collision */
-        var analyticsTags: Map<String, String>? = null
 
         /** Sets [qnaResultId] */
         fun setQnaResultId(qnaResultId: String): Builder = apply { this.qnaResultId = qnaResultId }
-        /** Sets [itemName] */
-        fun setItemName(itemName: String): Builder = apply { this.itemName = itemName }
-        /** Sets [variationId] */
-        fun setVariationId(variationId: String): Builder = apply { this.variationId = variationId }
-        /** Sets [threadId] */
-        fun setThreadId(threadId: String): Builder = apply { this.threadId = threadId }
-        /** Sets [sectionName] */
-        fun setSectionName(sectionName: String): Builder = apply { this.sectionName = sectionName }
-        /** Sets [analyticsTags] */
-        fun setAnalyticsTags(analyticsTags: Map<String, String>): Builder = apply { this.analyticsTags = analyticsTags }
 
         /** Builds the [ProductInsightsAgentAnswerFeedbackTrackingData] */
         fun build(): ProductInsightsAgentAnswerFeedbackTrackingData = ProductInsightsAgentAnswerFeedbackTrackingData(this)

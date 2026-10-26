@@ -2480,16 +2480,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentFocus(
@@ -2528,16 +2519,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentOutOfView(
@@ -2580,16 +2562,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentView(
@@ -2636,16 +2609,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentViews(
@@ -2686,16 +2650,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentQuestionClick(
@@ -2736,16 +2691,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentQuestionSubmit(
@@ -2786,16 +2732,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentAnswerFeedback(
@@ -2841,16 +2778,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentResultClick(
@@ -2897,16 +2825,7 @@ object ConstructorIo {
                 itemName = request.itemName,
                 variationId = request.variationId,
                 threadId = request.threadId,
-                c = BuildConfig.CLIENT_VERSION,
-                i = preferenceHelper.id,
-                s = preferenceHelper.getSessionId(),
-                key = preferenceHelper.apiKey,
-                ui = configMemoryHolder.userId,
-                us = configMemoryHolder.segments,
-                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags),
-                beacon = true,
-                section = section,
-                _dt = System.currentTimeMillis()
+                analyticsTags = mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, request.analyticsTags)
         )
 
         return dataManager.trackProductInsightsAgentAnswerView(

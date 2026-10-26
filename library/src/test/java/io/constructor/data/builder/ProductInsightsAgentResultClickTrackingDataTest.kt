@@ -63,6 +63,21 @@ class ProductInsightsAgentResultClickTrackingDataTest {
     }
 
     @Test
+    fun resultClickTrackingDataUsingBuilderWithSharedSettersFirst() {
+        // Shared setters come from the base builder and must return this builder so event setters can follow
+        val request = ProductInsightsAgentResultClickTrackingData.Builder(itemId, question, seedItemId)
+            .setItemName(itemName)
+            .setSectionName(sectionName)
+            .setPosition(position)
+            .setQnaResultId(qnaResultId)
+            .build()
+        assertEquals(itemName, request.itemName)
+        assertEquals(sectionName, request.sectionName)
+        assertEquals(position, request.position)
+        assertEquals(qnaResultId, request.qnaResultId)
+    }
+
+    @Test
     fun resultClickTrackingDataUsingBuilder() {
         val request = ProductInsightsAgentResultClickTrackingData.Builder(itemId, question, seedItemId)
             .setPosition(position)

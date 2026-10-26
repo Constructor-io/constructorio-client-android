@@ -19,19 +19,19 @@ import io.constructor.data.model.common.TrackingItem
  * @property analyticsTags additional analytics tags to pass. Merged with [io.constructor.core.ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on key collision
  */
 class ProductInsightsAgentAnswerViewTrackingData(
-    val itemId: String,
+    itemId: String,
     val question: String,
     val answerText: String,
     val questionTopic: String? = null,
     val qnaResultId: String? = null,
     val items: List<TrackingItem>? = null,
     val followUpQuestions: List<String>? = null,
-    val itemName: String? = null,
-    val variationId: String? = null,
-    val threadId: String? = null,
-    val sectionName: String? = null,
-    val analyticsTags: Map<String, String>? = null,
-) {
+    itemName: String? = null,
+    variationId: String? = null,
+    threadId: String? = null,
+    sectionName: String? = null,
+    analyticsTags: Map<String, String>? = null,
+) : ProductInsightsAgentTrackingData(itemId, itemName, variationId, threadId, sectionName, analyticsTags) {
     private constructor(builder: Builder) : this(
         builder.itemId,
         builder.question,
@@ -66,7 +66,7 @@ class ProductInsightsAgentAnswerViewTrackingData(
         val itemId: String,
         val question: String,
         val answerText: String
-    ) {
+    ) : ProductInsightsAgentTrackingData.Builder<Builder>() {
         /** The topic the question belongs to, i.e. "Durability" */
         var questionTopic: String? = null
         /** The result ID of the answer, as returned by the Product Insights Agent */
@@ -75,16 +75,6 @@ class ProductInsightsAgentAnswerViewTrackingData(
         var items: List<TrackingItem>? = null
         /** The follow-up questions shown with the answer. Only the first 100 are sent */
         var followUpQuestions: List<String>? = null
-        /** The name of the item (product) the Product Insights Agent is displayed for, i.e. "Waterproof Jacket" */
-        var itemName: String? = null
-        /** The variation ID of the item (product) the Product Insights Agent is displayed for */
-        var variationId: String? = null
-        /** The ID of the Product Insights Agent conversation thread */
-        var threadId: String? = null
-        /** The index section, i.e. "Products". Defaults to [io.constructor.core.ConstructorIoConfig.defaultItemSection] */
-        var sectionName: String? = null
-        /** Additional analytics tags to pass. Merged with [io.constructor.core.ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on key collision */
-        var analyticsTags: Map<String, String>? = null
 
         /** Sets [questionTopic] */
         fun setQuestionTopic(questionTopic: String): Builder = apply { this.questionTopic = questionTopic }
@@ -94,16 +84,6 @@ class ProductInsightsAgentAnswerViewTrackingData(
         fun setItems(items: List<TrackingItem>): Builder = apply { this.items = items }
         /** Sets [followUpQuestions] */
         fun setFollowUpQuestions(followUpQuestions: List<String>): Builder = apply { this.followUpQuestions = followUpQuestions }
-        /** Sets [itemName] */
-        fun setItemName(itemName: String): Builder = apply { this.itemName = itemName }
-        /** Sets [variationId] */
-        fun setVariationId(variationId: String): Builder = apply { this.variationId = variationId }
-        /** Sets [threadId] */
-        fun setThreadId(threadId: String): Builder = apply { this.threadId = threadId }
-        /** Sets [sectionName] */
-        fun setSectionName(sectionName: String): Builder = apply { this.sectionName = sectionName }
-        /** Sets [analyticsTags] */
-        fun setAnalyticsTags(analyticsTags: Map<String, String>): Builder = apply { this.analyticsTags = analyticsTags }
 
         /** Builds the [ProductInsightsAgentAnswerViewTrackingData] */
         fun build(): ProductInsightsAgentAnswerViewTrackingData = ProductInsightsAgentAnswerViewTrackingData(this)
