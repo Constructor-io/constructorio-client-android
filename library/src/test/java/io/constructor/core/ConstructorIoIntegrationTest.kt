@@ -2025,4 +2025,14 @@ class ConstructorIoIntegrationTest {
         observer.assertNoErrors()
         Thread.sleep(timeBetweenTests)
     }
+
+    // Required fields only, with answerText over the API's 2000 code point limit so the truncated text is sent
+    @Test
+    fun trackProductInsightsAgentAnswerViewWithRequiredFieldsOnlyAgainstRealResponse() {
+        val request = ProductInsightsAgentAnswerViewTrackingData.build("10001", "Is it waterproof?", "a".repeat(2001))
+        val observer = constructorIo.trackProductInsightsAgentAnswerViewInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
 }

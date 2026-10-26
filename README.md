@@ -729,7 +729,7 @@ ConstructorIo.trackProductInsightsAgentQuestionSubmit(
 )
 
 // Track when an answer is shown to the user (itemId, question, answerText)
-// Only the first 100 items and follow-up questions are sent
+// Only the first 100 items and follow-up questions are sent, and answerText over 2000 Unicode code points is truncated to fit
 ConstructorIo.trackProductInsightsAgentAnswerView(
     ProductInsightsAgentAnswerViewTrackingData.build("1234567-AB", "Is it waterproof?", "Yes, it is fully waterproof.") {
         qnaResultId = "qna-result-123"

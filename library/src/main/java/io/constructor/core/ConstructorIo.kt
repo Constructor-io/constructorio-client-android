@@ -41,6 +41,7 @@ import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
 import io.constructor.util.broadcastIntent
 import io.constructor.util.e
+import io.constructor.util.truncateToCodePoints
 import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -2822,7 +2823,7 @@ object ConstructorIo {
         val requestBody = ProductInsightsAgentAnswerViewRequestBody(
                 itemId = request.itemId,
                 question = request.question,
-                answerText = request.answerText,
+                answerText = request.answerText.truncateToCodePoints(2000),
                 questionTopic = request.questionTopic,
                 qnaResultId = request.qnaResultId,
                 items = request.items?.take(100),

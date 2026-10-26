@@ -761,6 +761,38 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("Question 100?", followUpQuestions.getJSONObject(99).getString("value"))
     }
 
+    private fun trackAnswerViewAndGetAnswerText(answerText: String): String {
+        mockServer.enqueue(MockResponse().setResponseCode(204))
+        val request = ProductInsightsAgentAnswerViewTrackingData.build("item-1", "Is it waterproof?", answerText)
+        val observer = ConstructorIo.trackProductInsightsAgentAnswerViewInternal(request).test()
+        observer.assertComplete()
+        return getJsonBody(awaitRequest()).getString("answer_text")
+    }
+
+    @Test
+    fun trackProductInsightsAgentAnswerViewKeepsAnswerTextAt2000CodePoints() {
+        val answerText = "a".repeat(2000)
+        assertEquals(answerText, trackAnswerViewAndGetAnswerText(answerText))
+    }
+
+    @Test
+    fun trackProductInsightsAgentAnswerViewTruncatesAnswerTextTo2000CodePoints() {
+        assertEquals("a".repeat(2000), trackAnswerViewAndGetAnswerText("a".repeat(2500)))
+    }
+
+    @Test
+    fun trackProductInsightsAgentAnswerViewCountsAnswerTextInCodePointsNotUtf16Units() {
+        // U+1F600 is 2 UTF-16 units but 1 code point, so 2000 of them are under the limit
+        val answerText = "😀".repeat(2000)
+        assertEquals(answerText, trackAnswerViewAndGetAnswerText(answerText))
+    }
+
+    @Test
+    fun trackProductInsightsAgentAnswerViewTruncatesAnswerTextWithoutSplittingSurrogatePairs() {
+        // 2001 code points: the cut falls between emoji, so no half surrogate pair is sent
+        assertEquals("a" + "\uD83D\uDE00".repeat(1999), trackAnswerViewAndGetAnswerText("a" + "\uD83D\uDE00".repeat(2000)))
+    }
+
     @Test
     fun trackProductInsightsAgentAnswerViewWithRequiredFieldsOnly() {
         mockServer.enqueue(MockResponse().setResponseCode(204))

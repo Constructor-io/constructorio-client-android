@@ -7,7 +7,7 @@ import io.constructor.data.model.common.TrackingItem
  *
  * @property itemId the ID of the item (product) the Product Insights Agent is displayed for, i.e. "1234567-AB"
  * @property question the question text, i.e. "Is it waterproof?"
- * @property answerText the answer text shown to the user. May be empty
+ * @property answerText the answer text shown to the user. May be empty. Text over 2000 Unicode code points is truncated to fit
  * @property questionTopic the topic the question belongs to, i.e. "Durability"
  * @property qnaResultId the result ID of the answer, as returned by the Product Insights Agent
  * @property items the items (products) shown in the answer. Only the first 100 are sent
