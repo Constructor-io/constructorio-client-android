@@ -1885,6 +1885,16 @@ class ConstructorIoIntegrationTest {
         Thread.sleep(timeBetweenTests)
     }
 
+    // itemName is optional: the API only needs one of item_id or item_name, and itemId is always required
+    @Test
+    fun trackProductInsightsAgentFocusWithoutItemNameAgainstRealResponse() {
+        val request = ProductInsightsAgentFocusTrackingData.build("10001")
+        val observer = constructorIo.trackProductInsightsAgentFocusInternal(request).test()
+        observer.assertComplete()
+        observer.assertNoErrors()
+        Thread.sleep(timeBetweenTests)
+    }
+
     @Test
     fun trackProductInsightsAgentOutOfViewAgainstRealResponse() {
         val request = ProductInsightsAgentOutOfViewTrackingData.build("10001") {
@@ -2003,7 +2013,7 @@ class ConstructorIoIntegrationTest {
         val request = ProductInsightsAgentAnswerViewTrackingData.build("10001", "Is it waterproof?", "") {
             questionTopic = "Durability"
             qnaResultId = "qna-cdx-709"
-            items = listOf(TrackingItem("10002", "20002", testCampaignId, testCampaignOwner), TrackingItem("10003", null, null, null))
+            items = listOf(TrackingItem("10002", "20002", testCampaignId, testCampaignOwner, "item2"), TrackingItem("10003", null, null, null))
             followUpQuestions = listOf("Is it breathable?")
             itemName = "item1"
             variationId = "20001"

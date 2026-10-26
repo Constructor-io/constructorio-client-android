@@ -13,4 +13,5 @@ data class TrackingItem(
     @Json(name = "variation_id") val variationId: String?,
     @Json(name = "sl_campaign_id") val slCampaignId: String?,
     @Json(name = "sl_campaign_owner") val slCampaignOwner: String?,
+    @Json(name = "item_name") val itemName: String? = null,
 ) : Serializable

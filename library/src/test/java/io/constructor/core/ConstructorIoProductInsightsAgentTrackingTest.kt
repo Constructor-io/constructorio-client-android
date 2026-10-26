@@ -687,7 +687,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
             questionTopic = "Durability"
             qnaResultId = "qna-1"
             items = listOf(
-                TrackingItem("rec-1", "rec-var-1", "camp-1", "owner-a"),
+                TrackingItem("rec-1", "rec-var-1", "camp-1", "owner-a", "Rain Jacket"),
                 TrackingItem("rec-2", null, null, null),
             )
             followUpQuestions = listOf("Is it breathable?", "Does it come in blue?")
@@ -718,6 +718,7 @@ class ConstructorIoProductInsightsAgentTrackingTest {
         assertEquals("rec-var-1", firstItem.getString("variation_id"))
         assertEquals("camp-1", firstItem.getString("sl_campaign_id"))
         assertEquals("owner-a", firstItem.getString("sl_campaign_owner"))
+        assertEquals("Rain Jacket", firstItem.getString("item_name"))
         val secondItem = items.getJSONObject(1)
         assertEquals("rec-2", secondItem.getString("item_id"))
         assertEquals(setOf("item_id"), secondItem.keys().asSequence().toSet())
