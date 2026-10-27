@@ -89,3 +89,6 @@ lint/tmp/
 .settings/
 .idea/
 .project
+.claude
+.DS_Store
+.crit
