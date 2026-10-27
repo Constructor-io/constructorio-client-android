@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import io.constructor.data.local.PreferencesHelper
 import io.constructor.data.model.autocomplete.AutocompleteResponse
 import io.constructor.data.model.browse.*
-import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
+import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.conversion.ConversionRequestBody
 import io.constructor.data.model.purchase.PurchaseRequestBody
 import io.constructor.data.model.quiz.*
@@ -12,8 +12,15 @@ import io.constructor.data.model.recommendations.RecommendationResultClickReques
 import io.constructor.data.model.recommendations.RecommendationResultViewRequestBody
 import io.constructor.data.model.recommendations.RecommendationsResponse
 import io.constructor.data.model.search.*
-import io.constructor.data.model.tracking.GenericResultClickRequestBody
+import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentAnswerFeedbackRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentAnswerViewRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentItemRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentQuestionRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentResultClickRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentViewRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentViewsRequestBody
 import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
 import io.constructor.data.remote.ApiPaths
 import io.constructor.data.remote.ConstructorApi
@@ -393,5 +400,41 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
     suspend fun getQuizResultsCRT(quizId: String, encodedParams: Array<Pair<String, String>> = arrayOf(), preferencesHelper: PreferencesHelper): QuizResultsResponse {
         var url = "${preferencesHelper.scheme}://${preferencesHelper.quizzesServiceUrl}/${ApiPaths.URL_QUIZ_RESULTS.format(quizId)}${getAdditionalParamsQueryString(encodedParams)}"
         return constructorApi.getQuizResultsCRT(url)
+    }
+
+    fun trackProductInsightsAgentFocus(body: ProductInsightsAgentItemRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentFocus(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentOutOfView(body: ProductInsightsAgentItemRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentOutOfView(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentView(body: ProductInsightsAgentViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentView(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentViews(body: ProductInsightsAgentViewsRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentViews(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentQuestionClick(body: ProductInsightsAgentQuestionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentQuestionClick(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentQuestionSubmit(body: ProductInsightsAgentQuestionRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentQuestionSubmit(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentAnswerFeedback(body: ProductInsightsAgentAnswerFeedbackRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentAnswerFeedback(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentResultClick(body: ProductInsightsAgentResultClickRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentResultClick(body, params.toMap())
+    }
+
+    fun trackProductInsightsAgentAnswerView(body: ProductInsightsAgentAnswerViewRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackProductInsightsAgentAnswerView(body, params.toMap())
     }
 }

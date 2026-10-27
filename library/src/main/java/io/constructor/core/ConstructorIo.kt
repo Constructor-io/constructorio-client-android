@@ -26,12 +26,22 @@ import io.constructor.data.model.search.*
 import io.constructor.data.model.tracking.GenericResultClickRequestBody
 import io.constructor.data.model.tracking.ItemDetailLoadRequestBody
 import io.constructor.data.model.tracking.MediaImpressionRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentAnswerFeedbackRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentAnswerViewRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentFollowUpQuestion
+import io.constructor.data.model.tracking.ProductInsightsAgentItemRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentQuestionRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentResultClickRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentViewRequestBody
+import io.constructor.data.model.tracking.ProductInsightsAgentViewTimespanBody
+import io.constructor.data.model.tracking.ProductInsightsAgentViewsRequestBody
 import io.constructor.data.model.tracking.ResultsImpressionViewRequestBody
 import io.constructor.injection.component.AppComponent
 import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
 import io.constructor.util.broadcastIntent
 import io.constructor.util.e
+import io.constructor.util.truncateToCodePoints
 import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -40,6 +50,7 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 typealias ConstructorError = ((Throwable) -> Unit)?
@@ -358,6 +369,20 @@ object ConstructorIo {
         }
 
         return analyticsTags
+    }
+
+    // SimpleDateFormat isn't thread-safe and tracking runs on Schedulers.io(), so create one per call
+    // Section and analytics tags are resolved the same way for every Product Insights Agent event
+    private fun ProductInsightsAgentTrackingData.resolvedSection(): String =
+        sectionName ?: preferenceHelper.defaultItemSection
+
+    private fun ProductInsightsAgentTrackingData.mergedAnalyticsTags(): Map<String, String>? =
+        mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)
+
+    private fun formatIsoTimestamp(epochMillis: Long): String {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        format.timeZone = TimeZone.getTimeZone("UTC")
+        return format.format(Date(epochMillis))
     }
 
     /**
@@ -2517,6 +2542,390 @@ object ConstructorIo {
 
         return dataManager.trackRecommendationResultsView(
                 recommendationResultViewRequestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent focus events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentFocusTrackingData.build("1234567-AB") {
+     *     itemName = "Waterproof Jacket"
+     * }
+     * ConstructorIo.trackProductInsightsAgentFocus(request)
+     * ```
+     * @param request the Product Insights Agent focus request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentFocus(request: ProductInsightsAgentFocusTrackingData) {
+        val completable = trackProductInsightsAgentFocusInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Focus error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentFocusInternal(request: ProductInsightsAgentFocusTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentItemRequestBody(
+                itemId = request.itemId,
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentFocus(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent out of view events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentOutOfViewTrackingData.build("1234567-AB") {
+     *     itemName = "Waterproof Jacket"
+     * }
+     * ConstructorIo.trackProductInsightsAgentOutOfView(request)
+     * ```
+     * @param request the Product Insights Agent out of view request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentOutOfView(request: ProductInsightsAgentOutOfViewTrackingData) {
+        val completable = trackProductInsightsAgentOutOfViewInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Out Of View error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentOutOfViewInternal(request: ProductInsightsAgentOutOfViewTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentItemRequestBody(
+                itemId = request.itemId,
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentOutOfView(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent view events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentViewTrackingData.build(
+     *     "1234567-AB",
+     *     listOf(ProductInsightsAgentQuestion("Is it waterproof?", "Durability"))
+     * ) {
+     *     itemName = "Waterproof Jacket"
+     * }
+     * ConstructorIo.trackProductInsightsAgentView(request)
+     * ```
+     * @param request the Product Insights Agent view request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentView(request: ProductInsightsAgentViewTrackingData) {
+        val completable = trackProductInsightsAgentViewInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent View error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentViewInternal(request: ProductInsightsAgentViewTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentViewRequestBody(
+                itemId = request.itemId,
+                questions = request.questions,
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentView(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent views events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentViewsTrackingData.build(
+     *     "1234567-AB",
+     *     listOf(ProductInsightsAgentQuestion("Is it waterproof?")),
+     *     listOf(ProductInsightsAgentViewTimespan(viewStartedAtMillis, System.currentTimeMillis()))
+     * ) {
+     *     itemName = "Waterproof Jacket"
+     * }
+     * ConstructorIo.trackProductInsightsAgentViews(request)
+     * ```
+     * @param request the Product Insights Agent views request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentViews(request: ProductInsightsAgentViewsTrackingData) {
+        val completable = trackProductInsightsAgentViewsInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Views error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentViewsInternal(request: ProductInsightsAgentViewsTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentViewsRequestBody(
+                itemId = request.itemId,
+                questions = request.questions,
+                viewTimespans = request.viewTimespans.map {
+                    ProductInsightsAgentViewTimespanBody(formatIsoTimestamp(it.start), formatIsoTimestamp(it.end))
+                },
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentViews(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent question click events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentQuestionClickTrackingData.build("1234567-AB", "Is it waterproof?") {
+     *     questionTopic = "Durability"
+     * }
+     * ConstructorIo.trackProductInsightsAgentQuestionClick(request)
+     * ```
+     * @param request the Product Insights Agent question click request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentQuestionClick(request: ProductInsightsAgentQuestionClickTrackingData) {
+        val completable = trackProductInsightsAgentQuestionClickInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Question Click error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentQuestionClickInternal(request: ProductInsightsAgentQuestionClickTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentQuestionRequestBody(
+                itemId = request.itemId,
+                question = request.question,
+                questionTopic = request.questionTopic,
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentQuestionClick(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent question submit events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentQuestionSubmitTrackingData.build("1234567-AB", "Is it waterproof?") {
+     *     threadId = "thread-123"
+     * }
+     * ConstructorIo.trackProductInsightsAgentQuestionSubmit(request)
+     * ```
+     * @param request the Product Insights Agent question submit request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentQuestionSubmit(request: ProductInsightsAgentQuestionSubmitTrackingData) {
+        val completable = trackProductInsightsAgentQuestionSubmitInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Question Submit error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentQuestionSubmitInternal(request: ProductInsightsAgentQuestionSubmitTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentQuestionRequestBody(
+                itemId = request.itemId,
+                question = request.question,
+                questionTopic = request.questionTopic,
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentQuestionSubmit(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent answer feedback events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentAnswerFeedbackTrackingData.build("1234567-AB", ProductInsightsAgentFeedbackLabel.THUMBS_UP) {
+     *     qnaResultId = "qna-result-123"
+     * }
+     * ConstructorIo.trackProductInsightsAgentAnswerFeedback(request)
+     * ```
+     * @param request the Product Insights Agent answer feedback request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentAnswerFeedback(request: ProductInsightsAgentAnswerFeedbackTrackingData) {
+        val completable = trackProductInsightsAgentAnswerFeedbackInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Answer Feedback error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentAnswerFeedbackInternal(request: ProductInsightsAgentAnswerFeedbackTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentAnswerFeedbackRequestBody(
+                itemId = request.itemId,
+                feedbackLabel = request.feedbackLabel,
+                qnaResultId = request.qnaResultId,
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentAnswerFeedback(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent result click events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentResultClickTrackingData.build("rec-123", "Is it waterproof?", "1234567-AB") {
+     *     position = 0
+     *     qnaResultId = "qna-result-123"
+     * }
+     * ConstructorIo.trackProductInsightsAgentResultClick(request)
+     * ```
+     * @param request the Product Insights Agent result click request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentResultClick(request: ProductInsightsAgentResultClickTrackingData) {
+        val completable = trackProductInsightsAgentResultClickInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Result Click error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentResultClickInternal(request: ProductInsightsAgentResultClickTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentResultClickRequestBody(
+                itemId = request.itemId,
+                question = request.question,
+                seedItemId = request.seedItemId,
+                position = request.position,
+                seedItemName = request.seedItemName,
+                seedVariationId = request.seedVariationId,
+                qnaResultId = request.qnaResultId,
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentResultClick(
+                requestBody,
+                arrayOf(Constants.QueryConstants.SECTION to section)
+        )
+    }
+
+    /**
+     * Tracks Product Insights Agent answer view events.
+     *
+     * Example:
+     * ```
+     * val request = ProductInsightsAgentAnswerViewTrackingData.build("1234567-AB", "Is it waterproof?", "Yes, it is fully waterproof.") {
+     *     qnaResultId = "qna-result-123"
+     *     items = listOf(TrackingItem("rec-123", null, null, null))
+     *     followUpQuestions = listOf("Is it breathable?")
+     * }
+     * ConstructorIo.trackProductInsightsAgentAnswerView(request)
+     * ```
+     * @param request the Product Insights Agent answer view request object holding all the tracking parameters. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
+     */
+    fun trackProductInsightsAgentAnswerView(request: ProductInsightsAgentAnswerViewTrackingData) {
+        val completable = trackProductInsightsAgentAnswerViewInternal(request)
+        disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, {
+            t -> e("Product Insights Agent Answer View error: ${t.message}")
+        }))
+    }
+
+    internal fun trackProductInsightsAgentAnswerViewInternal(request: ProductInsightsAgentAnswerViewTrackingData): Completable {
+        preferenceHelper.getSessionId(sessionIncrementHandler)
+        val section = request.resolvedSection()
+        val requestBody = ProductInsightsAgentAnswerViewRequestBody(
+                itemId = request.itemId,
+                question = request.question,
+                answerText = request.answerText.truncateToCodePoints(2000),
+                questionTopic = request.questionTopic,
+                qnaResultId = request.qnaResultId,
+                items = request.items?.take(100),
+                followUpQuestions = request.followUpQuestions?.take(100)?.map { ProductInsightsAgentFollowUpQuestion(it) },
+                itemName = request.itemName,
+                variationId = request.variationId,
+                threadId = request.threadId,
+                analyticsTags = request.mergedAnalyticsTags()
+        )
+
+        return dataManager.trackProductInsightsAgentAnswerView(
+                requestBody,
                 arrayOf(Constants.QueryConstants.SECTION to section)
         )
     }

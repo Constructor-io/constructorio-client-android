@@ -45,6 +45,14 @@ fun Intent.setExtra(key: String, value: Any) {
 fun String.urlEncode() = URLEncoder.encode(this, "UTF-8").replace("+", "%20")
 
 /**
+ * Truncates to at most [maxCodePoints] Unicode code points, never splitting a surrogate pair
+ *
+ * @suppress
+ */
+fun String.truncateToCodePoints(maxCodePoints: Int): String =
+    if (codePointCount(0, length) <= maxCodePoints) this else substring(0, offsetByCodePoints(0, maxCodePoints))
+
+/**
  * @suppress
  */
 fun Any.d(msg: String) = Log.d(this::class.qualifiedName, msg)
