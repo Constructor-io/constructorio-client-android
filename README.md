@@ -782,3 +782,7 @@ ConstructorIo.trackProductInsightsAgentResultClick(
 // All Product Insights Agent requests also accept sectionName, threadId, itemName, variationId and analyticsTags
 // Request level analytics tags are merged with the default analytics tags passed on initialization
 ```
+
+# Maintainers
+
+See [MAINTAINERS.md](MAINTAINERS.md) for how to publish a release.
