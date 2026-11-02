@@ -100,6 +100,41 @@ read_version() {
   sed -n "s/^[[:space:]]*versionName '\([0-9]*\.[0-9]*\.[0-9]*\)'.*/\1/p" "$BUILD_GRADLE"
 }
 
+# Quotes $1 for pasting into a shell: as is when it's safe, else in single quotes.
+shell_quote() {
+  case "$1" in
+    *[!A-Za-z0-9_./:=+-]*|'') printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")" ;;
+    *) printf '%s' "$1" ;;
+  esac
+}
+
+# Prints the command that picks this run up again at step $1, with its arguments
+# shell-quoted. "retry" keeps this run's --until and --dry-run, for re-running a step
+# that failed or was declined. "continue" drops them, for carrying on past where the
+# run stopped.
+resume_cmd() {
+  local from="$1" mode="$2" i cmd="./publish.sh"
+  i="$(step_index "$from")"
+  if [ "$i" -le "$(step_index bump)" ]; then
+    if [ -n "$BUMP" ]; then cmd="$cmd $(shell_quote "$BUMP")"; else cmd="$cmd <patch|minor|major|X.Y.Z>"; fi
+  fi
+  cmd="$cmd --from $from"
+  if [ "$i" -le "$(step_index tag)" ]; then
+    if [ -n "$MESSAGE" ]; then cmd="$cmd -m $(shell_quote "$MESSAGE")"; else cmd="$cmd -m \"<release title>\""; fi
+  fi
+  if [ "$i" -le "$(step_index test)" ]; then
+    [ "$SKIP_TESTS" = true ] && cmd="$cmd --skip-tests"
+    [ "$WITH_INTEGRATION" = true ] && cmd="$cmd --with-integration"
+  fi
+  [ "$i" -le "$(step_index docs)" ] && [ "$SKIP_DOCS" = true ] && cmd="$cmd --skip-docs"
+  if [ "$mode" = retry ]; then
+    [ "$DRY_RUN" = true ] && cmd="$cmd --dry-run"
+    [ "$UNTIL" != release ] && [ "$DRY_RUN" = false ] && cmd="$cmd --until $UNTIL"
+  fi
+  [ "$ASSUME_YES" = true ] && cmd="$cmd --yes"
+  echo "$cmd"
+}
+
 # ---------------------------------------------------------------------------
 # Arguments
 # ---------------------------------------------------------------------------
@@ -197,6 +232,9 @@ fi
 # Resolve the version and message
 # ---------------------------------------------------------------------------
 
+# Stopping after sync needs no version, so skip straight to the summary.
+if [ "$UNTIL" != sync ]; then
+
 FILE_VERSION="$(read_version)"
 [ -n "$FILE_VERSION" ] || die "couldn't find versionName in $BUILD_GRADLE"
 
@@ -252,6 +290,8 @@ bold "New version:     $NEW"
 [ -n "$MESSAGE" ] && bold "Tag message:     $MESSAGE"
 bold "Steps:           $FROM -> $UNTIL"
 [ "$DRY_RUN" = true ] && bold "Dry run:         push and release are only printed"
+
+fi
 
 # ---------------------------------------------------------------------------
 # bump
@@ -311,7 +351,7 @@ if runs test; then
     fi
     # shellcheck disable=SC2086
     gradle $TEST_ARGS :library:testDebugUnitTest \
-      || die "tests failed. Fix them and continue with: ./publish.sh --from test"
+      || die "tests failed. Fix them and continue with: $(resume_cmd test retry)"
   fi
 fi
 
@@ -380,13 +420,13 @@ if [ "$DRY_RUN" = true ]; then
   if runs push || runs release; then
     step dry-run "Skipping the remote steps. They would run:"
     runs push && echo "  git push $REMOTE $BRANCH --follow-tags"
-    runs release && printf '  gh release create %s --title %q --generate-notes --verify-tag\n' "$TAG" "$MESSAGE"
+    runs release && echo "  gh release create $TAG --title $(shell_quote "$MESSAGE") --generate-notes --verify-tag"
   fi
   echo
   bold "Dry run: nothing was pushed."
   if runs push || runs release; then
     NEXT="$FROM"; runs tag && NEXT="push"
-    echo "Publish it with: ./publish.sh --from $NEXT"
+    echo "Publish it with: $(resume_cmd "$NEXT" continue)"
   fi
   if runs tag; then
     echo "Or discard:      git tag -d $TAG && git reset --hard $REMOTE/$BRANCH"
@@ -400,7 +440,8 @@ if runs push || runs release; then
   runs release && ACTIONS="${ACTIONS:+$ACTIONS, then }create the GitHub release \"$MESSAGE\""
   echo
   if ! confirm "About to $ACTIONS. Continue?"; then
-    echo "Stopped. Nothing was pushed. Continue later with: ./publish.sh --from $FROM"
+    NEXT=release; runs push && NEXT=push
+    echo "Stopped. Nothing was pushed. Continue later with: $(resume_cmd "$NEXT" retry)"
     exit 1
   fi
 fi
@@ -432,7 +473,7 @@ if [ "$UNTIL" = release ]; then
 fi
 
 bold "Stopped after '$UNTIL'."
-echo "Continue with:  ./publish.sh --from $(step_after "$UNTIL")"
+echo "Continue with:  $(resume_cmd "$(step_after "$UNTIL")" continue)"
 case "$UNTIL" in
   sync) ;;
   bump|test|docs)
