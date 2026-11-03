@@ -342,7 +342,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val path = "/v2/behavioral_action/search_submit?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("tit", requestBody["user_input"])
         assertEquals("{appVersion:123,appPlatform:Android}", requestBody["analytics_tags"])
@@ -359,12 +359,23 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val path = "/v2/behavioral_action/search_submit?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("tit", requestBody["user_input"])
         assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchSubmitRedactsPiiInGroupIdAndAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", ResultGroup("Movies", "test@example.com"), mapOf("user" to "test@example.com")).test()
+        observer.assertComplete()
+        val requestBody = getRequestBody(mockServer.takeRequest())
+        assertEquals("{group_id:<email_omitted>}", requestBody["filters"])
+        assert(requestBody["analytics_tags"]!!.contains("user:<email_omitted>"))
     }
 
     @Test
@@ -378,7 +389,7 @@ class ConstructorIoTrackingTest {
         ConstructorIo.trackSearchSubmit(request)
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
-        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val path = "/v2/behavioral_action/search_submit?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("tit", requestBody["user_input"])
         assertEquals("{group_id:group_id}", requestBody["filters"])
@@ -397,7 +408,7 @@ class ConstructorIoTrackingTest {
         ConstructorIo.trackSearchSubmit(request)
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
-        val path = "/v2/behavioral_action/search?section=Content&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val path = "/v2/behavioral_action/search_submit?section=Content&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("tit", requestBody["user_input"])
         assertNull(requestBody["filters"])
@@ -413,7 +424,7 @@ class ConstructorIoTrackingTest {
         observer.assertError { true }
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
+        val path = "/v2/behavioral_action/search_submit?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.46.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("tit", requestBody["user_input"])
         assertEquals("POST", request.method)

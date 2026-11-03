@@ -1520,16 +1520,16 @@ object ConstructorIo {
 
     internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?, analyticsTags: Map<String, String>? = null, section: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val section = section ?: preferenceHelper.defaultItemSection
+        val effectiveSection = section ?: preferenceHelper.defaultItemSection
         val searchSubmitRequestBody = SearchSubmitRequestBody(
                 searchTerm.redactPii(),
                 originalQuery.redactPii(),
-                resultGroup?.groupId?.let { SearchSubmitFilters(it) },
-                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)
+                resultGroup?.groupId?.let { SearchSubmitFilters(it.redactPii()) },
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)?.mapValues { it.value.redactPii() }
         )
 
         return dataManager.trackSearchSubmit(searchSubmitRequestBody, arrayOf(
-                Constants.QueryConstants.SECTION to section
+                Constants.QueryConstants.SECTION to effectiveSection
         ))
     }
 
