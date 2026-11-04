@@ -1607,7 +1607,11 @@ object ConstructorIo {
      * }
      * ConstructorIo.trackSearchResultsLoaded(request)
      * ```
-     * @param request the search results loaded request object holding all of the tracking parameters
+     * @param request the search results loaded request object holding all of the tracking parameters.
+     *   The section name defaults to [ConstructorIoConfig.defaultItemSection] when not set. Any
+     *   analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
      */
     fun trackSearchResultsLoaded(request: SearchResultsLoadedData) {
         val completable = trackSearchResultsLoadedInternal(
@@ -1660,7 +1664,7 @@ object ConstructorIo {
 
         return dataManager.trackSearchResultsLoaded(
                 searchResultLoadRequestBody,
-                arrayOf()
+                arrayOf(Constants.QueryConstants.SECTION to section)
         )
     }
 

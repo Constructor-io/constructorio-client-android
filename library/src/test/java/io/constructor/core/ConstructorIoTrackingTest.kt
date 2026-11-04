@@ -403,7 +403,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals(null, requestBody["items"])
@@ -437,7 +437,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
@@ -453,7 +453,7 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals(null, requestBody["items"])
@@ -467,22 +467,36 @@ class ConstructorIoTrackingTest {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
         val items = arrayOf(TrackingItem("123", null, null, null))
-        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, items = items, resultId = "179b8a0e-3799-4a31-be87-127b06871de2", resultPage = 3, resultOffset = 20, sortOrder = "ascending", sortBy = "price", selectedFilters = mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))).test()
+        // result_offset is left out on purpose: the endpoint accepts either result_page or result_offset, never both
+        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, items = items, resultId = "179b8a0e-3799-4a31-be87-127b06871de2", resultPage = 3, sortOrder = "ascending", sortBy = "price", selectedFilters = mapOf("brand" to listOf("XYZ"), "color" to listOf("black"))).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123}]", requestBody["items"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
         assertEquals("3", requestBody["result_page"])
-        assertEquals("20", requestBody["result_offset"])
+        assertNull(requestBody["result_offset"])
         assertEquals("ascending", requestBody["sort_order"])
         assertEquals("price", requestBody["sort_by"])
         assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithResultOffset() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10, resultOffset = 20).test()
+        observer.assertComplete()
+        val request = mockServer.takeRequest()
+        val requestBody = getRequestBody(request)
+        assertEquals("20", requestBody["result_offset"])
+        assertNull(requestBody["result_page"])
+        assertEquals("POST", request.method)
     }
 
     @Test
@@ -492,8 +506,7 @@ class ConstructorIoTrackingTest {
         val request = SearchResultsLoadedData.build("titanic", 10) {
             setItems(listOf(TrackingItem("123", null, null, null)))
             setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
-            setResultPage(3)
-            setResultOffset(20)
+            setResultPage(3) // or setResultOffset(20): the endpoint accepts only one of the two
             setSortOrder("ascending")
             setSortBy("price")
             setSelectedFilters(mapOf("brand" to listOf("XYZ"), "color" to listOf("black")))
@@ -501,18 +514,33 @@ class ConstructorIoTrackingTest {
         ConstructorIo.trackSearchResultsLoaded(request)
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123}]", requestBody["items"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
         assertEquals("3", requestBody["result_page"])
-        assertEquals("20", requestBody["result_offset"])
+        assertNull(requestBody["result_offset"])
         assertEquals("ascending", requestBody["sort_order"])
         assertEquals("price", requestBody["sort_by"])
         assertEquals("{brand:[XYZ],color:[black]}", requestBody["selected_filters"])
         assertEquals("POST", recordedRequest.method)
         assert(recordedRequest.path!!.startsWith(path))
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithRequestBuilderAndResultOffset() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val request = SearchResultsLoadedData.build("titanic", 10) {
+            setResultOffset(20)
+        }
+        ConstructorIo.trackSearchResultsLoaded(request)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("20", requestBody["result_offset"])
+        assertNull(requestBody["result_page"])
+        assertEquals("POST", recordedRequest.method)
     }
 
     @Test
@@ -525,7 +553,7 @@ class ConstructorIoTrackingTest {
         ConstructorIo.trackSearchResultsLoaded(request)
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?section=Search%20Suggestions&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("Search Suggestions", requestBody["section"])
         assertEquals("POST", recordedRequest.method)
@@ -540,9 +568,11 @@ class ConstructorIoTrackingTest {
         ConstructorIo.trackSearchResultsLoaded(request)
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("Products", requestBody["section"])
         assertEquals("Not Available", requestBody["url"])
         assertEquals("POST", recordedRequest.method)
+        assert(recordedRequest.path!!.startsWith(path))
     }
 
     @Test
@@ -566,7 +596,7 @@ class ConstructorIoTrackingTest {
         val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10).test()
         observer.assertError { true }
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assert(request.path!!.startsWith(path))
     }
 
