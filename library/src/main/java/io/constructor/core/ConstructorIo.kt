@@ -41,8 +41,8 @@ import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
 import io.constructor.util.broadcastIntent
 import io.constructor.util.e
-import io.constructor.util.truncateToCodePoints
 import io.constructor.util.redactPii
+import io.constructor.util.truncateToCodePoints
 import io.constructor.util.urlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
