@@ -10,15 +10,19 @@ class SearchSubmitTrackingData(
     val originalQuery: String,
     val resultGroup: ResultGroup? = null,
     val analyticsTags: Map<String, String>? = null,
-    val section: String? = null,
 ) {
+    /** Settable via [Builder.setSection]; kept out of the public constructor to preserve binary compatibility */
+    var section: String? = null
+        private set
+
     private constructor(builder: Builder) : this(
         builder.searchTerm,
         builder.originalQuery,
         builder.resultGroup,
         builder.analyticsTags,
-        builder.section,
-    )
+    ) {
+        section = builder.section
+    }
 
     companion object {
         inline fun build(
