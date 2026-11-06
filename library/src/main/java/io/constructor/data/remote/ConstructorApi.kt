@@ -35,10 +35,9 @@ interface ConstructorApi {
                                 @QueryMap data: Map<String, String>,
                                 @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
 
-    @GET(ApiPaths.URL_SEARCH_SUBMIT_EVENT)
-    fun trackSearchSubmit(@Path("term") term: String,
-                          @QueryMap data: Map<String, String>,
-                          @QueryMap(encoded = true) encodedData: Map<String, String>): Completable
+    @POST(ApiPaths.URL_SEARCH_SUBMIT_EVENT)
+    fun trackSearchSubmit(@Body searchSubmitRequestBody: SearchSubmitRequestBody,
+                          @QueryMap params: Map<String, String>): Completable
 
     @GET(ApiPaths.URL_SESSION_START_EVENT)
     fun trackSessionStart(@QueryMap params: Map<String, String>): Completable

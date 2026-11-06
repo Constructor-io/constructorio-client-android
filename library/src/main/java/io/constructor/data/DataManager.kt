@@ -95,8 +95,8 @@ constructor(private val constructorApi: ConstructorApi, @ConstructorSdk private 
         return constructorApi.trackAutocompleteSelect(term, params.toMap(), encodedParams.toMap())
     }
 
-    fun trackSearchSubmit(term: String, params: Array<Pair<String, String>> = arrayOf(), encodedParams: Array<Pair<String, String>> = arrayOf()): Completable {
-        return constructorApi.trackSearchSubmit(term, params.toMap(), encodedParams.toMap())
+    fun trackSearchSubmit(searchSubmitRequestBody: SearchSubmitRequestBody, params: Array<Pair<String, String>> = arrayOf()): Completable {
+        return constructorApi.trackSearchSubmit(searchSubmitRequestBody, params.toMap())
     }
 
     fun trackSessionStart(params: Array<Pair<String, String>>): Completable {
