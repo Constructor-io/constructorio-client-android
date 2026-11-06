@@ -110,7 +110,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchSubmitInternal("titanic", "tit", null).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/search?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.46.0&_dt=";
+        val path = "/v2/behavioral_action/search_submit?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.46.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
