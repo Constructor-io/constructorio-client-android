@@ -564,7 +564,7 @@ class ConstructorIoTrackingTest {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
         val items = arrayOf(TrackingItem("123", null, null, null))
-        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, resultId = "179b8a0e-3799-4a31-be87-127b06871de2")
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, "179b8a0e-3799-4a31-be87-127b06871de2")
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
         val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
@@ -585,6 +585,7 @@ class ConstructorIoTrackingTest {
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
         assertEquals("titanic", requestBody["search_term"])
+        assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123}]", requestBody["items"])
         assertNull(requestBody["result_id"])
         assertEquals("POST", recordedRequest.method)
@@ -594,13 +595,16 @@ class ConstructorIoTrackingTest {
     fun trackSearchResultLoadedWithCustomerIdsAndResultId() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        ConstructorIo.trackSearchResultsLoaded("titanic", 10, arrayOf("123", "234"), resultId = "179b8a0e-3799-4a31-be87-127b06871de2")
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, arrayOf("123", "234"), "179b8a0e-3799-4a31-be87-127b06871de2")
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("titanic", requestBody["search_term"])
+        assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
         assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
         assertEquals("POST", recordedRequest.method)
+        assert(recordedRequest.path!!.startsWith(path))
     }
 
     @Test
@@ -611,6 +615,7 @@ class ConstructorIoTrackingTest {
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
         assertEquals("titanic", requestBody["search_term"])
+        assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
         assertNull(requestBody["result_id"])
         assertEquals("POST", recordedRequest.method)
