@@ -545,6 +545,9 @@ ConstructorIo.trackSearchSubmit(request)
 // Track when search results are loaded into view (searchTerm, resultCount, customerIds of shown items)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"))
 
+// Track when search results are loaded into view, passing the result_id from the search response (searchTerm, resultCount, items, resultId)
+ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf(TrackingItem("1234567-AB", "RED", null, null)), resultId = "179b8a0e-3799-4a31-be87-127b06871de2")
+
 // Track when search results are loaded into view using a request builder (searchTerm, resultCount)
 val searchResultsLoadedRequest = SearchResultsLoadedData.build("tooth", 789) {
   setItems(listOf(TrackingItem("1234567-AB", "RED", null, null)))

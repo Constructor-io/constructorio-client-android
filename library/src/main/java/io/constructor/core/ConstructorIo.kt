@@ -1565,10 +1565,12 @@ object ConstructorIo {
      * @param resultCount the number of results for that term
      * @param customerIds the customerIds of shown items
      * @param analyticsTags Additional analytics tags to pass
+     * @param resultId the result_id returned by the search response that produced these results
      */
     @Deprecated("Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.")
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null) {
-        var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds = customerIds, analyticsTags = analyticsTags)
+    @JvmOverloads
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null, resultId: String? = null) {
+        var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds = customerIds, analyticsTags = analyticsTags, resultId = resultId)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
 
@@ -1583,9 +1585,11 @@ object ConstructorIo {
      * @param resultCount the number of results for that term
      * @param items the list of items shown
      * @param analyticsTags Additional analytics tags to pass
+     * @param resultId the result_id returned by the search response that produced these results
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>? = null) {
-        var completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags)
+    @JvmOverloads
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>? = null, resultId: String? = null) {
+        var completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags, resultId = resultId)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
 
