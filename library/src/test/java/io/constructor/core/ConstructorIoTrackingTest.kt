@@ -648,6 +648,31 @@ class ConstructorIoTrackingTest {
         assertEquals("POST", recordedRequest.method)
     }
 
+    @Test
+    fun trackSearchResultLoadedWithItemsAndNamedResultId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(TrackingItem("123", null, null, null))
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, resultId = "179b8a0e-3799-4a31-be87-127b06871de2")
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("[{item_id:123}]", requestBody["items"])
+        assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithCustomerIdsAndNamedResultId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, arrayOf("123", "234"), resultId = "179b8a0e-3799-4a31-be87-127b06871de2")
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
+        assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
     // Existing callers that pass null for analyticsTags by position must still compile and use the original overloads
     @Test
     fun trackSearchResultLoadedWithItemsAndPositionalNullAnalyticsTags() {

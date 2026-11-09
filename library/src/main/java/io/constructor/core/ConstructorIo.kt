@@ -1594,16 +1594,16 @@ object ConstructorIo {
      *
      * Example:
      * ```
-     * ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"), null, "179b8a0e-3799-4a31-be87-127b06871de2")
+     * ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"), resultId = "179b8a0e-3799-4a31-be87-127b06871de2")
      * ```
      * @param term the term that results are displayed for, i.e. "Pumpkin"
      * @param resultCount the number of results for that term
      * @param customerIds the customerIds of shown items
-     * @param analyticsTags Additional analytics tags to pass, or null
+     * @param analyticsTags Additional analytics tags to pass (optional, defaults to null)
      * @param resultId the result_id returned by the search response that produced these results
      */
     @Deprecated("Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.")
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>?, analyticsTags: Map<String, String>?, resultId: String?) {
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>?, analyticsTags: Map<String, String>? = null, resultId: String?) {
         val completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds = customerIds, analyticsTags = analyticsTags, resultId = resultId)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
@@ -1613,15 +1613,15 @@ object ConstructorIo {
      *
      * Example:
      * ```
-     * ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf(TrackingItem("1234", "2345", "camp1234", "owner-A")), null, "179b8a0e-3799-4a31-be87-127b06871de2")
+     * ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf(TrackingItem("1234", "2345", "camp1234", "owner-A")), resultId = "179b8a0e-3799-4a31-be87-127b06871de2")
      * ```
      * @param term the term that results are displayed for, i.e. "Pumpkin"
      * @param resultCount the number of results for that term
      * @param items the list of items shown
-     * @param analyticsTags Additional analytics tags to pass, or null
+     * @param analyticsTags Additional analytics tags to pass (optional, defaults to null)
      * @param resultId the result_id returned by the search response that produced these results
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>?, resultId: String?) {
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>? = null, resultId: String?) {
         val completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags, resultId = resultId)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
