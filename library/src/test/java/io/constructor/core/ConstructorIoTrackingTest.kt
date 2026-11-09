@@ -564,7 +564,7 @@ class ConstructorIoTrackingTest {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
         val items = arrayOf(TrackingItem("123", null, null, null))
-        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, "179b8a0e-3799-4a31-be87-127b06871de2")
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, null, "179b8a0e-3799-4a31-be87-127b06871de2")
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
         val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
@@ -595,7 +595,7 @@ class ConstructorIoTrackingTest {
     fun trackSearchResultLoadedWithCustomerIdsAndResultId() {
         val mockResponse = MockResponse().setResponseCode(204)
         mockServer.enqueue(mockResponse)
-        ConstructorIo.trackSearchResultsLoaded("titanic", 10, arrayOf("123", "234"), "179b8a0e-3799-4a31-be87-127b06871de2")
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, arrayOf("123", "234"), null, "179b8a0e-3799-4a31-be87-127b06871de2")
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
         val path = "/v2/behavioral_action/search_result_load?key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
@@ -617,6 +617,72 @@ class ConstructorIoTrackingTest {
         assertEquals("titanic", requestBody["search_term"])
         assertEquals("10", requestBody["result_count"])
         assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
+        assertNull(requestBody["result_id"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithItemsAnalyticsTagsAndResultId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(TrackingItem("123", null, null, null))
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, mapOf("test" to "test1", "appVersion" to "150"), "179b8a0e-3799-4a31-be87-127b06871de2")
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("[{item_id:123}]", requestBody["items"])
+        assertEquals("{appVersion:150,appPlatform:Android,test:test1}", requestBody["analytics_tags"])
+        assertEquals("179b8a0e-3799-4a31-be87-127b06871de2", requestBody["result_id"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithItemsAndExplicitNullResultId() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(TrackingItem("123", null, null, null))
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, null, null)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("[{item_id:123}]", requestBody["items"])
+        assertNull(requestBody["result_id"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    // Existing callers that pass null for analyticsTags by position must still compile and use the original overloads
+    @Test
+    fun trackSearchResultLoadedWithItemsAndPositionalNullAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        val items = arrayOf(TrackingItem("123", null, null, null))
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, items, null)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("[{item_id:123}]", requestBody["items"])
+        assertNull(requestBody["result_id"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithCustomerIdsAndPositionalNullAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, arrayOf("123", "234"), null)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("[{item_id:123},{item_id:234}]", requestBody["items"])
+        assertNull(requestBody["result_id"])
+        assertEquals("POST", recordedRequest.method)
+    }
+
+    @Test
+    fun trackSearchResultLoadedWithNullCustomerIdsAndPositionalNullAnalyticsTags() {
+        val mockResponse = MockResponse().setResponseCode(204)
+        mockServer.enqueue(mockResponse)
+        ConstructorIo.trackSearchResultsLoaded("titanic", 10, null, null)
+        val recordedRequest = mockServer.takeRequest()
+        val requestBody = getRequestBody(recordedRequest)
+        assertEquals("titanic", requestBody["search_term"])
+        assertNull(requestBody["items"])
         assertNull(requestBody["result_id"])
         assertEquals("POST", recordedRequest.method)
     }
