@@ -541,6 +541,8 @@ ConstructorIo.trackSearchSubmit(request)
 
 ### Search Events
 
+`resultId` is required on search results loaded events when the search response returns a `result_id`. Use the request builder and call `setResultId` with the `resultId` from the `SearchResponse` that produced the results. The shorter `trackSearchResultsLoaded` overloads do not accept it.
+
 ```kotlin
 // Track when search results are loaded into view (searchTerm, resultCount, customerIds of shown items)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"))
@@ -577,6 +579,8 @@ ConstructorIo.trackSearchResultClick(itemName = "Fashionable Toothpicks", custom
 ```
 
 ### Browse Events
+
+`resultId` is required on browse results loaded events when the browse response returns a `result_id`. Use the request builder and call `setResultId` with the `resultId` from the `BrowseResponse` that produced the results. The shorter `trackBrowseResultsLoaded` overloads do not accept it.
 
 ```kotlin
 // Track when browse results are loaded into view (filterName, filterValue, resultCount)
