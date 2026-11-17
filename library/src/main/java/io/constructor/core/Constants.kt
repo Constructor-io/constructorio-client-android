@@ -64,6 +64,9 @@ class Constants {
         const val GROUPS_MAX_DEPTH = "groups_max_depth"
         const val FILTER_GROUP_ID = "filters[group_id]"
         const val PRE_FILTER_EXPRESSION = "pre_filter_expression"
+        const val VARIATION_ID = "variation_id"
+        const val FILTER_MATCH_TYPES = "filter_match_types[%s]"
+        const val POD_OVERRIDES = "pod_overrides[%s]"
         const val ANALYTICS_TAGS = "analytics_tags[%s]"
     }
 

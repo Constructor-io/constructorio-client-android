@@ -28,6 +28,7 @@ object ApiPaths {
     const val URL_RESULT_CLICK_EVENT = "v2/behavioral_action/result_click"
     const val URL_ITEM_DETAIL_LOAD_EVENT = "v2/behavioral_action/item_detail_load"
     const val URL_RECOMMENDATIONS = "recommendations/v1/pods/%s"
+    const val URL_RECOMMENDATION_PAGE = "recommendations/v1/pages/%s"
     const val URL_RECOMMENDATION_RESULT_CLICK_EVENT = "v2/behavioral_action/recommendation_result_click"
     const val URL_RECOMMENDATION_RESULT_VIEW_EVENT = "v2/behavioral_action/recommendation_result_view"
     const val URL_QUIZ_RESULT_CLICK_EVENT = "v2/behavioral_action/quiz_result_click"
