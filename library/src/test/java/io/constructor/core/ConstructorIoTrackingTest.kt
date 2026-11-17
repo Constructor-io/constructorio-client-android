@@ -494,9 +494,11 @@ class ConstructorIoTrackingTest {
         observer.assertComplete()
         val request = mockServer.takeRequest()
         val requestBody = getRequestBody(request)
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("20", requestBody["result_offset"])
         assertNull(requestBody["result_page"])
         assertEquals("POST", request.method)
+        assert(request.path!!.startsWith(path))
     }
 
     @Test
@@ -538,9 +540,11 @@ class ConstructorIoTrackingTest {
         ConstructorIo.trackSearchResultsLoaded(request)
         val recordedRequest = mockServer.takeRequest()
         val requestBody = getRequestBody(recordedRequest)
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=copper-key&i=wacko-the-guid&ui=player-three&s=67&c=cioand-2.47.0&_dt="
         assertEquals("20", requestBody["result_offset"])
         assertNull(requestBody["result_page"])
         assertEquals("POST", recordedRequest.method)
+        assert(recordedRequest.path!!.startsWith(path))
     }
 
     @Test

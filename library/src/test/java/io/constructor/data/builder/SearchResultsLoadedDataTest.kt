@@ -64,6 +64,15 @@ class SearchResultsLoadedDataTest {
     }
 
     @Test
+    fun searchResultsLoadedDataUsingDslWithResultOffset() {
+        val request = SearchResultsLoadedData.build(term, resultCount) {
+            this.resultOffset = this@SearchResultsLoadedDataTest.resultOffset
+        }
+        assertNull(request.resultPage)
+        assertEquals(resultOffset, request.resultOffset)
+    }
+
+    @Test
     fun searchResultsLoadedDataUsingBuilder() {
         val request = SearchResultsLoadedData.Builder(term, resultCount)
             .setItems(items)
@@ -88,6 +97,15 @@ class SearchResultsLoadedDataTest {
         assertEquals(sortOrder, request.sortOrder)
         assertEquals(sortBy, request.sortBy)
         assertEquals(selectedFilters, request.selectedFilters)
+    }
+
+    @Test
+    fun searchResultsLoadedDataUsingBuilderWithResultPage() {
+        val request = SearchResultsLoadedData.Builder(term, resultCount)
+            .setResultPage(resultPage)
+            .build()
+        assertEquals(resultPage, request.resultPage)
+        assertNull(request.resultOffset)
     }
 
     @Test
