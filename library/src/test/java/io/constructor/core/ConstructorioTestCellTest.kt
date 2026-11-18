@@ -121,7 +121,7 @@ class ConstructorioTestCellTest {
         val observer = ConstructorIo.trackSearchResultsLoadedInternal("titanic", 10).test()
         observer.assertComplete()
         val request = mockServer.takeRequest()
-        val path = "/v2/behavioral_action/search_result_load?key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.47.0&_dt=";
+        val path = "/v2/behavioral_action/search_result_load?section=Products&key=aluminium-key&i=koopa-the-guid&ui=player-two&s=14&ef-cellone=vanilla&ef-celltwo=whipped-cream&c=cioand-2.47.0&_dt=";
         assert(request.path!!.startsWith(path))
     }
 
