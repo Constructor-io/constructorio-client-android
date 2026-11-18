@@ -1566,7 +1566,7 @@ object ConstructorIo {
      * @param customerIds the customerIds of shown items
      * @param analyticsTags Additional analytics tags to pass
      */
-    @Deprecated("Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.")
+    @Deprecated("Prefer [trackSearchResultsLoaded] with a [SearchResultsLoadedData] request object built using [SearchResultsLoadedData.build].")
     fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null) {
         var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds = customerIds, analyticsTags = analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
@@ -1584,7 +1584,8 @@ object ConstructorIo {
      * @param items the list of items shown
      * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>? = null) {
+    @Deprecated("Prefer [trackSearchResultsLoaded] with a [SearchResultsLoadedData] request object built using [SearchResultsLoadedData.build].")
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>,analyticsTags: Map<String, String>? = null) {
         var completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
@@ -1607,7 +1608,15 @@ object ConstructorIo {
      * }
      * ConstructorIo.trackSearchResultsLoaded(request)
      * ```
-     * @param request the search results loaded request object holding all of the tracking parameters
+     * @param request the search results loaded request object holding all of the tracking parameters.
+     *   Prefer creating it through [SearchResultsLoadedData.build] or
+     *   [SearchResultsLoadedData.Builder] rather than its public constructor, which may be deprecated
+     *   in a future release.
+     * 
+     *   The section name defaults to [ConstructorIoConfig.defaultItemSection] when not set.
+     *   Any analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
      */
     fun trackSearchResultsLoaded(request: SearchResultsLoadedData) {
         val completable = trackSearchResultsLoadedInternal(
@@ -1660,7 +1669,7 @@ object ConstructorIo {
 
         return dataManager.trackSearchResultsLoaded(
                 searchResultLoadRequestBody,
-                arrayOf()
+                arrayOf(Constants.QueryConstants.SECTION to section)
         )
     }
 
