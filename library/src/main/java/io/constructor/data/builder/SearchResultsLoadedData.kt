@@ -6,9 +6,12 @@ import io.constructor.data.model.common.TrackingItem
  * Create a Search Results Loaded tracking request object utilizing a builder.
  * Sent when search results are loaded into view.
  *
+ * Prefer creating instances through [SearchResultsLoadedData.build] or [SearchResultsLoadedData.Builder] rather
+ * than the public constructor, which may be deprecated in a future release.
+ *
  * @property term the term that results are displayed for, i.e. "Pumpkin"
  * @property resultCount the total number of results for the term
- * @property items the items shown in the results
+ * @property items the items shown in the results. Each item should be built using the [TrackingItem] class
  * @property sectionName the index section the results came from, i.e. "Products". Defaults to
  *   [io.constructor.core.ConstructorIoConfig.defaultItemSection]
  * @property url the URL of the search results page. Defaults to "Not Available"
