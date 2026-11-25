@@ -1550,7 +1550,8 @@ object ConstructorIo {
                 searchTerm.redactPii(),
                 originalQuery.redactPii(),
                 resultGroup?.groupId?.let { SearchSubmitFilters(it.redactPii()) },
-                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)?.mapValues { it.value.redactPii() }
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)?.mapValues { it.value.redactPii() },
+                true
         )
 
         return dataManager.trackSearchSubmit(searchSubmitRequestBody, arrayOf(

@@ -349,6 +349,7 @@ class ConstructorIoTrackingTest {
         assertEquals("tit", requestBody["user_input"])
         assertEquals("{appVersion:123,appPlatform:Android}", requestBody["analytics_tags"])
         assertNull(requestBody["filters"])
+        assertEquals("true", requestBody["beacon"])
         assertEquals("POST", request.method)
         assert(request.path!!.startsWith(path))
     }
