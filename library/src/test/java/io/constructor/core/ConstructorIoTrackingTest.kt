@@ -2061,32 +2061,20 @@ class ConstructorIoTrackingTest {
     @Test
     fun trackSearchSubmitWithPiiShouldBeOmitted() {
         val mockResponse = MockResponse().setResponseCode(204)
+        val cases = emailPii.map { it to "<email_omitted>" } +
+                creditCardPii.map { it to "<credit_omitted>" } +
+                phonePii.map { it to "<phone_omitted>" }
 
-        for (email in emailPii) {
+        for ((pii, token) in cases) {
             mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchSubmitInternal(email, email, null).test()
+            val observer = ConstructorIo.trackSearchSubmitInternal(pii, pii, null).test()
             observer.assertComplete()
-            val body = mockServer.takeRequest().body.readUtf8()
-            assert(Regex("email_omitted").findAll(body).count() == 2)
-            assert(!body.contains(Regex(email)))
-        }
-
-        for (card in creditCardPii) {
-            mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchSubmitInternal(card, card, null).test()
-            observer.assertComplete()
-            val body = mockServer.takeRequest().body.readUtf8()
-            assert(Regex("credit_omitted").findAll(body).count() == 2)
-            assert(!body.contains(card))
-        }
-
-        for (phone in phonePii) {
-            mockServer.enqueue(mockResponse)
-            val observer = ConstructorIo.trackSearchSubmitInternal(phone, phone, null).test()
-            observer.assertComplete()
-            val body = mockServer.takeRequest().body.readUtf8()
-            assert(Regex("phone_omitted").findAll(body).count() == 2)
-            assert(!body.contains(phone))
+            val requestBody = getRequestBody(mockServer.takeRequest())
+            for (field in listOf("search_term", "user_input")) {
+                val value = requestBody[field]!!
+                assert(value.contains(token)) { "$field should contain $token for \"$pii\", was \"$value\"" }
+                assert(!value.contains(pii.trim())) { "$field should not contain raw PII \"$pii\"" }
+            }
         }
     }
 
@@ -2098,9 +2086,9 @@ class ConstructorIoTrackingTest {
             mockServer.enqueue(mockResponse)
             val observer = ConstructorIo.trackSearchSubmitInternal(query, query, null).test()
             observer.assertComplete()
-            val body = mockServer.takeRequest().body.readUtf8()
-            assert(body.contains(query))
-            assert(!body.contains("omitted"))
+            val requestBody = getRequestBody(mockServer.takeRequest())
+            assertEquals(query, requestBody["search_term"])
+            assertEquals(query, requestBody["user_input"])
         }
     }
 }

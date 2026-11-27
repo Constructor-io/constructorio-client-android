@@ -13,7 +13,7 @@ data class SearchSubmitRequestBody(
         @Json(name = "user_input") val userInput: String,
         @Json(name = "filters") val filters: SearchSubmitFilters?,
         @Json(name = "analytics_tags") val analyticsTags: Map<String, String>?,
-        @Json(name= "beacon") val beacon: Boolean?,
+        @Json(name = "beacon") val beacon: Boolean?,
 ) : Serializable
 
 /**
