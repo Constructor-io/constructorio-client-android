@@ -531,10 +531,13 @@ ConstructorIo.trackAutocompleteSelect("Fashionable Toothpicks", "tooth", "Produc
 // Track when the user submits a search  (searchTerm, originalQuery)
 ConstructorIo.trackSearchSubmit("toothpicks", "tooth")
 
-// Track when the user submits a search with additional parameters, i.e. analytics tags
+// Track when the user submits a search with additional parameters, i.e. analytics tags,
+// result group and section (section defaults to the default item section, i.e. "Products")
 // Request level analytics tags are merged with the default analytics tags passed on initialization
 val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
     setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
+    setResultGroup(ResultGroup("Canned Goods", "canned-goods"))
+    setSection("Products")
 }
 ConstructorIo.trackSearchSubmit(request)
 ```
@@ -548,9 +551,12 @@ ConstructorIo.trackSearchSubmit(request)
 ConstructorIo.trackSearchResultsLoaded("tooth", 789, arrayOf("1234567-AB", "1234567-AB"))
 
 // Track when search results are loaded into view using a request builder (searchTerm, resultCount)
+// Section defaults to the default item section, i.e. "Products"
+// Request level analytics tags are merged with the default analytics tags passed on initialization
 val searchResultsLoadedRequest = SearchResultsLoadedData.build("tooth", 789) {
   setItems(listOf(TrackingItem("1234567-AB", "RED", null, null)))
   setSectionName("Products")
+  setAnalyticsTags(mapOf("campaign" to "summer_sale"))
   setUrl("https://constructor.io/search?q=tooth")
   setResultId("179b8a0e-3799-4a31-be87-127b06871de2")
   setResultPage(3) // or setResultOffset(20) on infinite-scroll pages: set only one of the two

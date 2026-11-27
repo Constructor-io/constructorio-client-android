@@ -41,6 +41,7 @@ import io.constructor.injection.component.DaggerAppComponent
 import io.constructor.injection.module.AppModule
 import io.constructor.util.broadcastIntent
 import io.constructor.util.e
+import io.constructor.util.redactPii
 import io.constructor.util.truncateToCodePoints
 import io.constructor.util.urlEncode
 import io.reactivex.Completable
@@ -1524,6 +1525,7 @@ object ConstructorIo {
      * val request = SearchSubmitTrackingData.build("toothpicks", "tooth") {
      *     setResultGroup(ResultGroup("Canned Goods", "canned-goods"))
      *     setAnalyticsTags(mapOf("relatedSearchTerm" to "true"))
+     *     setSection("Products")
      * }
      * ConstructorIo.trackSearchSubmit(request)
      * ```
@@ -1533,7 +1535,7 @@ object ConstructorIo {
      *   key collision.
      */
     fun trackSearchSubmit(request: SearchSubmitTrackingData) {
-        val completable = trackSearchSubmitInternal(request.searchTerm, request.originalQuery, request.resultGroup, request.analyticsTags)
+        val completable = trackSearchSubmitInternal(request.searchTerm, request.originalQuery, request.resultGroup, request.analyticsTags, request.section)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({
             context.broadcastIntent(Constants.EVENT_QUERY_SENT, Constants.EXTRA_TERM to request.searchTerm)
         }, {
@@ -1541,17 +1543,20 @@ object ConstructorIo {
         }))
     }
 
-    internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?, analyticsTags: Map<String, String>? = null): Completable {
+    internal fun trackSearchSubmitInternal(searchTerm: String, originalQuery: String, resultGroup: ResultGroup?, analyticsTags: Map<String, String>? = null, section: String? = null): Completable {
         preferenceHelper.getSessionId(sessionIncrementHandler)
-        val encodedParams: ArrayList<Pair<String, String>> = getEncodedParams(groupId = resultGroup?.groupId, groupDisplayName = resultGroup?.displayName)
-        mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)?.forEach { (key, value) ->
-            encodedParams.add(Constants.QueryConstants.ANALYTICS_TAGS.format(key).urlEncode() to value.urlEncode())
-        }
+        val effectiveSection = section ?: preferenceHelper.defaultItemSection
+        val searchSubmitRequestBody = SearchSubmitRequestBody(
+                searchTerm.redactPii(),
+                originalQuery.redactPii(),
+                resultGroup?.groupId?.let { SearchSubmitFilters(it.redactPii()) },
+                mergeAnalyticsTags(configMemoryHolder.defaultAnalyticsTags, analyticsTags)?.mapValues { it.value.redactPii() },
+                true
+        )
 
-        return dataManager.trackSearchSubmit(searchTerm, arrayOf(
-                Constants.QueryConstants.ORIGINAL_QUERY to originalQuery,
-                Constants.QueryConstants.EVENT to Constants.QueryValues.EVENT_SEARCH
-        ), encodedParams.toTypedArray())
+        return dataManager.trackSearchSubmit(searchSubmitRequestBody, arrayOf(
+                Constants.QueryConstants.SECTION to effectiveSection
+        ))
     }
 
     /**
@@ -1566,7 +1571,7 @@ object ConstructorIo {
      * @param customerIds the customerIds of shown items
      * @param analyticsTags Additional analytics tags to pass
      */
-    @Deprecated("Prefer [trackSearchResultsLoaded] with an array of [TrackingItem] in place of an array of strings for customerIds.")
+    @Deprecated("Prefer [trackSearchResultsLoaded] with a [SearchResultsLoadedData] request object built using [SearchResultsLoadedData.build].")
     fun trackSearchResultsLoaded(term: String, resultCount: Int, customerIds: Array<String>? = null, analyticsTags: Map<String, String>? = null) {
         var completable = trackSearchResultsLoadedInternal(term, resultCount, customerIds = customerIds, analyticsTags = analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
@@ -1584,7 +1589,8 @@ object ConstructorIo {
      * @param items the list of items shown
      * @param analyticsTags Additional analytics tags to pass
      */
-    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>, analyticsTags: Map<String, String>? = null) {
+    @Deprecated("Prefer [trackSearchResultsLoaded] with a [SearchResultsLoadedData] request object built using [SearchResultsLoadedData.build].")
+    fun trackSearchResultsLoaded(term: String, resultCount: Int, items: Array<TrackingItem>,analyticsTags: Map<String, String>? = null) {
         var completable = trackSearchResultsLoadedInternal(term, resultCount, items = items, analyticsTags = analyticsTags)
         disposable.add(completable.subscribeOn(Schedulers.io()).subscribe({}, { t -> e("Search Results Loaded error: ${t.message}") }))
     }
@@ -1607,7 +1613,15 @@ object ConstructorIo {
      * }
      * ConstructorIo.trackSearchResultsLoaded(request)
      * ```
-     * @param request the search results loaded request object holding all of the tracking parameters
+     * @param request the search results loaded request object holding all of the tracking parameters.
+     *   Prefer creating it through [SearchResultsLoadedData.build] or
+     *   [SearchResultsLoadedData.Builder] rather than its public constructor, which may be deprecated
+     *   in a future release.
+     * 
+     *   The section name defaults to [ConstructorIoConfig.defaultItemSection] when not set.
+     *   Any analytics tags set on it are merged with the default analytics tags set on
+     *   [ConstructorIoConfig.defaultAnalyticsTags], with request-level values overriding defaults on
+     *   key collision.
      */
     fun trackSearchResultsLoaded(request: SearchResultsLoadedData) {
         val completable = trackSearchResultsLoadedInternal(
@@ -1660,7 +1674,7 @@ object ConstructorIo {
 
         return dataManager.trackSearchResultsLoaded(
                 searchResultLoadRequestBody,
-                arrayOf()
+                arrayOf(Constants.QueryConstants.SECTION to section)
         )
     }
 
